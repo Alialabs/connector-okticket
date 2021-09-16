@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+     @author: Alia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+    <data>
+
+        <record id="okticket_product_template_form_view" model="ir.ui.view">
+            <field name="name">okticket.product.template.common.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page name="okticket_conn_conf" string="OkTicket Conf.">
+                        <group>
+                            <field name="okticket_categ_prod_id" string="Category_id"/>
+                            <field name="okticket_type_prod_id" string="Type_id"/>
+                        </group>
+                        <group string="Rebillable Info">
+                            <field name="rebillable_prod_id"/>
+                            <field name="no_rebillable_prod_ids" readonly="1"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,834 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* okticket_connector_product_synchronization
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-06-22 14:36+0000\n"
+"PO-Revision-Date: 2021-06-22 14:36+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__product_variant_count
+msgid "# Product Variants"
+msgstr "# Variantes de producto"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__description_sale
+msgid ""
+"A description of the Product that you want to communicate to your customers."
+" This description will be copied to every Sales Order, Delivery Order and "
+"Customer Invoice/Credit Note"
+msgstr ""
+"Una descripción del producto que quiera comunicar a sus clientes. Esta "
+"descripción se copiará a cada pedido de venta, albarán de salida y factura "
+"de cliente."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__type
+msgid ""
+"A storable product is a product for which you manage stock. The Inventory app has to be installed.\n"
+"A consumable product is a product for which stock is not managed.\n"
+"A service is a non-material product you provide."
+msgstr ""
+"Un producto almacenable es un producto para el que gestiona stock. La aplicación de inventario debe estar instalada.\n"
+"Un producto consumible es un producto para el que no se gestionan las existencias.\n"
+"Un servicio es un producto no material."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__message_needaction
+msgid "Action Needed"
+msgstr "Acción requerida"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__activity_ids
+msgid "Activities"
+msgstr "Actividades"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "Decoración de Actividad  de Excepción"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__activity_state
+msgid "Activity State"
+msgstr "Estado de la actividad"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "Ícono de tipo de actvidad"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__message_attachment_count
+msgid "Attachment Count"
+msgstr "Nº de archivos adjuntos"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__barcode
+msgid "Barcode"
+msgstr "Código de barras"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__can_image_1024_be_zoomed
+msgid "Can Image 1024 be zoomed"
+msgstr "Puede agrandarse la imagen 1024"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__can_be_expensed
+msgid "Can be Expensed"
+msgstr "Puede ser un gasto"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__purchase_ok
+msgid "Can be Purchased"
+msgstr "Puede ser comprado"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__sale_ok
+msgid "Can be Sold"
+msgstr "Puede ser vendido"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__color
+msgid "Color Index"
+msgstr "Índice de Colores"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__standard_price
+msgid "Cost"
+msgstr "Coste"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__cost_currency_id
+msgid "Cost Currency"
+msgstr "Moneda de Coste"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__currency_id
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__taxes_id
+msgid "Customer Taxes"
+msgstr "Impuestos cliente"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__supplier_taxes_id
+msgid "Default taxes used when buying the product."
+msgstr "Impuestos por defecto usados cuando se compra el producto"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__taxes_id
+msgid "Default taxes used when selling the product."
+msgstr "Impuestos por defecto usados cuando se vende el producto"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__uom_id
+msgid "Default unit of measure used for all stock operations."
+msgstr ""
+"Unidad de medida por defecto utilizada para todas las operaciones de stock"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__uom_po_id
+msgid ""
+"Default unit of measure used for purchase orders. It must be in the same "
+"category as the default unit of measure."
+msgstr ""
+"Unidad de medida por defecto utilizada para los pedidos de compra. Debe "
+"estar en la misma categoría que la unidad de medida por defecto."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__seller_ids
+msgid "Define vendor pricelists."
+msgstr "Definir listas de precios de proveedores."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_backend__display_name
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__display_name
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_product_template__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__property_account_expense_id
+msgid "Expense Account"
+msgstr "Cuenta de gasto"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__expense_policy
+msgid ""
+"Expenses and vendor bills can be re-invoiced to a customer.With this option,"
+" a validated expense can be re-invoice to a customer at its cost or sales "
+"price."
+msgstr ""
+"Los gastos y las facturas del proveedor se pueden volver a facturar a un "
+"cliente. Con esta opción, un gasto validado se puede volver a facturar a un "
+"cliente a su costo o precio de venta."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__message_follower_ids
+msgid "Followers"
+msgstr "Seguidores"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__message_channel_ids
+msgid "Followers (Channels)"
+msgstr "Seguidores (Canales)"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Seguidores (Contactos)"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Icono de Font Awesome ej. fa-tasks"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__packaging_ids
+msgid "Gives the different ways to package the same product."
+msgstr "Da las diferentes formas de empaquetar el mismo producto."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__sequence
+msgid "Gives the sequence order when displaying a product list"
+msgstr "Proporciona el orden de secuencia al mostrar una lista de productos"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_backend__id
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__id
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_product_template__id
+msgid "ID"
+msgstr "Id"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__external_id
+msgid "ID on Okticket"
+msgstr "Id en Okticket"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__activity_exception_icon
+msgid "Icon"
+msgstr "Icono"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "Icono para indicar una actividad de excepción."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__message_needaction
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__message_unread
+msgid "If checked, new messages require your attention."
+msgstr "Si está marcado hay nuevos mensajes que requieren su atención."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__message_has_error
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Si se encuentra marcado, algunos mensajes tienen error de envío."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__active
+msgid ""
+"If unchecked, it will allow you to hide the product without removing it."
+msgstr "Si no está marcado, permitirá ocultar el producto sin eliminarlo."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__image_1920
+msgid "Image"
+msgstr "Imagen"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__image_1024
+msgid "Image 1024"
+msgstr "Imagen 1024"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__image_128
+msgid "Image 128"
+msgstr "Imagen 128"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__image_256
+msgid "Image 256"
+msgstr "Imagen 256"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__image_512
+msgid "Image 512"
+msgstr "Imagen 512"
+
+#. module: okticket_connector_product_synchronization
+#: code:addons/okticket_connector_product_synchronization/models/okticket_product_template_importer.py:0
+#, python-format
+msgid "Import from Okticket DONE"
+msgstr "Importación desde Okticket REALIZADA"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__standard_price
+msgid ""
+"In Standard Price & AVCO: value of the product (automatically computed in AVCO).\n"
+"        In FIFO: value of the last unit that left the stock (automatically computed).\n"
+"        Used to value the product when the purchase cost is not known (e.g. inventory adjustment).\n"
+"        Used to compute margins on sale orders."
+msgstr ""
+"En Standard Price & AVCO: valor del producto (calculado automáticamente en AVCO).\n"
+"En FIFO: valor de la última unidad que salió del stock (calculado automáticamente).\n"
+"Se utiliza para valorar el producto cuando se desconoce el coste de compra (por ejemplo, ajuste de inventario).\n"
+"Se utiliza para calcular los márgenes de las órdenes de venta."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__property_account_income_id
+msgid "Income Account"
+msgstr "Cuenta de ingresos"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__default_code
+msgid "Internal Reference"
+msgstr "Referencia interna"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__invoice_policy
+msgid "Invoicing Policy"
+msgstr "Política de Facturación"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__message_is_follower
+msgid "Is Follower"
+msgstr "Es un seguidor"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__has_configurable_attributes
+msgid "Is a configurable product"
+msgstr "Es un producto configurable"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__is_product_variant
+msgid "Is a product variant"
+msgstr "Es una variante de producto"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__rebillable_product_version
+msgid "Is rebillable product version"
+msgstr "Es una versión de producto refacturable"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__property_account_income_id
+msgid ""
+"Keep this field empty to use the default value from the product category."
+msgstr ""
+"Mantenga este campo vacío para usar el valor predeterminado de la categoría "
+"del producto."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__property_account_expense_id
+msgid ""
+"Keep this field empty to use the default value from the product category. If"
+" anglo-saxon accounting with automated valuation method is configured, the "
+"expense account on the product category will be used."
+msgstr ""
+"Mantenga este campo vacío para usar el valor predeterminado de la categoría "
+"de producto. Si se configura la contabilidad anglosajona con el método de "
+"valoración automatizado, se utilizará la cuenta de gastos en la categoría de"
+" producto."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_backend____last_update
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template____last_update
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_product_template____last_update
+msgid "Last Modified on"
+msgstr "Última modificación el"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__sync_date
+msgid "Last synchronization date"
+msgstr "Última fecha de sincronización"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__message_main_attachment_id
+msgid "Main Attachment"
+msgstr "Adjuntos principales"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__service_type
+msgid ""
+"Manually set quantities on order: Invoice based on the manually entered quantity, without creating an analytic account.\n"
+"Timesheets on contract: Invoice based on the tracked hours on the related timesheet.\n"
+"Create a task and track hours: Create a task on the sales order validation and track the work hours."
+msgstr ""
+"Establezca manualmente las cantidades en el pedido: la factura se basa en la cantidad ingresada manualmente, sin crear una cuenta analítica.\n"
+"Partes de horas en el contrato: la factura se basa en las horas registradas en la hoja de tiempo relacionada.\n"
+"Cree una tarea y realice un seguimiento de las horas: cree una tarea en la validación de la orden de venta y realice un seguimiento de las horas de trabajo."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__message_has_error
+msgid "Message Delivery error"
+msgstr "Error de Envío de Mensaje"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__sale_line_warn_msg
+msgid "Message for Sales Order Line"
+msgstr "Mensaje para la línea de pedido de venta"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__message_ids
+msgid "Messages"
+msgstr "Mensajes"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "Siguiente plazo de actividad"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__activity_summary
+msgid "Next Activity Summary"
+msgstr "Resumen de la siguiente actividad"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__activity_type_id
+msgid "Next Activity Type"
+msgstr "Siguiente tipo de actividad"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__no_rebillable_prod_ids
+msgid "No rebillable product version"
+msgstr "Versión de producto no refacturable"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Número de acciones"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__message_has_error_counter
+msgid "Number of errors"
+msgstr "Numero de errores"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "Número de mensajes que requieren una acción"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Número de mensajes con error de envío"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__pricelist_item_count
+msgid "Number of price rules"
+msgstr "Número de reglas de precios"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__message_unread_counter
+msgid "Number of unread messages"
+msgstr "Número de mensajes no leidos"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__okticket_categ_prod_id
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_product_product__okticket_categ_prod_id
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_product_template__okticket_categ_prod_id
+msgid "OkTicket Category_id"
+msgstr "Categoría de Okticket"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__okticket_type_prod_id
+msgid "OkTicket Type_id"
+msgstr "Tipo de Okticket"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__backend_id
+msgid "Okticket Backend"
+msgstr "Backend de Okticket"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model,name:okticket_connector_product_synchronization.model_okticket_backend
+msgid "Okticket Backend Configuration"
+msgstr "Configuración de backend de Okticket"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__service_tracking
+msgid ""
+"On Sales order confirmation, this product can generate a project and/or task.         From those, you can track the service you are selling.\n"
+"         'In sale order's project': Will use the sale order's configured project if defined or fallback to         creating a new project based on the selected template."
+msgstr ""
+"En la confirmación de pedidos de venta, este producto puede generar un proyecto y/o tarea.         Desde estos, puede seguir el servicio que está vendiendo."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__invoice_policy
+msgid ""
+"Ordered Quantity: Invoice quantities ordered by the customer.\n"
+"Delivered Quantity: Invoice quantities delivered to the customer."
+msgstr ""
+"Cantidad pedida: facturar cantidades pedidas por el cliente.\n"
+"Cantidad entregada: facturar cantidades entregadas al cliente."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__price
+msgid "Price"
+msgstr "Precio"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__list_price
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__lst_price
+msgid "Price at which the product is sold to customers."
+msgstr "Precio al que se vende el producto a los clientes."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__pricelist_id
+msgid "Pricelist"
+msgstr "Tarifa"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__odoo_id
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__product_variant_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__attribute_line_ids
+msgid "Product Attributes"
+msgstr "Atributos del producto"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__categ_id
+msgid "Product Category"
+msgstr "Categoría de producto"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__packaging_ids
+msgid "Product Packages"
+msgstr "Paquetes de productos"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__okticket_bind_ids
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_product_product__okticket_bind_ids
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_product_template__okticket_bind_ids
+msgid "Product Product Bindings"
+msgstr "Vínculos de producto"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.actions.server,name:okticket_connector_product_synchronization.ir_cron_product_import_ir_actions_server
+#: model:ir.cron,cron_name:okticket_connector_product_synchronization.ir_cron_product_import
+#: model:ir.cron,name:okticket_connector_product_synchronization.ir_cron_product_import
+msgid "Product Synchronization From Okticket"
+msgstr "Sincronización de productos desde Okticket"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model,name:okticket_connector_product_synchronization.model_product_template
+msgid "Product Template"
+msgstr "Plantilla de producto"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__type
+msgid "Product Type"
+msgstr "Tipo de producto"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__product_variant_ids
+msgid "Products"
+msgstr "Productos"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__project_id
+msgid "Project"
+msgstr "Proyecto"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__project_template_id
+msgid "Project Template"
+msgstr "Plantilla de proyecto"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__lst_price
+msgid "Public Price"
+msgstr "Precio al público"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__description_purchase
+msgid "Purchase Description"
+msgstr "Descripción de compra"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__uom_po_id
+msgid "Purchase Unit of Measure"
+msgstr "Unidad de medida compra"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__visible_qty_configurator
+msgid "Quantity visible in configurator"
+msgstr "Cantidad visible en configurador"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__expense_policy
+msgid "Re-Invoice Expenses"
+msgstr "Gastos de Re-factura"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__visible_expense_policy
+msgid "Re-Invoice Policy visible"
+msgstr "Política de refacturación visible"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__rebillable_prod_id
+msgid "Rebillable product version"
+msgstr "Versión de producto refacturable"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__rebillable_prod_id
+msgid "Rebillable version of the product"
+msgstr "Versión de producto refacturable"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__activity_user_id
+msgid "Responsible User"
+msgstr "Usuario responsable"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "Error de entrega del SMS"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__description_sale
+msgid "Sales Description"
+msgstr "Descripción de Ventas"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__sale_line_warn
+msgid "Sales Order Line"
+msgstr "Línea de pedido de venta"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__list_price
+msgid "Sales Price"
+msgstr "Precio de venta"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__project_id
+msgid ""
+"Select a billable project on which tasks can be created. This setting must "
+"be set for each company."
+msgstr ""
+"Seleccionar un proyecto facturable en el que puedan ser creadas tareas. Esta configuración debería "
+"ser realizada para cada compañía."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__project_template_id
+msgid ""
+"Select a billable project to be the skeleton of the new created project when"
+" selling the current product. Its stages and tasks will be duplicated."
+msgstr ""
+"Seleccionar un proyecto facturable para ser la base del nuevo proyecto creado en la"
+" venta del producto actual. Sus etapas y tareas serán duplicadas."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__categ_id
+msgid "Select category for the current product"
+msgstr "Seleccione la categoría para el producto actual."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__sale_line_warn
+msgid ""
+"Selecting the \"Warning\" option will notify user with the message, "
+"Selecting \"Blocking Message\" will throw an exception with the message and "
+"block the flow. The Message has to be written in the next field."
+msgstr ""
+"Si selecciona la opción \"Aviso\" se notificará a los usuarios con el "
+"mensaje, si selecciona \"Mensaje de bloqueo\" se lanzará una excepción con "
+"el mensaje y se bloqueará el flujo. El mensaje debe escribirse en el "
+"siguiente campo."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__service_policy
+msgid "Service Invoicing Policy"
+msgstr "Servicio de política de facturación"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__service_tracking
+msgid "Service Tracking"
+msgstr "Seguimiento del servicio"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__sales_count
+msgid "Sold"
+msgstr "Vendido"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__can_be_expensed
+msgid "Specify whether the product can be selected in an expense."
+msgstr "Especifica si un producto puede ser seleccionado como gasto."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"Estado basado en actividades\n"
+"Vencida: la fecha tope ya ha pasado\n"
+"Hoy: La fecha tope es hoy\n"
+"Planificada: futuras actividades."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__valid_product_template_attribute_line_ids
+msgid "Technical compute"
+msgstr "Cálculo Técnico "
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__pricelist_id
+msgid ""
+"Technical field. Used for searching on pricelists, not stored in database."
+msgstr ""
+"Campo técnico. Se utiliza para buscar en tarifas, no almacenadas en la base "
+"de datos."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__service_type
+msgid "Track Service"
+msgstr "Seguimiento del Servicio"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__rebillable_product_version
+msgid "True if the product has other version no rebillable"
+msgstr "Marcado si el producto tiene otra versión no refacturable"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "Tipo de actividad de excepción registrada."
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__uom_id
+msgid "Unit of Measure"
+msgstr "Unidad de medida"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__uom_name
+msgid "Unit of Measure Name"
+msgstr "Nombre de Unidad de Medida"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__message_unread
+msgid "Unread Messages"
+msgstr "Mensajes sin leer"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr "Nº de mensajes sin leer"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__valid_product_template_attribute_line_ids
+msgid "Valid Product Attribute Lines"
+msgstr "Líneas de Atributo de Producto Válidas"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__variant_seller_ids
+msgid "Variant Seller"
+msgstr "Variante del vendedor"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__supplier_taxes_id
+msgid "Vendor Taxes"
+msgstr "Impuestos de proveedor"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__seller_ids
+msgid "Vendors"
+msgstr "Proveedores"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__volume
+msgid "Volume"
+msgstr "Volumen"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__volume_uom_name
+msgid "Volume unit of measure label"
+msgstr "Etiqueta de unidad de medida de volumen"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__website_message_ids
+msgid "Website Messages"
+msgstr "Mensajes del sitio web"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__website_message_ids
+msgid "Website communication history"
+msgstr "Historial de comunicaciones del sitio web"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__weight
+msgid "Weight"
+msgstr "Peso"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__weight_uom_name
+msgid "Weight unit of measure label"
+msgstr "Etiqueta de Unidad de Medida de peso"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.model,name:okticket_connector_product_synchronization.model_okticket_product_template
+msgid "okticket.product.template"
+msgstr "Plantilla de producto de Okticket"
