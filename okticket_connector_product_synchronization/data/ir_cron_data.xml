@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record forcecreate="True" id="ir_cron_product_import" model="ir.cron">
+            <field name="name">Product Synchronization From Okticket</field>
+            <field name="active" eval="False"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">2</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False" />
+            <field name="model_id" ref="okticket_connector_product_synchronization.model_okticket_backend"/>
+            <field name="state">code</field>
+            <field name="code">model._scheduler_synchronize_products()</field>
+        </record>
+
+    </data>
+</openerp>

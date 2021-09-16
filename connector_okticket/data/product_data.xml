@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+       <record id="product_product_okticket_other" model="product.product">
+           <field name="name">Otros</field>
+           <field name="type">service</field>
+           <field name="uom_id" ref="uom.product_uom_unit"/>
+           <field name="uom_po_id" ref="uom.product_uom_unit"/>
+           <field name="categ_id" ref="product.product_category_all"/>
+           <field name="okticket_categ_prod_id">0</field>
+           <field name="okticket_type_prod_id">0</field>
+        </record>
+
+        <record id="product_product_okticket_restaurant" model="product.product">
+           <field name="name">Restauración</field>
+           <field name="type">service</field>
+           <field name="uom_id" ref="uom.product_uom_unit"/>
+           <field name="uom_po_id" ref="uom.product_uom_unit"/>
+           <field name="categ_id" ref="product.product_category_all"/>
+           <field name="okticket_categ_prod_id">1</field>
+           <field name="okticket_type_prod_id">0</field>
+        </record>
+
+        <record id="product_product_okticket_parking" model="product.product">
+           <field name="name">Aparcamiento</field>
+           <field name="type">service</field>
+           <field name="uom_id" ref="uom.product_uom_unit"/>
+           <field name="uom_po_id" ref="uom.product_uom_unit"/>
+           <field name="categ_id" ref="product.product_category_all"/>
+           <field name="okticket_categ_prod_id">2</field>
+           <field name="okticket_type_prod_id">0</field>
+        </record>
+
+        <record id="product_product_okticket_toll" model="product.product">
+           <field name="name">Peaje</field>
+           <field name="type">service</field>
+           <field name="uom_id" ref="uom.product_uom_unit"/>
+           <field name="uom_po_id" ref="uom.product_uom_unit"/>
+           <field name="categ_id" ref="product.product_category_all"/>
+           <field name="okticket_categ_prod_id">3</field>
+           <field name="okticket_type_prod_id">0</field>
+        </record>
+
+        <record id="product_product_okticket_transport" model="product.product">
+           <field name="name">Transporte</field>
+           <field name="type">service</field>
+           <field name="uom_id" ref="uom.product_uom_unit"/>
+           <field name="uom_po_id" ref="uom.product_uom_unit"/>
+           <field name="categ_id" ref="product.product_category_all"/>
+           <field name="okticket_categ_prod_id">4</field>
+           <field name="okticket_type_prod_id">0</field>
+        </record>
+
+        <record id="product_product_okticket_hotel" model="product.product">
+           <field name="name">Alojamiento</field>
+           <field name="type">service</field>
+           <field name="uom_id" ref="uom.product_uom_unit"/>
+           <field name="uom_po_id" ref="uom.product_uom_unit"/>
+           <field name="categ_id" ref="product.product_category_all"/>
+           <field name="okticket_categ_prod_id">5</field>
+           <field name="okticket_type_prod_id">0</field>
+        </record>
+
+        <record id="product_product_okticket_gas" model="product.product">
+           <field name="name">Gasolina</field>
+           <field name="type">service</field>
+           <field name="uom_id" ref="uom.product_uom_unit"/>
+           <field name="uom_po_id" ref="uom.product_uom_unit"/>
+           <field name="categ_id" ref="product.product_category_all"/>
+           <field name="okticket_categ_prod_id">6</field>
+           <field name="okticket_type_prod_id">0</field>
+        </record>
+
+        <record id="product_product_okticket_gasoil" model="product.product">
+           <field name="name">Gasoil</field>
+           <field name="type">service</field>
+           <field name="uom_id" ref="uom.product_uom_unit"/>
+           <field name="uom_po_id" ref="uom.product_uom_unit"/>
+           <field name="categ_id" ref="product.product_category_all"/>
+           <field name="okticket_categ_prod_id">146</field>
+           <field name="okticket_type_prod_id">0</field>
+        </record>
+
+        <record id="product_product_okticket_invoice" model="product.product">
+           <field name="name">Factura</field>
+           <field name="type">service</field>
+           <field name="uom_id" ref="uom.product_uom_unit"/>
+           <field name="uom_po_id" ref="uom.product_uom_unit"/>
+           <field name="categ_id" ref="product.product_category_all"/>
+           <field name="okticket_categ_prod_id">-1</field>
+           <field name="okticket_type_prod_id">1</field>
+        </record>
+
+        <record id="product_product_okticket_km" model="product.product">
+           <field name="name">Kilómetros</field>
+           <field name="type">service</field>
+           <field name="uom_id" ref="uom.product_uom_unit"/>
+           <field name="uom_po_id" ref="uom.product_uom_unit"/>
+           <field name="categ_id" ref="product.product_category_all"/>
+           <field name="okticket_categ_prod_id">-1</field>
+           <field name="okticket_type_prod_id">2</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="okticket_sheets_project_view" model="ir.ui.view">
+            <field name="name">okticket.sheets.project.view</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="connector_okticket.okticket_edit_project_view"/>
+            <field name="arch" type="xml">
+                <page name="okticket_conn_conf" position="inside" >
+                    <field name="expense_sheet_ids"/>
+                </page>
+            </field>
+        </record>
+
+    </data>
+</openerp>
