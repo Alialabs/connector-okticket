@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+     @author: Alia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
 <odoo>
     <data noupdate="1">
-
-        <!-- TODO: se esta usando sudo() -->
 
         <record id="okticket_connector_user" model="res.users">
             <field name="name">Okticket Connector User</field>

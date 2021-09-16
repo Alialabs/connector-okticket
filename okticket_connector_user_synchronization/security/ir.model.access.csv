@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_okticket_hr_employee,access_okticket_hr_employee,model_okticket_hr_employee,base.group_user,1,1,1,1
+access_okticket_hr_employee_all,access_okticket_hr_employee_all,model_okticket_hr_employee,,1,0,0,0
+access_okticket_hr_employee_user,access_okticket_hr_employee_user,model_okticket_hr_employee,connector_okticket.group_okticket_conn_user,1,1,1,1
+access_okticket_hr_employee_manager,access_okticket_hr_employee_manager,model_okticket_hr_employee,connector_okticket.group_okticket_conn_manager,1,1,1,1

@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-  <data>
-    <menuitem id="menu_okticket_root"
-              parent="connector.menu_connector_root"
-              name="Okticket"
-              sequence="10"
-              groups="connector.group_connector_manager"/>
+<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+     @author: Alia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+    <data>
+        <menuitem id="menu_okticket_root"
+                  parent="connector.menu_connector_root"
+                  name="Okticket"
+                  sequence="10"
+                  groups="connector_okticket.group_okticket_conn_user"/>
 
-    <menuitem id="menu_okticket_backend"
-              name="Backends"
-              parent="menu_okticket_root"
-              action="action_okticket_backend"/>
+        <menuitem id="menu_okticket_backend"
+                  name="Backends"
+                  parent="menu_okticket_root"
+                  action="action_okticket_backend"/>
 
-    <menuitem id="menu_okticket_log_event"
-              name="Logs"
-              parent="menu_okticket_root"
-              action="action_okticket_log"/>
-  </data>
-</openerp>
+        <menuitem id="menu_okticket_log_event"
+                  name="Logs"
+                  parent="menu_okticket_root"
+                  action="action_okticket_log"/>
+    </data>
+</odoo>

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+     @author: Alia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
 <openerp>
     <data>
 
@@ -7,7 +10,7 @@
             <field name="model">project.project</field>
             <field name="inherit_id" ref="connector_okticket.okticket_edit_project_view"/>
             <field name="arch" type="xml">
-                <page name="okticket_conn_conf" position="inside" >
+                <page name="okticket_conn_conf" position="inside">
                     <field name="expense_sheet_ids"/>
                 </page>
             </field>

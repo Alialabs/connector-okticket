@@ -1,46 +1,21 @@
-# -*- coding: utf-8 -*-
-#
-#    Created on 16/04/19
-#
-#    @author:alia
-#
-#
-# 2019 ALIA Technologies
-#       http://www.alialabs.com
-#
-# WARNING: This program as such is intended to be used by professional
-# programmers who take the whole responsability of assessing all potential
-# consequences resulting from its eventual inadequacies and bugs
-# End users who are looking for a ready-to-use solution with commercial
-# garantees and support are strongly adviced to contract a Free Software
-# Service Company
-#
-# This program is Free Software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
+# Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+# @author: Alia
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo.tools.translate import _
-from odoo.tools import ustr
-from requests.exceptions import ConnectionError
-from odoo.addons.component.core import Component
-from ..okticket import exceptions, ticket_connector
-from odoo.addons.component.core import AbstractComponent
-from odoo.addons.queue_job.exception import FailedJobError
-from odoo.addons.connector.exception import NetworkRetryableError
 import logging
 
+from odoo.addons.component.core import AbstractComponent
+from odoo.addons.component.core import Component
+from odoo.addons.connector.exception import NetworkRetryableError
+from odoo.addons.queue_job.exception import FailedJobError
+from odoo.tools import ustr
+from odoo.tools.translate import _
+from requests.exceptions import ConnectionError
+
+from ..okticket import exceptions, ticket_connector
+
 _logger = logging.getLogger(__name__)
+
 
 class OkticketBaseBackendAdapter(AbstractComponent):
     _name = 'okticket.base.backend.adapter'
@@ -75,12 +50,12 @@ class OkticketAdapter(Component):
         except (exceptions.AuthError, ConnectionError) as err:
             raise FailedJobError(
                 _('Okticket connection Error: '
-                    'Invalid authentications key.'))
+                  'Invalid authentications key.'))
 
         except (exceptions.UnknownError, exceptions.ServerError) as err:
             raise NetworkRetryableError(
                 _('A network error caused the failure of the job: '
-                    '%s') % ustr(err))
+                  '%s') % ustr(err))
 
         self.okticket_api = okticket_api
         return True

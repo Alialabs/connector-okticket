@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+     @author: Alia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
     <data>
 
         <record model="ir.ui.view" id="okticket_hr_expense_view">
@@ -8,7 +11,6 @@
             <field name="inherit_id" ref="hr_expense.hr_expense_view_form"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <!-- Remplazo de posicion de total_amount y payment_mode -->
                 <xpath expr='//group/group[last()]' position='replace'/>
                 <field name="tax_ids" position="after">
                     <field name="okticket_img" widget="image"/>
@@ -16,9 +18,9 @@
                 <field name="company_id" position="after">
                     <field name="okticket_expense_id"/>
                     <field name="okticket_status" widget="statusbar"/>
-                    <field name="payment_method" widget="selection" />
-                    <field name="okticket_vat" />
-                    <field name="okticket_partner_name" />
+                    <field name="payment_method" widget="selection"/>
+                    <field name="okticket_vat"/>
+                    <field name="okticket_partner_name"/>
                     <label for="payment_mode"/>
                     <div>
                         <field name="payment_mode" widget="radio"/>
@@ -32,21 +34,21 @@
             <field name="name">My Expenses to Submit</field>
             <field name="res_model">hr.expense</field>
             <field name="view_mode">tree,kanban,form,graph,pivot</field>
-            <field name="search_view_id" ref="hr_expense.view_hr_expense_filter"/>
+            <field name="search_view_id" ref="hr_expense.hr_expense_view_search"/>
             <field name="domain">[]</field>
             <field name="context">{'search_default_to_report': 1}</field>
             <field name="help" type="html">
-              <p>
-                The steps to process expenses are:
-                <ol>
-                    <li>You record expenses,</li>
-                    <li>Periodically, you submit expenses report to your manager,</li>
-                    <li>Once approved, your expense report, goes to the accounting,</li>
-                    <li>The accountant validates entries and reimburse you.</li>
-                </ol>
-              </p>
+                <p>
+                    The steps to process expenses are:
+                    <ol>
+                        <li>You record expenses,</li>
+                        <li>Periodically, you submit expenses report to your manager,</li>
+                        <li>Once approved, your expense report, goes to the accounting,</li>
+                        <li>The accountant validates entries and reimburse you.</li>
+                    </ol>
+                </p>
             </field>
         </record>
 
     </data>
-</openerp>
+</odoo>

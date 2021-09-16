@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+     @author: Alia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
 <odoo>
     <data>
 
@@ -8,23 +11,42 @@
             <field name="arch" type="xml">
                 <form string="Confirm Cost Center from Project">
                     <p class="oe_grey">
-                        Se crearán los centros de coste a partir
-                        de los proyectos indicados
-                        ¿Desea continuar?
+                        Cost centers will be created from
+                        the indicated projects.
+                        Do you want to continue?
                     </p>
                     <footer>
-                        <button string="Confirm" name="cost_center_from_project_confirm" type="object" default_focus="1" class="btn-primary"/>
+                        <button string="Confirm" name="cost_center_from_project_confirm" type="object" default_focus="1"
+                                class="btn-primary"/>
                         <button string="Cancel" class="btn-secondary" special="cancel"/>
                     </footer>
                 </form>
             </field>
         </record>
 
-        <act_window id="action_confirm_cost_center_creation_project"
-            multi="True"
-            key2="client_action_multi" name="Confirm Cost Center Creation from Project"
-            res_model="project.cost.center.wizard" src_model="project.project"
-            view_mode="form" target="new" view_type="form" />
+        <record model="ir.actions.server" id="cost_center_creation_from_project_action">
+            <field name="name">Confirm Cost Center Creation from Project</field>
+            <field name="model_id" ref="okticket_connector_cost_center.model_project_cost_center_wizard"/>
+            <field name="binding_model_id" ref="project.model_project_project"/>
+            <field name="state">code</field>
+            <field name="binding_view_types">list</field>
+            <field name="code">
+action = {
+            'name': 'Confirm Cost Center Creation from Project',
+            'view_mode': 'form',
+            'res_model': 'project.cost.center.wizard',
+            'views': [(env.ref('okticket_connector_cost_center.cost_center_creation_from_project_view').id, 'form')],
+            'type': 'ir.actions.act_window',
+            # 'res_id': wizard.id,
+            'target': 'new',
+            'context': env.context,
+        }
+            </field>
+        </record>
+
+        <record id="project.open_view_project_all" model="ir.actions.act_window">
+            <field name="view_mode">kanban,tree,form</field>
+        </record>
 
     </data>
 </odoo>
