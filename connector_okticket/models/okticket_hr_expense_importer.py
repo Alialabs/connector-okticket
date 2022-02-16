@@ -77,22 +77,35 @@ class HrExpenseBatchImporter(Component):
         params = []
         existing = False
         if 'type_id' in record:
-            if record['type_id'] == 0:
-                params = [('okticket_categ_prod_id', '=', record['category_id'])]
-            elif record['type_id'] in [1,2]: # TODO factura ??
+
+            if record['type_id'] in [2]:  # Solo kilómetros
                 params = [('okticket_type_prod_id', '=', record['type_id'])]
-            existing = self.env['product.product'].search(params,limit=1,)
+
+            else:  # record['type_id'] in [0, 1]:  # Gastos y facturas
+
+                # Gastos y facturas comparten productos
+                params = [('okticket_categ_prod_id', '=', record['category_id'])]
+
+                # Si existen productos separados para gastos y facturas
+                # params = [('okticket_categ_prod_id', '=', record['category_id']),
+                # ('okticket_type_prod_id', '=', record['type_id'])]
+
+                # if record['type_id'] in [1]:  # Identificación de factura
+                    # TODO implementar acción para identificar facturas
+
+            existing = self.env['product.product'].search(params, limit=1)
         return existing
 
     @mapping
     def product_id(self, record):
         # params = []
+        # existing = False
         # if 'type_id' in record:
         #     if record['type_id'] == 0:
         #         params = [('okticket_categ_prod_id', '=', record['category_id'])]
-        #     elif record['type_id'] in [1,2]: # TODO factura ??
+        #     elif record['type_id'] in [1, 2]:  # TODO factura ??
         #         params = [('okticket_type_prod_id', '=', record['type_id'])]
-        #     existing = self.env['product.product'].search(params,limit=1,)
+        #     existing = self.env['product.product'].search(params, limit=1)
         existing = self.get_related_product(record)
 
         if existing:
@@ -111,9 +124,9 @@ class HrExpenseBatchImporter(Component):
             result = {'product_id': existing.id,}
             if record['type_id'] != 0:
                 # Asigna impuestos asociados al producto SOLO si NO es ticket
-                tax_ids = [ (4, stax.id) for stax in existing.supplier_taxes_id ]
+                tax_ids = [(4, stax.id) for stax in existing.supplier_taxes_id]
                 if tax_ids:
-                    result.update({'tax_ids': tax_ids,})
+                    result.update({'tax_ids': tax_ids})
 
             # MOVIDO A @mapping de account_id : def account_id(self, record):
             # # Asignación de la Cuenta contable al gasto en base del producto
