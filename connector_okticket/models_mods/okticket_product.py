@@ -39,28 +39,52 @@ class ProductTemplate(models.Model):
 
     okticket_categ_prod_id = fields.Integer(string="OkTicket Category_id", default=-1.0)
     okticket_type_prod_id = fields.Integer(string="OkTicket Type_id", default=-1.0)
+
     # Producto versión "refacturable" del product.template
     reinvoiceable_prod_id = fields.Many2one('product.template', company_dependent=True,
-                                    string="Reinvoiceable product version",
-                                    help="Reinvoiceable version of the product")
+                                            string="Reinvoiceable product version",
+                                            help="Reinvoiceable version of the product")
     no_reinvoiceable_prod_ids = fields.One2many('product.template', 'reinvoiceable_prod_id',
-                                    string='No reinvoiceable product version')
+                                                string='No reinvoiceable product version')
     reinvoiceable_product_version = fields.Boolean("Is reinvoiceable product version", store=True,
-                                    # compute='_compute_is_reinvoiceable_product',
-                                    help="True if the product has other version no reinvoiceable")
+                                                   # compute='_compute_is_reinvoiceable_product',
+                                                   help="True if the product has other version no reinvoiceable")
 
+    # Producto versión "factura" del product.template
+    invoice_prod_id = fields.Many2one('product.template', company_dependent=True,
+                                      string="Invoice product version",
+                                      help="Version of the product to use in invoices")
+    base_version_prod_ids = fields.One2many('product.template', 'invoice_prod_id',
+                                            string='Base product version')
+
+    @api.multi
+    def copy(self, default=None):
+        """
+        Evita que se dupliquen versiones de factura o versiones refacturables
+        """
+        default = default or {}
+        if 'reinvoiceable_prod_id' not in default:
+            default.update({
+                'reinvoiceable_prod_id': False,
+            })
+        if 'invoice_prod_id' not in default:
+            default.update({
+                'invoice_prod_id': False,
+            })
+        return super().copy(default)
+    
     @api.depends('reinvoiceable_prod_id')
     def _compute_is_reinvoiceable_product(self):
-        if self.reinvoiceable_prod_id: # Si el producto tiene versión refacturable, entonces es NO refacturable
-            self.reinvoiceable_product_version =  False
-        else: # Si el producto NO tiene versión refacturable, entonces ES refacturable
+        if self.reinvoiceable_prod_id:  # Si el producto tiene versión refacturable, entonces es NO refacturable
+            self.reinvoiceable_product_version = False
+        else:  # Si el producto NO tiene versión refacturable, entonces ES refacturable
             self.reinvoiceable_product_version = True
 
     @api.multi
     def load_reinvoiceable_product_version(self):
-        '''
+        """
         Actualización/creación de un product.template en versión "reinvoiceable" a partir del indicado
-        '''
+        """
         reinvoiceable_products = []
         for no_reinv_prod in self:
             reinvoiceable_prod = no_reinv_prod.reinvoiceable_prod_id or False
@@ -70,15 +94,38 @@ class ProductTemplate(models.Model):
                     'okticket_type_prod_id': reinvoiceable_prod.okticket_type_prod_id,
                     'okticket_categ_prod_id': reinvoiceable_prod.okticket_categ_prod_id,
                 })
-            else:# Si no, se crea un nuevo product.template versión "refacturable"
-                reinv_name = no_reinv_prod.name + '-REFACTURABLE' # todo: otra forma de nombrar la verión "refacturable" ??
+            else:  # Si no, se crea un nuevo product.template versión "refacturable"
+                reinv_name = no_reinv_prod.name + '-REFACTURABLE'  # todo: otra forma de nombrar la verión "refacturable" ??
                 reinvoiceable_prod = no_reinv_prod.copy(default={
                     'name': reinv_name,
-                    'expense_policy': 'cost', # "Re-Invoice Policy" = 'A costo'
+                    'expense_policy': 'cost',  # "Re-Invoice Policy" = 'A costo'
                 })
                 no_reinv_prod.write({'reinvoiceable_prod_id': reinvoiceable_prod.id})
             reinvoiceable_products.append(reinvoiceable_prod)
         return reinvoiceable_products
 
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+    @api.multi
+    def load_invoice_product_version(self):
+        """
+        Actualización/creación de un product.template en versión "invoice" a partir del
+        producto indicado tipo "gastos" (okticket_type_prod_id = 1)
+        """
+        _default_invoice_type_id = 1  # Id por defecto para las facturas
+        invoice_version_products_ids = []
+        for base_prod in self.filtered(lambda p: p.okticket_type_prod_id == 0):
+            invoice_version_prod = base_prod.invoice_prod_id or False
+            # Se actualiza la versión "factura" de cada product.template si ya tiene una
+            if invoice_version_prod:
+                invoice_version_prod.write({
+                    'okticket_type_prod_id': _default_invoice_type_id,
+                    'okticket_categ_prod_id': invoice_version_prod.okticket_categ_prod_id,
+                })
+            else:  # Si no, se crea un nuevo product.template versión "factura"
+                inv_name = base_prod.name + '-FACTURA'  # todo: otra forma de nombrar la verión "factura" ??
+                invoice_version_prod = base_prod.copy(default={
+                    'name': inv_name,
+                    'okticket_type_prod_id': _default_invoice_type_id,
+                })
+                base_prod.write({'invoice_prod_id': invoice_version_prod.id})
+            invoice_version_products_ids.append(invoice_version_prod.id)
+        return invoice_version_products_ids
