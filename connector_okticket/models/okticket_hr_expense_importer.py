@@ -46,22 +46,17 @@ class HrExpenseBatchImporter(Component):
         if existing:
             return {'odoo_id': existing.id}
 
-    def get_related_product(self, record):
+    def get_base_product(self, record):
         """ Gets product of expenses """
         params = []
         existing = False
         if 'type_id' in record:
-            if record['type_id'] == 0:
-                params = [('okticket_categ_prod_id', '=', record['category_id'])]
-            elif record['type_id'] in [1, 2]:
-                params = [('okticket_type_prod_id', '=', record['type_id'])]
+            # Gasto: type_id = 0; Factura: type_id = 1; Kilómetros: type_id = 2
+            params = [('okticket_type_prod_id', '=', record['type_id'])]
+            if record['type_id'] in [0, 1]:  # Gastos y facturas
+                params.append(('okticket_categ_prod_id', '=', record['category_id']))
             existing = self.env['product.product'].search(params, limit=1)
-        return existing
 
-    @mapping
-    def product_id(self, record):
-        existing = self.get_related_product(record)
-        if existing:
             # By default, it's used 'no refacturable' in product.template
             # If 'custom_field' from Okticket expense is
             # 'refacturable'="1" ("0": False='no refacturable'; "1": True='refacturable')
@@ -74,7 +69,13 @@ class HrExpenseBatchImporter(Component):
                 if existing.rebillable_prod_id:
                     existing = self.env['product.product']. \
                         search([('product_tmpl_id', '=', existing.rebillable_prod_id.id)], limit=1)
-            result = {'product_id': existing.id, }
+        return existing
+
+    @mapping
+    def product_id(self, record):
+        existing = self.get_base_product(record)
+        if existing:
+            result = {'product_id': existing.id}
             if record['type_id'] != 0:
                 # Assign taxes on product only if it is not of the "ticket" type.
                 tax_ids = [(4, stax.id) for stax in existing.supplier_taxes_id]
@@ -195,7 +196,7 @@ class HrExpenseBatchImporter(Component):
                                               or False
                 if not okticket_project_account_id:
                     # Ledger account from within the product
-                    existing = self.get_related_product(record)
+                    existing = self.get_base_product(record)
                     if existing.property_account_expense_id:
                         okticket_project_account_id = existing.property_account_expense_id.id
                 if okticket_project_account_id:
@@ -206,6 +207,10 @@ class HrExpenseBatchImporter(Component):
     @mapping
     def reference(self, record):
         return {'reference': record.get('ticket_num') or 'N.A.'}
+
+    @mapping
+    def is_invoice(self, record):
+        return {'is_invoice': record.get('type_id') and record['type_id'] == 1 or False}
 
     def run(self, filters=None, options=None):
         """

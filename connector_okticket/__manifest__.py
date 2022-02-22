@@ -5,7 +5,7 @@
     'name': 'Okticket Connector',
     'summary': 'Mainly features, models and business logic for Okticket connector. '
                'Implements expenses import from Okticket.',
-    'version': '1.0',
+    'version': '14.0.1.0.2',
     'category': 'Connector',
     'depends': [
         'hr_expense',

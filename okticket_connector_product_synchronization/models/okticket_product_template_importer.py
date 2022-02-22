@@ -103,5 +103,11 @@ class ProductTemplateBatchImporter(Component):
             if odoo_product:
                 odoo_product.load_rebillable_product_version()
 
+            # Creation/update of invoice product version which is being imported
+            if odoo_product:
+                invoice_product_version_ids = odoo_product.load_invoice_product_version()
+                # TODO si se necesitase crear la versión reinvoiceable de la versión invoice de un producto
+                # self.env['product.template'].browse(invoice_product_version_ids).load_reinvoiceable_product_version()
+
         _logger.info(_('Import from Okticket DONE'))
         return okticket_product_template_ids

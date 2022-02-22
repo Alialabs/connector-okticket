@@ -204,6 +204,8 @@ class BaseConnector(object):
                     result = data.decode("utf-8")
                 else:
                     try:
+                        if type(data) == bytes:
+                            data = data.decode('UTF-8')
                         result = json.loads(data)
                     except (ValueError, TypeError):
                         raise JSONDecodeError(response)

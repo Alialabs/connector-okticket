@@ -15,6 +15,9 @@
                 <field name="tax_ids" position="after">
                     <field name="okticket_img" widget="image"/>
                 </field>
+                <field name="date" position="before">
+                    <field name="is_invoice"/>
+                </field>
                 <field name="company_id" position="after">
                     <field name="okticket_expense_id"/>
                     <field name="okticket_status" widget="statusbar"/>

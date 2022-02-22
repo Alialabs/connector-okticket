@@ -535,6 +535,12 @@ msgid "Invoice"
 msgstr "Factura"
 
 #. module: connector_okticket
+#: code:addons/connector_okticket/models/okticket_product.py:0
+#, python-format
+msgid "Invoiceable"
+msgstr "Factura"
+
+#. module: connector_okticket
 #: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__is_editable
 msgid "Is Editable By Current User"
 msgstr "Es editable por el usuario actual"
@@ -543,6 +549,12 @@ msgstr "Es editable por el usuario actual"
 #: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__message_is_follower
 msgid "Is Follower"
 msgstr "Es un seguidor"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_hr_expense__okticket_is_invoice
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__okticket_is_invoice
+msgid "Is invoice"
+msgstr "Es factura"
 
 #. module: connector_okticket
 #: model:ir.model.fields,field_description:connector_okticket.field_product_product__rebillable_product_version
