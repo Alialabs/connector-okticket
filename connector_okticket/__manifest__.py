@@ -10,7 +10,7 @@
 #
 #
 {'name': 'Okticket Connector',
- 'version': '1.0',
+ 'version': '12.0.1.0.3',
  'category': 'Connector',
  'depends': [
              # 'project_department',

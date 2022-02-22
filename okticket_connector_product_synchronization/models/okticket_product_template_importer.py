@@ -61,7 +61,8 @@ class ProductTemplateBatchImporter(Component):
         existing = self.env['product.template'].search(
             [('name', '=', record['name']),
              ('can_be_expensed', '=', True),
-             ('reinvoiceable_product_version', '=', False)], # El binding del producto se realiza contra la versión "No refacturable"
+             ('reinvoiceable_product_version', '=', False)],
+            # El binding del producto se realiza contra la versión "No refacturable"
             # limit=1,
         )
         if existing:
@@ -98,19 +99,19 @@ class ProductTemplateBatchImporter(Component):
                 'okticket_type_prod_id': int(self._ticket_type_id),
                 'okticket_categ_prod_id': product_ext_vals['id'],
             }
-            odoo_product = False # Siempre adquiere un valor a lo largo de los if-else...
-            if binding: # EXISTE producto y están VINCULADO = ACTUALIZAR
+            odoo_product = False  # Siempre adquiere un valor a lo largo de los if-else...
+            if binding:  # EXISTE producto y están VINCULADO = ACTUALIZAR
                 binding.write(internal_data)
                 odoo_product = self.env['product.template'].browse(internal_data['odoo_id'])
                 odoo_product.write(product_to_bind_vals)
-            else: # NO está VINCULADO
-                if not internal_data.get('odoo_id'): # NO EXISTE
+            else:  # NO está VINCULADO
+                if not internal_data.get('odoo_id'):  # NO EXISTE
                     # Creación del product.product con la información de OkTicket
                     product_to_bind_vals.update({
                         'name': product_ext_vals.get('name'),
                     })
                     odoo_product = self.env['product.template'].create(product_to_bind_vals)
-                else: # EXISTE el producto en Odoo pero NO está VINCULADO
+                else:  # EXISTE el producto en Odoo pero NO está VINCULADO
                     odoo_product = self.env['product.template'].browse(internal_data['odoo_id'])
                     odoo_product.write(product_to_bind_vals)
                 # Vinculación entre el producto creado o ya existente en Odoo y la categoría de gasto de Okticket
@@ -127,8 +128,11 @@ class ProductTemplateBatchImporter(Component):
             if odoo_product:
                 odoo_product.load_reinvoiceable_product_version()
 
+            # CREACIÓN/ACTUALIZACIÓN de versión FACTURA del producto que se está importando
+            if odoo_product:
+                invoice_product_version_ids = odoo_product.load_invoice_product_version()
+                # TODO si se necesitase crear la versión reinvoiceable de la versión invoice de un producto
+                # self.env['product.template'].browse(invoice_product_version_ids).load_reinvoiceable_product_version()
+
         _logger.info('Import from Okticket DONE !!!')
         return okticket_product_template_ids
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

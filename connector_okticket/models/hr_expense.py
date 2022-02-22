@@ -59,3 +59,5 @@ class HrExpense(models.Model):
         ('confirmed', 'Confirmed'),
         ('pending', 'Pending'),
     ], string='Status', readonly=True, copy=False, index=True, track_visibility='onchange', default='pending')
+    
+    is_invoice = fields.Boolean(string='Is invoice', default=False)
