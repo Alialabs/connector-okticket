@@ -30,22 +30,23 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
-from odoo import fields, models
+from odoo import fields, models, api, _
+from odoo.exceptions import UserError
 
 _payment_method_selection = [('efectivo', 'Efectivo'), ('tarjeta', 'Tarjeta empresa'),
                              ('cheque', 'Cheque bancario'), ('tarjeta-gas', 'Tarjeta combustible'),
                              ('transferencia', 'Transferencia'), ('paypal', 'Paypal'), ('na', 'N.A.')]
+
 
 # def get_payment_methods():
 #     return [ tuple_sel[0] for tuple_sel in _payment_method_selection ]
 
 
 class HrExpense(models.Model):
-
     _inherit = 'hr.expense'
 
     payment_method = fields.Selection(_payment_method_selection, string='Payment method', readonly=True,
-                                       copy=False, index=True, track_visibility='onchange', default='na')
+                                      copy=False, index=True, track_visibility='onchange', default='na')
 
     okticket_vat = fields.Char(string='VAT Number')
     okticket_partner_name = fields.Char(string='Partner Name')
@@ -59,5 +60,12 @@ class HrExpense(models.Model):
         ('confirmed', 'Confirmed'),
         ('pending', 'Pending'),
     ], string='Status', readonly=True, copy=False, index=True, track_visibility='onchange', default='pending')
-    
+
     is_invoice = fields.Boolean(string='Is invoice', default=False)
+
+    @api.multi
+    def unlink(self):
+        for expense in self:
+            if expense.state in ['reported']:
+                raise UserError(_('You cannot delete a reported expense.'))
+        return super(HrExpense, self).unlink()
