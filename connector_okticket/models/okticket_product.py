@@ -27,7 +27,6 @@ class ProductTemplate(models.Model):
     base_version_prod_ids = fields.One2many('product.template', 'invoice_prod_id',
                                             string='Base product version')
 
-    @api.multi
     def copy(self, default=None):
         default = default or {}
         if 'rebillable_prod_id' not in default:
@@ -75,7 +74,6 @@ class ProductTemplate(models.Model):
             rebillable_products.append(rebillable_prod)
         return rebillable_products
 
-    @api.multi
     def load_invoice_product_version(self):
         """
         Updates or creates product.template in a "invoiceable" version from the one indicated
