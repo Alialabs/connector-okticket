@@ -2,7 +2,8 @@
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import fields, models
+from odoo import fields, models, api, _
+from odoo.exceptions import UserError
 
 # Values from OkTicket
 _payment_method_selection = [('efectivo', 'Cash'), ('tarjeta', 'Business card'),
@@ -26,3 +27,9 @@ class HrExpense(models.Model):
     ], string='Status', readonly=True, copy=False, index=True, track_visibility='onchange', default='pending')
 
     is_invoice = fields.Boolean(string='Is invoice', default=False)
+
+    def unlink(self):
+        for expense in self:
+            if expense.state in ['reported']:
+                raise UserError(_('You cannot delete a reported expense.'))
+        return super(HrExpense, self).unlink()
