@@ -1208,6 +1208,12 @@ msgid "Website communication history"
 msgstr "Historial de comunicaciones del sitio web"
 
 #. module: connector_okticket
+#: code:addons/connector_okticket/models/hr_expense.py:0
+#, python-format
+msgid "You cannot delete a reported expense."
+msgstr "No se puede eliminar un gasto en estado enviado."
+
+#. module: connector_okticket
 #: model_terms:ir.ui.view,arch_db:connector_okticket.view_okticket_backend_form
 msgid "e.g. http://dev.okticket.es/api/public"
 msgstr "p.ej. http://dev.okticket.es/api/public"
