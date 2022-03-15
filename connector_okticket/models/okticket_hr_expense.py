@@ -105,7 +105,9 @@ class ExpensesAdapter(Component):
                 result = self.okticket_api.find_expense_by_id(filter['expense_external_id'],
                                                               https=self.collection.https)
             else:
-                result = self.okticket_api.find_expenses(params={'accounted': 'false'},
+                result = self.okticket_api.find_expenses(params={
+                                                            'accounted': 'false',
+                                                            'statuses': '0,1,2'},
                                                          https=self.collection.https)
 
                 # result = self.okticket_api.find_expenses(params={})
