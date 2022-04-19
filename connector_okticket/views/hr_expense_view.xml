@@ -8,7 +8,7 @@
         <record model="ir.ui.view" id="okticket_hr_expense_view">
             <field name="name">okticket.hr.expense.form</field>
             <field name="model">hr.expense</field>
-            <field name="inherit_id" ref="hr_expense.hr_expense_view_form"/>
+            <field name="inherit_id" ref="hr_expense.hr_expense_form_view"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <xpath expr='//group/group[last()]' position='replace'/>
@@ -37,7 +37,7 @@
             <field name="name">My Expenses to Submit</field>
             <field name="res_model">hr.expense</field>
             <field name="view_mode">tree,kanban,form,graph,pivot</field>
-            <field name="search_view_id" ref="hr_expense.hr_expense_view_search"/>
+            <field name="search_view_id" ref="hr_expense.view_hr_expense_filter"/>
             <field name="domain">[]</field>
             <field name="context">{'search_default_to_report': 1}</field>
             <field name="help" type="html">

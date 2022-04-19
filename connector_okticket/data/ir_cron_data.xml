@@ -15,7 +15,9 @@
             <field name="doall" eval="False"/>
             <field name="model_id" ref="connector_okticket.model_okticket_backend"/>
             <field name="state">code</field>
-            <field name="code">model._scheduler_import_expenses()</field>
+            <field name="model">okticket.backend</field>
+            <field name="function">_scheduler_import_expenses</field>
+            <field name="args" eval="'()'"/>
         </record>
 
     </data>

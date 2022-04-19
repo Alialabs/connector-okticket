@@ -2,10 +2,10 @@
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-import http.client
+import httplib
 import json
 import logging
-import urllib.parse
+import urllib
 
 _logger = logging.getLogger(__name__)
 
@@ -140,9 +140,9 @@ class BaseConnector(object):
 
     def get_http_connection(self, https=False):
         if https:
-            conn = http.client.HTTPSConnection(self.http_client_conn_url)
+            conn = httplib.HTTPSConnection(self.http_client_conn_url)
         else:
-            conn = http.client.HTTPConnection(self.http_client_conn_url)
+            conn = httplib.HTTPConnection(self.http_client_conn_url)
         return conn
 
     def process_request(self, url, type_request, params=None, data=None, headers=None, raw_response=None,
@@ -153,7 +153,7 @@ class BaseConnector(object):
         assert self.http_client_conn_url, "http_client_conn_url param is required"
 
         if params:  # URL params
-            params = urllib.parse.urlencode(params)
+            params = urllib.urlencode(params)
             url = url + "?" + params if type_request == "GET" and params else url
 
         conn = self.get_http_connection(https=https)
