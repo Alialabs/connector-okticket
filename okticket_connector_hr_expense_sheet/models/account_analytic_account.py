@@ -5,9 +5,9 @@
 from odoo import fields, models
 
 
-class Project(models.Model):
-    _inherit = 'project.project'
+class AccountAnalyticAccount(models.Model):
+    _inherit = 'account.analytic.account'
 
     expense_sheet_ids = fields.Many2many('hr.expense.sheet',
-                                         'project_expense_sheet_rel',
-                                         'project_id', 'sheet_id')
+                                         'analytic_expense_sheet_rel',
+                                         'analytic_id', 'sheet_id')

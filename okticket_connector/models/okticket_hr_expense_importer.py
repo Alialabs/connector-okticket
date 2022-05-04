@@ -167,6 +167,8 @@ class HrExpenseBatchImporter(Component):
                 fields = {
                     'analytic_account_id': cc_analytic_binder.odoo_id.id
                 }
+                # TODO revisar relación entre pedido de venta y cuenta analítica.
+                #  Puede que ya exista relación directa sin tener que pasar por el proyecto
                 sale_order_id = cc_analytic_binder.odoo_id.project_ids and cc_analytic_binder.odoo_id.project_ids[0] \
                     and cc_analytic_binder.odoo_id.project_ids[0].sale_order_id \
                     and cc_analytic_binder.odoo_id.project_ids[0].sale_order_id.id \
@@ -187,21 +189,17 @@ class HrExpenseBatchImporter(Component):
                 limit=1, )
             if cc_analytic_binder and cc_analytic_binder.odoo_id:
                 # Ledger account of the related project
-                okticket_project_account_id = cc_analytic_binder.odoo_id.project_ids \
-                                              and cc_analytic_binder.odoo_id.project_ids[0] \
-                                              and cc_analytic_binder.odoo_id.project_ids[0] \
-                                                  .okticket_project_account_id \
-                                              and cc_analytic_binder.odoo_id.project_ids[0] \
-                                                  .okticket_project_account_id.id \
+                okticket_account_id = cc_analytic_binder.odoo_id.okticket_account_id \
+                                              and cc_analytic_binder.odoo_id.okticket_account_id.id \
                                               or False
-                if not okticket_project_account_id:
+                if not okticket_account_id:
                     # Ledger account from within the product
                     existing = self.get_base_product(record)
                     if existing.property_account_expense_id:
-                        okticket_project_account_id = existing.property_account_expense_id.id
-                if okticket_project_account_id:
+                        okticket_account_id = existing.property_account_expense_id.id
+                if okticket_account_id:
                     return {
-                        'account_id': okticket_project_account_id,
+                        'account_id': okticket_account_id,
                     }
 
     @mapping

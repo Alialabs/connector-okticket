@@ -16,8 +16,8 @@
     'website': 'http://www.alialabs.com',
     'data': [
         'security/ir.model.access.csv',
-        'wizard/project_cost_center_view.xml',
-        'views/project_view.xml',
+        'wizard/analytic_cost_center_view.xml',
+        'views/account_analytic_account_view.xml',
     ],
     'application': False,
     'installable': True,

@@ -6,9 +6,8 @@
 from odoo import fields, models
 
 
-class ProjectProject(models.Model):
-    _inherit = 'project.project'
+class AccountAnalyticAccount(models.Model):
+    _inherit = 'account.analytic.account'
 
     okticket_cost_center_id = fields.Integer(string='OkTicket Cost_center_id', default=-1.0)
-    okticket_project_account_id = fields.Many2one('account.account',
-                                                  string='Default Account for Expenses')
+    okticket_account_id = fields.Many2one('account.account', string='Default Account for Expenses')

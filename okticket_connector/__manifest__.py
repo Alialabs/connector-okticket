@@ -17,8 +17,9 @@
         'uom',
         # 'analytic_base_department',
         'product',
+        'analytic',
         'hr',
-        'project',
+        # 'project',
         'hr_timesheet'
     ],
     'author': "Alia Technologies",
@@ -38,7 +39,7 @@
         'views/product_template_view.xml',
         'views/hr_employee_view.xml',
         'views/company_view.xml',
-        'views/project_view.xml',
+        'views/account_analytic_account_view.xml',
 
         'wizard/expense_wizard_view.xml'
     ],

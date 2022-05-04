@@ -2,7 +2,7 @@
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from . import project
+from . import account_analytic_account
 from . import hr_expense
 from . import okticket_hr_expense_exporter
 from . import hr_expense_sheet

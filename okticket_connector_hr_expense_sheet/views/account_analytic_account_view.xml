@@ -5,10 +5,10 @@
 <openerp>
     <data>
 
-        <record id="okticket_sheets_project_view" model="ir.ui.view">
-            <field name="name">okticket.sheets.project.view</field>
-            <field name="model">project.project</field>
-            <field name="inherit_id" ref="okticket_connector.okticket_edit_project_view"/>
+        <record id="okticket_sheets_analytic_view" model="ir.ui.view">
+            <field name="name">okticket.sheets.analytic.view</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="okticket_connector.okticket_view_account_analytic_account_form"/>
             <field name="arch" type="xml">
                 <page name="okticket_conn_conf" position="inside">
                     <field name="expense_sheet_ids"/>
