@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* connector_okticket
+# 	* okticket_connector
 #
 msgid ""
 msgstr ""
@@ -15,8 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#. module: connector_okticket
-#: code:addons/connector_okticket/models/okticket_hr_expense_importer.py:0
+#. module: okticket_connector
+#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
 #, python-format
 msgid ""
 "\n"
@@ -25,8 +25,8 @@ msgstr ""
 "\n"
 "Error: "
 
-#. module: connector_okticket
-#: code:addons/connector_okticket/wizard/expense_wizard.py:0
+#. module: okticket_connector
+#: code:addons/okticket_connector/wizard/expense_wizard.py:0
 #, python-format
 msgid ""
 "(assign_default_expense_account)> Field \"account_id\" updated from product "
@@ -35,121 +35,121 @@ msgstr ""
 "(assign_default_expense_account)> Campo \"account_id\" actualizado desde el producto "
 "para los gastos: %s"
 
-#. module: connector_okticket
-#: code:addons/connector_okticket/models/okticket_backend.py:0
+#. module: okticket_connector
+#: code:addons/okticket_connector/models/okticket_backend.py:0
 #, python-format
 msgid "1.0 and higher"
 msgstr "1.0 y superior"
 
-#. module: connector_okticket
-#: model:ir.model.constraint,message:connector_okticket.constraint_okticket_account_analytic_account_okticket_uniq
-#: model:ir.model.constraint,message:connector_okticket.constraint_okticket_binding_okticket_uniq
-#: model:ir.model.constraint,message:connector_okticket.constraint_okticket_hr_employee_okticket_uniq
-#: model:ir.model.constraint,message:connector_okticket.constraint_okticket_hr_expense_okticket_uniq
-#: model:ir.model.constraint,message:connector_okticket.constraint_okticket_hr_expense_sheet_okticket_uniq
-#: model:ir.model.constraint,message:connector_okticket.constraint_okticket_product_template_okticket_uniq
+#. module: okticket_connector
+#: model:ir.model.constraint,message:okticket_connector.constraint_okticket_account_analytic_account_okticket_uniq
+#: model:ir.model.constraint,message:okticket_connector.constraint_okticket_binding_okticket_uniq
+#: model:ir.model.constraint,message:okticket_connector.constraint_okticket_hr_employee_okticket_uniq
+#: model:ir.model.constraint,message:okticket_connector.constraint_okticket_hr_expense_okticket_uniq
+#: model:ir.model.constraint,message:okticket_connector.constraint_okticket_hr_expense_sheet_okticket_uniq
+#: model:ir.model.constraint,message:okticket_connector.constraint_okticket_product_template_okticket_uniq
 msgid "A binding already exists with the same Okticket ID."
 msgstr "Ya existe un vínculo con el mismo ID de Okticket."
 
-#. module: connector_okticket
-#: code:addons/connector_okticket/components/backend_adapter.py:0
+#. module: okticket_connector
+#: code:addons/okticket_connector/components/backend_adapter.py:0
 #, python-format
 msgid "A network error caused the failure of the job: %s"
 msgstr "Un error de red ha causado el fallo: %s"
 
-#. module: connector_okticket
-#: model:product.product,name:connector_okticket.product_product_okticket_accommodation
-#: model:product.template,name:connector_okticket.product_product_okticket_accommodation_product_template
+#. module: okticket_connector
+#: model:product.product,name:okticket_connector.product_product_okticket_accommodation
+#: model:product.template,name:okticket_connector.product_product_okticket_accommodation_product_template
 msgid "Accommodation"
 msgstr "Alojamiento"
 
-#. module: connector_okticket
-#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__account_id
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__account_id
 msgid "Account"
 msgstr "Cuenta"
 
-#. module: connector_okticket
-#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_edit_project_view
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_edit_project_view
 msgid "Account Information"
 msgstr "Información de la cuenta"
 
-#. module: connector_okticket
-#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__accounting_date
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__accounting_date
 msgid "Accounting Date"
 msgstr "Fecha contable"
 
-#. module: connector_okticket
-#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__message_needaction
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__message_needaction
 msgid "Action Needed"
 msgstr "Acción requerida"
 
-#. module: connector_okticket
-#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__active
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__active
 msgid "Active"
 msgstr "Activo"
 
-#. module: connector_okticket
-#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__activity_ids
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_ids
 msgid "Activities"
 msgstr "Actividades"
 
-#. module: connector_okticket
-#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__activity_exception_decoration
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_exception_decoration
 msgid "Activity Exception Decoration"
 msgstr "Decoración de Actividad  de Excepción"
 
-#. module: connector_okticket
-#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__activity_state
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_state
 msgid "Activity State"
 msgstr "Estado de la actividad"
 
-#. module: connector_okticket
-#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__activity_type_icon
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_type_icon
 msgid "Activity Type Icon"
 msgstr "Icono de tipo de actvidad"
 
-#. module: connector_okticket
-#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__amount_residual
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__amount_residual
 msgid "Amount Due"
 msgstr "Importe adeudado"
 
-#. module: connector_okticket
-#: model:ir.model.fields,help:connector_okticket.field_okticket_hr_expense__account_id
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__account_id
 msgid "An expense account is expected"
 msgstr "Se espera una cuenta de gastos"
 
-#. module: connector_okticket
-#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__analytic_account_id
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__analytic_account_id
 msgid "Analytic Account"
 msgstr "Cuenta analítica"
 
-#. module: connector_okticket
-#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__analytic_tag_ids
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__analytic_tag_ids
 msgid "Analytic Tags"
 msgstr "Etiquetas analíticas"
 
-#. module: connector_okticket
-#: model_terms:ir.ui.view,arch_db:connector_okticket.expense_wizard_view
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.expense_wizard_view
 msgid "Assign default expenses to accounts"
 msgstr "Asignar gastos por defecto a las cuentas"
 
-#. module: connector_okticket
-#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__message_attachment_count
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__message_attachment_count
 msgid "Attachment Count"
 msgstr "Nº de archivos adjuntos"
 
-#. module: connector_okticket
-#: model:ir.model.fields.selection,name:connector_okticket.selection__log_event__tag__auth
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__tag__auth
 msgid "Authentication"
 msgstr "Autentificación"
 
-#. module: connector_okticket
-#: model:ir.model.fields,field_description:connector_okticket.field_log_event__backend_id
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_log_event__backend_id
 msgid "Backend"
 msgstr "Backend"
 
-#. module: connector_okticket
-#: model_terms:ir.ui.view,arch_db:connector_okticket.view_okticket_backend_form
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
 msgid "Backend Log"
 msgstr "Log de Backend"
 

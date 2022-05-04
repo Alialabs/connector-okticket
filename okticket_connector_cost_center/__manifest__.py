@@ -8,7 +8,7 @@
     'version': '1.0',
     'category': 'Connector',
     'depends': [
-        'connector_okticket',
+        'okticket_connector',
         'project',
     ],
     'author': "Alia Technologies",

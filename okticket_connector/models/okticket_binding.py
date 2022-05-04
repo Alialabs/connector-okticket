@@ -65,20 +65,3 @@ class OkticketBinding(models.AbstractModel):
         with backend.work_on(self._name) as work:
             exporter = work.component(usage='record.exporter')
             return exporter.run(*args)
-
-
-class OkticketBinder(AbstractComponent):
-    _name = 'okticket.binder'
-    _inherit = ['base.binder', 'base.okticket.connector']
-    _description = 'Okticket Binder'
-
-    backend_id = fields.Many2one(
-        'okticket.backend', 'Okticket Backend', required=True,
-        ondelete='restrict'
-    )
-    okticket_id = fields.Char('ID in Okticket', required=True)
-
-    _sql_constraints = [
-        ('okticket_uniq', 'unique(backend_id, okticket_id)',
-         'A record with same ID on OkTicket already exists.'),
-    ]

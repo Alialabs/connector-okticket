@@ -5,10 +5,10 @@
 {
     'name': 'Alia Okticket Connector Product Synchronization',
     'summary': 'Implements Okticket product synchronization operations.',
-    'version': '12.0.1.0.2',
+    'version': '15.0.1.0.1',
     'category': 'Connector',
     'depends': [
-        'connector_okticket',
+        'okticket_connector',
     ],
     'author': "Alia Technologies",
     'license': 'AGPL-3',

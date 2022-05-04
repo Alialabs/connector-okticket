@@ -8,7 +8,7 @@
                   parent="connector.menu_connector_root"
                   name="Okticket"
                   sequence="10"
-                  groups="connector_okticket.group_okticket_conn_user"/>
+                  groups="okticket_connector.group_okticket_conn_user"/>
 
         <menuitem id="menu_okticket_backend"
                   name="Backends"

@@ -9,7 +9,7 @@
     'category': 'Connector',
     'depends': [
         'hr',
-        'connector_okticket',
+        'okticket_connector',
     ],
     'author': "Alia Technologies",
     'license': 'AGPL-3',

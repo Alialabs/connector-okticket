@@ -10,7 +10,7 @@
     'depends': [
         'sale_timesheet',
         'hr_expense',
-        'connector_okticket',
+        'okticket_connector',
     ],
     'author': "Alia Technologies",
     'license': 'AGPL-3',

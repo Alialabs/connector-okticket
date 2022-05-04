@@ -8,7 +8,7 @@
         <record id="okticket_edit_project_view" model="ir.ui.view">
             <field name="name">okticket.edit.project.view</field>
             <field name="model">project.project</field>
-            <field name="inherit_id" ref="connector_okticket.okticket_edit_project_view"/>
+            <field name="inherit_id" ref="okticket_connector.okticket_edit_project_view"/>
             <field name="arch" type="xml">
                 <field name="okticket_cost_center_id" position="after">
                     <button string="Unlink Cost Center" name="unlink_cost_center_from_project" type="object"/>

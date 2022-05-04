@@ -2,10 +2,10 @@
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
-    'name': 'Okticket Connector',
+    'name': 'Alia Okticket Connector',
     'summary': 'Mainly features, models and business logic for Okticket connector. '
                'Implements expenses import from Okticket.',
-    'version': '14.0.1.0.2',
+    'version': '15.0.1.0.1',
     'category': 'Connector',
     'depends': [
         'hr_expense',
@@ -15,7 +15,7 @@
         'component_event',
         'connector',
         'uom',
-        'analytic_base_department',
+        # 'analytic_base_department',
         'product',
         'hr',
         'project',
