@@ -15,7 +15,7 @@
                         <page name="okticket_conn_conf" string="OkTicket Conf.">
                             <group>
                                 <group string="Account Information" name="account_info_group">
-                                    <field name="okticket_account_id"/>
+                                    <field name="okticket_def_account_id"/>
                                 </group>
                                 <group string="Cost Center Information" name="cost_center_info_group">
                                     <field name="okticket_cost_center_id" string="Cost_center_id"/>

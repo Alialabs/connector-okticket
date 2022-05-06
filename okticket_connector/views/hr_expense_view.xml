@@ -24,11 +24,14 @@
                     <field name="payment_method" widget="selection"/>
                     <field name="okticket_vat"/>
                     <field name="okticket_partner_name"/>
-                    <label for="payment_mode"/>
-                    <div>
-                        <field name="payment_mode" widget="radio"/>
-                    </div>
-                    <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+
+                    <!-- Campos ya presentes en la interfaz -->
+<!--                    <label for="payment_mode"/>-->
+<!--                    <div>-->
+<!--                        <field name="payment_mode" widget="radio"/>-->
+<!--                    </div>-->
+<!--                    <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
+
                 </field>
             </field>
         </record>

@@ -29,15 +29,11 @@ class AccountAnalyticAccountExporter(Component):
         binder = self.component(usage='account.analytic.account.binder')
         # Read expenses values from OkTicket
         if acc_analyt:
-            sale = False
-            for project in acc_analyt.project_ids:
-                if project.sale_order_id:
-                    sale = project.sale_order_id
-                    break
+            sale = acc_analyt.get_related_sale_order()
 
-            cost_center_name = acc_analyt.project_ids[0].name
-            if acc_analyt.project_ids[0].partner_id:
-                cost_center_name += ' - ' + acc_analyt.project_ids[0].partner_id.name
+            cost_center_name = acc_analyt.name
+            if acc_analyt.partner_id:
+                cost_center_name += ' - ' + acc_analyt.partner_id.name
             okticket_company_id = acc_analyt.company_id and acc_analyt.company_id.okticket_company_id
             values = {
                 'name': cost_center_name,
@@ -62,9 +58,9 @@ class AccountAnalyticAccountExporter(Component):
         backend_adapter = self.component(usage='backend.adapter')
         if acc_analyt:
             for ok_acc_an_acc in acc_analyt.okticket_bind_ids:
-                cost_center_name = acc_analyt.project_ids[0].name
-                if acc_analyt.project_ids[0].partner_id:
-                    cost_center_name += ' - ' + acc_analyt.project_ids[0].partner_id.name
+                cost_center_name = acc_analyt.name
+                if acc_analyt.partner_id:
+                    cost_center_name += ' - ' + acc_analyt.partner_id.name
                 values = {
                     'name': cost_center_name,
                 }
