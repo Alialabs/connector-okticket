@@ -33,6 +33,7 @@
         # 'data/okticket_connector_user_data.xml',
         # 'data/product_data.xml',
         'security/ir.model.access.csv',
+        'views/log_event_view.xml',
         'views/okticket_backend_view.xml',
         'views/okticket_menu.xml',
         'views/res_users.xml',
