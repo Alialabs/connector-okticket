@@ -18,6 +18,20 @@ class AccountAnalyticAccount(models.Model):
         string='Account Analytic Account Bindings',
     )
 
+    def _get_cost_center(self):
+        for analytic in self:
+            ok_acc_analt = self.env['okticket.account.analytic.account'].search(
+                [('odoo_id', '=', analytic.id)])
+            external_id_int = -1.0
+            if ok_acc_analt and ok_acc_analt[0].external_id:
+                external_id_int = int(float(ok_acc_analt[0].external_id))
+            analytic.okticket_cost_center_id = external_id_int or -1.0
+
+    okticket_cost_center_id = fields.Integer(string="OkTicket Cost_center_id",
+                                             default=-1.0,
+                                             compute=_get_cost_center,
+                                             readonly=True)
+
     def _okticket_create(self):
         """
         Creates cost center object in OkTicket related with current account.analytic.account
@@ -42,6 +56,10 @@ class AccountAnalyticAccount(models.Model):
         :return:
         """
         self.env['okticket.account.analytic.account'].sudo().modify_active_state_cost_center(self, new_state)
+
+    def unlink_cost_center_from_analytic_account(self):
+        for record in self:
+            record.okticket_bind_ids = [(2, ok_bind.id) for ok_bind in record.okticket_bind_ids]
 
 
 class OkticketAccountAnalyticAccount(models.Model):
