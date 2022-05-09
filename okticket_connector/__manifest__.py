@@ -32,6 +32,7 @@
         'data/ir_cron_data.xml',
         'data/product_data.xml',
 
+        'views/log_event_view.xml',
         'views/okticket_backend_view.xml',
         'views/okticket_menu.xml',
         'views/res_users.xml',
