@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0\n"
+"Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-22 14:22+0000\n"
-"PO-Revision-Date: 2021-06-22 14:22+0000\n"
+"POT-Creation-Date: 2022-05-10 14:37+0000\n"
+"PO-Revision-Date: 2022-05-10 14:37+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -58,7 +58,7 @@ msgid "Balance"
 msgstr "Saldo"
 
 #. module: okticket_connector_cost_center
-#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.cost_center_creation_from_project_view
+#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.cost_center_creation_from_analytic_view
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -68,34 +68,34 @@ msgid "Company"
 msgstr "Compañía"
 
 #. module: okticket_connector_cost_center
-#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.cost_center_creation_from_project_view
+#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.cost_center_creation_from_analytic_view
 msgid "Confirm"
 msgstr "Confirmar"
 
 #. module: okticket_connector_cost_center
-#: model:ir.actions.server,name:okticket_connector_cost_center.cost_center_creation_from_project_action
-msgid "Confirm Cost Center Creation from Project"
-msgstr "Confirmar creación de centro de coste desde proyecto"
+#: model:ir.actions.server,name:okticket_connector_cost_center.cost_center_creation_from_analytic_action
+msgid "Confirm Cost Center Creation from Analytic"
+msgstr ""
 
 #. module: okticket_connector_cost_center
-#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.cost_center_creation_from_project_view
-msgid "Confirm Cost Center from Project"
-msgstr "Confirmar centro de coste desde proyecto"
+#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.cost_center_creation_from_analytic_view
+msgid "Confirm Cost Center from Analytic"
+msgstr ""
 
 #. module: okticket_connector_cost_center
-#: model:ir.model,name:okticket_connector_cost_center.model_project_cost_center_wizard
-msgid "Confirm cost center creation from project"
-msgstr "Confirmar creación de centro de coste desde proyecto"
+#: model:ir.model,name:okticket_connector_cost_center.model_analytic_cost_center_wizard
+msgid "Confirm cost center creation from analytic account"
+msgstr ""
 
 #. module: okticket_connector_cost_center
-#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.cost_center_creation_from_project_view
+#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.cost_center_creation_from_analytic_view
 msgid ""
 "Cost centers will be created from\n"
-"                        the indicated projects.\n"
+"                        the indicated analytics.\n"
 "                        Do you want to continue?"
 msgstr ""
 "El centro de coste será creado desde\n"
-"                        los proyectos indicados.\n"
+"                        las cuentas analíticas indicados.\n"
 "                        ¿Desea continuar?"
 
 #. module: okticket_connector_cost_center
@@ -106,8 +106,8 @@ msgid "Could not connect to Okticket"
 msgstr "No se puede establecer conexión con Okticket"
 
 #. module: okticket_connector_cost_center
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_analytic_cost_center_wizard__create_uid
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__create_uid
-#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_project_cost_center_wizard__create_uid
 msgid "Created by"
 msgstr "Creado por"
 
@@ -118,8 +118,8 @@ msgid "Created new Cost Center in Okticket"
 msgstr "Nuevo coste de centro creado en Okticket"
 
 #. module: okticket_connector_cost_center
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_analytic_cost_center_wizard__create_date
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__create_date
-#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_project_cost_center_wizard__create_date
 msgid "Created on"
 msgstr "Creado el"
 
@@ -144,26 +144,19 @@ msgid "Debit"
 msgstr "Debe"
 
 #. module: okticket_connector_cost_center
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__okticket_def_account_id
+msgid "Default Account for Expenses"
+msgstr "Cuenta contable por defecto para gastos"
+
+#. module: okticket_connector_cost_center
 #: code:addons/okticket_connector_cost_center/models/okticket_analytic_account_exporter.py:0
 #, python-format
 msgid "Deleted Cost Center in Okticket"
 msgstr "Centro de coste eliminado en Okticket"
 
 #. module: okticket_connector_cost_center
-#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__department_id
-msgid "Department"
-msgstr "Departamento"
-
-#. module: okticket_connector_cost_center
-#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.okticket_edit_project_view
-msgid "Unlink Cost Center"
-msgstr "Desvincular Centro de Coste"
-
-#. module: okticket_connector_cost_center
-#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_account_analytic_account__display_name
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_analytic_cost_center_wizard__display_name
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__display_name
-#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_project_cost_center_wizard__display_name
-#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_project_project__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
 
@@ -179,11 +172,6 @@ msgid "Followers"
 msgstr "Seguidores"
 
 #. module: okticket_connector_cost_center
-#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__message_channel_ids
-msgid "Followers (Channels)"
-msgstr "Seguidores (Canales)"
-
-#. module: okticket_connector_cost_center
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__message_partner_ids
 msgid "Followers (Partners)"
 msgstr "Seguidores (Contactos)"
@@ -194,10 +182,13 @@ msgid "Group"
 msgstr "Grupo"
 
 #. module: okticket_connector_cost_center
-#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_account_analytic_account__id
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__has_message
+msgid "Has Message"
+msgstr "Tiene mensaje"
+
+#. module: okticket_connector_cost_center
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_analytic_cost_center_wizard__id
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__id
-#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_project_cost_center_wizard__id
-#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_project_project__id
 msgid "ID"
 msgstr "Id"
 
@@ -227,27 +218,30 @@ msgstr ""
 "Si el campo activo se desmarca, permite ocultar la cuenta sin eliminarla."
 
 #. module: okticket_connector_cost_center
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__invoice_count
+msgid "Invoice Count"
+msgstr "Recuento de facturas"
+
+#. module: okticket_connector_cost_center
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__message_is_follower
 msgid "Is Follower"
 msgstr "Es un seguidor"
 
 #. module: okticket_connector_cost_center
-#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_account_analytic_account____last_update
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_analytic_cost_center_wizard____last_update
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account____last_update
-#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_project_cost_center_wizard____last_update
-#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_project_project____last_update
 msgid "Last Modified on"
 msgstr "Última modificación el"
 
 #. module: okticket_connector_cost_center
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_analytic_cost_center_wizard__write_uid
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__write_uid
-#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_project_cost_center_wizard__write_uid
 msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: okticket_connector_cost_center
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_analytic_cost_center_wizard__write_date
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__write_date
-#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_project_cost_center_wizard__write_date
 msgid "Last Updated on"
 msgstr "Última actualización el"
 
@@ -304,7 +298,8 @@ msgid "Number of unread messages"
 msgstr "Número de mensajes no leidos"
 
 #. module: okticket_connector_cost_center
-#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_project_project__okticket_cost_center_id
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_account_analytic_account__okticket_cost_center_id
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__okticket_cost_center_id
 msgid "OkTicket Cost_center_id"
 msgstr "Centro de coste de Okticket"
 
@@ -339,6 +334,11 @@ msgid "SMS Delivery error"
 msgstr "Error de entrega del SMS"
 
 #. module: okticket_connector_cost_center
+#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.okticket_view_account_analytic_account_form
+msgid "Unlink Cost Center"
+msgstr ""
+
+#. module: okticket_connector_cost_center
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__message_unread
 msgid "Unread Messages"
 msgstr "Mensajes sin leer"
@@ -347,6 +347,11 @@ msgstr "Mensajes sin leer"
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__message_unread_counter
 msgid "Unread Messages Counter"
 msgstr "Nº de mensajes sin leer"
+
+#. module: okticket_connector_cost_center
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__vendor_bill_count
+msgid "Vendor Bill Count"
+msgstr ""
 
 #. module: okticket_connector_cost_center
 #: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:0

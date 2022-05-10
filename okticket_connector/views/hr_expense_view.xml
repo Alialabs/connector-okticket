@@ -5,6 +5,17 @@
 <odoo>
     <data>
 
+        <record id="hr_expense_view_expenses_analysis_tree_okticket" model="ir.ui.view">
+            <field name="name">okticket.hr.expense.tree</field>
+            <field name="model">hr.expense</field>
+            <field name="inherit_id" ref="hr_expense.hr_expense_view_expenses_analysis_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='tax_ids']" position="after">
+                    <field name="is_invoice" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
         <record model="ir.ui.view" id="okticket_hr_expense_view">
             <field name="name">okticket.hr.expense.form</field>
             <field name="model">hr.expense</field>
