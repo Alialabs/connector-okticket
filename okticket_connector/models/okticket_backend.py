@@ -5,7 +5,7 @@
 import logging
 
 from odoo import api, fields, models
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 from odoo.tools.translate import _
 
 _logger = logging.getLogger(__name__)
@@ -153,8 +153,8 @@ class OkticketBackend(models.Model):
             _logger.error('Exception: %s\n', e)
             import traceback
             traceback.print_exc()
-            raise Warning(_('Could not connect to Okticket'))
-        raise Warning(
+            raise UserError(_('Could not connect to Okticket'))
+        raise UserError(
             _('Connection test succeeded\n'
               'Everything seems properly set up'))
 

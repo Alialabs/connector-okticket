@@ -5,6 +5,7 @@
 
 from odoo import _, api, fields, models
 from odoo.addons.component.core import Component
+from odoo.exceptions import UserError
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -62,7 +63,7 @@ class OkticketHrExpense(models.Model):
                     _logger.error('Exception: %s\n', e)
                     import traceback
                     traceback.print_exc()
-                    raise Warning(_('Could not connect to Okticket'))
+                    raise UserError(_('Could not connect to Okticket'))
         else:
             _logger.warning(_('WARNING! Not exists backend for company %s (%s)'),
                             self.env.user.company_id.name, self.env.user.company_id.id)
@@ -78,7 +79,7 @@ class OkticketHrExpense(models.Model):
                     _logger.error('Exception: %s\n', e)
                     import traceback
                     traceback.print_exc()
-                    raise Warning(_('Could not connect to Okticket'))
+                    raise UserError(_('Could not connect to Okticket'))
         else:
             _logger.warning(_('WARNING! Not exists backend for company %s (%s)'),
                             self.env.user.company_id.name, self.env.user.company_id.id)
