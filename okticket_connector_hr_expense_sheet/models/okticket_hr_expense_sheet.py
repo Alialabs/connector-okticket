@@ -6,6 +6,7 @@ import logging
 
 from odoo import _, api, fields, models
 from odoo.addons.component.core import Component
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -58,7 +59,7 @@ class OkticketHrExpenseSheet(models.Model):
                 _logger.error('Exception: %s\n', e)
                 import traceback
                 traceback.print_exc()
-                raise Warning(_('Could not connect to Okticket'))
+                raise UserError(_('Could not connect to Okticket'))
 
     def change_expense_sheet_status(self, expense_sheets, action_id, comments='No comment'):
         backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
@@ -71,7 +72,7 @@ class OkticketHrExpenseSheet(models.Model):
                 _logger.error('Exception: %s\n', e)
                 import traceback
                 traceback.print_exc()
-                raise Warning(_('Could not connect to Okticket'))
+                raise UserError(_('Could not connect to Okticket'))
 
 
 class HrExpenseSheetAdapter(Component):

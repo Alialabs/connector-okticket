@@ -6,6 +6,7 @@ import logging
 
 from odoo import _
 from odoo import models, fields, api
+from odoo.exceptions import UserError
 from odoo.addons.component.core import AbstractComponent
 
 _logger = logging.getLogger(__name__)
@@ -49,7 +50,7 @@ class OkticketBinding(models.AbstractModel):
                 _logger.error('Exception: %s\n', e)
                 import traceback
                 traceback.print_exc()
-                raise Warning(_('Could not connect to Okticket'))
+                raise UserError(_('Could not connect to Okticket'))
 
     @api.model
     def import_record(self, backend, filters=False):
