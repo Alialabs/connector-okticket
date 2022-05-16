@@ -183,6 +183,8 @@ class HrExpenseSheet(models.Model):
         action_id = 353
         self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
 
+    # def action_unpost
+
     @api.returns('mail.message', lambda value: value.id)
     def message_post(self, body='', **kwargs):
         result = super(HrExpenseSheet, self).message_post(body=body, **kwargs)
