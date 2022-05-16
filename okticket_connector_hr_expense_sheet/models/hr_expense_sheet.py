@@ -76,9 +76,11 @@ class HrExpenseSheet(models.Model):
         new_expense_sheet = False
         if analytic and expense:
             sale_order = analytic.get_related_sale_order()
-            sale_order_client = sale_order and sale_order.partner_id and sale_order.partner_id.name or 'NO CLIENT'
-            analytic_name = analytic and analytic.name or 'NO ANALYTIC ACC'
-            complete_name = '-'.join([sale_order_client, analytic_name])
+            analytic_name = analytic and analytic.name or 'NO CostCenter'
+            if sale_order and sale_order.partner_id and sale_order.partner_id.name:
+                complete_name = '-'.join([sale_order.partner_id.name, analytic_name])
+            else:
+                complete_name = analytic_name  # Sin cliente
             sheet_vals = {
                 'name': complete_name,
                 'employee_id': expense.employee_id and expense.employee_id.id or False,
