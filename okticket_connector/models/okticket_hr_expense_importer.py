@@ -126,7 +126,7 @@ class HrExpenseBatchImporter(Component):
 
     @mapping
     def okticket_partner_name(self, record):
-        if 'name' in record and 'type_id' in record and record['type_id'] == 1:
+        if 'name' in record:  # and 'type_id' in record and record['type_id'] == 1:
             return {'okticket_partner_name': record['name']}
 
     @mapping
