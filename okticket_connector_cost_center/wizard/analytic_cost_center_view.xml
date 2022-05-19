@@ -10,11 +10,21 @@
             <field name="model">analytic.cost.center.wizard</field>
             <field name="arch" type="xml">
                 <form string="Confirm Cost Center from Analytic">
-                    <p class="oe_grey">
-                        Cost centers will be created from
-                        the indicated analytics.
-                        Do you want to continue?
-                    </p>
+                    <field name="duplicate_confirmation_needed" invisible="1"/>
+                    <group attrs="{'invisible': [('duplicate_confirmation_needed', '=', True)]}">
+                        <p class="body">
+                            Cost centers will be created from
+                            the indicated analytics.
+                            Do you want to continue?
+                        </p>
+                    </group>
+                    <group attrs="{'invisible': [('duplicate_confirmation_needed', '=', False)]}">
+                        <p class="body">
+                            Warning! Duplicated cost center will be created.
+                            Check box below if you want to continue.
+                        </p>
+                        <field name="confirm_duplicate"/>
+                    </group>
                     <footer>
                         <button string="Confirm" name="cost_center_from_analytic_confirm" type="object" default_focus="1"
                                 class="btn-primary"/>

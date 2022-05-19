@@ -68,6 +68,10 @@ class OkTicketOpenConnector(BaseConnector):
         path = "/reports?with=user,expenses"
         return self.find(path, params=params, https=https, company_in_header=True)
 
+    def find_cost_center(self, params=False, https=False):
+        path = "/cost-centers"
+        return self.find(path, params=params, https=https, company_in_header=True)
+
     def autocomplete_relational_fields(self, data):
         """
         Identifies key fields in obtained dicts and gets the specific information
