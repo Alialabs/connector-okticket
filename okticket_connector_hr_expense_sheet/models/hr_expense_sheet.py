@@ -120,15 +120,22 @@ class HrExpenseSheet(models.Model):
     def reset_expense_sheets(self):
         """
         From "Enviada" and "Rechazada" state: "Cambiar a borrador"/"Reabrir(Empleado)"
+        From "Aprobada" state: "Rechazada" + "Cambiar a borrador"/"Reabrir(Empleado)"
         Implied actions:
             - Set 'accounted' = 'false' in expenses from Okticket expense sheet.
+            - Action [352] Okticket from "Aprobada" to "Rechazada" state
             - Action [348] Okticket from "Enviada" state
             - Action [354] Okticket from "Rechazada" state
         """
+
+        if self.state == 'approve':
+            self.refuse_sheet('')
+
         if self.state == 'cancel':
             action_id = 354  # From "Rechazada"
-        else:
+        elif self.state == 'submit':
             action_id = 348  # From "Enviada"
+
         if super(HrExpenseSheet, self).reset_expense_sheets():
             for expense in self.expense_line_ids:
                 expense._okticket_accounted_expense(new_state=False)
