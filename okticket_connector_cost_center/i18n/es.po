@@ -75,24 +75,29 @@ msgstr "Confirmar"
 #. module: okticket_connector_cost_center
 #: model:ir.actions.server,name:okticket_connector_cost_center.cost_center_creation_from_analytic_action
 msgid "Confirm Cost Center Creation from Analytic"
-msgstr ""
+msgstr "Creación de centro de coste desde cuenta analítica"
 
 #. module: okticket_connector_cost_center
 #: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.cost_center_creation_from_analytic_view
 msgid "Confirm Cost Center from Analytic"
-msgstr ""
+msgstr "Creación de centro de coste desde cuenta analítica"
+
+#. module: okticket_connector_cost_center
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_analytic_cost_center_wizard__confirm_duplicate
+msgid "Confirm Duplicate"
+msgstr "Confirmar duplicado de centro de coste"
 
 #. module: okticket_connector_cost_center
 #: model:ir.model,name:okticket_connector_cost_center.model_analytic_cost_center_wizard
 msgid "Confirm cost center creation from analytic account"
-msgstr ""
+msgstr "Creación de centro de coste desde cuenta analítica"
 
 #. module: okticket_connector_cost_center
 #: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.cost_center_creation_from_analytic_view
 msgid ""
 "Cost centers will be created from\n"
-"                        the indicated analytics.\n"
-"                        Do you want to continue?"
+"                            the indicated analytics.\n"
+"                            Do you want to continue?"
 msgstr ""
 "El centro de coste será creado desde\n"
 "                        las cuentas analíticas indicados.\n"
@@ -221,6 +226,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__invoice_count
 msgid "Invoice Count"
 msgstr "Recuento de facturas"
+
+#. module: okticket_connector_cost_center
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_analytic_cost_center_wizard__duplicate_confirmation_needed
+msgid "Duplicate Confirmation Needed"
+msgstr "Necesario confirmación de duplicado"
 
 #. module: okticket_connector_cost_center
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__message_is_follower
@@ -358,9 +368,19 @@ msgstr ""
 #: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:0
 #: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:0
 #: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:0
+#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:0
 #, python-format
 msgid "WARNING! Not exists backend for company %s (%s)"
 msgstr "¡Atención! No existe backend para la compañía %s (%s)"
+
+#. module: okticket_connector_cost_center
+#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.cost_center_creation_from_analytic_view
+msgid ""
+"Warning! Duplicated cost center will be created.\n"
+"                            Check box below if you want to continue."
+msgstr ""
+"¡Atención! Se va a crear un centro de coste duplicado.\n"
+"                            Marque la casilla inferior y confirme para continuar."
 
 #. module: okticket_connector_cost_center
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__website_message_ids

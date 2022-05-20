@@ -19,6 +19,13 @@ class AccountAnalyticAccount(models.Model):
         string='Account Analytic Account Bindings',
     )
 
+    def generate_cost_center_name_from_analytic(self):
+        self.ensure_one()
+        cost_center_name = self.name
+        if self.partner_id:
+            cost_center_name += ' - ' + self.partner_id.name
+        return cost_center_name
+
     def _get_cost_center(self):
         for analytic in self:
             ok_acc_analt = self.env['okticket.account.analytic.account'].search(
@@ -32,6 +39,13 @@ class AccountAnalyticAccount(models.Model):
                                              default=-1.0,
                                              compute=_get_cost_center,
                                              readonly=True)
+
+    def _okticket_create_duplicates_control(self):
+        """
+        Creates/link cost center object in OkTicket related with current account.analytic.account.
+        Checks if exists cost center in OkTicket and avoid automatic creation.
+        """
+        return self.env['okticket.account.analytic.account'].sudo().create_cost_center_duplicates_control(self)
 
     def _okticket_create(self):
         """
@@ -74,6 +88,26 @@ class OkticketAccountAnalyticAccount(models.Model):
         required=True,
         ondelete='cascade',
     )
+
+    def create_cost_center_duplicates_control(self, acc_analyt):
+        """
+        Create new cost center in OkTicket and relates with an Odoo account.analytic.account.
+        Checks and inform about cost center duplicates.
+        """
+        backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
+        if backend:
+            with backend.work_on(self._name) as work:
+                exporter = work.component(usage='account.analytic.account.exporter')
+                try:
+                    return exporter.create_cost_center_duplicates_control(acc_analyt)
+                except Exception as e:
+                    _logger.error('Exception: %s\n', e)
+                    import traceback
+                    traceback.print_exc()
+                    raise UserError('Could not connect to Okticket')
+        else:
+            _logger.warning(_('WARNING! Not exists backend for company %s (%s)'),
+                            self.env.user.company_id.name, self.env.user.company_id.id)
 
     def create_cost_center(self, acc_analyt):
         """ Create new cost center in OkTicket and relates with an Odoo account.analytic.account """
@@ -153,6 +187,33 @@ class AccountAnalyticAccountAdapter(Component):
     _usage = 'backend.adapter'
     _collection = 'okticket.backend'
     _apply_on = 'okticket.account.analytic.account'
+
+    def search(self, filters=False):
+        if self._auth():
+            result = self.okticket_api.find_cost_center(params=filters, https=self.collection.https)
+
+            # Log event
+            result['log'].update({
+                'backend_id': self.backend_record.id,
+                'type': result['log'].get('type') or 'success',
+            })
+            self.env['log.event'].add_event(result['log'])
+            return result['result']
+        return []
+
+    def okticket_api_create_cost_center(self, values):
+        okticketapi = self.okticket_api
+        url = okticketapi.get_full_path('/cost-centers')
+        header = {
+            'Authorization': okticketapi.token_type + ' ' + okticketapi.access_token,
+            'Content-Type': 'application/json', }
+        fields_dict = {
+            "active": True,
+            "global": True,
+        }
+        fields_dict.update(values)
+        return okticketapi.general_request(url, "POST", fields_dict,
+                                           headers=header, only_data=False, https=self.collection.https)
 
     def create_cost_center(self, values):
         if self._auth():

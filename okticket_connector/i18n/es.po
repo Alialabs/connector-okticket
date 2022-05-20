@@ -536,6 +536,7 @@ msgid "Invoice product version"
 msgstr "Versión de producto factura"
 
 #. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_product_expense_form_view
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
 msgid "Invoice version Info"
 msgstr "Información de versión de factura"
@@ -773,6 +774,7 @@ msgstr "Compañía de Okticket"
 
 #. module: okticket_connector
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_hr_employee_view_form
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_product_expense_form_view
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_view_account_analytic_account_form
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_view_company_form
@@ -963,6 +965,7 @@ msgid "Rebillable"
 msgstr "Refacturable"
 
 #. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_product_expense_form_view
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
 msgid "Rebillable Info"
 msgstr "Información de refacturación"
@@ -1145,6 +1148,7 @@ msgid "Type of the exception activity on record."
 msgstr "Tipo de actividad de excepción registrada."
 
 #. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_product_expense_form_view
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
 msgid "Type_id"
 msgstr "Tipo"
