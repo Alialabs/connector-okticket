@@ -3,98 +3,11 @@
      @author: Alia
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
 <odoo>
-    <data noupdate="1">
+    <data noupdate="0">
 
-        <record id="product_product_okticket_other" model="product.product">
-            <field name="name">Others</field>
-            <field name="type">service</field>
-            <field name="uom_id" ref="uom.product_uom_unit"/>
-            <field name="uom_po_id" ref="uom.product_uom_unit"/>
-            <field name="categ_id" ref="product.product_category_all"/>
-            <field name="okticket_categ_prod_id">0</field>
-            <field name="okticket_type_prod_id">0</field>
-            <field name="can_be_expensed" eval="True"/>
-        </record>
-
-        <record id="product_product_okticket_restoration" model="product.product">
-            <field name="name">Restoration</field>
-            <field name="type">service</field>
-            <field name="uom_id" ref="uom.product_uom_unit"/>
-            <field name="uom_po_id" ref="uom.product_uom_unit"/>
-            <field name="categ_id" ref="product.product_category_all"/>
-            <field name="okticket_categ_prod_id">1</field>
-            <field name="okticket_type_prod_id">0</field>
-            <field name="can_be_expensed" eval="True"/>
-        </record>
-
-        <record id="product_product_okticket_parking" model="product.product">
-            <field name="name">Parking</field>
-            <field name="type">service</field>
-            <field name="uom_id" ref="uom.product_uom_unit"/>
-            <field name="uom_po_id" ref="uom.product_uom_unit"/>
-            <field name="categ_id" ref="product.product_category_all"/>
-            <field name="okticket_categ_prod_id">2</field>
-            <field name="okticket_type_prod_id">0</field>
-            <field name="can_be_expensed" eval="True"/>
-        </record>
-
-        <record id="product_product_okticket_toll" model="product.product">
-            <field name="name">Toll</field>
-            <field name="type">service</field>
-            <field name="uom_id" ref="uom.product_uom_unit"/>
-            <field name="uom_po_id" ref="uom.product_uom_unit"/>
-            <field name="categ_id" ref="product.product_category_all"/>
-            <field name="okticket_categ_prod_id">3</field>
-            <field name="okticket_type_prod_id">0</field>
-            <field name="can_be_expensed" eval="True"/>
-        </record>
-
-        <record id="product_product_okticket_transport" model="product.product">
-            <field name="name">Transport</field>
-            <field name="type">service</field>
-            <field name="uom_id" ref="uom.product_uom_unit"/>
-            <field name="uom_po_id" ref="uom.product_uom_unit"/>
-            <field name="categ_id" ref="product.product_category_all"/>
-            <field name="okticket_categ_prod_id">4</field>
-            <field name="okticket_type_prod_id">0</field>
-            <field name="can_be_expensed" eval="True"/>
-        </record>
-
-        <record id="product_product_okticket_accommodation" model="product.product">
-            <field name="name">Accommodation</field>
-            <field name="type">service</field>
-            <field name="uom_id" ref="uom.product_uom_unit"/>
-            <field name="uom_po_id" ref="uom.product_uom_unit"/>
-            <field name="categ_id" ref="product.product_category_all"/>
-            <field name="okticket_categ_prod_id">5</field>
-            <field name="okticket_type_prod_id">0</field>
-            <field name="can_be_expensed" eval="True"/>
-        </record>
-
-        <record id="product_product_okticket_gas" model="product.product">
-            <field name="name">Gas</field>
-            <field name="type">service</field>
-            <field name="uom_id" ref="uom.product_uom_unit"/>
-            <field name="uom_po_id" ref="uom.product_uom_unit"/>
-            <field name="categ_id" ref="product.product_category_all"/>
-            <field name="okticket_categ_prod_id">6</field>
-            <field name="okticket_type_prod_id">0</field>
-            <field name="can_be_expensed" eval="True"/>
-        </record>
-
-        <record id="product_product_okticket_invoice" model="product.product">
-            <field name="name">Invoice</field>
-            <field name="type">service</field>
-            <field name="uom_id" ref="uom.product_uom_unit"/>
-            <field name="uom_po_id" ref="uom.product_uom_unit"/>
-            <field name="categ_id" ref="product.product_category_all"/>
-            <field name="okticket_categ_prod_id">-1</field>
-            <field name="okticket_type_prod_id">1</field>
-            <field name="can_be_expensed" eval="True"/>
-        </record>
-
-        <record id="product_product_okticket_km" model="product.product">
-            <field name="name">Kilometres</field>
+        <record id="product_product_okticket_km_rebillable" model="product.product">
+            <field name="name">Kilometres-Rebillable</field>
+            <field name="expense_policy">cost</field>
             <field name="type">service</field>
             <field name="uom_id" ref="uom.product_uom_unit"/>
             <field name="uom_po_id" ref="uom.product_uom_unit"/>
@@ -103,6 +16,107 @@
             <field name="okticket_type_prod_id">2</field>
             <field name="can_be_expensed" eval="True"/>
         </record>
+
+        <record id="product_product_okticket_km" model="product.product">
+            <field name="name">Kilometres</field>
+            <field name="type">service</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+            <field name="rebillable_prod_id" ref="product_product_okticket_km_rebillable"/>
+            <field name="categ_id" ref="product.product_category_all"/>
+            <field name="okticket_categ_prod_id">-1</field>
+            <field name="okticket_type_prod_id">2</field>
+            <field name="can_be_expensed" eval="True"/>
+        </record>
+
+        <!-- Las categorías estándar se cargan con la sincronización desde okticket_connector_product_synchronization-->
+        <!--        <record id="product_product_okticket_other" model="product.product">-->
+        <!--            <field name="name">Others</field>-->
+        <!--            <field name="type">service</field>-->
+        <!--            <field name="uom_id" ref="uom.product_uom_unit"/>-->
+        <!--            <field name="uom_po_id" ref="uom.product_uom_unit"/>-->
+        <!--            <field name="categ_id" ref="product.product_category_all"/>-->
+        <!--            <field name="okticket_categ_prod_id">0</field>-->
+        <!--            <field name="okticket_type_prod_id">0</field>-->
+        <!--            <field name="can_be_expensed" eval="True"/>-->
+        <!--        </record>-->
+
+        <!--        <record id="product_product_okticket_restoration" model="product.product">-->
+        <!--            <field name="name">Restoration</field>-->
+        <!--            <field name="type">service</field>-->
+        <!--            <field name="uom_id" ref="uom.product_uom_unit"/>-->
+        <!--            <field name="uom_po_id" ref="uom.product_uom_unit"/>-->
+        <!--            <field name="categ_id" ref="product.product_category_all"/>-->
+        <!--            <field name="okticket_categ_prod_id">1</field>-->
+        <!--            <field name="okticket_type_prod_id">0</field>-->
+        <!--            <field name="can_be_expensed" eval="True"/>-->
+        <!--        </record>-->
+
+        <!--        <record id="product_product_okticket_parking" model="product.product">-->
+        <!--            <field name="name">Parking</field>-->
+        <!--            <field name="type">service</field>-->
+        <!--            <field name="uom_id" ref="uom.product_uom_unit"/>-->
+        <!--            <field name="uom_po_id" ref="uom.product_uom_unit"/>-->
+        <!--            <field name="categ_id" ref="product.product_category_all"/>-->
+        <!--            <field name="okticket_categ_prod_id">2</field>-->
+        <!--            <field name="okticket_type_prod_id">0</field>-->
+        <!--            <field name="can_be_expensed" eval="True"/>-->
+        <!--        </record>-->
+
+        <!--        <record id="product_product_okticket_toll" model="product.product">-->
+        <!--            <field name="name">Toll</field>-->
+        <!--            <field name="type">service</field>-->
+        <!--            <field name="uom_id" ref="uom.product_uom_unit"/>-->
+        <!--            <field name="uom_po_id" ref="uom.product_uom_unit"/>-->
+        <!--            <field name="categ_id" ref="product.product_category_all"/>-->
+        <!--            <field name="okticket_categ_prod_id">3</field>-->
+        <!--            <field name="okticket_type_prod_id">0</field>-->
+        <!--            <field name="can_be_expensed" eval="True"/>-->
+        <!--        </record>-->
+
+        <!--        <record id="product_product_okticket_transport" model="product.product">-->
+        <!--            <field name="name">Transport</field>-->
+        <!--            <field name="type">service</field>-->
+        <!--            <field name="uom_id" ref="uom.product_uom_unit"/>-->
+        <!--            <field name="uom_po_id" ref="uom.product_uom_unit"/>-->
+        <!--            <field name="categ_id" ref="product.product_category_all"/>-->
+        <!--            <field name="okticket_categ_prod_id">4</field>-->
+        <!--            <field name="okticket_type_prod_id">0</field>-->
+        <!--            <field name="can_be_expensed" eval="True"/>-->
+        <!--        </record>-->
+
+        <!--        <record id="product_product_okticket_accommodation" model="product.product">-->
+        <!--            <field name="name">Accommodation</field>-->
+        <!--            <field name="type">service</field>-->
+        <!--            <field name="uom_id" ref="uom.product_uom_unit"/>-->
+        <!--            <field name="uom_po_id" ref="uom.product_uom_unit"/>-->
+        <!--            <field name="categ_id" ref="product.product_category_all"/>-->
+        <!--            <field name="okticket_categ_prod_id">5</field>-->
+        <!--            <field name="okticket_type_prod_id">0</field>-->
+        <!--            <field name="can_be_expensed" eval="True"/>-->
+        <!--        </record>-->
+
+        <!--        <record id="product_product_okticket_gas" model="product.product">-->
+        <!--            <field name="name">Gas</field>-->
+        <!--            <field name="type">service</field>-->
+        <!--            <field name="uom_id" ref="uom.product_uom_unit"/>-->
+        <!--            <field name="uom_po_id" ref="uom.product_uom_unit"/>-->
+        <!--            <field name="categ_id" ref="product.product_category_all"/>-->
+        <!--            <field name="okticket_categ_prod_id">6</field>-->
+        <!--            <field name="okticket_type_prod_id">0</field>-->
+        <!--            <field name="can_be_expensed" eval="True"/>-->
+        <!--        </record>-->
+
+        <!--        <record id="product_product_okticket_invoice" model="product.product">-->
+        <!--            <field name="name">Invoice</field>-->
+        <!--            <field name="type">service</field>-->
+        <!--            <field name="uom_id" ref="uom.product_uom_unit"/>-->
+        <!--            <field name="uom_po_id" ref="uom.product_uom_unit"/>-->
+        <!--            <field name="categ_id" ref="product.product_category_all"/>-->
+        <!--            <field name="okticket_categ_prod_id">-1</field>-->
+        <!--            <field name="okticket_type_prod_id">1</field>-->
+        <!--            <field name="can_be_expensed" eval="True"/>-->
+        <!--        </record>-->
 
     </data>
 </odoo>
