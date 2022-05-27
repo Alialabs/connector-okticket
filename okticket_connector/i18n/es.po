@@ -591,6 +591,12 @@ msgid "Kilometres"
 msgstr "Kilómetros"
 
 #. module: okticket_connector
+#: model:product.product,name:okticket_connector.product_product_okticket_km_rebillable
+#: model:product.template,name:okticket_connector.product_product_okticket_km_rebillable_product_template
+msgid "Kilometres-Rebillable"
+msgstr "Kilómetros-Refacturable"
+
+#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__name
 msgid "Label"
 msgstr "Descripción"
