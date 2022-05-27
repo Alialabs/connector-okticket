@@ -34,11 +34,43 @@ class HrExpenseBatchImporter(Component):
             return True
         return False
 
+    # Refactorización del método run para optimizar la sobreescritura en el addon
+    # okticket_connector_hr_expense_sheet_grouping
+
+    # def run(self, filters=None, options=None):
+    #     okticket_hr_expense_ids = super(HrExpenseBatchImporter, self).run(filters=filters, options=options)
+    #     expense_sheet_dict = {}
+    #     for expense in [rel.odoo_id for rel in
+    #                     self.env['okticket.hr.expense'].search([('id', 'in', okticket_hr_expense_ids)])]:
+    #         if expense.analytic_account_id:
+    #             expense_sheet = False
+    #             for analytic_expense_sheet in expense.analytic_account_id.expense_sheet_ids:
+    #                 # Expense sheet based on state, payment mode and employee
+    #                 if self.check_selected_expense_sheet(analytic_expense_sheet, expense, expense_sheet_dict):
+    #                     expense_sheet = analytic_expense_sheet
+    #                     break
+    #             if not expense_sheet:
+    #                 self.env['hr.expense.sheet'].create_expense_sheet_from_analytic_partner(expense.analytic_account_id,
+    #                                                                                         expense)
+    #     for sheet_id, sheet_values in expense_sheet_dict.items():  # Okticket expense sheet synchronization
+    #         exp_list = sheet_values.get('expense_list', [])
+    #         sheet_to_updt = self.env['hr.expense.sheet'].browse(sheet_id)
+    #         expenses_to_link = [(4, exp_id) for exp_id in exp_list]
+    #         sheet_to_updt.write({'expense_line_ids': expenses_to_link, })
+    #     return okticket_hr_expense_ids
+
     def run(self, filters=None, options=None):
         okticket_hr_expense_ids = super(HrExpenseBatchImporter, self).run(filters=filters, options=options)
+        self.expense_sheet_processing(okticket_hr_expense_ids)
+        return okticket_hr_expense_ids
+
+    def expense_sheet_processing(self, okticket_hr_expense_ids):
         expense_sheet_dict = {}
         for expense in [rel.odoo_id for rel in
                         self.env['okticket.hr.expense'].search([('id', 'in', okticket_hr_expense_ids)])]:
+
+            # Pre-agrupado de gastos donde se crean las hojas de gasto necesarias y
+            # se agrupan los gastos para la posterior vinculación con las hojas de gasto
             if expense.analytic_account_id:
                 expense_sheet = False
                 for analytic_expense_sheet in expense.analytic_account_id.expense_sheet_ids:
@@ -54,7 +86,6 @@ class HrExpenseBatchImporter(Component):
             sheet_to_updt = self.env['hr.expense.sheet'].browse(sheet_id)
             expenses_to_link = [(4, exp_id) for exp_id in exp_list]
             sheet_to_updt.write({'expense_line_ids': expenses_to_link, })
-        return okticket_hr_expense_ids
 
 
 class HrExpenseSheet(models.Model):
