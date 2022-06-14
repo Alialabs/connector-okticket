@@ -13,7 +13,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//page[@name='okticket_conn_conf']" position="inside">
                     <group name="expense_sheet_grouping_conf">
-                        <field name="expense_sheet_grouping_time"/>
+                        <field name="expense_sheet_grouping_method"/>
                     </group>
                 </xpath>
             </field>

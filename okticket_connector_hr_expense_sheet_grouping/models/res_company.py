@@ -14,12 +14,15 @@ _logger = logging.getLogger(__name__)
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
-    expense_sheet_grouping_mode = fields.Selection(
-        [('standard', 'Standard'), ('analytic', 'Analytic Account')],
-        default='standard', required=True,
-        string='Expense Sheet Grouping Mode',
+    expense_sheet_grouping_method = fields.Selection(
+        selection_add=[('standard', 'Standard')], default='standard',
+        ondelete={
+            'standard': 'set analytic',
+        },
         help=(
-            "Specify if the expenses must be grouped by employee and payment mode (Odoo standard)"
+            "Expenses grouping method for expense sheets managing:\n"
+            "- Analytic Account: expenses group by analytic account, employee and payment mode"
+            "- Specify if the expenses must be grouped by employee and payment mode (Odoo standard)"
             "or by analytic account, employee and payment mode (analytic)."
         ),
     )

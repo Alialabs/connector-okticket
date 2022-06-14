@@ -2,6 +2,7 @@
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
+from . import res_company
 from . import account_analytic_account
 from . import hr_expense
 from . import okticket_hr_expense_exporter
