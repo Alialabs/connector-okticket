@@ -14,6 +14,7 @@
                 <xpath expr="//page[@name='okticket_conn_conf']" position="inside">
                     <group name="expense_sheet_grouping_conf">
                         <field name="expense_sheet_grouping_method"/>
+                        <field name="expense_sheet_grouping_time"/>
                     </group>
                 </xpath>
             </field>

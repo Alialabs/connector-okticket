@@ -22,15 +22,6 @@ class ResCompany(models.Model):
         help=(
             "Expenses grouping method for expense sheets managing:\n"
             "- Analytic Account: expenses group by analytic account, employee and payment mode"
-            "- Specify if the expenses must be grouped by employee and payment mode (Odoo standard)"
-            "or by analytic account, employee and payment mode (analytic)."
-        ),
-    )
-    expense_sheet_grouping_time = fields.Selection(
-        [('no_interval', 'No interval'), ('monthly', 'Monthly')],
-        default='no_interval', required=True,
-        string='Expense Sheet Grouping Time interval',
-        help=(
-            "Specify if the expenses must be grouped by time interval."
+            "- Standard: expenses grouped by employee and payment mode (Odoo standard)"
         ),
     )

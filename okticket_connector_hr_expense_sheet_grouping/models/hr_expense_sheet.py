@@ -21,59 +21,66 @@ class HrExpenseBatchImporter(Component):
         })
         return conf_dict
 
-    def standard_classification_method(self, expense_ids):
+    ### Funciones de clasificación de gastos ###
+
+    def standard_classification_method(self, expenses_grouped, expense_ids, excluded_expense_sheet_ids):
         """
         Classifies expenses based on payment mode and employee
-        :param expense_ids: list of okticket expense ids
+        :param expenses_grouped: ExpenseGrouping object
+        :param expense_ids: list of expense ids
+        :param excluded_expense_sheet_ids: list of expense sheet ids to update expenses
         """
-        expenses_grouped_dict = {
-            'to_create': {},
-            'to_update': {}
-        }
-        for expense in [rel.odoo_id for rel in self.env['okticket.hr.expense'].search([('id', 'in', expense_ids)])
-                        if rel.odoo_id.analytic_account_id]:  # Solo gastos con cuenta analítica
+        for expense in self.env['hr.expense'].browse(expense_ids).filtered(lambda ex: ex.analytic_account_id):  # Solo gastos con cuenta analítica
 
             new_expense_sheet = True
+
             # Se busca primero entre hojas de gastos con la misma cuenta analítica
             for expense_sheet in self.env['hr.expense.sheet'].search(
-                    [('state', 'in', ['draft']), ('payment_mode', '=', expense.payment_method),
-                     ('employee_id', '=', expense.employee_id.id),
-                     ('analytic_ids', '=', expense.analytic_account_id.id)]):
-                if expense_sheet.id not in expenses_grouped_dict['to_update'].keys():
-                    expenses_grouped_dict['to_update'][expense_sheet.id] = []
-                expenses_grouped_dict['to_update'][expense_sheet.id].append(expense.id)
-                new_expense_sheet = False
-                break
+                    [('state', 'in', ['draft']), ('employee_id', '=', expense.employee_id.id),
+                     ('id', 'not in', excluded_expense_sheet_ids),
+                     ('analytic_ids', '=', expense.analytic_account_id.id)]).filtered(
+                lambda exp_sheet: not exp_sheet.payment_mode or
+                                  exp_sheet.payment_mode == expense.payment_mode):
 
-            if new_expense_sheet:
-            # No existen hojas de gastos con la misma cuenta analítica. Se prueba a buscar sin cuenta.
-                for expense_sheet in self.env['hr.expense.sheet'].search(
-                        [('state', 'in', ['draft']), ('payment_mode', '=', expense.payment_method),
-                         ('employee_id', '=', expense.employee_id.id)]):
-                    if expense_sheet.id not in expenses_grouped_dict['to_update'].keys():
-                        expenses_grouped_dict['to_update'][expense_sheet.id] = []
-                    expenses_grouped_dict['to_update'][expense_sheet.id].append(expense.id)
+                if self.could_add_expense_to_empty_sheet_by_payment_mode(expense_sheet, expenses_grouped, expense):
+                    expenses_grouped.add_exp_to_update_sheet(expense_sheet.id, expense.id)
                     new_expense_sheet = False
                     break
 
             if new_expense_sheet:
-                dict_key = (expense.employee_id.id, expense.payment_mode)
-                if dict_key not in expenses_grouped_dict['to_create'].keys():
-                    expenses_grouped_dict['to_create'][dict_key] = []
-                expenses_grouped_dict['to_create'][dict_key].append(expense.id)
-        return expenses_grouped_dict
+                # No existen hojas de gastos con la misma cuenta analítica. Se prueba a buscar sin cuenta.
+                for expense_sheet in self.env['hr.expense.sheet'].search(
+                        [('state', 'in', ['draft']), ('employee_id', '=', expense.employee_id.id),
+                         ('id', 'not in', excluded_expense_sheet_ids)]).filtered(
+                    lambda exp_sheet: not exp_sheet.payment_mode or
+                                      exp_sheet.payment_mode == expense.payment_mode):
 
-    def standard_expense_sheet_manage_method(self, expenses_grouped_dict):
+                    if self.could_add_expense_to_empty_sheet_by_payment_mode(expense_sheet, expenses_grouped, expense):
+                        expenses_grouped.add_exp_to_update_sheet(expense_sheet.id, expense.id)
+                        new_expense_sheet = False
+                        break
+
+            if new_expense_sheet:
+                custom_key = (expense.employee_id.id, expense.payment_mode)
+                expenses_grouped.add_exp_to_create_by_key(custom_key, expense.id)
+
+        return expenses_grouped
+
+    ### Funciones de creación/actualización de hojas de gastos ###
+
+    def standard_expense_sheet_manage_method(self, expenses_grouped):
         """
         Manages classified expenses for expense sheet creation
         """
         expense_sheet_obj = self.env['hr.expense.sheet']
         # Actualización de hojas de gastos existentes
-        for expense_sheet_id, expense_ids in expenses_grouped_dict['to_update'].items():
+        for expense_sheet_id, expense_ids in expenses_grouped.get_to_update_dict().items():
             self.env['hr.expense.sheet'].browse(expense_sheet_id).write(
                 {'expense_line_ids': [(4, exp_id) for exp_id in expense_ids]})
         # Creación de nuevas hojas de gastos
-        for tuple_key, expense_ids in expenses_grouped_dict['to_create'].items():
+        for to_create_dict in expenses_grouped.get_to_create_list():
+            tuple_key = to_create_dict['classif_key']
+            expense_ids = to_create_dict['expense_ids']
             employee_id = tuple_key[0]
             payment_mode = tuple_key[1]
             analytic = self.env['hr.expense'].browse(expense_ids[0]).analytic_account_id
