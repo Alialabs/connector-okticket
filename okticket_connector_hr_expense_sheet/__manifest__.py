@@ -16,6 +16,7 @@
     'license': 'AGPL-3',
     'website': 'http://www.alialabs.com',
     'data': [
+        'views/res_company_view.xml',
         'views/account_analytic_account_view.xml',
         'views/hr_expense_sheet_view.xml',
         'security/ir.model.access.csv',

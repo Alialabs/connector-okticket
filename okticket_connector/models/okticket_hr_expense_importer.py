@@ -224,15 +224,29 @@ class HrExpenseBatchImporter(Component):
         # Fields needed to be able to import a expense
         required_fields = ['product_id', 'employee_id', 'company_id']
 
-        # All expenses not in "sent" state (this is, state = "draft") are eliminated before new import or
-        # synchronization of expenses from OkTicket. This way, we ensure Odoo-OkTicket synchronization.
-        states_to_remove = ['draft']
-        expenses_to_remove = self.env['hr.expense'].search([('state', 'in', states_to_remove)])
-        expenses_to_remove = self.env['hr.expense'].browse([exp.id for exp in expenses_to_remove
-                                                            if exp.okticket_expense_id])
-        expenses_to_remove.unlink()
+        last_expenses_import = datetime.datetime.now()
+        if not self.backend_record.ignore_import_expenses_since and self.backend_record.import_expenses_since:
+            # Restricción de importación de gastos por fecha de última importación
+            filters = filters or {}
+            filters.update({
+                'updated_after': self.backend_record.import_expenses_since.strftime("%Y-%m-%dT%H:%M:%S")
+            })
+        else:
+            # All expenses not in "sent" state (this is, state = "draft") are eliminated before new import or
+            # synchronization of expenses from OkTicket. This way, we ensure Odoo-OkTicket synchronization.
+            states_to_remove = ['draft']
+            expenses_to_remove = self.env['hr.expense'].search([('state', 'in', states_to_remove)])
+            expenses_to_remove = self.env['hr.expense'].browse([exp.id for exp in expenses_to_remove
+                                                                if exp.okticket_expense_id])
+            expenses_to_remove.unlink()
+
+        only_reviewed = self.backend_record.import_only_reviewed_expenses
 
         for expense_ext_vals in backend_adapter.search(filters):
+            # Restricción de importación de gastos revisados
+            if only_reviewed and expense_ext_vals and 'review' not in expense_ext_vals:
+                continue
+
             # Map to odoo data
             internal_data = mapper.map_record(expense_ext_vals).values()
             # Searchs if the OkTicket id already exists in odoo
@@ -270,4 +284,8 @@ class HrExpenseBatchImporter(Component):
             _logger.info('Imported')
         _logger.info(
             'Import from Okticket DONE')
+
+        # Actualizar fecha de última importación de gastos
+        self.backend_record.import_expenses_since = last_expenses_import
+
         return okticket_hr_expense_ids

@@ -16,7 +16,7 @@
     'license': 'AGPL-3',
     'website': 'http://www.alialabs.com',
     'data': [
-        'views/res_company_view.xml',
+        'views/hr_expense_sheet_view.xml',
     ],
     'application': False,
     'installable': True,

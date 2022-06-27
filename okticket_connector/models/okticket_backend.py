@@ -132,6 +132,13 @@ class OkticketBackend(models.Model):
     https = fields.Boolean(string='HTTPS protocol',
                            default=True)
 
+    # Expenses import config
+    import_expenses_since = fields.Datetime(string='Import Expenses Since')
+    ignore_import_expenses_since = fields.Boolean(string='Ignore Import Expenses Since',
+                                                  default=False)
+    import_only_reviewed_expenses = fields.Boolean(string='Import Only Reviewed Expenses',
+                                                   default=True)
+
     def get_default_backend_okticket_connector(self):
         """
         :return: backends with 'company_id' like the company of the current user
