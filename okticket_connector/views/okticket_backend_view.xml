@@ -59,12 +59,19 @@
                             </group>
                         </group>
                         <separator/>
-                        <button name="%(action_open_okticket_log)d" string="⇒ See Backend Logs" type="action" class="oe_link"/>
+                        <button name="%(action_open_okticket_log)d" string="⇒ See Backend Logs" type="action"
+                                class="oe_link"/>
 <!--                        <group name="okticket" string="Backend Log" groups="okticket_connector.group_okticket_conn_user">-->
 <!--                            <field name="log_event_ids" nolabel="1"-->
 <!--                                   domain="[('backend_id', '=', active_id)]"/>-->
 <!--                        </group>-->
                         <separator/>
+                        <group name="expense_config" string="Expenses import Configuration"
+                               groups="okticket_connector.group_okticket_conn_user">
+                            <field name="import_expenses_since"/>
+                            <field name="ignore_import_expenses_since"/>
+                            <field name="import_only_reviewed_expenses"/>
+                        </group>
                     </sheet>
                 </form>
             </field>

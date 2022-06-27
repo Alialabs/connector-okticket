@@ -24,7 +24,7 @@ class ResCompany(models.Model):
         ),
     )
     expense_sheet_grouping_time = fields.Selection(
-        [('no_interval', 'No interval'), ('monthly', 'Monthly')],
+        [('no_interval', 'No interval')],
         default='no_interval', required=True,
         string='Expense Sheet Grouping Time interval',
         help=(
