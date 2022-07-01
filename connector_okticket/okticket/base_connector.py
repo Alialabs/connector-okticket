@@ -30,9 +30,11 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
-import http.client, urllib.parse
+import http.client
 import json
 import logging
+import urllib.parse
+
 _logger = logging.getLogger(__name__)
 
 from .exceptions import (
@@ -51,9 +53,8 @@ from .exceptions import (
 
 
 class BaseConnector(object):
-
-    # Atributos
-    http_client_conn_url =  None
+    # Attributes
+    http_client_conn_url = None
     base_url = None
     auth_uri = None
     uri_op_path = None
@@ -86,13 +87,12 @@ class BaseConnector(object):
         }
 
     def login(self, https=False):
-        '''
-        Login de usuario. Almacena token_type y access_token recuperados.
-        :return:
-        '''
+        """
+        User login. Stores token_type and access_token
+        """
         fields_dict = self.get_login_values()
         response = self.general_request(self.base_url + self.auth_uri, "POST", fields_dict,
-                                header_gen_method=self.login_header_generator, only_data=False, https=https)
+                                        header_gen_method=self.login_header_generator, only_data=False, https=https)
         if response and response.get('result'):
             self.token_type = response['result'].get('token_type')
             self.access_token = response['result'].get('access_token')
@@ -109,7 +109,7 @@ class BaseConnector(object):
         return result
 
     def default_header_generator(self):
-        '''Genera un header template'''
+        """Generates a header template"""
         return {
             'Authorization': self.token_type + ' ' + self.access_token,
             'Accept': "application/json",
@@ -117,23 +117,21 @@ class BaseConnector(object):
         }
 
     def find(self, path, params=None, https=False, company_in_header=False):
-        '''
-        Peticiones GET para recuperacion lista de elementos.
-        :param path: path especifico de un objeto
-        :param params: parametros de filtrado de la peticion
+        """
+        GET call to obtain the list of items
+        :param path: object's specific path
+        :param params: filter params
         :return: [ dict ]
-        '''
+        """
         url = self.get_full_path(path)
         headers = {}
         if company_in_header:
             header_gen_method = False
         else:
             header_gen_method = self.find_header_generator
-
         response = self.general_request(url, "GET", fields_dict={}, headers=headers,
-                                                header_gen_method=header_gen_method,
-                                                params=params, https=https)
-        # TODO: controlar numero de elementos por recuperar y realizar peticiones hasta recuperarlos todos
+                                        header_gen_method=header_gen_method,
+                                        params=params, https=https)
         return response
 
     def find_one(self, path, params=None, https=False, company_in_header=False):
@@ -149,20 +147,18 @@ class BaseConnector(object):
         return response
 
     def general_request(self, url, type_request, fields_dict, headers=None,
-                header_gen_method=None, params=None, raw_response=False, only_data=True, https=False):
+                        header_gen_method=None, params=None, raw_response=False, only_data=True, https=False):
         try:
-            # Generacion dinamica de headers y params
+            # Dynamic headers and params generation
             default_header = {}
             if not header_gen_method:
                 default_header = self.default_header_generator()
             headers = headers or header_gen_method and header_gen_method(fields_dict) or {}
             default_header.update(headers)
-            # if url != 'http://dev.okticket.es/api/public/oauth/token':
-            #     headers['company'] = '12902'
             result = self.process_request(url, type_request, params=params, data=fields_dict, headers=default_header,
                                           raw_response=raw_response, only_data=only_data, https=https)
         except AuthError:
-            # Reintento tras nueva autenticacion
+            # Retry after new authentication
             if url != 'http://dev.okticket.es/api/public/oauth/token':
                 self.login(https=https)
                 result = self.general_request(url, type_request, fields_dict, headers=headers,
@@ -177,34 +173,35 @@ class BaseConnector(object):
             conn = http.client.HTTPConnection(self.http_client_conn_url)
         return conn
 
-    def process_request(self, url, type_request, params=None, data=None, headers=None, raw_response=None, only_data=True, https=False):
-        '''
-        Procesa la peticion HTTP
-        '''
+    def process_request(self, url, type_request, params=None, data=None, headers=None, raw_response=None,
+                        only_data=True, https=False):
+        """
+        HTTP request processing
+        """
         assert self.http_client_conn_url, "http_client_conn_url param is required"
 
-        # Incluir parametros en url de la peticion
-        if params:
+        if params:  # URL params
             params = urllib.parse.urlencode(params)
             url = url + "?" + params if type_request == "GET" and params else url
 
         conn = self.get_http_connection(https=https)
         try:
-            payload_json = json.dumps(data) # codificacion en JSON
-            response = self.request_base(url, type_request, conn, params=params, data=payload_json, headers=headers, raw_response=raw_response)
+            payload_json = json.dumps(data)  # JSON
+            response = self.request_base(url, type_request, conn, params=params, data=payload_json, headers=headers,
+                                         raw_response=raw_response)
             result = response['result']
             if only_data:
                 result = result.get('data')
-                # Itera entre todas las posibles paginas de listado de elementos
-                if response['result'].get('links'): # TODO: REVISAR EN PRODUCCIÓN
+                # Goes through all the pages
+                if response['result'].get('links'):
                     while response['result']['links'].get('next'):
-                        # Cerrar y abrir de nuevo la conexión para realizar la petición a la siguiente "página"
+                        # Close and open once again the connection for making the requests for the next "page"
                         conn.close()
                         conn = self.get_http_connection(https=https)
-
                         next_url = response['result']['links']['next']
                         next_url = next_url + "&" + params if type_request == "GET" and params else next_url
-                        response = self.request_base(next_url, type_request, conn, params=params, data=data, headers=headers,
+                        response = self.request_base(next_url, type_request, conn, params=params, data=data,
+                                                     headers=headers,
                                                      raw_response=raw_response)
                         result = result + response['result'].get('data')
         finally:
@@ -215,7 +212,7 @@ class BaseConnector(object):
         }
 
     def request_base(self, url, type_request, conn, params={}, data={}, headers={}, raw_response=None):
-        # Definicion estructura de diccionario de valores para log.event
+        """ Log.event structure """
         log = {
             'tag': type_request,
             'headers': headers,
@@ -248,7 +245,7 @@ class BaseConnector(object):
                 if response.reason == 'Not Found':
                     _logger.warning(
                         "Not fount object!!! Operations will continue...")
-                    # TODO: no encuentra el objeto con el id indicado en OKTICKET
+                    # It doesn't find an object with OkTicket id
                     result = True
                 raise ResourceNotFoundError
             elif response.status == 409:
@@ -263,7 +260,8 @@ class BaseConnector(object):
             elif response.status == 500:
                 raise ServerError
             elif response.status == 204:
-                _logger.warning("DELETE done...")  # TODO: no encuentra el objeto con el id indicado en OKTICKET
+                _logger.warning("DELETE done...")
+                # It doesn't find an object with OkTicket id
                 result = True
             else:
                 raise UnknownError(response.status)
@@ -277,13 +275,11 @@ class BaseConnector(object):
             log_result = str(conExc)
 
         finally:
-            # Actualizar info de log
+            # Updates log info
             log.update({
                 'status': response,
-                'result': log_result,})
+                'result': log_result, })
             return {
                 'result': result,
                 'log': log,
             }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+     @author: Alia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
     <data noupdate="1">
 
         <record forcecreate="True" id="ir_cron_product_import" model="ir.cron">
@@ -16,4 +19,4 @@
         </record>
 
     </data>
-</openerp>
+</odoo>

@@ -46,12 +46,3 @@ class OkticketHrEmployeeBindingExportListener(Component):
                 ('ignore_okticket_synch' not in self.env.context or not self.env.context['ignore_okticket_synch']):
             fields['work_email'] = record.work_email
             record.synchronize_record(fields=fields)
-
-    # @skip_if(lambda self, record, **kwargs: self.no_connector_export(record))
-    # def on_record_write(self, record, fields=None):
-    #     fields = {}
-    #     if record.work_email:
-    #         fields['work_email'] = record.work_email
-    #     record.synchronize_record(fields=fields)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

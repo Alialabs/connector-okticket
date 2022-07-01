@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-#    Created on 6/05/19
+#    Created on 9/06/22
 #
 #    @author:alia
 #
@@ -30,17 +30,17 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
-
-from odoo import api, fields, models
-
-
-class ProjectProject(models.Model):
-    _inherit = 'project.project'
-
-    okticket_cost_center_id = fields.Integer(string="OkTicket Cost_center_id", default=-1.0)
-    # department_id = fields.Many2one('hr.department', string="Related Department")
-    okticket_project_account_id = fields.Many2one('account.account',
-                                               string='Default Account for Expenses')
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+{
+    'name': 'Alia Okticket Connector Expense Sheet Synchronized Unlink',
+    'version': '12.0.1.0.1',
+    'category': 'Connector',
+    'depends': [
+        'okticket_connector_hr_expense_sheet',
+    ],
+    'author': "Alia Technologies",
+    'license': 'AGPL-3',
+    'website': 'http://www.alialabs.com',
+    'data': [],
+    'application': False,
+    'installable': True,
+}

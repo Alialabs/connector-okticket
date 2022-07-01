@@ -30,8 +30,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
-from odoo import api, models, fields
 import logging
+
+from odoo import models, fields, api
 
 _logger = logging.getLogger(__name__)
 
@@ -39,37 +40,26 @@ _logger = logging.getLogger(__name__)
 class Project(models.Model):
     _inherit = 'project.project'
 
-    def _get_cost_center(self):
-        for proj in self:
-            if proj.analytic_account_id:
-                ok_acc_analt = self.env['okticket.account.analytic.account'].search(
-                                                [('odoo_id', '=', proj.analytic_account_id.id)])
-                external_id_int = -1.0
-                if ok_acc_analt and ok_acc_analt[0].external_id:
-                    external_id_int = int(float(ok_acc_analt[0].external_id))
-                proj.okticket_cost_center_id = external_id_int or -1.0
+    # def _get_cost_center(self):
+    #     for proj in self:
+    #         if proj.analytic_account_id:
+    #             ok_acc_analt = self.env['okticket.account.analytic.account'].search(
+    #                 [('odoo_id', '=', proj.analytic_account_id.id)])
+    #             external_id_int = -1.0
+    #             if ok_acc_analt and ok_acc_analt[0].external_id:
+    #                 external_id_int = int(float(ok_acc_analt[0].external_id))
+    #             proj.okticket_cost_center_id = external_id_int or -1.0
+    #
+    # okticket_cost_center_id = fields.Integer(string="OkTicket Cost_center_id",
+    #                                          default=-1.0,
+    #                                          compute=_get_cost_center,
+    #                                          readonly=True)
 
-    okticket_cost_center_id = fields.Integer(string="OkTicket Cost_center_id",
-                                             default=-1.0,
-                                             compute=_get_cost_center,
-                                             readonly=True)
-
-    
-    # INFO: movido a 'analytic_account_listener.py'
-    # @api.model
-    # def create(self, values):
-    #     new_project = super(Project, self).create(values)
-    #     new_project.analytic_account_id._okticket_create()
-    #     return new_project
-
-    @api.multi
     def unlink(self):
-        # TODO: abstraer en módulo listener eventos 'on_unlink'
         analytic_accounts_to_delete = self.env['account.analytic.account']
         for project in self:
             if project.analytic_account_id and not project.analytic_account_id.line_ids:
                 analytic_accounts_to_delete |= project.analytic_account_id
-
         analytic_accounts_to_delete._okticket_unlink()
         return super(Project, self).unlink()
 
@@ -80,10 +70,3 @@ class Project(models.Model):
                 # Modificar estado de project.project
                 project.analytic_account_id._okticket_modify_active_state_cost_center(not project.active)
         super(Project, self).toggle_active()
-
-    @api.multi
-    def unlink_cost_center_from_project(self):
-        for record in self:
-            record.analytic_account_id.okticket_bind_ids = [(2, ok_bind.id) for ok_bind in record.analytic_account_id.okticket_bind_ids]
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

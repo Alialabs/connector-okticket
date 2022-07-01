@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-#    Created on 16/04/19
+#    Created on 6/05/19
 #
 #    @author:alia
 #
@@ -30,7 +30,23 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
-from . import okticket_product
-from . import okticket_hr_employee
-from . import okticket_company
-from . import okticket_project
+
+from odoo import fields, models
+
+
+class AccountAnalyticAccount(models.Model):
+    _inherit = 'account.analytic.account'
+
+    okticket_cost_center_id = fields.Integer(string='OkTicket Cost_center_id', default=-1.0)
+    okticket_def_account_id = fields.Many2one('account.account', string='Default Account for Expenses')
+
+    def get_related_sale_order(self):
+        """
+        Gets account analytic account related sale orders.
+        """
+        self.ensure_one()
+        sale_orders = self.env['sale.order'].search([
+            ('analytic_account_id', '=', self.id),
+            ('state', '=', 'sale')
+        ])
+        return sale_orders and sale_orders[0] or False

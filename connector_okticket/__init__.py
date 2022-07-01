@@ -32,7 +32,6 @@
 
 
 from . import components
-from . import models
 from . import okticket
-from . import models_mods
 from . import wizard
+from . import models

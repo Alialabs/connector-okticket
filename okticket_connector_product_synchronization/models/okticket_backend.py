@@ -31,8 +31,9 @@
 #
 
 
-from odoo import api, models
 import logging
+
+from odoo import api, models
 
 _logger = logging.getLogger(__name__)
 
@@ -53,5 +54,3 @@ class OkticketBackend(models.Model):
         self.ensure_one()
         self.env['okticket.product.template'].sudo().import_batch(self)
         return True
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

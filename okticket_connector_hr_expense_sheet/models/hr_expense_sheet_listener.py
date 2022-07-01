@@ -30,11 +30,14 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
-from odoo.addons.component.core import Component
-from odoo.addons.component_event import skip_if
 import logging
 
+from odoo import _
+from odoo.addons.component.core import Component
+from odoo.addons.component_event import skip_if
+
 _logger = logging.getLogger(__name__)
+
 
 class OkticketHrExpenseSheetBindingExportListener(Component):
     _name = 'okticket.hr.expense.sheet.binding.export.listener'
@@ -47,17 +50,15 @@ class OkticketHrExpenseSheetBindingExportListener(Component):
 
     @skip_if(lambda self, record, **kwargs: self.no_connector_export(record))
     def on_record_write(self, record, fields=None):
-        if fields and 'expense_line_ids' in fields: # Se han modificado los gastos asociados a la hoja de gastos
+        """ Expenses in a expense sheet were modified """
+        if fields and 'expense_line_ids' in fields:
             self.export_expense_sheet(record)
 
     def export_expense_sheet(self, record):
-        # Doctor employee de hr.expense.sheet que se está creado es un empleado relacionado con un usuario de OkTicket
         if not record.employee_id.okticket_user_id or \
                 record.employee_id.okticket_user_id <= 0:
-            _logger.warning('Expense employee %s (%s) not related with Okticket user!',
+            _logger.warning(_('Expense employee %s (%s) not related with Okticket user!'),
                             record.employee_id.name,
                             record.employee_id.id)
         else:
             record.export_record()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

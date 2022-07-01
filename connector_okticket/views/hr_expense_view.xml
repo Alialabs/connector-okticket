@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+     @author: Alia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
     <data>
+
+<!--        TODO ARREGLAR -->
+<!--        <record id="hr_expense_view_expenses_analysis_tree_okticket" model="ir.ui.view">-->
+<!--            <field name="name">okticket.hr.expense.tree</field>-->
+<!--            <field name="model">hr.expense</field>-->
+<!--            <field name="inherit_id" ref="hr_expense.hr_expense_view_expenses_analysis_tree"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='tax_ids']" position="after">-->
+<!--                    <field name="is_invoice" optional="hide"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
 
         <record model="ir.ui.view" id="okticket_hr_expense_view">
             <field name="name">okticket.hr.expense.form</field>
@@ -8,8 +23,12 @@
             <field name="inherit_id" ref="hr_expense.hr_expense_view_form"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <!-- Remplazo de posicion de total_amount y payment_mode -->
-                <xpath expr='//group/group[last()]' position='replace'/>
+
+<!--                <xpath expr="//group/field[@name='product_id']" position="replace">-->
+<!--                    <field name="product_id" required="1" attrs="{'readonly': [('sheet_is_editable', '=', False)]}"-->
+<!--                           context="{'default_can_be_expensed': 1, 'tree_view_ref': 'hr_expense.product_product_expense_tree_view', 'form_view_ref': 'hr_expense.product_product_expense_form_view'}"/>-->
+<!--                </xpath>-->
+
                 <field name="tax_ids" position="after">
                     <field name="okticket_img" widget="image"/>
                 </field>
@@ -51,5 +70,30 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="okticket_product_product_expense_form_view">
+            <field name="name">okticket.product.product.expense.for</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="sale_expense.product_product_view_form_inherit_sale_expense"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='product_details']" position="after">
+                    <notebook>
+                        <page name="okticket_conn_conf" string="OkTicket Conf.">
+                            <group>
+                                <field name="okticket_categ_prod_id" string="Category_id"/>
+                                <field name="okticket_type_prod_id" string="Type_id"/>
+                            </group>
+                            <group string="Rebillable Info">
+                                <field name="rebillable_prod_id"/>
+                                <field name="no_rebillable_prod_ids" widget="many2many_tags" readonly="1"/>
+                            </group>
+                            <group string="Invoice version Info">
+                                <field name="invoice_prod_id"/>
+                                <field name="base_version_prod_ids" widget="many2many_tags" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </xpath>
+            </field>
+        </record>
     </data>
-</openerp>
+</odoo>

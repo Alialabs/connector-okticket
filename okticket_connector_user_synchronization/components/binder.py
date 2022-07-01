@@ -32,10 +32,9 @@
 
 from odoo.addons.component.core import Component
 
+
 class OkticketHrEmployeeBinder(Component):
     _name = 'okticket.hr.employee.binder'
     _inherit = 'okticket.binder'
     _apply_on = ['okticket.hr.employee']
     _usage = 'binder'
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-#    Created on 6/05/19
+#    Created on 09/06/22
 #
 #    @author:alia
 #
@@ -30,13 +30,30 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
+import logging
+from datetime import datetime
 
-from odoo import api, fields, models
+from odoo.addons.component.core import Component
+
+_logger = logging.getLogger(__name__)
 
 
-class HrEmployee(models.Model):
-    _inherit = 'hr.employee'
+class HrExpenseExporter(Component):
+    _inherit = 'okticket.hr.expense.sheet.exporter'
 
-    okticket_user_id = fields.Integer(string="OkTicket User_id")
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+    def delete_expense_sheet(self, exp_sheet):
+        """
+        Run the synchronization for all users, using the connector crons.
+        """
+        backend_adapter = self.component(usage='backend.adapter')
+        if exp_sheet:
+            # Eliminar expense.sheet
+            okticket_exp_sheet_ids = [okticket_exp_sheet.id for okticket_exp_sheet in exp_sheet]
+            for ok_exp_sheet in self.env['okticket.hr.expense.sheet'].search(
+                    [('odoo_id', 'in', okticket_exp_sheet_ids)]):
+                try:
+                    backend_adapter.delete_expense_sheet(ok_exp_sheet.external_id)
+                except Exception as e:
+                    _logger.error('\n\n    >>> ERROR ELIMINACION EXP SHEET ID: %s no localizacdo en OKTICKET\n',
+                                  ok_exp_sheet.external_id)
+        _logger.info('Deleted related Expense Sheet in Okticket !!!')

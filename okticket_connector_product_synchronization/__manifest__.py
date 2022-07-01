@@ -32,20 +32,19 @@
 
 {
     'name': 'Alia Okticket Connector Product Synchronization',
-    'version': '12.0.1.0.2',
+    'summary': 'Implements Okticket product synchronization operations.',
+    'version': '12.0.1.0.1',
     'category': 'Connector',
     'depends': [
-                'connector_okticket',
-                 ],
+        'connector_okticket',
+    ],
     'author': "Alia Technologies",
     'license': 'AGPL-3',
     'website': 'http://www.alialabs.com',
     'data': [
         'security/ir.model.access.csv',
         'data/ir_cron_data.xml',
-        ],
+    ],
     'application': False,
     'installable': True,
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

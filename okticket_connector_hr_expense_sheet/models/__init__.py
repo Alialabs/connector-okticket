@@ -30,12 +30,11 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
-from . import project
+from . import res_company
+from . import account_analytic_account
 from . import hr_expense
 from . import okticket_hr_expense_exporter
 from . import hr_expense_sheet
 from . import hr_expense_sheet_listener
 from . import okticket_hr_expense_sheet
 from . import okticket_hr_expense_sheet_exporter
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

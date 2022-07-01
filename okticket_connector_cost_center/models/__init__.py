@@ -33,6 +33,4 @@
 from . import project
 from . import okticket_analytic_account
 from . import okticket_analytic_account_exporter
-from . import analytic_account_listener # Con listener en lugar de de sobreescribiendo el Create()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+from . import analytic_account_listener

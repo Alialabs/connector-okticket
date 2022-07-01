@@ -34,5 +34,3 @@ from . import okticket_backend
 from . import okticket_hr_employee
 from . import okticket_hr_employee_importer
 from . import hr_employee_listener
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

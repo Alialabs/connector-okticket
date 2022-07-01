@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+     @author: Alia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
     <data>
 
         <record id="view_users_form_simple_modif" model="ir.ui.view">
@@ -8,10 +11,11 @@
             <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
             <field name="arch" type="xml">
                 <group name="preferences" position="inside">
-                    <field name="okticket_backend_ids" readonly="0" options="{'no_create': True, 'no_edit': True}" widget="many2many_tags"/>
+                    <field name="okticket_backend_ids" readonly="0" options="{'no_create': True, 'no_edit': True}"
+                           widget="many2many_tags"/>
                 </group>
             </field>
         </record>
 
     </data>
-</openerp>
+</odoo>
