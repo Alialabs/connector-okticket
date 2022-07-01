@@ -134,6 +134,11 @@ class HrExpenseBatchImporter(Component):
 
                 # Prepare para generar campos required como name
                 new_sheet_values = hr_expense_sheet_obj.prepare_expense_sheet_values(new_sheet_values)
+                if new_sheet_values and 'name' in new_sheet_values and not new_sheet_values['name']:
+                    new_sheet_values['name'] = expense_data['expense'].analytic_account_id and \
+                                               expense_data[
+                                                   'expense'].analytic_account_id.name or 'NO-ANALYTIC-FOUND'
+
                 new_sheet_values.update(expense_sheet_values)
 
                 # TODO es necesario un prepare dinámico vinculado con los tipos de agrupación (normal y temporal)
@@ -186,12 +191,19 @@ class HrExpenseSheet(models.Model):
                                     'analytic_expense_sheet_rel',
                                     'sheet_id', 'analytic_id')
 
+    def check_empty_sheet(self):
+        """
+        If sheet is empty, delete it
+        """
+        self.filtered(lambda x: not x.expense_line_ids).unlink()
+
     def write(self, vals):
         """
         Removes empty expense sheets
         """
         result = super(HrExpenseSheet, self).write(vals)
-        self.filtered(lambda x: not x.expense_line_ids).unlink()
+        if vals and 'expense_line_ids' in vals:
+            self.check_empty_sheet()
         return result
 
     def prepare_expense_sheet_values(self, raw_values):
