@@ -232,7 +232,7 @@ class HrExpenseSheet(models.Model):
 
     @api.multi
     @api.depends('expense_line_ids')
-    def _compute_picking_ids(self):
+    def _compute_analytic_ids(self):
         for sheet in self:
             sheet.analytic_ids = sheet.expense_line_ids.mapped('analytic_account_id').ids
 
