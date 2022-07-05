@@ -59,6 +59,6 @@ class HrExpense(models.Model):
     @api.multi
     def unlink(self):
         for expense in self:
-            if expense.state in ['reported']:
-                raise UserError(_('You cannot delete a reported expense.'))
+            if expense.state not in ['draft']:
+                raise UserError(_('Delete expenses in a state different from draft is not allowed.'))
         return super(HrExpense, self).unlink()

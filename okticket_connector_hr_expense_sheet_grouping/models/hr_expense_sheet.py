@@ -50,6 +50,7 @@ class HrExpenseBatchImporter(Component):
             #         'analytic_ids': expense.analytic_account_id.id,
             #     },
             #     'expense_id': expense.id,
+            #     'sheet_name': expense.name,
             # }
         ]
         for expense in self.env['hr.expense'].browse(expense_ids):
@@ -59,6 +60,7 @@ class HrExpenseBatchImporter(Component):
                     'payment_mode': expense.payment_mode,
                 },
                 'expense': expense,
+                'sheet_name': expense.name,
             })
         return grouped_expenses
 
@@ -75,9 +77,10 @@ class HrExpenseBatchImporter(Component):
                     'employee_id': expense.employee_id and expense.employee_id.id,
                     'payment_mode': expense.payment_mode,
                     'analytic_ids': expense.analytic_account_id and expense.analytic_account_id.id,
-                    'name': expense.name,  # Campo para generar una hoja por gasto
+                    'name': expense.okticket_expense_id,  # Campo para generar una hoja por gasto
                 },
                 'expense': expense,
+                'sheet_name': '%s-%s' % (expense.name, expense.employee_id.name),
             })
         return grouped_expenses
 
@@ -94,11 +97,11 @@ class HrExpenseBatchImporter(Component):
         """
         for expense_data in grouped_expenses:
             expense_date = expense_data['expense'].date
+            expense_data['sheet_name'] = '%s-%s' % (expense_data['sheet_name'], expense_date.month)
             expense_data['group_fields'].update({
                 'init_date': expense_date.replace(day=1),
                 'end_date': expense_date.replace(day=monthrange(expense_date.year, expense_date.month)[1]),
             })
-            # TODO en el método grouped_expenses_managing hace una búsqueda "estricta" por fecha
         return grouped_expenses
 
 

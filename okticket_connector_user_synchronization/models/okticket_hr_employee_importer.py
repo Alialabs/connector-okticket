@@ -105,7 +105,11 @@ class HrEmployeeBatchImporter(Component):
             odoo_user = False
             if binding:  # User exists and is bound (UPDATE)
                 binding.write(internal_data)
-                odoo_user = employee_obj.browse(internal_data['odoo_id'])
+                try:
+                    odoo_user = employee_obj.browse(internal_data['odoo_id'])
+                except Exception as e:
+                    raise Warning(_('Employee %s (%s) must be deleted') %
+                                  employee_ext_vals['name'], employee_ext_vals['id'])
             else:  # User doesn't bound
                 if not internal_data.get('odoo_id'):
                     # User doesn't exist

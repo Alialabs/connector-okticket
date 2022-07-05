@@ -1,0 +1,1122 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* connector_okticket
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-04 15:19+0000\n"
+"PO-Revision-Date: 2022-07-04 15:19+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: connector_okticket
+#: code:addons/connector_okticket/models/okticket_hr_expense_importer.py:301
+#, python-format
+msgid "\n"
+"Error: "
+msgstr "\n"
+"Error: "
+
+#. module: connector_okticket
+#: code:addons/connector_okticket/wizard/expense_wizard.py:58
+#, python-format
+msgid "(assign_default_expense_account)> Field \"account_id\" updated from product for expenses: %s"
+msgstr "(assign_default_expense_account)> Campo \"account_id\" actualizado desde producto para gastos: %s"
+
+#. module: connector_okticket
+#: code:addons/connector_okticket/models/okticket_backend.py:34
+#, python-format
+msgid "1.0 and higher"
+msgstr "1.0 y superior"
+
+#. module: connector_okticket
+#: sql_constraint:okticket.binding:0
+#: sql_constraint:okticket.hr.expense:0
+msgid "A binding already exists with the same Okticket ID."
+msgstr "Ya existe un vínculo con el mismo ID de Okticket."
+
+#. module: connector_okticket
+#: code:addons/connector_okticket/components/backend_adapter.py:85
+#, python-format
+msgid "A network error caused the failure of the job: %s"
+msgstr "Un error de red ha causado el fallo: %s"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__account_id
+msgid "Account"
+msgstr "Cuenta"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_view_account_analytic_account_form
+msgid "Account Information"
+msgstr "Información de la cuenta"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__message_needaction
+msgid "Action Needed"
+msgstr "Acción Necesaria"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__activity_ids
+msgid "Activities"
+msgstr "Actividades"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__activity_state
+msgid "Activity State"
+msgstr "Estado de la actividad"
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_okticket_hr_expense__account_id
+msgid "An expense account is expected"
+msgstr "Se espera una cuenta de gastos"
+
+#. module: connector_okticket
+#: model:ir.model,name:connector_okticket.model_account_analytic_account
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__analytic_account_id
+msgid "Analytic Account"
+msgstr "Cuenta analítica"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__analytic_tag_ids
+msgid "Analytic Tags"
+msgstr "Etiquetas analíticas"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.expense_wizard_view
+msgid "Assign default expenses to accounts"
+msgstr "Asignar gastos por defecto a las cuentas"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__message_attachment_count
+msgid "Attachment Count"
+msgstr "Nº de archivos adjuntos"
+
+#. module: connector_okticket
+#: selection:log.event,tag:0
+msgid "Authentication"
+msgstr "Autentificación"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_log_event__backend_id
+msgid "Backend"
+msgstr "Backend"
+
+#. module: connector_okticket
+#: model:ir.actions.act_window,name:connector_okticket.action_open_okticket_log
+msgid "Backend Logs"
+msgstr "Log de backend"
+
+#. module: connector_okticket
+#: model:ir.ui.menu,name:connector_okticket.menu_okticket_backend
+msgid "Backends"
+msgstr "Backends"
+
+#. module: connector_okticket
+#: selection:hr.expense,payment_method:0
+msgid "Bank check"
+msgstr "Cheque bancario"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_product_product__base_version_prod_ids
+#: model:ir.model.fields,field_description:connector_okticket.field_product_template__base_version_prod_ids
+msgid "Base product version"
+msgstr "Versión producto base"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__base_url
+msgid "Base url"
+msgstr "URL Base"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__reference
+msgid "Bill Reference"
+msgstr "Referencia Factura"
+
+#. module: connector_okticket
+#: selection:hr.expense,payment_method:0
+msgid "Business card"
+msgstr "Tarjeta"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.expense_wizard_view
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: connector_okticket
+#: selection:hr.expense,payment_method:0
+msgid "Cash"
+msgstr "Efectivo"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_product_product_expense_form_view
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_product_template_form_view
+msgid "Category_id"
+msgstr "Categoría"
+
+#. module: connector_okticket
+#: model:ir.model,name:connector_okticket.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__company_id
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_view_company_form
+msgid "Company_id"
+msgstr "Compañía"
+
+#. module: connector_okticket
+#: selection:hr.expense,okticket_status:0
+msgid "Confirmed"
+msgstr "Confirmado"
+
+#. module: connector_okticket
+#: code:addons/connector_okticket/models/okticket_backend.py:167
+#, python-format
+msgid ""
+"Connection test succeeded\n"
+"Everything seems properly set up"
+msgstr ""
+"Test de Conexión realizado con éxito\n"
+"Todo parece estar correctamente configurado"
+
+#. module: connector_okticket
+#: model:ir.model,name:connector_okticket.model_connector_backend
+msgid "Connector Backend"
+msgstr "Backend del conector"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_log_event__content
+msgid "Content"
+msgstr "Contenido"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_view_account_analytic_account_form
+msgid "Cost Center Information"
+msgstr ""
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_view_account_analytic_account_form
+msgid "Cost_center_id"
+msgstr "Centro de coste"
+
+#. module: connector_okticket
+#: code:addons/connector_okticket/models/okticket_backend.py:165
+#: code:addons/connector_okticket/models/okticket_binding.py:80
+#, python-format
+msgid "Could not connect to Okticket"
+msgstr "No se puede conectar a Okticket"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_log_event__create_uid
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__create_uid
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_expense_wizard__create_uid
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_log_event__create_date
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__create_date
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_expense_wizard__create_date
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__currency_id
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_log_event__datetime_event
+msgid "Datetime event"
+msgstr "Fecha del evento"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_account_analytic_account__okticket_def_account_id
+msgid "Default Account for Expenses"
+msgstr "Cuenta por defecto para gastos"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__default_lang_id
+msgid "Default Language"
+msgstr "Idioma por defecto"
+
+#. module: connector_okticket
+#: selection:log.event,tag:0
+msgid "Delete"
+msgstr "Suprimir"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__name
+msgid "Description"
+msgstr "Descripción"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_connector_backend__display_name
+#: model:ir.model.fields,field_description:connector_okticket.field_log_event__display_name
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__display_name
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_binding__display_name
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_expense_wizard__display_name
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: connector_okticket
+#: model:ir.model,name:connector_okticket.model_hr_employee
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__employee_id
+msgid "Employee"
+msgstr "Empleado"
+
+#. module: connector_okticket
+#: selection:log.event,type:0
+msgid "Error"
+msgstr "Error"
+
+#. module: connector_okticket
+#: model:ir.model,name:connector_okticket.model_hr_expense
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__odoo_id
+msgid "Expense"
+msgstr "Gasto"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__sheet_id
+msgid "Expense Report"
+msgstr "Informe de Gastos"
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_okticket_hr_expense__sheet_id_state
+msgid "Expense Report State"
+msgstr "Estado del Informe de Gastos"
+
+#. module: connector_okticket
+#: model:ir.actions.act_window,name:connector_okticket.action_expense_wizard
+msgid "Expense Wizard"
+msgstr "Asistente de gastos"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.view_okticket_backend_form
+msgid "Expenses import Configuration"
+msgstr "Configuración de importación de gastos"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__is_refused
+msgid "Explicitely Refused by manager or acccountant"
+msgstr "Explícitamente rechazado por el responsable o por contabilidad"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__message_follower_ids
+msgid "Followers"
+msgstr "Seguidores"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__message_channel_ids
+msgid "Followers (Channels)"
+msgstr "Seguidores (Canales)"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Seguidores (Empresas)"
+
+#. module: connector_okticket
+#: selection:hr.expense,payment_method:0
+msgid "Fuel card"
+msgstr "Tarjeta combustible"
+
+#. module: connector_okticket
+#: selection:log.event,tag:0
+msgid "Get"
+msgstr "GET"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__grant_type
+msgid "Grant type"
+msgstr "Grant type"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__http_client_conn_url
+msgid "HTTP connection url"
+msgstr "URL Conexión HTTP"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__https
+msgid "HTTPS protocol"
+msgstr "Protocolo HTTPS"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_connector_backend__id
+#: model:ir.model.fields,field_description:connector_okticket.field_log_event__id
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__id
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_binding__id
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_expense_wizard__id
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__id
+msgid "ID"
+msgstr "ID"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_binding__external_id
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__external_id
+msgid "ID on Okticket"
+msgstr "ID en Okticket"
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_okticket_backend__default_lang_id
+msgid ""
+"If a default language is selected, the records will be imported in the translation of this language.\n"
+"Note that a similar configuration exists for each storeview."
+msgstr ""
+"Si un idioma por defecto está seleccionado, los registro serán importados en la traducción de este idioma.\n"
+"Observe que una configuración similar existe para cada storeview."
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_okticket_hr_expense__message_unread
+msgid "If checked new messages require your attention."
+msgstr "Si está marcado, hay nuevos mensajes que requieren su atención"
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_okticket_hr_expense__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Si está marcado, hay nuevos mensajes que requieren su atención."
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_okticket_hr_expense__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Si se encuentra marcado, algunos mensajes tienen error de envío."
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__ignore_import_expenses_since
+msgid "Ignore Import Expenses Since"
+msgstr "Ignorar Importación de gastos desde fecha"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_hr_expense__okticket_img
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__okticket_img
+msgid "Image"
+msgstr "Imagen"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__image_base_url
+msgid "Image Base url"
+msgstr "URL de imagen base"
+
+#. module: connector_okticket
+#: model:ir.actions.server,name:connector_okticket.ir_cron_hr_expenses_import_ir_actions_server
+#: model:ir.cron,cron_name:connector_okticket.ir_cron_hr_expenses_import
+#: model:ir.cron,name:connector_okticket.ir_cron_hr_expenses_import
+msgid "Import Expenses From Okticket"
+msgstr "Importación de gastos desde Okticket"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__import_expenses_since
+msgid "Import Expenses Since"
+msgstr "Importación de gastos desde fecha"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__import_only_reviewed_expenses
+msgid "Import Only Reviewed Expenses"
+msgstr "Importar solo gastos revisados"
+
+#. module: connector_okticket
+#: code:addons/connector_okticket/models/okticket_hr_expense_importer.py:292
+#, python-format
+msgid "Importing expense ID: %s. It does not have required fields: %s"
+msgstr "Importando gasto ID: %s. No tiene los campos requeridos: %s"
+
+#. module: connector_okticket
+#: selection:log.event,type:0
+msgid "Info"
+msgstr "Información"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_product_product__invoice_prod_id
+#: model:ir.model.fields,field_description:connector_okticket.field_product_template__invoice_prod_id
+msgid "Invoice product version"
+msgstr "Versión de producto factura"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_product_product_expense_form_view
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_product_template_form_view
+msgid "Invoice version Info"
+msgstr "Información de versión de factura"
+
+#. module: connector_okticket
+#: code:addons/connector_okticket/models/okticket_product.py:124
+#, python-format
+msgid "Invoiceable"
+msgstr "Factura"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__message_is_follower
+msgid "Is Follower"
+msgstr "Es un seguidor"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_hr_expense__is_invoice
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__is_invoice
+msgid "Is invoice"
+msgstr "Es factura"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_product_product__rebillable_product_version
+#: model:ir.model.fields,field_description:connector_okticket.field_product_template__rebillable_product_version
+msgid "Is rebillable product version"
+msgstr "Es una versión de producto refacturable"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__key
+msgid "Key"
+msgstr "Clave"
+
+#. module: connector_okticket
+#: model:product.product,name:connector_okticket.product_product_okticket_kilometres
+#: model:product.template,name:connector_okticket.product_product_okticket_kilometres_product_template
+msgid "Kilometres"
+msgstr "Kilómetros"
+
+#. module: connector_okticket
+#: model:product.product,name:connector_okticket.product_product_okticket_km_rebillable
+#: model:product.template,name:connector_okticket.product_product_okticket_km_rebillable_product_template
+msgid "Kilometres-Rebillable"
+msgstr "Kilómetros-Refacturable"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__name
+msgid "Label"
+msgstr "Etiqueta"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_connector_backend____last_update
+#: model:ir.model.fields,field_description:connector_okticket.field_log_event____last_update
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend____last_update
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_binding____last_update
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_expense_wizard____last_update
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense____last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_log_event__write_uid
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__write_uid
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_expense_wizard__write_uid
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_log_event__write_date
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__write_date
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_expense_wizard__write_date
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_binding__sync_date
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__sync_date
+msgid "Last synchronization date"
+msgstr "Última fecha de sincronización"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__location
+msgid "Location"
+msgstr "Ubicación"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__log_event_ids
+msgid "Log Events"
+msgstr "Eventos de Log"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.log_event_view_tree
+msgid "Log events"
+msgstr "Eventos de Log"
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_okticket_backend__log_event_ids
+msgid "Log events related with this backend"
+msgstr "Eventos de Log relacionados con este backend"
+
+#. module: connector_okticket
+#: model:ir.ui.menu,name:connector_okticket.menu_okticket_log_event
+msgid "Logs"
+msgstr "Registros"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__message_main_attachment_id
+msgid "Main Attachment"
+msgstr "Adjuntos principales"
+
+#. module: connector_okticket
+#: model:res.groups,name:connector_okticket.group_okticket_conn_manager
+msgid "Manager"
+msgstr "Responsable"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__message_has_error
+msgid "Message Delivery error"
+msgstr "Error de Envío de Mensaje"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__message_ids
+msgid "Messages"
+msgstr "Mensajes"
+
+#. module: connector_okticket
+#: selection:hr.expense,payment_method:0
+msgid "N.A."
+msgstr "N.A."
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "Siguiente plazo de actividad"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__activity_summary
+msgid "Next Activity Summary"
+msgstr "Resumen de la siguiente actividad"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__activity_type_id
+msgid "Next Activity Type"
+msgstr "Siguiente tipo de actividad"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_product_product__no_rebillable_prod_ids
+#: model:ir.model.fields,field_description:connector_okticket.field_product_template__no_rebillable_prod_ids
+msgid "No rebillable product version"
+msgstr "Versión de producto no refacturable"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__description
+msgid "Notes..."
+msgstr "Notas..."
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Número de acciones"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__attachment_number
+msgid "Number of Attachments"
+msgstr "Número de adjuntos"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__message_has_error_counter
+msgid "Number of error"
+msgstr "Número de error"
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_okticket_hr_expense__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "Número de mensajes que requieren una acción"
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_okticket_hr_expense__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Número de mensajes con error de envío"
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_okticket_hr_expense__message_unread_counter
+msgid "Number of unread messages"
+msgstr "Número de mensajes no leidos"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__oauth_client_id
+msgid "Oauth client id"
+msgstr "Id de cliente Oauth"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__auth_uri
+msgid "Oauth path"
+msgstr "Ruta Oauth"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__oauth_secret
+msgid "Oauth secret"
+msgstr "Oauth secret"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_product_product__okticket_categ_prod_id
+#: model:ir.model.fields,field_description:connector_okticket.field_product_template__okticket_categ_prod_id
+msgid "OkTicket Category_id"
+msgstr "Categoría de Okticket"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_res_company__okticket_company_id
+msgid "OkTicket Company_id"
+msgstr "Compañía de Okticket"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_hr_employee_view_form
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_product_product_expense_form_view
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_product_template_form_view
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_view_account_analytic_account_form
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_view_company_form
+msgid "OkTicket Conf."
+msgstr "Configuración Okticket"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_account_analytic_account__okticket_cost_center_id
+msgid "OkTicket Cost_center_id"
+msgstr "Centro de coste de Okticket"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_hr_expense__okticket_bind_ids
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__okticket_bind_ids
+msgid "OkTicket Expense Bindings"
+msgstr "Vínculos de gastos de Okticket"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.view_okticket_backend_form
+msgid "OkTicket Test Parameters"
+msgstr ""
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_product_product__okticket_type_prod_id
+#: model:ir.model.fields,field_description:connector_okticket.field_product_template__okticket_type_prod_id
+msgid "OkTicket Type_id"
+msgstr "Tipo de Okticket"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_hr_expense__okticket_expense_id
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__okticket_expense_id
+msgid "OkTicket id"
+msgstr "Id de Okticket"
+
+#. module: connector_okticket
+#: model:ir.ui.menu,name:connector_okticket.menu_okticket_root
+msgid "Okticket"
+msgstr "Okticket"
+
+#. module: connector_okticket
+#: model:ir.actions.act_window,name:connector_okticket.action_okticket_backend
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_binding__backend_id
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__backend_id
+#: model_terms:ir.ui.view,arch_db:connector_okticket.view_okticket_backend_form
+#: model_terms:ir.ui.view,arch_db:connector_okticket.view_okticket_backend_tree
+msgid "Okticket Backend"
+msgstr "Backend de Okticket"
+
+#. module: connector_okticket
+#: model:ir.model,name:connector_okticket.model_okticket_backend
+msgid "Okticket Backend Configuration"
+msgstr "Configuración de backend de Okticket"
+
+#. module: connector_okticket
+#: model:ir.actions.act_window,name:connector_okticket.action_okticket_log
+msgid "Okticket Backend Logs"
+msgstr "Logs de backend de Okticket"
+
+#. module: connector_okticket
+#: model:ir.model,name:connector_okticket.model_okticket_binding
+msgid "Okticket Binding (abstract)"
+msgstr "Vínculos de Okticket (abstract)"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__okticket_company_id
+msgid "Okticket Company Id"
+msgstr "Id de compañía de Okticket"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.view_okticket_backend_form
+msgid "Okticket Configuration"
+msgstr "Configuración Okticket"
+
+#. module: connector_okticket
+#: model:ir.module.category,name:connector_okticket.module_category_okticket_connector
+msgid "Okticket Connector Management"
+msgstr "Gestión de conector Okticket"
+
+#. module: connector_okticket
+#: model:ir.module.category,description:connector_okticket.module_category_okticket_connector
+msgid "Okticket Connector Operations"
+msgstr "Operaciones de conector Okticket"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_res_users__okticket_backend_ids
+msgid "Okticket Server"
+msgstr "Servidor Okticket"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_hr_employee__okticket_user_id
+msgid "Okticket User Id"
+msgstr "Id de usuario de Okticket"
+
+#. module: connector_okticket
+#: code:addons/connector_okticket/components/backend_adapter.py:80
+#, python-format
+msgid "Okticket connection Error: Invalid authentications key."
+msgstr "Error de conexión Okticket: clave de auteticación inválida."
+
+#. module: connector_okticket
+#: selection:log.event,tag:0
+msgid "Operation"
+msgstr "Operación"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__uri_op_path
+msgid "Operations path"
+msgstr "Ruta de operaciones"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__payment_mode
+msgid "Paid By"
+msgstr "Pagado Por"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_hr_expense__okticket_partner_name
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__okticket_partner_name
+msgid "Partner Name"
+msgstr "Nombre de la empresa"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__api_password
+msgid "Pass"
+msgstr "Contraseña"
+
+#. module: connector_okticket
+#: selection:log.event,tag:0
+msgid "Patch"
+msgstr "PATCH"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_hr_expense__payment_method
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__payment_method
+msgid "Payment method"
+msgstr "Modo de pago"
+
+#. module: connector_okticket
+#: selection:hr.expense,payment_method:0
+msgid "Paypal"
+msgstr "Paypal"
+
+#. module: connector_okticket
+#: selection:hr.expense,okticket_status:0
+msgid "Pending"
+msgstr "Pendiente"
+
+#. module: connector_okticket
+#: selection:log.event,tag:0
+msgid "Post"
+msgstr "Publicar"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: connector_okticket
+#: model:ir.model,name:connector_okticket.model_product_template
+msgid "Product Template"
+msgstr "Plantilla de producto"
+
+#. module: connector_okticket
+#: model:ir.model,name:connector_okticket.model_project_project
+msgid "Project"
+msgstr "Proyecto"
+
+#. module: connector_okticket
+#: selection:log.event,tag:0
+msgid "Put"
+msgstr "PUT"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__quantity
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: connector_okticket
+#: code:addons/connector_okticket/models/okticket_product.py:97
+#, python-format
+msgid "Rebillable"
+msgstr "Refacturable"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_product_product_expense_form_view
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_product_template_form_view
+msgid "Rebillable Info"
+msgstr "Información de refacturación"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_product_product__rebillable_prod_id
+#: model:ir.model.fields,field_description:connector_okticket.field_product_template__rebillable_prod_id
+msgid "Rebillable product version"
+msgstr "Versión de producto refacturable"
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_product_product__rebillable_prod_id
+#: model:ir.model.fields,help:connector_okticket.field_product_template__rebillable_prod_id
+msgid "Rebillable version of the product"
+msgstr "Versión de producto refacturable"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_hr_expense__okticket_remote_path
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__okticket_remote_path
+msgid "Remote Path"
+msgstr "Ruta remota"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_hr_expense__okticket_remote_uri
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__okticket_remote_uri
+msgid "Remote URI"
+msgstr "URI remoto"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__company_currency_id
+msgid "Report Company Currency"
+msgstr "Informe en la moneda de la compañía"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__activity_user_id
+msgid "Responsible User"
+msgstr "Usuario responsable"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__sale_order_id
+msgid "Sale Order"
+msgstr "Pedido de venta"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__scope
+msgid "Scope"
+msgstr "Ámbito"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.expense_wizard_view
+msgid "Set accounted false"
+msgstr "Asignar valor 'false' a 'contabilizado'"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__sheet_id_state
+msgid "Sheet state"
+msgstr ""
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_hr_expense__okticket_status
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__okticket_status
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__state
+msgid "Status"
+msgstr "Estado"
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_okticket_hr_expense__activity_state
+msgid "Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr "Estado basado en actividades\n"
+"Vencida: la fecha tope ya ha pasado\n"
+"Hoy: La fecha tope es hoy\n"
+"Planificada: futuras actividades."
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_okticket_hr_expense__state
+msgid "Status of the expense."
+msgstr "Estado del gasto"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__untaxed_amount
+msgid "Subtotal"
+msgstr "Subtotal"
+
+#. module: connector_okticket
+#: selection:log.event,type:0
+msgid "Success"
+msgstr "Éxito"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_log_event__tag
+msgid "Tag"
+msgstr "Etiqueta"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__tax_ids
+msgid "Taxes"
+msgstr "Impuestos"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.view_okticket_backend_form
+msgid "Test Authentication"
+msgstr "Prueba de autenticación"
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_res_users__okticket_backend_ids
+msgid "The okticket service from which to import your timesheets. If empty, the default okticket service will be used instead."
+msgstr ""
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__total_amount
+msgid "Total"
+msgstr "Total"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__total_amount_company
+msgid "Total (Company Currency)"
+msgstr "Total (Moneda compañía)"
+
+#. module: connector_okticket
+#: selection:hr.expense,payment_method:0
+msgid "Transfer"
+msgstr "Albarán"
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_product_product__rebillable_product_version
+#: model:ir.model.fields,help:connector_okticket.field_product_template__rebillable_product_version
+msgid "True if the product has other version no rebillable"
+msgstr "Marcado si el producto tiene otra versión no refacturable"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_log_event__type
+msgid "Type"
+msgstr "Tipo"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_product_product_expense_form_view
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_product_template_form_view
+msgid "Type_id"
+msgstr "Tipo"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__unit_amount
+msgid "Unit Price"
+msgstr "Precio unitario"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__product_uom_id
+msgid "Unit of Measure"
+msgstr "Unidad de medida"
+
+#. module: connector_okticket
+#: model:product.product,uom_name:connector_okticket.product_product_okticket_kilometres
+#: model:product.product,uom_name:connector_okticket.product_product_okticket_km_rebillable
+#: model:product.template,uom_name:connector_okticket.product_product_okticket_kilometres_product_template
+#: model:product.template,uom_name:connector_okticket.product_product_okticket_km_rebillable_product_template
+msgid "Unit(s)"
+msgstr "Unidad(es)"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__message_unread
+msgid "Unread Messages"
+msgstr "Mensajes por leer"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr "Contador de mensajes sin leer"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__api_login
+#: model:res.groups,name:connector_okticket.group_okticket_conn_user
+msgid "User"
+msgstr "Usuario"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.okticket_hr_employee_view_form
+msgid "User_id"
+msgstr "Usuario"
+
+#. module: connector_okticket
+#: model:ir.model,name:connector_okticket.model_res_users
+msgid "Users"
+msgstr "Usuarios"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_hr_expense__okticket_vat
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__okticket_vat
+msgid "VAT Number"
+msgstr "NIF"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__invoice_id
+msgid "Vendor Bill"
+msgstr "Factura de proveedor"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend__version
+msgid "Version"
+msgstr "Version"
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_product_product__invoice_prod_id
+#: model:ir.model.fields,help:connector_okticket.field_product_template__invoice_prod_id
+msgid "Version of the product to use in invoices"
+msgstr ""
+
+#. module: connector_okticket
+#: selection:log.event,type:0
+msgid "Warning"
+msgstr "Alerta"
+
+#. module: connector_okticket
+#: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__website_message_ids
+msgid "Website Messages"
+msgstr "Mensajes del sitio web"
+
+#. module: connector_okticket
+#: model:ir.model.fields,help:connector_okticket.field_okticket_hr_expense__website_message_ids
+msgid "Website communication history"
+msgstr "Historial de comunicaciones del sitio web"
+
+#. module: connector_okticket
+#: code:addons/connector_okticket/models/hr_expense.py:63
+#, python-format
+msgid "Delete expenses in a state different from draft is not allowed."
+msgstr "No se puede eliminar un gasto en estado distinto de \"A enviar\"."
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.view_okticket_backend_form
+msgid "e.g. http://dev.okticket.es/api/public"
+msgstr "p.ej. http://dev.okticket.es/api/public"
+
+#. module: connector_okticket
+#: model:product.product,weight_uom_name:connector_okticket.product_product_okticket_kilometres
+#: model:product.product,weight_uom_name:connector_okticket.product_product_okticket_km_rebillable
+#: model:product.template,weight_uom_name:connector_okticket.product_product_okticket_kilometres_product_template
+#: model:product.template,weight_uom_name:connector_okticket.product_product_okticket_km_rebillable_product_template
+msgid "kg"
+msgstr ""
+
+#. module: connector_okticket
+#: model:ir.model,name:connector_okticket.model_log_event
+msgid "log.event"
+msgstr "Evento de Log"
+
+#. module: connector_okticket
+#: model:ir.model,name:connector_okticket.model_okticket_expense_wizard
+msgid "okticket.expense.wizard"
+msgstr "Asistente de gasto Okticket"
+
+#. module: connector_okticket
+#: model:ir.model,name:connector_okticket.model_okticket_hr_expense
+msgid "okticket.hr.expense"
+msgstr "Gasto de Okticket"
+
+#. module: connector_okticket
+#: model_terms:ir.ui.view,arch_db:connector_okticket.view_okticket_backend_form
+msgid "⇒ See Backend Logs"
+msgstr "⇒ Ver logs"

@@ -1,0 +1,504 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* okticket_connector_hr_expense_sheet
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-04 15:22+0000\n"
+"PO-Revision-Date: 2022-07-04 15:22+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: okticket_connector_hr_expense_sheet
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet_exporter.py:84
+#, python-format
+msgid ""
+"(generate_new_expense_sheet): It is not possible to find a valid name for "
+"expenses sheet: %s"
+msgstr ""
+"(generate_new_expense_sheet): No es posible encontrar un nombre válido para"
+"la hoja de gastos: %s"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_needaction
+msgid "Action Needed"
+msgstr "Acción requerida"
+
+#. module: okticket_connector_hr_expense_sheet
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:278
+#, python-format
+msgid "Action not valid for Okticket expense sheet %s in state %s"
+msgstr "Acción no válida para hoa de gastos de Okticket %s en estado %s"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__activity_ids
+msgid "Activities"
+msgstr "Actividades"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__activity_state
+msgid "Activity State"
+msgstr "Estado de la actividad"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model,name:okticket_connector_hr_expense_sheet.model_account_analytic_account
+#: selection:res.company,expense_sheet_grouping_method:0
+msgid "Analytic Account"
+msgstr "Cuenta analítica"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_attachment_count
+msgid "Attachment Count"
+msgstr "Nº de archivos adjuntos"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__bank_journal_id
+msgid "Bank Journal"
+msgstr "Diario del banco"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__can_reset
+msgid "Can Reset"
+msgstr "Puede restablecer"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model,name:okticket_connector_hr_expense_sheet.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: okticket_connector_hr_expense_sheet
+#: code:addons/okticket_connector_hr_expense_sheet/models/hr_expense.py:109
+#: code:addons/okticket_connector_hr_expense_sheet/models/hr_expense.py:126
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:91
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:105
+#, python-format
+msgid "Could not connect to Okticket"
+msgstr "No es posible establecer la conexión con Okticket"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__currency_id
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__accounting_date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__department_id
+msgid "Department"
+msgstr "Departamento"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__employee_id
+msgid "Employee"
+msgstr "Empleado"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__address_id
+msgid "Employee Home Address"
+msgstr "Dirección particular"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model,name:okticket_connector_hr_expense_sheet.model_hr_expense
+msgid "Expense"
+msgstr "Gasto"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__journal_id
+msgid "Expense Journal"
+msgstr "Diario de gasto"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__expense_line_ids
+msgid "Expense Lines"
+msgstr "Líneas de gastos"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model,name:okticket_connector_hr_expense_sheet.model_hr_expense_sheet_register_payment_wizard
+msgid "Expense Register Payment Wizard"
+msgstr ""
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model,name:okticket_connector_hr_expense_sheet.model_hr_expense_sheet
+msgid "Expense Report"
+msgstr "Informe de gastos"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,help:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__state
+msgid "Expense Report State"
+msgstr "Estado del Informe de Gastos"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__name
+msgid "Expense Report Summary"
+msgstr "Resumen del informe de gastos"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_res_company__expense_sheet_grouping_method
+msgid "Expense Sheet Grouping Method"
+msgstr "Método de agrupación de hojas de gastos"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_res_company__expense_sheet_grouping_time
+msgid "Expense Sheet Grouping Time interval"
+msgstr "Intervalo temporal de agrupación de hojas de gastos"
+
+#. module: okticket_connector_hr_expense_sheet
+#: code:addons/okticket_connector_hr_expense_sheet/models/hr_expense_sheet_listener.py:60
+#, python-format
+msgid "Expense employee %s (%s) not related with Okticket user!"
+msgstr "¡Gasto de empleado %s (%s) no relacionado con usuario de Okticket!"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model_terms:ir.ui.view,arch_db:okticket_connector_hr_expense_sheet.okticket_expense_sheets_view
+msgid "Expense_sheet_id"
+msgstr "Hoja de gastos"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,help:okticket_connector_hr_expense_sheet.field_res_company__expense_sheet_grouping_method
+msgid "Expenses grouping method for expense sheets managing:\n"
+"- Analytic Account: expenses group by analytic account, employee and payment mode- Standard: expenses grouped by employee and payment mode (Odoo standard)"
+msgstr "Método de agrupación de gastos para gestión de hojas de gastos:\n"
+"- Cuenta analítica: gastos agrupados por cuenta analítica, empleado y modo de pago.\n"
+"- Estándar: gastos agrupados por empleado y modo de pago (estándar de Odoo)."
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_follower_ids
+msgid "Followers"
+msgstr "Seguidores"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_channel_ids
+msgid "Followers (Channels)"
+msgstr "Seguidores (Canales)"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Seguidores (Empresas)"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__is_multiple_currency
+msgid "Handle lines with different currencies"
+msgstr "Manejar líneas con diferentes monedas."
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__odoo_id
+msgid "Hr Expense Sheet"
+msgstr "Hoja gastos RRHH"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_hr_expense_sheet__okticket_bind_ids
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__okticket_bind_ids
+msgid "Hr Expense Sheet Bindings"
+msgstr "Vínculos de hoja de gastos"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__id
+msgid "ID"
+msgstr "Id"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__external_id
+msgid "ID on Okticket"
+msgstr "Id en Okticket"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__activity_exception_icon
+msgid "Icon"
+msgstr "Icono"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,help:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_unread
+msgid "If checked new messages require your attention."
+msgstr "Si está marcado, hay nuevos mensajes que requieren su atención"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,help:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Si está marcado, hay nuevos mensajes que requieren su atención."
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,help:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Si se encuentra marcado, algunos mensajes tienen error de envío."
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__invoice_count
+msgid "Invoice Count"
+msgstr "Recuento de facturas"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_is_follower
+msgid "Is Follower"
+msgstr "Es un seguidor"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__account_move_id
+msgid "Journal Entry"
+msgstr "Asiento contable"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet____last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__sync_date
+msgid "Last synchronization date"
+msgstr "Última fecha de sincronización"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_main_attachment_id
+msgid "Main Attachment"
+msgstr "Adjuntos principales"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__user_id
+msgid "Manager"
+msgstr "Responsable"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_has_error
+msgid "Message Delivery error"
+msgstr "Error de Envío de Mensaje"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_ids
+msgid "Messages"
+msgstr "Mensajes"
+
+#. module: okticket_connector_hr_expense_sheet
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_exporter.py:59
+#, python-format
+msgid "Modify expense accounted field in Okticket"
+msgstr "Modificar campo 'contabilizado' (accounted) en Okticket"
+
+#. module: okticket_connector_hr_expense_sheet
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:209
+#, python-format
+msgid "Modify report_id field in Okticket"
+msgstr "Modificar campo 'informe' (report_id) en Okticket"
+
+#. module: okticket_connector_hr_expense_sheet
+#: selection:res.company,expense_sheet_grouping_time:0
+msgid "Monthly"
+msgstr "Mensual"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "Siguiente plazo de actividad"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__activity_summary
+msgid "Next Activity Summary"
+msgstr "Resumen de la siguiente actividad"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__activity_type_id
+msgid "Next Activity Type"
+msgstr "Siguiente tipo de actividad"
+
+#. module: okticket_connector_hr_expense_sheet
+#: selection:res.company,expense_sheet_grouping_method:0
+msgid "No grouping"
+msgstr "Sin agrupación"
+
+#. module: okticket_connector_hr_expense_sheet
+#: selection:res.company,expense_sheet_grouping_time:0
+msgid "No interval"
+msgstr "Sin intervalo"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Número de acciones"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__attachment_number
+msgid "Number of Attachments"
+msgstr "Número de adjuntos"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_has_error_counter
+msgid "Number of error"
+msgstr "Número de error"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,help:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "Número de mensajes que requieren una acción"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,help:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Número de mensajes con error de envío"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,help:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_unread_counter
+msgid "Number of unread messages"
+msgstr "Número de mensajes no leidos"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model_terms:ir.ui.view,arch_db:okticket_connector_hr_expense_sheet.okticket_expense_sheets_view
+msgid "OkTicket Conf."
+msgstr "Configuración de Okticket"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_hr_expense_sheet__okticket_expense_sheet_id
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__okticket_expense_sheet_id
+msgid "OkTicket Expense_sheet_id"
+msgstr "Hoja de gastos de Okticket"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__backend_id
+msgid "Okticket Backend"
+msgstr "Backend de Okticket"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__payment_mode
+msgid "Paid By"
+msgstr "Pagado Por"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model,name:okticket_connector_hr_expense_sheet.model_project_project
+msgid "Project"
+msgstr "Proyecto"
+
+#. module: okticket_connector_hr_expense_sheet
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_exporter.py:67
+#, python-format
+msgid "Removed expense in Okticket"
+msgstr "Gastos eliminados en Okticket"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__activity_user_id
+msgid "Responsible User"
+msgstr "Usuario responsable"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model,name:okticket_connector_hr_expense_sheet.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línea de pedido de venta"
+
+#. module: okticket_connector_hr_expense_sheet
+#: selection:res.company,expense_sheet_grouping_method:0
+msgid "Single expense sheet"
+msgstr "Un gasto por hoja"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,help:okticket_connector_hr_expense_sheet.field_res_company__expense_sheet_grouping_time
+msgid "Specify if the expenses must be grouped by time interval."
+msgstr "Especifica si los gastos deben ser agrupados por intervalo temporal"
+
+#. module: okticket_connector_hr_expense_sheet
+#: selection:res.company,expense_sheet_grouping_method:0
+msgid "Standard"
+msgstr "Estándar"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__state
+msgid "Status"
+msgstr "Estado"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,help:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__activity_state
+msgid "Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr "Estado basado en actividades\n"
+"Vencida: la fecha tope ya ha pasado\n"
+"Hoy: La fecha tope es hoy\n"
+"Planificada: futuras actividades."
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,help:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__journal_id
+msgid "The journal used when the expense is done."
+msgstr "El diario usado cuando se realiza el gasto."
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,help:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__bank_journal_id
+msgid "The payment method used when the expense is paid by the company."
+msgstr "El método de pago usado cuando el gasto ha sido pagado por la compañía."
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__total_amount
+msgid "Total Amount"
+msgstr "Importe total"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_unread
+msgid "Unread Messages"
+msgstr "Mensajes por leer"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr "Contador de mensajes sin leer"
+
+#. module: okticket_connector_hr_expense_sheet
+#: code:addons/okticket_connector_hr_expense_sheet/models/hr_expense.py:111
+#: code:addons/okticket_connector_hr_expense_sheet/models/hr_expense.py:128
+#, python-format
+msgid "WARNING! Not exists backend for company %s (%s)"
+msgstr "¡Atención! No existe backend para la compañía %s (%s)"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__website_message_ids
+msgid "Website Messages"
+msgstr "Mensajes del sitio web"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,help:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__website_message_ids
+msgid "Website communication history"
+msgstr "Historial de comunicaciones del sitio web"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model,name:okticket_connector_hr_expense_sheet.model_okticket_hr_expense
+msgid "okticket.hr.expense"
+msgstr "Gasto de Okticket"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model,name:okticket_connector_hr_expense_sheet.model_okticket_hr_expense_sheet
+msgid "okticket.hr.expense.sheet"
+msgstr "Hoja de gastos de Okticket"
