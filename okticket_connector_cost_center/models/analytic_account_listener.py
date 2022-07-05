@@ -48,8 +48,3 @@ class AccountAnalyticCostCenterBindingExportListener(Component):
         if 'name' in fields:
             record.analytic_account_id.name = record.name
             record.analytic_account_id._okticket_modify_cc_name()
-        
-    # def on_record_unlink(self, record):
-    #     print("--- evento unlink escuchado---")
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

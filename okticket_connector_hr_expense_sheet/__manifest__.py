@@ -32,23 +32,22 @@
 
 {
     'name': 'Alia Okticket Expense Sheet',
-    'version': '1.0',
+    'summary': 'Implements Okticket expenses sheet operations.',
+    'version': '12.0.1.0.1',
     'category': 'Connector',
     'depends': [
-                'sale_timesheet',
-                # 'hr_timesheet',
-                'connector_okticket',
-                 ],
+        'sale_timesheet',
+        'hr_expense',
+        'connector_okticket',
+    ],
     'author': "Alia Technologies",
     'license': 'AGPL-3',
     'website': 'http://www.alialabs.com',
     'data': [
-        'views/project_view.xml',
+        'views/res_company_view.xml',
         'views/hr_expense_sheet_view.xml',
         'security/ir.model.access.csv',
-        ],
+    ],
     'application': False,
     'installable': True,
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

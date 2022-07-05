@@ -32,21 +32,20 @@
 
 {
     'name': 'Alia Okticket Hr Expense Reporting',
-    'version': '1.0',
+    'summary': 'Implements Okticket Expense reporting.',
+    'version': '12.0.1.0.1',
     'category': 'Reporting',
     'depends': [
-                'okticket_connector_hr_expense_sheet',
-                'web',
-                 ],
+        'okticket_connector_hr_expense_sheet',
+        'web',
+    ],
     'author': "Alia Technologies",
     'license': 'AGPL-3',
     'website': 'http://www.alialabs.com',
     'data': [
         'report/hr_expense_report.xml',
         'report/hr_expense_sheet_report.xml',
-        ],
+    ],
     'application': False,
     'installable': True,
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

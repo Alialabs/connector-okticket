@@ -30,9 +30,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
-from odoo import api, fields, models
-from odoo.addons.queue_job.job import job
+from odoo import fields, models, api
 from odoo.addons.component.core import Component
+
 
 class HrExpense(models.Model):
     _inherit = 'hr.expense'
@@ -51,8 +51,8 @@ class HrExpense(models.Model):
                                           expense.okticket_bind_ids[0].external_id or ''
 
     okticket_expense_id = fields.Char(string="OkTicket id",
-                                         compute=_get_external_expense,
-                                         readonly=True)
+                                      compute=_get_external_expense,
+                                      readonly=True)
 
 
 class OkticketExpense(models.Model):
@@ -60,27 +60,16 @@ class OkticketExpense(models.Model):
     _inherit = 'okticket.binding'
     _inherits = {'hr.expense': 'odoo_id'}
 
-    # _usage = 'binder'
-    # _apply_on = ['okticket.hr.expense']
-
     odoo_id = fields.Many2one(
         comodel_name='hr.expense',
         string='Expense',
         required=True,
         ondelete='cascade',
-        # oldname='openerp_id',
     )
 
-    @job #(default_channel='root.prestashop')
     @api.multi
     def import_expenses_since(self, backend, since_date=None, **kwargs):
-        """ Prepare the import of orders modified on Okticket """
-        filters = None
-        # if since_date:
-        #     filters = {'date': '1', 'filter[date_upd]': '>[%s]' % (since_date)}
-        # now_fmt = fields.Datetime.now()
         self.env['okticket.hr.expense'].sudo().import_batch(backend, priority=5)
-        # backend.import_expenses_since = now_fmt
         return True
 
 
@@ -100,17 +89,22 @@ class ExpensesAdapter(Component):
 
     def search(self, filters=False):
         if self._auth():
-            # Esta implementacion de okticket accede directamente a los metodos de find_expenses
+
+            # Parámetros por defecto
+            params_dict = {'accounted': 'false',
+                           'statuses': '0,1,2'}
+
+            if filters and 'params' in filters and filters['params'] and isinstance(filters['params'], dict):
+                params_dict.update(filters['params'])  # Permite concatenar params a través del filters
+
             if filters and filters.get('expense_external_id'):
-                result = self.okticket_api.find_expense_by_id(filter['expense_external_id'],
+                # No se utiliza esta llamada
+                result = self.okticket_api.find_expense_by_id(filters['expense_external_id'],
                                                               https=self.collection.https)
             else:
-                result = self.okticket_api.find_expenses(params={
-                                                            'accounted': 'false',
-                                                            'statuses': '0,1,2'},
+                result = self.okticket_api.find_expenses(params=params_dict,
                                                          https=self.collection.https)
 
-                # result = self.okticket_api.find_expenses(params={})
             # Log event
             result['log'].update({
                 'backend_id': self.backend_record.id,

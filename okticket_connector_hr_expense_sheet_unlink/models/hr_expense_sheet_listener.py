@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-#    Created on 6/05/19
+#    Created on 9/06/22
 #
 #    @author:alia
 #
@@ -30,13 +30,17 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
+import logging
 
-from odoo import api, fields, models
+from odoo.addons.component.core import Component
+from odoo.addons.component_event import skip_if
+
+_logger = logging.getLogger(__name__)
 
 
-class ResCompany(models.Model):
-    _inherit = 'res.company'
+class OkticketHrExpenseSheetBindingExportListener(Component):
+    _inherit = 'okticket.hr.expense.sheet.binding.export.listener'
 
-    okticket_company_id = fields.Integer(string="OkTicket Company_id")
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+    @skip_if(lambda self, record, **kwargs: self.no_connector_export(record))
+    def on_record_unlink(self, record, fields=None):
+        record.delete_expense_sheet()

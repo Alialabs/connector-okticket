@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+     @author: Alia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+    <data>
+
+        <record id="okticket_view_account_analytic_account_form" model="ir.ui.view">
+            <field name="name">okticket.analytic.analytic.account.form</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='main']" position="after">
+                    <notebook>
+                        <page name="okticket_conn_conf" string="OkTicket Conf.">
+                            <group>
+                                <group string="Account Information" name="account_info_group">
+                                    <field name="okticket_def_account_id"/>
+                                </group>
+                                <group string="Cost Center Information" name="cost_center_info_group">
+                                    <field name="okticket_cost_center_id" string="Cost_center_id"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

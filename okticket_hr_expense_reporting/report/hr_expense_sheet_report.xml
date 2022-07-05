@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+     @author: Alia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
 <odoo>
 
     <template id="okticket_external_layout">
@@ -23,7 +26,7 @@
                 </div>
                 <div class="col-6" style="font-family: helvetica;text-align: right;padding-top: 35px;">
                     <span style="font-size:30px;">
-                        INFORME DE GASTOS
+                        Expenses report
                     </span>
                 </div>
               </div>
@@ -49,9 +52,6 @@
                                         <t t-if="line.analytic_account_id">
                                           <p class="text-uppercase">
                                             <strong>
-                                              <!--<b>-->
-                                                <!--PROYECTO:-->
-                                              <!--</b>-->
                                               <span t-field="line.analytic_account_id.name"/>
                                             </strong>
                                             <br/>
@@ -71,7 +71,7 @@
                                             <strong>
                                                 <i>
                                                   <p class="text-danger">
-                                                  IMAGEN NO DISPONIBLE
+                                                  IMG N.A.
                                                   </p>
                                                 </i>
                                             </strong>

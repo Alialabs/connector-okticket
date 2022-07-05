@@ -32,11 +32,11 @@
 
 from odoo import _
 from odoo import models, fields, api
-from odoo.addons.queue_job.job import job
-from odoo.addons.component.core import AbstractComponent
+from odoo.exceptions import UserError
 import logging
 
 _logger = logging.getLogger(__name__)
+
 
 class OkticketBinding(models.AbstractModel):
     """ Abstract Model for the Bindings.
@@ -48,7 +48,7 @@ class OkticketBinding(models.AbstractModel):
     _inherit = 'external.binding'
     _description = 'Okticket Binding (abstract)'
 
-    # odoo_id = odoo-side id must be declared in concrete model
+    # FYI: odoo_id = odoo-side id must be declared in concrete model
     backend_id = fields.Many2one(
         comodel_name='okticket.backend',
         string='Okticket Backend',
@@ -63,11 +63,9 @@ class OkticketBinding(models.AbstractModel):
          'A binding already exists with the same Okticket ID.'),
     ]
 
-
-    @job
     @api.model
     def import_batch(self, backend, filters=None, **kwargs):
-        """ Prepare a batch import of records from OkTicket """
+        """ Prepares a batch import of records from OkTicket """
         backend.ensure_one()
         if filters is None:
             filters = {}
@@ -79,46 +77,19 @@ class OkticketBinding(models.AbstractModel):
                 _logger.error('Exception: %s\n', e)
                 import traceback
                 traceback.print_exc()
-                raise Warning(_('Could not connect to Okticket'))
+                raise UserError(_('Could not connect to Okticket'))
 
-    @job
     @api.model
     def import_record(self, backend, filters=False):
-        """ Import a Okticket record """
+        """ Imports Okticket record """
         with backend.work_on(self._name) as work:
             importer = work.component(usage='record.importer')
             return importer.run(filters=filters)
 
-    @job(default_channel='root.magento')
-    # @related_action(action='related_action_unwrap_binding')
-    @api.multi
     def export_record(self, *args):
-        """ Export a record on OkTicket """
+        """ Exports record on OkTicket """
         backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
         backend.ensure_one()
         with backend.work_on(self._name) as work:
             exporter = work.component(usage='record.exporter')
-            # obj_vals = kwargs and kwargs.get('obj_vals') or False
-            return exporter.run(*args) # le pasa el binding??
-        
-
-class OkticketBinder(AbstractComponent):
-    _name = 'okticket.binder'
-    _inherit = ['base.binder', 'base.okticket.connector']
-    _description = 'Okticket Binder'
-
-    backend_id = fields.Many2one(
-        'okticket.backend', 'Okticket Backend', required=True,
-        ondelete='restrict'
-    )
-    okticket_id = fields.Char('ID in Okticket', required=True)
-
-
-    _sql_constraints = [
-        ('okticket_uniq', 'unique(backend_id, okticket_id)',
-         'A record with same ID on OkTicket already exists.'),
-    ]
-
-
-
-
+            return exporter.run(*args)

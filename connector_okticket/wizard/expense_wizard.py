@@ -30,13 +30,12 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
-
-from odoo import api, fields, models
-from odoo.addons.queue_job.job import job
-from odoo.addons.component.core import Component
 import logging
 
+from odoo import _, models, api
+
 _logger = logging.getLogger(__name__)
+
 
 class ExpenseWizard(models.TransientModel):
     _name = 'okticket.expense.wizard'
@@ -45,7 +44,7 @@ class ExpenseWizard(models.TransientModel):
     def set_accounted_to_false(self):
         active_ids = self.env.context.get('active_ids')
         for expense in self.env['hr.expense'].browse(active_ids):
-            expense._okticket_accounted_expense(new_state=False) # 'accounted'='false' en Okticket
+            expense._okticket_accounted_expense(new_state=False)  # 'accounted'='false' in Okticket
 
     @api.multi
     def assign_default_expense_account(self):
@@ -56,7 +55,5 @@ class ExpenseWizard(models.TransientModel):
                                  or expense.account_id and expense.account_id.id \
                                  or False
             info_msg_refs.append(expense.name)
-        _logger.info('(assign_default_expense_account)> Campo "account_id" actualizado a partir del producto '
-                     'para los gastos: %s', ', '.join(info_msg_refs))
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+        _logger.info(_('(assign_default_expense_account)> Field "account_id" updated from product for expenses: %s'),
+                     ', '.join(info_msg_refs))

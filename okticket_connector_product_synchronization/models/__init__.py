@@ -33,5 +33,3 @@
 from . import okticket_backend
 from . import okticket_product_template
 from . import okticket_product_template_importer
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

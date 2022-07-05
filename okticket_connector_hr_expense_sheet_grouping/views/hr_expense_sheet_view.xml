@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+     @author: Alia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<openerp>
+    <data>
+
+        <record id="okticket_expense_sheets_grouping_view" model="ir.ui.view">
+            <field name="name">okticket.expense.sheets.grouping.view</field>
+            <field name="model">hr.expense.sheet</field>
+            <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_form"/>
+            <field name="arch" type="xml">
+                <field name="user_id" position="after">
+                    <field name="init_date"/>
+                    <field name="end_date"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

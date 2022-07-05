@@ -53,9 +53,6 @@ class OkTicketOpenConnector(BaseConnector):
         self.access_token = ""
         self.refresh_token = ""
 
-        # print('INICIALIZAMOS OkTicket connector...')
-
-
     def auth_test(self, https=False):
         return self.login(https=https)
 
@@ -72,14 +69,14 @@ class OkTicketOpenConnector(BaseConnector):
     def get_login_params(self):
         return {'grant_type': self.grant_type, 'scope': self.scope}
 
-    def find_expenses(self, params=False, https=False): # TODO: donde situar los params pasarlos aqui o de atras??
+    def find_expenses(self, params=False, https=False):
         path = "/expenses"
         return self.find(path, params=params, https=https, company_in_header=True)
 
     def find_expense_by_id(self, id, https=False):
         path = "/expenses/{0}".format(id)
         params = {
-            'with': 'report', # TODO: como indicar que quiero o no este parametro activo?
+            'with': 'report',
         }
         return self.find_one(path, params=params, https=https)
 
@@ -99,26 +96,24 @@ class OkTicketOpenConnector(BaseConnector):
         path = "/reports?with=user,expenses"
         return self.find(path, params=params, https=https, company_in_header=True)
 
-    def autocomplete_relational_fields(self, data):
-        '''
-        Identifica campos claves en los diccionarios de valores recuperados y recupera la informacion
-        especifica de cada uno de esos objetos a partir del id que trae.
-        :param data: dict valores recuperados de request previa
-        :return:
-        '''
-        # TODO: diccionario simulacion clave-valor de fichero de campos 'especiales' para recuperar
-        test = {'report_id': self.find_report_by_id,}
-        # TODO Loxo: si usamos report_id sustituye 'report_id' por diccionario de valores pero si se incluyen
-        # los parametros 'with=report' se anade el campo 'report' con esta informacion y no seria necesario
-        # este autocompletado, si no apareceria la misma informacion en 'report' y 'report_id'
+    def find_cost_center(self, params=False, https=False):
+        path = "/cost-centers"
+        return self.find(path, params=params, https=https, company_in_header=True)
 
+    def autocomplete_relational_fields(self, data):
+        """
+        Identifies key fields in obtained dicts and gets the specific information
+        of every object based on the obtained id
+        :param data: obtained values dictionary from previous request
+        """
+        aux = {'report_id': self.find_report_by_id, }
+        # If we use 'report_id' it overwrites 'report_id' by dictionary.
+        # If 'with=report' params are included, 'report' field is added with this data and autocomplete
+        # is no needed or the same data will be in 'report' and 'report_id'
         temporal_result = {}
         for key, val_id in data.items():
-            if test.has_key(key):
-                find_method = test[key]
+            if key in aux:
+                find_method = aux[key]
                 temporal_result[key] = find_method(val_id)
-        data.update(temporal_result) # Merge de datos originales con los nuevos recuperados
+        data.update(temporal_result)
         return data
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

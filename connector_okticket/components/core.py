@@ -35,7 +35,6 @@ from odoo.addons.component.core import AbstractComponent
 
 class BaseOkticketConnectorComponent(AbstractComponent):
     """ Base Okticket Connector Component
-
     All components of this connector should inherit from it.
     """
 

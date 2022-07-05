@@ -33,13 +33,10 @@
 from odoo import fields, models, api, _
 from odoo.exceptions import UserError
 
-_payment_method_selection = [('efectivo', 'Efectivo'), ('tarjeta', 'Tarjeta empresa'),
-                             ('cheque', 'Cheque bancario'), ('tarjeta-gas', 'Tarjeta combustible'),
-                             ('transferencia', 'Transferencia'), ('paypal', 'Paypal'), ('na', 'N.A.')]
-
-
-# def get_payment_methods():
-#     return [ tuple_sel[0] for tuple_sel in _payment_method_selection ]
+# Values from OkTicket
+_payment_method_selection = [('efectivo', 'Cash'), ('tarjeta', 'Business card'),
+                             ('cheque', 'Bank check'), ('tarjeta-gas', 'Fuel card'),
+                             ('transferencia', 'Transfer'), ('paypal', 'Paypal'), ('na', 'N.A.')]
 
 
 class HrExpense(models.Model):
@@ -47,15 +44,11 @@ class HrExpense(models.Model):
 
     payment_method = fields.Selection(_payment_method_selection, string='Payment method', readonly=True,
                                       copy=False, index=True, track_visibility='onchange', default='na')
-
     okticket_vat = fields.Char(string='VAT Number')
     okticket_partner_name = fields.Char(string='Partner Name')
-
     okticket_remote_path = fields.Char(string='Remote Path')
     okticket_remote_uri = fields.Char(string='Remote URI')
-
     okticket_img = fields.Binary(string='Image')
-
     okticket_status = fields.Selection([
         ('confirmed', 'Confirmed'),
         ('pending', 'Pending'),
@@ -66,6 +59,6 @@ class HrExpense(models.Model):
     @api.multi
     def unlink(self):
         for expense in self:
-            if expense.state in ['reported']:
-                raise UserError(_('You cannot delete a reported expense.'))
+            if expense.state not in ['draft']:
+                raise UserError(_('Delete expenses in a state different from draft is not allowed.'))
         return super(HrExpense, self).unlink()

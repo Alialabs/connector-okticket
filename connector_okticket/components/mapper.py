@@ -30,8 +30,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
-from odoo.tools.translate import _
 from odoo.addons.component.core import AbstractComponent
+
 
 class OkticketImportMapper(AbstractComponent):
     _name = 'okticket.import.mapper'

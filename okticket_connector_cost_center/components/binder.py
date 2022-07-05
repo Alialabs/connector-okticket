@@ -32,6 +32,7 @@
 
 from odoo.addons.component.core import Component
 
+
 class OkticketAccountAnalyticAccountBinder(Component):
     _name = 'okticket.account.analytic.account.binder'
     _inherit = 'okticket.binder'

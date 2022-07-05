@@ -31,10 +31,10 @@
 #
 
 
-from odoo import api, fields, models
-from odoo.addons.queue_job.job import job
-from odoo.addons.component.core import Component
 import logging
+
+from odoo import fields, models, api
+from odoo.addons.component.core import Component
 
 _logger = logging.getLogger(__name__)
 
@@ -45,19 +45,17 @@ class HrEmployee(models.Model):
     okticket_bind_ids = fields.One2many(
         comodel_name='okticket.hr.employee',
         inverse_name='odoo_id',
-        string='Hr Employee Bindings',)
+        string='Hr Employee Bindings', )
 
     okticket_user_id = fields.Integer(string="Okticket User Id",
                                       readonly=True)
 
-    @job  # (default_channel='root.prestashop')
     @api.multi
     def synchronize_record(self, fields=None, **kwargs):
         """ Synchronization with user on Okticket """
         # TODO: reaprovechar import_batch añadiéndole filtros que se propagan al search()
         backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
         self.env['okticket.hr.employee'].sudo().import_batch(backend, filters=fields)
-        # self.env['okticket.hr.employee'].sudo().import_record(backend, filters=fields)
         return True
 
 
@@ -73,11 +71,6 @@ class OkticketHrEmployee(models.Model):
         ondelete='cascade',
     )
 
-    # @job
-    # @api.multi
-    # def import_expenses_since(self, backend, **kwargs):
-    #     self.env['okticket.hr.expense'].sudo().import_batch(backend, priority=5)
-    #     return True
 
 class HrEmployeeAdapter(Component):
     _name = 'okticket.hr.employee.adapter'
@@ -112,7 +105,3 @@ class HrEmployeeAdapter(Component):
             self.env['log.event'].add_event(result['log'])
             return result['result']
         return []
-
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

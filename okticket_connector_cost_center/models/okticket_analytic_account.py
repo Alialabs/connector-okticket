@@ -30,9 +30,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
-from odoo import api, fields, models
-from odoo.addons.queue_job.job import job
+from odoo import _, api, fields, models
 from odoo.addons.component.core import Component
+from odoo.exceptions import UserError
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -44,33 +44,65 @@ class AccountAnalyticAccount(models.Model):
     okticket_bind_ids = fields.One2many(
         comodel_name='okticket.account.analytic.account',
         inverse_name='odoo_id',
-        string='Accoutn Analytic Account Bindings',
+        string='Account Analytic Account Bindings',
     )
 
+    def generate_cost_center_name_from_analytic(self):
+        self.ensure_one()
+        cost_center_name = self.name
+        if self.partner_id:
+            cost_center_name += ' - ' + self.partner_id.name
+        return cost_center_name
+
+    def _get_cost_center(self):
+        for analytic in self:
+            ok_acc_analt = self.env['okticket.account.analytic.account'].search(
+                [('odoo_id', '=', analytic.id)])
+            external_id_int = -1.0
+            if ok_acc_analt and ok_acc_analt[0].external_id:
+                external_id_int = int(float(ok_acc_analt[0].external_id))
+            analytic.okticket_cost_center_id = external_id_int or -1.0
+
+    okticket_cost_center_id = fields.Integer(string="OkTicket Cost_center_id",
+                                             default=-1.0,
+                                             compute=_get_cost_center,
+                                             readonly=True)
+
+    def _okticket_create_duplicates_control(self):
+        """
+        Creates/link cost center object in OkTicket related with current account.analytic.account.
+        Checks if exists cost center in OkTicket and avoid automatic creation.
+        """
+        return self.env['okticket.account.analytic.account'].sudo().create_cost_center_duplicates_control(self)
+
     def _okticket_create(self):
-        '''
+        """
         Creates cost center object in OkTicket related with current account.analytic.account
-        '''
+        """
         return self.env['okticket.account.analytic.account'].sudo().create_cost_center(self)
 
     def _okticket_unlink(self):
-        '''
+        """
         Delete cost center object in OkTicket related with current account.analytic.account
-        '''
+        """
         self.env['okticket.account.analytic.account'].sudo().delete_cost_center(self)
 
     def _okticket_modify_cc_name(self):
-        '''
+        """
         Write cost center object in OkTicket related with current account.analytic.account
-        '''
+        """
         self.env['okticket.account.analytic.account'].sudo().modify_cc_name(self)
 
     def _okticket_modify_active_state_cost_center(self, new_state):
-        '''
+        """
         Modify active field of cost center related with project
         :return:
-        '''
+        """
         self.env['okticket.account.analytic.account'].sudo().modify_active_state_cost_center(self, new_state)
+
+    def unlink_cost_center_from_analytic_account(self):
+        for record in self:
+            record.okticket_bind_ids = [(2, ok_bind.id) for ok_bind in record.okticket_bind_ids]
 
 
 class OkticketAccountAnalyticAccount(models.Model):
@@ -85,13 +117,29 @@ class OkticketAccountAnalyticAccount(models.Model):
         ondelete='cascade',
     )
 
-    # TODO : refactorizar exporter con listener y adapter.CRUD (ejemplo a partir de connector_magento_export_partner/models/partner/listener
+    def create_cost_center_duplicates_control(self, acc_analyt):
+        """
+        Create new cost center in OkTicket and relates with an Odoo account.analytic.account.
+        Checks and inform about cost center duplicates.
+        """
+        backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
+        if backend:
+            with backend.work_on(self._name) as work:
+                exporter = work.component(usage='account.analytic.account.exporter')
+                try:
+                    return exporter.create_cost_center_duplicates_control(acc_analyt)
+                except Exception as e:
+                    _logger.error('Exception: %s\n', e)
+                    import traceback
+                    traceback.print_exc()
+                    raise UserError('Could not connect to Okticket')
+        else:
+            _logger.warning(_('WARNING! Not exists backend for company %s (%s)'),
+                            self.env.user.company_id.name, self.env.user.company_id.id)
 
-    @job
     @api.multi
     def create_cost_center(self, acc_analyt):
-        """ Create new cost center in OkTicket and relates with an Odoo account.analytic.account"""
-        # Default okticket.backend ( si el user es admin, no funciona el metodo anterior de obtención de backend)
+        """ Create new cost center in OkTicket and relates with an Odoo account.analytic.account """
         backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
         if backend:
             with backend.work_on(self._name) as work:
@@ -102,12 +150,11 @@ class OkticketAccountAnalyticAccount(models.Model):
                     _logger.error('Exception: %s\n', e)
                     import traceback
                     traceback.print_exc()
-                    raise Warning('Could not connect to Okticket')
+                    raise UserError('Could not connect to Okticket')
         else:
-            _logger.warning('WARNING! NO EXISTE BACKEND PARA LA COMPANY %s (%s)\n',
+            _logger.warning(_('WARNING! Not exists backend for company %s (%s)'),
                             self.env.user.company_id.name, self.env.user.company_id.id)
 
-    @job
     @api.multi
     def modify_cc_name(self, acc_analyt):
         backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
@@ -120,16 +167,14 @@ class OkticketAccountAnalyticAccount(models.Model):
                     _logger.error('Exception: %s\n', e)
                     import traceback
                     traceback.print_exc()
-                    raise Warning('Could not connect to Okticket')
+                    raise UserError('Could not connect to Okticket')
         else:
-            _logger.warning('WARNING! NO EXISTE BACKEND PARA LA COMPANY %s (%s)\n',
+            _logger.warning(_('WARNING! Not exists backend for company %s (%s)'),
                             self.env.user.company_id.name, self.env.user.company_id.id)
 
-    @job
     @api.multi
     def delete_cost_center(self, acc_analyt):
-        """ Delete cost center in OkTicket related with Odoo account.analytic.account that is being unlinked"""
-        # Default okticket.backend ( si el user es admin, no funciona el metodo anterior de obtención de backend)
+        """ Delete cost center in OkTicket related with Odoo account.analytic.account that is being unlinked """
         backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
         if backend:
             with backend.work_on(self._name) as work:
@@ -140,16 +185,14 @@ class OkticketAccountAnalyticAccount(models.Model):
                     _logger.error('Exception: %s\n', e)
                     import traceback
                     traceback.print_exc()
-                    raise Warning(_('Could not connect to Okticket'))
+                    raise UserError(_('Could not connect to Okticket'))
         else:
-            _logger.warning('WARNING! NO EXISTE BACKEND PARA LA COMPANY %s (%s)\n',
+            _logger.warning(_('WARNING! Not exists backend for company %s (%s)'),
                             self.env.user.company_id.name, self.env.user.company_id.id)
 
-    @job
     @api.multi
     def modify_active_state_cost_center(self, acc_analyt, new_state):
         """ Modify cost center active state in OkTicket"""
-        # Default okticket.backend ( si el user es admin, no funciona el metodo anterior de obtención de backend)
         backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
         if backend:
             with backend.work_on(self._name) as work:
@@ -160,10 +203,11 @@ class OkticketAccountAnalyticAccount(models.Model):
                     _logger.error('Exception: %s\n', e)
                     import traceback
                     traceback.print_exc()
-                    raise Warning(_('Could not connect to Okticket'))
+                    raise UserError(_('Could not connect to Okticket'))
         else:
-            _logger.warning('WARNING! NO EXISTE BACKEND PARA LA COMPANY %s (%s)\n',
+            _logger.warning(_('WARNING! Not exists backend for company %s (%s)'),
                             self.env.user.company_id.name, self.env.user.company_id.id)
+
 
 class AccountAnalyticAccountAdapter(Component):
     """
@@ -176,13 +220,32 @@ class AccountAnalyticAccountAdapter(Component):
     _collection = 'okticket.backend'
     _apply_on = 'okticket.account.analytic.account'
 
-    # def search(self, filters):
-    #     self._auth()
-    #     # Se llama directamente a la abstracción de find con el path de cuentas analiticas
-    #     # TODO: abstraer el find() del connector y extenderlo con un find_department()
-    #     path = "/departments"
-    #     response = self.find(path)
-    #     return response
+    def search(self, filters=False):
+        if self._auth():
+            result = self.okticket_api.find_cost_center(params=filters, https=self.collection.https)
+
+            # Log event
+            result['log'].update({
+                'backend_id': self.backend_record.id,
+                'type': result['log'].get('type') or 'success',
+            })
+            self.env['log.event'].add_event(result['log'])
+            return result['result']
+        return []
+
+    def okticket_api_create_cost_center(self, values):
+        okticketapi = self.okticket_api
+        url = okticketapi.get_full_path('/cost-centers')
+        header = {
+            'Authorization': okticketapi.token_type + ' ' + okticketapi.access_token,
+            'Content-Type': 'application/json', }
+        fields_dict = {
+            "active": True,
+            "global": True,
+        }
+        fields_dict.update(values)
+        return okticketapi.general_request(url, "POST", fields_dict,
+                                           headers=header, only_data=False, https=self.collection.https)
 
     def create_cost_center(self, values):
         if self._auth():
@@ -196,9 +259,7 @@ class AccountAnalyticAccountAdapter(Component):
             return result.get('result')
         return False
 
-    # TODO: refactorizar este método para incluir en el connector y reutilizar por las operaciones de create
     def okticket_api_create_cost_center(self, values):
-        # Esto en la api
         okticketapi = self.okticket_api
         url = okticketapi.get_full_path('/cost-centers')
         header = {
@@ -210,7 +271,7 @@ class AccountAnalyticAccountAdapter(Component):
         }
         fields_dict.update(values)
         return okticketapi.general_request(url, "POST", fields_dict,
-                                               headers=header, only_data=False, https=self.collection.https)
+                                           headers=header, only_data=False, https=self.collection.https)
 
     def modify_cc_name(self, cost_center_id, values):
         if self._auth():
@@ -232,7 +293,7 @@ class AccountAnalyticAccountAdapter(Component):
             'Authorization': okticketapi.token_type + ' ' + okticketapi.access_token,
             'Content-Type': 'application/json', }
         return okticketapi.general_request(url, "PATCH", values,
-                                               headers=header, only_data=False, https=self.collection.https)
+                                           headers=header, only_data=False, https=self.collection.https)
 
     def delete_cost_center(self, cost_center_id):
         if self._auth():
@@ -246,9 +307,7 @@ class AccountAnalyticAccountAdapter(Component):
             return result.get('result')
         return False
 
-    # TODO: refactorizar este método para incluir en el connector y reutilizar por las operaciones de unlink
     def okticket_api_delete_cost_center(self, cost_center_id):
-        # Esto en la api
         okticketapi = self.okticket_api
         url = okticketapi.get_full_path('/cost-centers')
         url = url + '/' + cost_center_id
@@ -257,7 +316,7 @@ class AccountAnalyticAccountAdapter(Component):
             'Content-Type': 'application/json',
         }
         return okticketapi.general_request(url, "DELETE", {},
-                                               headers=header, only_data=False, https=self.collection.https)
+                                           headers=header, only_data=False, https=self.collection.https)
 
     def modify_active_state_cost_center(self, cost_center_id, new_state):
         if self._auth():
@@ -271,9 +330,7 @@ class AccountAnalyticAccountAdapter(Component):
             return result.get('result')
         return False
 
-    # TODO: refactorizar este método para incluir en el connector y reutilizar por las operaciones de unlink
     def okticket_api_modify_active_state_cost_center(self, cost_center_id, new_state):
-        # Esto en la api
         okticketapi = self.okticket_api
         url = okticketapi.get_full_path('/cost-centers')
         url = url + '/' + cost_center_id
@@ -281,7 +338,5 @@ class AccountAnalyticAccountAdapter(Component):
             'Authorization': okticketapi.token_type + ' ' + okticketapi.access_token,
             'Content-Type': 'application/json',
         }
-        return okticketapi.general_request(url, "PATCH", {'active': new_state,}, headers=header,
+        return okticketapi.general_request(url, "PATCH", {'active': new_state, }, headers=header,
                                            only_data=False, https=self.collection.https)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

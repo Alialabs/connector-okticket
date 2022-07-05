@@ -36,14 +36,42 @@
 from odoo import models, fields
 
 
+def generate_log_event_content(values):
+    """
+    Log.event message format
+    """
+    if values.get('msg'):
+        content = values['msg']
+    else:
+        content = values.get('tag', 'OP') + ' (' + str(values['status']) + '): ' + values['url']
+        if values.get('type', '') == 'error':
+            content = content + ' - ' + values.get('result')
+    return content
+
+
+def prepare_log_event(values):
+    """
+    Dict with needed values for log.event creation.
+    Builds log.event message based on the available information
+    :param values: dict
+    :return: values dict for log.event
+    """
+    return {
+        'backend_id': values['backend_id'],
+        'type': values.get('type'),
+        'tag': values.get('tag'),
+        'msg': generate_log_event_content(values),
+    }
+
+
 class LogEvent(models.Model):
     _name = 'log.event'
     _order = 'datetime_event desc,id desc'
-    
+
     type = fields.Selection([('info', 'Info'),
-                            ('success', 'Success'),
-                            ('warning', 'Warning'),
-                            ('error', 'Error')],
+                             ('success', 'Success'),
+                             ('warning', 'Warning'),
+                             ('error', 'Error')],
                             string='Type',
                             default='info',
                             required=False)
@@ -54,58 +82,29 @@ class LogEvent(models.Model):
                             ('PATCH', 'Patch'),
                             ('DELETE', 'Delete'),
                             ('OP', 'Operation')],
-                             string='Tag',
-                             default='Operation',
-                             required=False)
+                           string='Tag',
+                           default='Operation',
+                           required=False)
     backend_id = fields.Many2one(comodel_name='okticket.backend',
                                  string='Backend',
                                  required=False,
-                                 ondelete='cascade',)
+                                 ondelete='cascade', )
     datetime_event = fields.Datetime(string='Datetime event',
                                      default=fields.Datetime.now,
                                      readonly=True)
     content = fields.Text(string='Content',
                           required=True)
 
-    def generate_log_event_content(self, vals):
-        '''
-        Formato del mensaje de log.event
-        '''
-        if vals.get('msg'):
-            content = vals['msg']
-        else:
-            content = vals.get('tag', 'OP') + ' (' + str(vals['status']) + '): ' + vals['url']
-            if vals.get('type', '') == 'error':
-                content = content + ' - ' + vals.get('result')
-        return content
-
-    def prepare_log_event(self, vals):
-        '''
-        Diccionario de valores necesarios para la creacion de un log.event
-        Construye el mensaje del log.event en base a la informacion disponible
-        :param vals: dict
-        :return: dict con vals para construir log.event
-        '''
-        return {
-            'backend_id': vals['backend_id'],
-            'type': vals.get('type'),
-            'tag': vals.get('tag'),
-            'msg': self.generate_log_event_content(vals),
-        }
-
-    def add_event(self, vals):
-        '''
-        Prepara vals y crea un log.event
-        :param vals: dict
+    def add_event(self, values):
+        """
+        Prepares and creates log.event
+        :param values: dict
         :return: log.event
-        '''
-        dict_vals = self.prepare_log_event(vals)
+        """
+        dict_values = prepare_log_event(values)
         return self.create({
-                'backend_id': dict_vals['backend_id'],
-                'type': dict_vals['type'],
-                'tag': dict_vals['tag'],
-                'content': dict_vals['msg'],
-            })
-
-        
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+            'backend_id': dict_values['backend_id'],
+            'type': dict_values['type'],
+            'tag': dict_values['tag'],
+            'content': dict_values['msg'],
+        })

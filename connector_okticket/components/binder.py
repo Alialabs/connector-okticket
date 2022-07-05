@@ -30,10 +30,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, ustr
-from odoo.addons.component.core import Component
 from odoo.addons.component.core import AbstractComponent
-from datetime import datetime
+from odoo.addons.component.core import Component
 
 
 class OkticketModelBinder(AbstractComponent):

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-#    Created on 4/07/19
+#    Created on 9/06/22
 #
 #    @author:alia
 #
@@ -30,14 +30,4 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
-from odoo import fields, models
-
-
-class Project(models.Model):
-    _inherit = 'project.project'
-
-    expense_sheet_ids = fields.Many2many('hr.expense.sheet', 
-                                         'project_expense_sheet_rel', 
-                                         'project_id', 'sheet_id')
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+from . import models

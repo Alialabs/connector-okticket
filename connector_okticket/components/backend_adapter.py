@@ -30,17 +30,20 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
-from odoo.tools.translate import _
-from odoo.tools import ustr
-from requests.exceptions import ConnectionError
-from odoo.addons.component.core import Component
-from ..okticket import exceptions, ticket_connector
-from odoo.addons.component.core import AbstractComponent
-from odoo.addons.queue_job.exception import FailedJobError
-from odoo.addons.connector.exception import NetworkRetryableError
 import logging
 
+from odoo.addons.component.core import AbstractComponent
+from odoo.addons.component.core import Component
+from odoo.addons.connector.exception import NetworkRetryableError
+from odoo.addons.queue_job.exception import FailedJobError
+from odoo.tools import ustr
+from odoo.tools.translate import _
+from requests.exceptions import ConnectionError
+
+from ..okticket import exceptions, ticket_connector
+
 _logger = logging.getLogger(__name__)
+
 
 class OkticketBaseBackendAdapter(AbstractComponent):
     _name = 'okticket.base.backend.adapter'
@@ -75,12 +78,12 @@ class OkticketAdapter(Component):
         except (exceptions.AuthError, ConnectionError) as err:
             raise FailedJobError(
                 _('Okticket connection Error: '
-                    'Invalid authentications key.'))
+                  'Invalid authentications key.'))
 
         except (exceptions.UnknownError, exceptions.ServerError) as err:
             raise NetworkRetryableError(
                 _('A network error caused the failure of the job: '
-                    '%s') % ustr(err))
+                  '%s') % ustr(err))
 
         self.okticket_api = okticket_api
         return True

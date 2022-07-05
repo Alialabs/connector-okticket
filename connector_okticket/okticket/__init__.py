@@ -34,5 +34,3 @@ from . import exceptions
 from . import base_connector
 from . import ticket_connector
 # from . import connector_test
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
