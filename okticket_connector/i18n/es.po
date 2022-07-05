@@ -1257,8 +1257,8 @@ msgstr "Historial de comunicaciones del sitio web"
 #. module: okticket_connector
 #: code:addons/okticket_connector/models/hr_expense.py:0
 #, python-format
-msgid "You cannot delete a reported expense."
-msgstr "No se puede eliminar un gasto en estado enviado."
+msgid "Delete expenses in a state different from draft is not allowed."
+msgstr "No se puede eliminar un gasto en estado distinto de \"A enviar\"."
 
 #. module: okticket_connector
 #: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
