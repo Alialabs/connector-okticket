@@ -97,7 +97,8 @@ class HrExpenseBatchImporter(Component):
         """
         for expense_data in grouped_expenses:
             expense_date = expense_data['expense'].date
-            expense_data['sheet_name'] = '%s-%s' % (expense_data['sheet_name'], expense_date.month)
+            month = expense_date.strftime("%B").capitalize()
+            expense_data['sheet_name'] = '%s-%s' % (expense_data['sheet_name'], month)
             expense_data['group_fields'].update({
                 'init_date': expense_date.replace(day=1),
                 'end_date': expense_date.replace(day=monthrange(expense_date.year, expense_date.month)[1]),
