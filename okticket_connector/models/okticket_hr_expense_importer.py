@@ -229,7 +229,9 @@ class HrExpenseBatchImporter(Component):
             # Restricción de importación de gastos por fecha de última importación
             filters = filters or {}
             filters.update({
-                'updated_after': self.backend_record.import_expenses_since.strftime("%Y-%m-%dT%H:%M:%S")
+                'params': {
+                    'updated_after': self.backend_record.import_expenses_since.strftime("%Y-%m-%dT%H:%M:%S")
+                }
             })
         else:
             # All expenses not in "sent" state (this is, state = "draft") are eliminated before new import or

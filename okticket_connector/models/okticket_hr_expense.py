@@ -64,12 +64,12 @@ class ExpensesAdapter(Component):
             params_dict = {'accounted': 'false',
                            'statuses': '0,1,2'}
 
-            if filters and 'params' in filters and filters['params'] and isinstance(dict, filters['params']):
+            if filters and 'params' in filters and filters['params'] and isinstance(filters['params'], dict):
                 params_dict.update(filters['params'])  # Permite concatenar params a través del filters
 
             if filters and filters.get('expense_external_id'):
                 # No se utiliza esta llamada
-                result = self.okticket_api.find_expense_by_id(filter['expense_external_id'],
+                result = self.okticket_api.find_expense_by_id(filters['expense_external_id'],
                                                               https=self.collection.https)
             else:
                 result = self.okticket_api.find_expenses(params=params_dict,

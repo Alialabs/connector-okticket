@@ -79,6 +79,7 @@ class HrExpenseBatchImporter(Component):
             #         'analytic_ids': expense.analytic_account_id.id,
             #     },
             #     'expense': expense,
+            #     'sheet_name': expense.analytic_account_id.name,
             # }
         ]
         for expense in self.env['hr.expense'].browse(expense_ids):
@@ -86,9 +87,10 @@ class HrExpenseBatchImporter(Component):
                 'group_fields': {
                     'employee_id': expense.employee_id and expense.employee_id.id,
                     'payment_mode': expense.payment_mode,
-                    'analytic_ids': expense.analytic_account_id and expense.analytic_account_id.id,
+                    'analytic_ids': expense.analytic_account_id and expense.analytic_account_id.id or False,
                 },
                 'expense': expense,
+                'sheet_name': expense.analytic_account_id and expense.analytic_account_id.name or expense.name,
             })
         return grouped_expenses
 
@@ -111,36 +113,43 @@ class HrExpenseBatchImporter(Component):
             # Search domain
             sheet_domain = []
             for sheet_field, sheet_value in expense_data['group_fields'].items():
-                sheet_domain.append((sheet_field, '=', sheet_value))
 
-            # Expense sheet values
+                # TODO desacoplar esta comprobación!!
+                if sheet_field != 'analytic_ids' or sheet_value:
+                    # Solo incluye el campo si es distinto a analytic_ids
+                    # o si siendo analytic_ids tiene valor distinto de False
+                    sheet_domain.append((sheet_field, '=', sheet_value))
+
+            # Expense sheet values to update/create
             expense_sheet_values = {
                 'expense_line_ids': [(4, expense_data['expense'].id)],
             }
+
             # TODO desacoplar esta asignación!!
             if 'analytic_ids' in expense_data['group_fields'] and expense_data['group_fields']['analytic_ids']:
-               expense_sheet_values.update({
-                   'analytic_ids': [(4, expense_data['group_fields']['analytic_ids'])]
-               })
+                expense_sheet_values.update({
+                    'analytic_ids': [(4, expense_data['group_fields']['analytic_ids'])]
+                })
 
             hr_expense_sheet = hr_expense_sheet_obj.search(sheet_domain)
             if hr_expense_sheet:  # Update
                 hr_expense_sheet.write(expense_sheet_values)
             else:  # Create
+
+                # Genera diccionario de valores para crear la hoja de gasto
+                # en base a los parámetros identificativos del gasto
                 new_sheet_values = {}
                 for sheet_field, sheet_value in expense_data['group_fields'].items():
                     if sheet_field not in new_sheet_values:
                         new_sheet_values[sheet_field] = sheet_value
 
-                # Prepare para generar campos required como name
+                # Se incluye el name de la hoja de gastos, si exsite
+                if 'sheet_name' in expense_data and expense_data['sheet_name']:
+                    new_sheet_values['name'] = expense_data['sheet_name']
+
+                # Prepare de hojas de gastos
                 new_sheet_values = hr_expense_sheet_obj.prepare_expense_sheet_values(new_sheet_values)
                 new_sheet_values.update(expense_sheet_values)
-
-                # TODO es necesario un prepare dinámico vinculado con los tipos de agrupación (normal y temporal)
-                #  para poder generar aquí un dict con operadores (para fechas)
-                #  o para campos x2Many (analytic_ids 'in')
-                #  o para el caso del payment_mode que lo coge dinámicamente la hoja de gastos
-
                 hr_expense_sheet_obj.create(new_sheet_values)
 
     ### Función de importación de gastos ###
@@ -183,38 +192,50 @@ class HrExpenseSheet(models.Model):
     _inherit = 'hr.expense.sheet'
 
     analytic_ids = fields.Many2many('account.analytic.account',
-                                    'analytic_expense_sheet_rel',
-                                    'sheet_id', 'analytic_id')
+                                    compute='_compute_analytic_ids')
+
+    @api.depends('expense_line_ids')
+    def _compute_analytic_ids(self):
+        for sheet in self:
+            sheet.analytic_ids = sheet.expense_line_ids.mapped('analytic_account_id').ids
+
+    def check_empty_sheet(self):
+        """
+        If sheet is empty, delete it
+        """
+        self.filtered(lambda x: not x.expense_line_ids).unlink()
 
     def write(self, vals):
         """
         Removes empty expense sheets
         """
         result = super(HrExpenseSheet, self).write(vals)
-        self.filtered(lambda x: not x.expense_line_ids).unlink()
+        if vals and 'expense_line_ids' in vals:
+            self.check_empty_sheet()
         return result
 
     def prepare_expense_sheet_values(self, raw_values):
-        complete_name = raw_values and 'name' in raw_values and raw_values['name'] or 'NO-ANALYTIC-FOUND'
-
-        employee_id = raw_values['employee_id']
-        analytic = 'analytic_ids' in raw_values and raw_values['analytic_ids'] and \
-                   self.env['account.analytic.account'].browse(raw_values['analytic_ids']) or False
-        payment_mode = raw_values['payment_mode']
         sale_order = False
+        complete_name = raw_values and 'name' in raw_values and raw_values['name'] or False
+        analytic = 'analytic_ids' in raw_values and raw_values['analytic_ids'] and \
+                   self.env['account.analytic.account'].browse(raw_values['analytic_ids'])
 
+        # Obtención de sale.order para el user
         if analytic:
             sale_order = analytic.get_related_sale_order()
-            analytic_name = analytic and analytic.name or 'NO CostCenter'
+
+        # Si no se tiene un nombre para la hoja de gasto, se busca en la cuenta analítica y el sale.order si existen
+        if not complete_name and analytic:
             if sale_order and sale_order.partner_id and sale_order.partner_id.name:
-                complete_name = '-'.join([sale_order.partner_id.name, analytic_name])
+                complete_name = '-'.join([sale_order.partner_id.name, analytic.name])
             else:
-                complete_name = analytic_name  # Sin cliente
+                complete_name = analytic.name  # Sin cliente
+
         raw_values.update({
-            'name': complete_name,
-            'employee_id': employee_id,
+            'name': complete_name or 'NO-NAME-EXP-SHEET',  # En última instancia (no debería de ejecutarse nunca
+            'employee_id': raw_values['employee_id'],
             'user_id': sale_order and sale_order.user_id and sale_order.user_id.id or False,
-            'payment_mode': payment_mode,
+            'payment_mode': raw_values['payment_mode'],
         })
         return raw_values
 
