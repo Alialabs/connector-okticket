@@ -328,12 +328,6 @@ msgid "Modify expense accounted field in Okticket"
 msgstr "Modificar campo 'contabilizado' (accounted) en Okticket"
 
 #. module: okticket_connector_hr_expense_sheet
-#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
-#, python-format
-msgid "Modify report_id field in Okticket"
-msgstr "Modificar campo 'informe' (report_id) en Okticket"
-
-#. module: okticket_connector_hr_expense_sheet
 #: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__my_activity_date_deadline
 msgid "My Activity Deadline"
 msgstr ""

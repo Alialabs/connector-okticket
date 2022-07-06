@@ -125,12 +125,6 @@ class HrExpenseBatchImporter(Component):
                 'expense_line_ids': [(4, expense_data['expense'].id)],
             }
 
-            # TODO desacoplar esta asignación!!
-            if 'analytic_ids' in expense_data['group_fields'] and expense_data['group_fields']['analytic_ids']:
-                expense_sheet_values.update({
-                    'analytic_ids': [(4, expense_data['group_fields']['analytic_ids'])]
-                })
-
             hr_expense_sheet = hr_expense_sheet_obj.search(sheet_domain)
             if hr_expense_sheet:  # Update
                 hr_expense_sheet.write(expense_sheet_values)
@@ -191,8 +185,24 @@ class HrExpenseBatchImporter(Component):
 class HrExpenseSheet(models.Model):
     _inherit = 'hr.expense.sheet'
 
+    def _search_analytic_ids(self, operator, value):
+        if not isinstance(value, list):
+            value = [value]
+
+        self.env.cr.execute("""
+            SELECT DISTINCT sheet.id
+            FROM hr_expense_sheet sheet
+            INNER JOIN hr_expense exp
+            ON sheet.id = exp.sheet_id
+            WHERE exp.analytic_account_id IN %s
+        """, (tuple(value),))
+        return [('id', 'in', [sheet_id[0] for sheet_id in self.env.cr.fetchall()])]
+
     analytic_ids = fields.Many2many('account.analytic.account',
-                                    compute='_compute_analytic_ids')
+                                    string='Analytic account',
+                                    readonly=True,
+                                    compute='_compute_analytic_ids',
+                                    search="_search_analytic_ids")
 
     @api.depends('expense_line_ids')
     def _compute_analytic_ids(self):
