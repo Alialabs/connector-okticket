@@ -172,7 +172,6 @@ class HrExpenseSheetAdapter(Component):
             expense_external_id = expense.okticket_bind_ids and expense.okticket_bind_ids[0].external_id or False
             if expense_external_id:
                 expense_backend_adapter.write_expense(expense_external_id, vals_dict)
-                _logger.info(_('Modify report_id field in Okticket'))
 
     def search(self, filters=False):
         if self._auth():
