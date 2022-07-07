@@ -173,13 +173,13 @@ class HrExpenseBatchImporter(Component):
                 new_sheet_values.update(expense_sheet_values)
                 hr_expense_sheet_obj.create(new_sheet_values)
 
-    def sanitize_expenses(self, okticket_hr_expense_ids):
+    def sanitize_expenses(self, hr_expense_ids):
         """
         Checks which expenses are not related with a expense sheet.
-        :param okticket_hr_expense_ids: list of int (expense ids)
+        :param hr_expense_ids: list of int (expense ids)
         :return: list of expense ids
         """
-        return self.env['hr.expense'].browse(okticket_hr_expense_ids).filtered(lambda x: not x.sheet_id).ids
+        return self.env['hr.expense'].browse(hr_expense_ids).filtered(lambda x: not x.sheet_id).ids
 
     ### Función de importación de gastos ###
     def run(self, filters=None, options=None):
@@ -187,25 +187,28 @@ class HrExpenseBatchImporter(Component):
         Imports expenses from Okticket and it classify them in expense sheets
         """
         okticket_hr_expense_ids = super(HrExpenseBatchImporter, self).run(filters=filters, options=options)
-        okticket_hr_expense_ids = self.sanitize_expenses(okticket_hr_expense_ids)
-        self.expense_sheet_processing(okticket_hr_expense_ids)
+
+        # Recupera hr.expenses relacionados con los gastos de okticket. Solo aquellos con cuenta anlítica
+        hr_expense_ids = [rel.odoo_id.id for rel in self.env['okticket.hr.expense'].search([
+            ('id', 'in', okticket_hr_expense_ids)])]
+
+        hr_expense_ids = self.sanitize_expenses(hr_expense_ids)
+        self.expense_sheet_processing(hr_expense_ids)
+
         return okticket_hr_expense_ids
 
     ### Función donde se recuperan dinámicamente las funciones de
     # clasificación, división por intervalo temporal y agrupación en hojas de gastos de gastos ###
 
-    def expense_sheet_processing(self, okticket_hr_expense_ids):
+    def expense_sheet_processing(self, hr_expense_ids):
         """
         Expense classification and expense sheet creation/modification based on
         grouping method and time interval selected in current company
-        :param okticket_hr_expense_ids: list of int (hr.expense ids)
+        :param hr_expense_ids: list of int (hr.expense ids)
         """
         # 1º) Clasificación de gastos en base al método de agrupación indicado
         # Retorna una estructura de datos que el método de gestión de hojas de gasto es capaz de manejar
         expense_classification_method = self.get_expense_sheet_classification_method()
-        # Recupera hr.expenses relacionados con los gastos de okticket. Solo aquellos con cuenta anlítica
-        hr_expense_ids = [rel.odoo_id.id for rel in self.env['okticket.hr.expense'].search([
-            ('id', 'in', okticket_hr_expense_ids)])]
         grouped_expenses = expense_classification_method(hr_expense_ids)
 
         # 2º) Reclasificación en base a parámetros temporales
