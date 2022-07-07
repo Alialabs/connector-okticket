@@ -3,7 +3,7 @@
      @author: Alia
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
 <odoo>
-    <data noupdate="0">
+    <data noupdate="1">
 
         <record id="product_product_okticket_kilometres_rebillable" model="product.product">
             <field name="name">Kilometres-Rebillable</field>
