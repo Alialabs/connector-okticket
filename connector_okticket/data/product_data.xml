@@ -22,7 +22,7 @@
             <field name="type">service</field>
             <field name="uom_id" ref="uom.product_uom_unit"/>
             <field name="uom_po_id" ref="uom.product_uom_unit"/>
-            <field name="rebillable_prod_id" ref="product_product_okticket_km_rebillable"/>
+            <field name="rebillable_prod_id" ref="product_product_okticket_kilometres_rebillable"/>
             <field name="categ_id" ref="product.product_category_all"/>
             <field name="okticket_categ_prod_id">-1</field>
             <field name="okticket_type_prod_id">2</field>
