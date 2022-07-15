@@ -5,12 +5,14 @@
 from odoo.addons.component.core import Component
 
 
-class HrExpenseListener(Component):
-    _name = 'hr.expense.listener'
+class AccountAnalyticCostCenterBindingExportListener(Component):
+    _name = 'account.analytic.account.binding.export.listener'
     _inherit = 'base.connector.listener'
-    _apply_on = ['hr.expense']
+    _apply_on = ['account.analytic.account']
+
+    def on_record_create(self, record, fields=None):
+        record._okticket_create()
 
     def on_record_write(self, record, fields=None):
-        if 'state' in fields and record['state'] == 'draft':
-            record.analytic_account_id.name = record.name
-            record.analytic_account_id._okticket_modify_cc_name()
+        if 'name' in fields:
+            record._okticket_modify_cc_name()
