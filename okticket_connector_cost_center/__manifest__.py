@@ -17,7 +17,9 @@
     'data': [
         'security/ir.model.access.csv',
         'wizard/analytic_cost_center_view.xml',
+        'views/okticket_analytic_account_view.xml',
         'views/account_analytic_account_view.xml',
+        'views/okticket_backend_view.xml',
     ],
     'application': False,
     'installable': True,

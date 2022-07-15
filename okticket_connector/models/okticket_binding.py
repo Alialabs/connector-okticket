@@ -50,7 +50,7 @@ class OkticketBinding(models.AbstractModel):
                 _logger.error('Exception: %s\n', e)
                 import traceback
                 traceback.print_exc()
-                raise UserError(_('Could not connect to Okticket'))
+                raise (e or UserError(_('Could not connect to Okticket')))
 
     @api.model
     def import_record(self, backend, filters=False):

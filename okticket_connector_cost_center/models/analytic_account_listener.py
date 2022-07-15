@@ -3,20 +3,14 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo.addons.component.core import Component
-from odoo.addons.component_event import skip_if
 
 
-class AccountAnalyticCostCenterBindingExportListener(Component):
-    _name = 'account.analytic.account.binding.export.listener'
+class HrExpenseListener(Component):
+    _name = 'hr.expense.listener'
     _inherit = 'base.connector.listener'
-    _apply_on = ['project.project']
+    _apply_on = ['hr.expense']
 
-    @skip_if(lambda self, record, **kwargs: self.no_connector_export(record))
-    def on_record_create(self, record, fields=None):
-        record.analytic_account_id._okticket_create()
-
-    @skip_if(lambda self, record, **kwargs: self.no_connector_export(record))
     def on_record_write(self, record, fields=None):
-        if 'name' in fields:
+        if 'state' in fields and record['state'] == 'draft':
             record.analytic_account_id.name = record.name
             record.analytic_account_id._okticket_modify_cc_name()

@@ -160,7 +160,7 @@ class OkticketBackend(models.Model):
             _logger.error('Exception: %s\n', e)
             import traceback
             traceback.print_exc()
-            raise UserError(_('Could not connect to Okticket'))
+            raise (e or UserError(_('Could not connect to Okticket')))
         raise UserError(
             _('Connection test succeeded\n'
               'Everything seems properly set up'))

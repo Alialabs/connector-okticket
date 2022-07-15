@@ -27,6 +27,17 @@ class ProductTemplate(models.Model):
     base_version_prod_ids = fields.One2many('product.template', 'invoice_prod_id',
                                             string='Base product version')
 
+    def get_base_product(self):
+        self.ensure_one()
+        # TODO refactorizar para analizar todos los campos que pueden hacer referencia a otro producto "base"
+        #  para no tener que hacerlo con 'ifs'
+        base_product = self
+        if self.base_version_prod_ids:
+            base_product = self.base_version_prod_ids[0]
+        elif self.no_rebillable_prod_ids:
+            base_product = self.no_rebillable_prod_ids
+        return base_product
+
     def copy(self, default=None):
         default = default or {}
         if 'rebillable_prod_id' not in default:
@@ -61,7 +72,7 @@ class ProductTemplate(models.Model):
             if rebillable_prod:
                 rebillable_prod.write({
                     'okticket_type_prod_id': rebillable_prod.okticket_type_prod_id,
-                    'okticket_categ_prod_id': rebillable_prod.okticket_categ_prod_id,
+                    # 'okticket_categ_prod_id': rebillable_prod.okticket_categ_prod_id,
                 })
             else:  # If not, it creates new product.template "rebillable" version
                 rebill_sufix = _('Rebillable')
@@ -87,7 +98,7 @@ class ProductTemplate(models.Model):
             if invoice_version_prod:
                 invoice_version_prod.write({
                     'okticket_type_prod_id': _default_invoice_type_id,
-                    'okticket_categ_prod_id': invoice_version_prod.okticket_categ_prod_id,
+                    # 'okticket_categ_prod_id': invoice_version_prod.okticket_categ_prod_id,
                 })
             else:  # If not, it creates new product.template "invoiceable" version
                 invoiceable_sufix = _('Invoiceable')

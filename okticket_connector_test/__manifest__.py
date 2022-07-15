@@ -3,22 +3,17 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
-    'name': 'Alia Okticket Connector User Synchronization',
-    'summary': 'Implements Okticket user synchronization operations.',
+    'name': 'Okticket Connector Test',
+    'summary': 'Implements Okticket Expense reporting.',
     'version': '1.0',
-    'category': 'Connector',
+    'category': 'Tools',
     'depends': [
-        'hr',
-        'okticket_connector',
+        'okticket_connector_hr_expense_sheet',
     ],
     'author': "Alia Technologies",
     'license': 'AGPL-3',
     'website': 'http://www.alialabs.com',
     'data': [
-        'security/ir.model.access.csv',
-        'data/ir_cron_data.xml',
-        'views/okticket_hr_employee_view.xml',
-        'views/okticket_backend_view.xml',
     ],
     'application': False,
     'installable': True,

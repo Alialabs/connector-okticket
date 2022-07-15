@@ -293,9 +293,11 @@ class HrExpenseSheet(models.Model):
             action_id = 348  # From "Enviada"
 
         if super(HrExpenseSheet, self).reset_expense_sheets():
-            for expense in self.expense_line_ids:
-                expense._okticket_accounted_expense(new_state=False)
-            self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
+            # Check if exists sheet. It could be deleted if only had one expense with okticket_deleted  = True
+            if self.search([('id', '=', self.id)]):
+                for expense in self.expense_line_ids:
+                    expense._okticket_accounted_expense(new_state=False)
+                self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
 
     def refuse_sheet(self, reason):
         """

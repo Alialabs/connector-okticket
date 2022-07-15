@@ -30,6 +30,14 @@ class HrEmployeeMapper(Component):
         return {'external_id': record['id']}
 
     @mapping
+    def work_email(self, record):
+        return {'work_email': record['email']}
+
+    @mapping
+    def name(self, record):
+        return {'name': record['name']}
+
+    @mapping
     def backend_id(self, record):
         return {'backend_id': self.backend_record.id}
 
@@ -68,40 +76,70 @@ class HrEmployeeBatchImporter(Component):
             # find if the OkTicket id already exists in odoo
             binding = binder.to_internal(employee_ext_vals['id'])
 
-            user_to_bind_vals = {
-                'okticket_user_id': employee_ext_vals.get('id'),
-                'work_email': employee_ext_vals.get('email'),
-                'name': employee_ext_vals.get('name'),
-            }
             odoo_user = False
             if binding:  # User exists and is bound (UPDATE)
                 binding.write(internal_data)
-                try:
-                    odoo_user = employee_obj.browse(internal_data['odoo_id'])
-                except Exception as e:
-                    raise Warning(_('Employee %s (%s) must be deleted') %
-                                  employee_ext_vals['name'], employee_ext_vals['id'])
             else:  # User doesn't bound
-                if not internal_data.get('odoo_id'):
-                    # User doesn't exist
-                    odoo_user = employee_obj. \
-                        with_context(ignore_okticket_synch=True).create(user_to_bind_vals)
-                else:
-                    # User exists but is not bound
-                    odoo_user = employee_obj.browse(internal_data['odoo_id'])
-                    odoo_user.write(user_to_bind_vals)
-                # Binding between Odoo employee and Okticket user
-                internal_data['odoo_id'] = odoo_user.id
-                binding = self.model.create(internal_data)
-            if binding:
-                okticket_hr_employee_ids.append(binding.id)
-                if 'id' in employee_ext_vals:
-                    external_id = str(employee_ext_vals['id'])
-                    binder.bind(external_id, binding)
-                    _logger.info(_('Imported'))
+                binding = self.model.with_context(ignore_okticket_synch=True).create(internal_data)
+            okticket_hr_employee_ids.append(binding.id)
+            binder.bind(employee_ext_vals.get('id'), binding)
+            _logger.info('Imported')
 
         _logger.info(_('Import from Okticket DONE'))
         return okticket_hr_employee_ids
+
+    #   OLD VERSION
+    # def run(self, filters=None, options=None):
+    #     employee_obj = self.env['hr.employee']
+    #     # Adapter
+    #     backend_adapter = self.component(usage='backend.adapter')
+    #     # Read users from OkTicket
+    #     okticket_hr_employee_ids = []
+    #     # Mapper
+    #     mapper = self.component(usage='mapper')
+    #     filters = mapper.filters_fields_conversion(filters)
+    #     # Binder
+    #     binder = self.component(usage='binder')
+    #     for employee_ext_vals in backend_adapter.search(filters):
+    #         # Map to odoo data
+    #         internal_data = mapper.map_record(employee_ext_vals).values()
+    #         # find if the OkTicket id already exists in odoo
+    #         binding = binder.to_internal(employee_ext_vals['id'])
+    #
+    #         user_to_bind_vals = {
+    #             'okticket_user_id': employee_ext_vals.get('id'),
+    #             'work_email': employee_ext_vals.get('email'),
+    #             'name': employee_ext_vals.get('name'),
+    #         }
+    #         odoo_user = False
+    #         if binding:  # User exists and is bound (UPDATE)
+    #             binding.write(internal_data)
+    #             try:
+    #                 odoo_user = employee_obj.browse(internal_data['odoo_id'])
+    #             except Exception as e:
+    #                 raise Warning(_('Employee %s (%s) must be deleted') %
+    #                               employee_ext_vals['name'], employee_ext_vals['id'])
+    #         else:  # User doesn't bound
+    #             if not internal_data.get('odoo_id'):
+    #                 # User doesn't exist
+    #                 odoo_user = employee_obj. \
+    #                     with_context(ignore_okticket_synch=True).create(user_to_bind_vals)
+    #             else:
+    #                 # User exists but is not bound
+    #                 odoo_user = employee_obj.browse(internal_data['odoo_id'])
+    #                 odoo_user.write(user_to_bind_vals)
+    #             # Binding between Odoo employee and Okticket user
+    #             internal_data['odoo_id'] = odoo_user.id
+    #             binding = self.model.create(internal_data)
+    #         if binding:
+    #             okticket_hr_employee_ids.append(binding.id)
+    #             if 'id' in employee_ext_vals:
+    #                 external_id = str(employee_ext_vals['id'])
+    #                 binder.bind(external_id, binding)
+    #                 _logger.info(_('Imported'))
+    #
+    #     _logger.info(_('Import from Okticket DONE'))
+    #     return okticket_hr_employee_ids
 
 
 class HrEmployeeRecordImporter(Component):
