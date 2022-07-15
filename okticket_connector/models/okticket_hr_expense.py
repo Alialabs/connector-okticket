@@ -2,7 +2,7 @@
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import fields, models
+from odoo import fields, models, _
 from odoo.addons.component.core import Component
 
 
@@ -12,18 +12,32 @@ class HrExpense(models.Model):
     okticket_bind_ids = fields.One2many(
         comodel_name='okticket.hr.expense',
         inverse_name='odoo_id',
-        string='OkTicket Expense Bindings',
-        readonly=True,
-    )
+        string='OkTicket Expense Bindings')
 
-    def _get_external_expense(self):
+    def _get_expense_okticket_id(self):
         for expense in self:
             expense.okticket_expense_id = expense.okticket_bind_ids and \
-                                          expense.okticket_bind_ids[0].external_id or ''
+                                          expense.okticket_bind_ids[0].external_id or '-1'
+
+    def _set_expense_okticket_id(self):
+        for exp in self.filtered(lambda ex: ex.okticket_bind_ids):
+            exp.okticket_bind_ids.write({'external_id': exp.okticket_expense_id})
+
+    def _search_expense_okticket_id(self, operator, value):
+        if operator not in ['=', '!=']:
+            raise ValueError(_('This operator is not supported'))
+        if not isinstance(value, str):
+            raise ValueError(_('Value should be string (not %s)'), value)
+        domain = []
+        odoo_ids = self.env['okticket.hr.expense'].search([('external_id', operator, value)]).mapped('odoo_id').ids
+        if odoo_ids:
+            domain.append(('id', 'in', odoo_ids))
+        return domain
 
     okticket_expense_id = fields.Char(string="OkTicket id",
-                                      compute=_get_external_expense,
-                                      readonly=True)
+                                      compute=_get_expense_okticket_id,
+                                      inverse=_set_expense_okticket_id,
+                                      search=_search_expense_okticket_id)
 
 
 class OkticketExpense(models.Model):
@@ -41,6 +55,16 @@ class OkticketExpense(models.Model):
     def import_expenses_since(self, backend, since_date=None, **kwargs):
         self.env['okticket.hr.expense'].sudo().import_batch(backend, priority=5)
         return True
+
+
+class OkticketBackend(models.Model):
+    _inherit = 'okticket.backend'
+
+    okticket_hr_expense_ids = fields.One2many(
+        comodel_name='okticket.hr.expense',
+        inverse_name='backend_id',
+        string='Hr Expense Bindings',
+        context={'active_test': False})
 
 
 class ExpensesAdapter(Component):

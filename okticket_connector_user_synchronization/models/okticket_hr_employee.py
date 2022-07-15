@@ -5,7 +5,7 @@
 
 import logging
 
-from odoo import fields, models
+from odoo import _, fields, models
 from odoo.addons.component.core import Component
 
 _logger = logging.getLogger(__name__)
@@ -17,10 +17,35 @@ class HrEmployee(models.Model):
     okticket_bind_ids = fields.One2many(
         comodel_name='okticket.hr.employee',
         inverse_name='odoo_id',
-        string='Hr Employee Bindings', )
+        string='Hr Employee Bindings',
+    )
 
-    okticket_user_id = fields.Integer(string="Okticket User Id",
-                                      readonly=True)
+    def _get_hr_employee(self):
+        for employee in self:
+            external_ids = [okticket_acc_emp.external_id for okticket_acc_emp in employee.okticket_bind_ids]
+            employee.okticket_user_id = external_ids and int(float(external_ids[0])) or -1.0
+
+    def _set_hr_employee(self):
+        for employee in self.filtered(lambda emp: emp.okticket_bind_ids):
+            employee.okticket_bind_ids.write({'external_id': employee.okticket_user_id})
+
+    def _search_hr_employee(self, operator, value):
+        if operator not in ['=', '!=']:
+            raise ValueError(_('This operator is not supported'))
+        if not isinstance(value, int):
+            raise ValueError(_('Value should be integer (not %s)'), value)
+        domain = []
+        odoo_ids = self.env['okticket.hr.employee'].search([
+            ('external_id', operator, value)]).mapped('odoo_id').ids
+        if odoo_ids:
+            domain.append(('id', 'in', odoo_ids))
+        return domain
+
+    okticket_user_id = fields.Integer(string="Okticket User_Id",
+                                      default=-1.0,
+                                      compute=_get_hr_employee,
+                                      inverse=_set_hr_employee,
+                                      search=_search_hr_employee)
 
     def synchronize_record(self, fields=None, **kwargs):
         """ Synchronization with user on Okticket """
@@ -40,6 +65,16 @@ class OkticketHrEmployee(models.Model):
         required=True,
         ondelete='cascade',
     )
+
+
+class OkticketBackend(models.Model):
+    _inherit = 'okticket.backend'
+
+    okticket_hr_employee_ids = fields.One2many(
+        comodel_name='okticket.hr.employee',
+        inverse_name='backend_id',
+        string='Hr Employee Bindings',
+        context={'active_test': False})
 
 
 class HrEmployeeAdapter(Component):

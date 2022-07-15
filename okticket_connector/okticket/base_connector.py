@@ -6,6 +6,7 @@ import http.client
 import json
 import logging
 import urllib.parse
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -136,6 +137,12 @@ class BaseConnector(object):
                 result = self.general_request(url, type_request, fields_dict, headers=headers,
                                               header_gen_method=header_gen_method, params=params,
                                               raw_response=raw_response, only_data=only_data, https=https)
+
+        if result and 'result' in result and not result['result'] \
+                and 'log' in result and result['log'].get('type', '') == 'error':
+            error_msg = "Error status %s: %s" % (result['log']['status'], result['log']['result'])
+            raise UserError(error_msg)
+
         return result
 
     def get_http_connection(self, https=False):
@@ -162,7 +169,7 @@ class BaseConnector(object):
             response = self.request_base(url, type_request, conn, params=params, data=payload_json, headers=headers,
                                          raw_response=raw_response)
             result = response['result']
-            if only_data:
+            if only_data and result:
                 result = result.get('data')
                 # Goes through all the pages
                 if response['result'].get('links'):

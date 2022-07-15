@@ -17,17 +17,34 @@ class HrExpenseSheet(models.Model):
     okticket_bind_ids = fields.One2many(
         comodel_name='okticket.hr.expense.sheet',
         inverse_name='odoo_id',
-        string='Hr Expense Sheet Bindings', )
+        string='Hr Expense Sheet Bindings')
 
-    def _get_expense_sheet(self):
+    def _get_expense_sheet_okticket_id(self):
         for exp_sheet in self:
             external_ids = [ok_exp_sheet.external_id for ok_exp_sheet in exp_sheet.okticket_bind_ids]
             exp_sheet.okticket_expense_sheet_id = external_ids and external_ids[0] or '-1'
 
+    def _set_expense_sheet_okticket_id(self):
+        for exp_sheet in self.filtered(lambda sheet: sheet.okticket_bind_ids):
+            exp_sheet.okticket_bind_ids.write({'external_id': exp_sheet.okticket_expense_sheet_id})
+
+    def _search_expense_sheet_okticket_id(self, operator, value):
+        if operator not in ['=', '!=']:
+            raise ValueError(_('This operator is not supported'))
+        if not isinstance(value, str):
+            raise ValueError(_('Value should be string (not %s)'), value)
+        domain = []
+        odoo_ids = self.env['okticket.hr.expense.sheet'].search([
+            ('external_id', operator, value)]).mapped('odoo_id').ids
+        if odoo_ids:
+            domain.append(('id', 'in', odoo_ids))
+        return domain
+
     okticket_expense_sheet_id = fields.Char(string="OkTicket Expense_sheet_id",
                                             default='-1',
-                                            compute=_get_expense_sheet,
-                                            readonly=True)
+                                            compute=_get_expense_sheet_okticket_id,
+                                            inverse=_set_expense_sheet_okticket_id,
+                                            search=_search_expense_sheet_okticket_id)
 
     def export_record(self, *args, **kwargs):
         """ Creates a new expense sheet on Okticket """
@@ -59,7 +76,7 @@ class OkticketHrExpenseSheet(models.Model):
                 _logger.error('Exception: %s\n', e)
                 import traceback
                 traceback.print_exc()
-                raise UserError(_('Could not connect to Okticket'))
+                raise (e or UserError(_('Could not connect to Okticket')))
 
     def change_expense_sheet_status(self, expense_sheets, action_id, comments='No comment'):
         backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
@@ -72,7 +89,17 @@ class OkticketHrExpenseSheet(models.Model):
                 _logger.error('Exception: %s\n', e)
                 import traceback
                 traceback.print_exc()
-                raise UserError(_('Could not connect to Okticket'))
+                raise (e or UserError(_('Could not connect to Okticket')))
+
+
+class OkticketBackend(models.Model):
+    _inherit = 'okticket.backend'
+
+    okticket_hr_expense_sheet_ids = fields.One2many(
+        comodel_name='okticket.hr.expense.sheet',
+        inverse_name='backend_id',
+        string='Hr Expense Sheet Bindings',
+        context={'active_test': False})
 
 
 class HrExpenseSheetAdapter(Component):

@@ -28,17 +28,30 @@ class AccountAnalyticAccount(models.Model):
 
     def _get_cost_center(self):
         for analytic in self:
-            ok_acc_analt = self.env['okticket.account.analytic.account'].search(
-                [('odoo_id', '=', analytic.id)])
-            external_id_int = -1.0
-            if ok_acc_analt and ok_acc_analt[0].external_id:
-                external_id_int = int(float(ok_acc_analt[0].external_id))
-            analytic.okticket_cost_center_id = external_id_int or -1.0
+            external_ids = [okticket_acc_an.external_id for okticket_acc_an in analytic.okticket_bind_ids]
+            analytic.okticket_cost_center_id = external_ids and int(float(external_ids[0])) or -1.0
+
+    def _set_cost_center(self):
+        for analytic in self.filtered(lambda cc: cc.okticket_bind_ids):
+            analytic.okticket_bind_ids.write({'external_id': analytic.okticket_cost_center_id})
+
+    def _search_cost_center(self, operator, value):
+        if operator not in ['=', '!=']:
+            raise ValueError(_('This operator is not supported'))
+        if not isinstance(value, int):
+            raise ValueError(_('Value should be integer (not %s)'), value)
+        domain = []
+        odoo_ids = self.env['okticket.account.analytic.account'].search([
+            ('external_id', operator, value)]).mapped('odoo_id').ids
+        if odoo_ids:
+            domain.append(('id', 'in', odoo_ids))
+        return domain
 
     okticket_cost_center_id = fields.Integer(string="OkTicket Cost_center_id",
                                              default=-1.0,
                                              compute=_get_cost_center,
-                                             readonly=True)
+                                             inverse=_set_cost_center,
+                                             search=_search_cost_center)
 
     def _okticket_create_duplicates_control(self):
         """
@@ -104,7 +117,7 @@ class OkticketAccountAnalyticAccount(models.Model):
                     _logger.error('Exception: %s\n', e)
                     import traceback
                     traceback.print_exc()
-                    raise UserError('Could not connect to Okticket')
+                    raise (e or UserError(_('Could not connect to Okticket')))
         else:
             _logger.warning(_('WARNING! Not exists backend for company %s (%s)'),
                             self.env.user.company_id.name, self.env.user.company_id.id)
@@ -121,7 +134,7 @@ class OkticketAccountAnalyticAccount(models.Model):
                     _logger.error('Exception: %s\n', e)
                     import traceback
                     traceback.print_exc()
-                    raise UserError('Could not connect to Okticket')
+                    raise (e or UserError(_('Could not connect to Okticket')))
         else:
             _logger.warning(_('WARNING! Not exists backend for company %s (%s)'),
                             self.env.user.company_id.name, self.env.user.company_id.id)
@@ -137,7 +150,7 @@ class OkticketAccountAnalyticAccount(models.Model):
                     _logger.error('Exception: %s\n', e)
                     import traceback
                     traceback.print_exc()
-                    raise UserError('Could not connect to Okticket')
+                    raise (e or UserError(_('Could not connect to Okticket')))
         else:
             _logger.warning(_('WARNING! Not exists backend for company %s (%s)'),
                             self.env.user.company_id.name, self.env.user.company_id.id)
@@ -154,7 +167,7 @@ class OkticketAccountAnalyticAccount(models.Model):
                     _logger.error('Exception: %s\n', e)
                     import traceback
                     traceback.print_exc()
-                    raise UserError(_('Could not connect to Okticket'))
+                    raise (e or UserError(_('Could not connect to Okticket')))
         else:
             _logger.warning(_('WARNING! Not exists backend for company %s (%s)'),
                             self.env.user.company_id.name, self.env.user.company_id.id)
@@ -171,10 +184,20 @@ class OkticketAccountAnalyticAccount(models.Model):
                     _logger.error('Exception: %s\n', e)
                     import traceback
                     traceback.print_exc()
-                    raise UserError(_('Could not connect to Okticket'))
+                    raise (e or UserError(_('Could not connect to Okticket')))
         else:
             _logger.warning(_('WARNING! Not exists backend for company %s (%s)'),
                             self.env.user.company_id.name, self.env.user.company_id.id)
+
+
+class OkticketBackend(models.Model):
+    _inherit = 'okticket.backend'
+
+    okticket_analytic_account_ids = fields.One2many(
+        comodel_name='okticket.account.analytic.account',
+        inverse_name='backend_id',
+        string='Analytic Account Bindings',
+        context={'active_test': False})
 
 
 class AccountAnalyticAccountAdapter(Component):

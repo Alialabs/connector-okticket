@@ -16,9 +16,11 @@
     'license': 'AGPL-3',
     'website': 'http://www.alialabs.com',
     'data': [
+        'security/ir.model.access.csv',
         'views/res_company_view.xml',
         'views/hr_expense_sheet_view.xml',
-        'security/ir.model.access.csv',
+        'views/okticket_hr_expense_sheet_vies.xml',
+        'views/okticket_backend_view.xml',
     ],
     'application': False,
     'installable': True,

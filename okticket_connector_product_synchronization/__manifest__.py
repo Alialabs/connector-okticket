@@ -16,6 +16,8 @@
     'data': [
         'security/ir.model.access.csv',
         'data/ir_cron_data.xml',
+        'views/okticket_product_template_view.xml',
+        'views/okticket_backend_view.xml',
     ],
     'application': False,
     'installable': True,

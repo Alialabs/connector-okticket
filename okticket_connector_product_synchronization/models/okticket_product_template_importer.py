@@ -48,6 +48,30 @@ class ProductTemplateBatchImporter(Component):
                 valid_prod = existing[0]
             return {'odoo_id': valid_prod.id}
 
+    @mapping
+    def type(self, record):
+        prod_type = 'service'
+        return {
+            'type': prod_type,
+            'detailed_type': prod_type
+        }
+
+    @mapping
+    def can_be_expensed(self, record):
+        return {'can_be_expensed': True}
+
+    @mapping
+    def okticket_type_prod_id(self, record):
+        return {'okticket_type_prod_id': int(self._ticket_type_id)}
+
+    @mapping
+    def okticket_categ_prod_id(self, record):
+        return {'okticket_categ_prod_id': record['id']}
+
+    @mapping
+    def name(self, record):
+        return {'name': record['name']}
+
     def run(self, filters=None, options=None):
         # Adapter
         backend_adapter = self.component(usage='backend.adapter')
@@ -65,40 +89,17 @@ class ProductTemplateBatchImporter(Component):
             # find if the OkTicket id already exists in odoo
             binding = binder.to_internal(product_ext_vals.get('id'))
 
-            product_to_bind_vals = {
-                'type': 'service',
-                'can_be_expensed': True,
-                'okticket_type_prod_id': int(self._ticket_type_id),
-                'okticket_categ_prod_id': product_ext_vals['id'],
-            }
             odoo_product = False
             if binding:
                 # Exists the product and is bound (UPDATE)
                 binding.write(internal_data)
-                odoo_product = self.env['product.template'].browse(internal_data['odoo_id'])
-                odoo_product.write(product_to_bind_vals)
             else:
-                # Product not bound
-                if not internal_data.get('odoo_id'):
-                    # Product doesn't exist
-                    # It creates new product.product based on Okticket data
-                    product_to_bind_vals.update({
-                        'name': product_ext_vals.get('name'),
-                    })
-                    odoo_product = self.env['product.template'].create(product_to_bind_vals)
-                else:
-                    # Product exists in Odoo but doesn't is bound
-                    odoo_product = self.env['product.template'].browse(internal_data['odoo_id'])
-                    odoo_product.write(product_to_bind_vals)
-                # Binding between Odoo product and Okticket expense category
-                internal_data['odoo_id'] = odoo_product.id
                 binding = self.model.create(internal_data)
-            if binding:
-                okticket_product_template_ids.append(binding.id)
-                if 'id' in product_ext_vals:
-                    external_id = str(product_ext_vals['id'])
-                    binder.bind(external_id, binding)
-                    _logger.info('Imported')
+            okticket_product_template_ids.append(binding.id)
+            binder.bind(str(product_ext_vals['id']), binding)
+            _logger.info('Imported')
+
+            odoo_product = binding.odoo_id
             # Creation/update of no refund product version which is being imported
             if odoo_product:
                 odoo_product.load_rebillable_product_version()
@@ -111,3 +112,69 @@ class ProductTemplateBatchImporter(Component):
 
         _logger.info(_('Import from Okticket DONE'))
         return okticket_product_template_ids
+
+    # OLD VERSION
+    # def run(self, filters=None, options=None):
+    #     # Adapter
+    #     backend_adapter = self.component(usage='backend.adapter')
+    #     # Read users from OkTicket
+    #     okticket_product_template_ids = []
+    #     # Mapper
+    #     mapper = self.component(usage='importer')
+    #     # Binder
+    #     binder = self.component(usage='binder')
+    #
+    #     # WARNING: it only gets products (expenses) with type_id = 0 ("ticket" type)
+    #     for product_ext_vals in backend_adapter.search(filters):
+    #
+    #         # Map to odoo data
+    #         internal_data = mapper.map_record(product_ext_vals).values()
+    #         # find if the OkTicket id already exists in odoo
+    #         binding = binder.to_internal(product_ext_vals.get('id'))
+    #
+    #         product_to_bind_vals = {
+    #             'type': 'service',
+    #             'can_be_expensed': True,
+    #             'okticket_type_prod_id': int(self._ticket_type_id),
+    #             'okticket_categ_prod_id': product_ext_vals['id'],
+    #         }
+    #         odoo_product = False
+    #         if binding:
+    #             # Exists the product and is bound (UPDATE)
+    #             binding.write(internal_data)
+    #             odoo_product = self.env['product.template'].browse(internal_data['odoo_id'])
+    #             odoo_product.write(product_to_bind_vals)
+    #         else:
+    #             # Product not bound
+    #             if not internal_data.get('odoo_id'):
+    #                 # Product doesn't exist
+    #                 # It creates new product.product based on Okticket data
+    #                 product_to_bind_vals.update({
+    #                     'name': product_ext_vals.get('name'),
+    #                 })
+    #                 odoo_product = self.env['product.template'].create(product_to_bind_vals)
+    #             else:
+    #                 # Product exists in Odoo but doesn't is bound
+    #                 odoo_product = self.env['product.template'].browse(internal_data['odoo_id'])
+    #                 odoo_product.write(product_to_bind_vals)
+    #             # Binding between Odoo product and Okticket expense category
+    #             internal_data['odoo_id'] = odoo_product.id
+    #             binding = self.model.create(internal_data)
+    #         if binding:
+    #             okticket_product_template_ids.append(binding.id)
+    #             if 'id' in product_ext_vals:
+    #                 external_id = str(product_ext_vals['id'])
+    #                 binder.bind(external_id, binding)
+    #                 _logger.info('Imported')
+    #         # Creation/update of no refund product version which is being imported
+    #         if odoo_product:
+    #             odoo_product.load_rebillable_product_version()
+    #
+    #         # Creation/update of invoice product version which is being imported
+    #         if odoo_product:
+    #             invoice_product_version_ids = odoo_product.load_invoice_product_version()
+    #             # TODO si se necesitase crear la versión reinvoiceable de la versión invoice de un producto
+    #             # self.env['product.template'].browse(invoice_product_version_ids).load_reinvoiceable_product_version()
+    #
+    #     _logger.info(_('Import from Okticket DONE'))
+    #     return okticket_product_template_ids
