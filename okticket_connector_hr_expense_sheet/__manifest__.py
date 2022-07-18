@@ -19,7 +19,7 @@
         'security/ir.model.access.csv',
         'views/res_company_view.xml',
         'views/hr_expense_sheet_view.xml',
-        'views/okticket_hr_expense_sheet_vies.xml',
+        'views/okticket_hr_expense_sheet_view.xml',
         'views/okticket_backend_view.xml',
     ],
     'application': False,
