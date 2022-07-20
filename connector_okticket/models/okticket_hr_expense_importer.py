@@ -179,10 +179,17 @@ class HrExpenseBatchImporter(Component):
 
     @mapping
     def payment_mode(self, record):
-        payment_mode = 'own_account'
-        if record.get('custom_fields') and record['custom_fields'].get('refundable') \
-                and record['custom_fields']['refundable'] == 'payed':
-            payment_mode = 'company_account'
+        # Si el método de pago es 'efectivo', el modo de pago es 'pagado por el empleado'
+        # En caso contrario, es 'pagado por la empresa'
+        # Si existe campo 'refundable' en 'custom_fields', se evalúa para asignar 'pagado por la empresa'
+        payment_mode = 'payment_method' in record and record['payment_method'] == 'efectivo' and 'own_account' \
+                       or 'company_account'
+
+        if record.get('custom_fields') and record['custom_fields'].get('refundable'):
+            payment_mode = 'own_account'  # Pago por cliente ('refundable' == 'refund')
+            if record['custom_fields']['refundable'] == 'payed':
+                payment_mode = 'company_account'  # Pago por empresa
+
         return {'payment_mode': payment_mode}
 
     @mapping
@@ -234,53 +241,40 @@ class HrExpenseBatchImporter(Component):
         return {'is_invoice': record.get('type_id') and record['type_id'] == 1 or False}
 
     def run(self, filters=None, options=None):
-        """
-        Run the synchronization for all users, using the connector crons.
-        """
-        # Adapter
         backend_adapter = self.component(usage='backend.adapter')
-        # Expenses values from OkTicket
         okticket_hr_expense_ids = []
-        # Mapper
         mapper = self.component(usage='importer')
-        # Binder
         binder = self.component(usage='binder')
 
         # Fields needed to be able to import a expense
         required_fields = ['product_id', 'employee_id', 'company_id']
 
-        last_expenses_import = datetime.datetime.now()
-        if not self.backend_record.ignore_import_expenses_since and self.backend_record.import_expenses_since:
-            # Restricción de importación de gastos por fecha de última importación
-            filters = filters or {}
-            filters.update({
-                'params': {
-                    'updated_after': self.backend_record.import_expenses_since.strftime("%Y-%m-%dT%H:%M:%S")
-                }
-            })
-        else:
-            # All expenses not in "sent" state (this is, state = "draft") are eliminated before new import or
-            # synchronization of expenses from OkTicket. This way, we ensure Odoo-OkTicket synchronization.
-            states_to_remove = ['draft']
-            expenses_to_remove = self.env['hr.expense'].search([('state', 'in', states_to_remove)])
-            expenses_to_remove = self.env['hr.expense'].browse([exp.id for exp in expenses_to_remove
-                                                                if exp.okticket_expense_id])
-            expenses_to_remove.unlink()
-
+        filters, last_expenses_import = self.datetime_expenses_import_backend_filter(filters)
         only_reviewed = self.backend_record.import_only_reviewed_expenses
 
         for expense_ext_vals in backend_adapter.search(filters):
+
+            # Searchs if the OkTicket id already exists in odoo
+            binding = binder.to_internal(expense_ext_vals.get('_id'))
+
+            # Gasto eliminado (lógico) en Okticket
+            if 'deleted_at' in expense_ext_vals and expense_ext_vals['deleted_at']:  # deleted_at not null
+                if binding:
+                    self.delete_expense_synchro(binding)
+                continue
+
             # Restricción de importación de gastos revisados
             if only_reviewed and expense_ext_vals and 'review' not in expense_ext_vals:
                 continue
 
             # Map to odoo data
             internal_data = mapper.map_record(expense_ext_vals).values()
-            # Searchs if the OkTicket id already exists in odoo
-            binding = binder.to_internal(expense_ext_vals.get('_id'))
 
             if binding:
-                # If exists, we update it
+                # If exists, we update it  # TODO analizar error employee_id
+                # del internal_data['backend_id']
+                # del internal_data['external_id']
+                # self.env['hr.expense'].browse(binding.odoo_id.id).write(internal_data)
                 binding.write(internal_data)
             else:
                 values = internal_data.keys()
@@ -314,5 +308,51 @@ class HrExpenseBatchImporter(Component):
 
         # Actualizar fecha de última importación de gastos
         self.backend_record.import_expenses_since = last_expenses_import
-
         return okticket_hr_expense_ids
+
+    def delete_expense_synchro(self, binding):
+        """
+        Tries to unlink Odoo expense if it was deleted (logically) in Okticket.
+        If it couldn't be possible, a "deleted in Okticket" flag is actived in the expense. Odoo will try deleted the
+        expenses with this flag active when it could be possible (state changes in expense sheets).
+        :param binding:
+        """
+        try:
+            binding.odoo_id.unlink()  # Se trata de eliminar el gasto en Odoo
+        except Exception as e:
+            # Se marca como "gasto eliminado en Okticket" y se registra el evento
+            binding.odoo_id.okticket_deleted = True
+            msg = _('\nError while try to unlink expense %s in Odoo: %s') % (binding.odoo_id.id, e)
+            # Log event
+            log_vals = {
+                'backend_id': self.backend_record.id,
+                'type': 'warning',
+                'msg': msg,
+            }
+            self.env['log.event'].add_event(log_vals)
+            _logger.error(msg)
+
+    def datetime_expenses_import_backend_filter(self, filters):
+        """
+        Manages datetime last expenses import backend param to be added in update_after API-REST request
+        :param filters: searching filters dict
+        :return: filters dict, last import datetime
+        """
+        last_expenses_import = datetime.datetime.now()
+        if not self.backend_record.ignore_import_expenses_since and self.backend_record.import_expenses_since:
+            # Restricción de importación de gastos por fecha de última importación
+            filters = filters or {}
+            filters.update({
+                'params': {
+                    'updated_after': self.backend_record.import_expenses_since.strftime("%Y-%m-%dT%H:%M:%S")
+                }
+            })
+        else:
+            # All expenses not in "sent" state (this is, state = "draft") are eliminated before new import or
+            # synchronization of expenses from OkTicket. This way, we ensure Odoo-OkTicket synchronization.
+            states_to_remove = ['draft']
+            expenses_to_remove = self.env['hr.expense'].search([('state', 'in', states_to_remove)])
+            expenses_to_remove = self.env['hr.expense'].browse([exp.id for exp in expenses_to_remove
+                                                                if exp.okticket_expense_id])
+            expenses_to_remove.unlink()
+        return filters, last_expenses_import

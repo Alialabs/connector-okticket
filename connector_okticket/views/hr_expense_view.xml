@@ -36,6 +36,7 @@
                     <field name="is_invoice"/>
                 </field>
                 <field name="company_id" position="after">
+                    <field name="okticket_deleted" invisible="1"/>
                     <field name="okticket_expense_id"/>
                     <field name="okticket_status" widget="statusbar"/>
                     <field name="payment_method" widget="selection" />
@@ -47,6 +48,11 @@
                     </div>
                     <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                 </field>
+
+                <xpath expr="//form/sheet/div[1]" position="before">
+                    <widget name="web_ribbon" title="Deleted in Okticket" bg_color="bg-danger"
+                            attrs="{'invisible': [('okticket_deleted', '=', False)]}"/>
+                </xpath>
             </field>
         </record>
 

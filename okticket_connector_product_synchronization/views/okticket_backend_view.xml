@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+     @author: Alia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+    <data>
+
+        <record id="view_okticket_backend_form" model="ir.ui.view">
+            <field name="name">okticket.backend.form</field>
+            <field name="model">okticket.backend</field>
+            <field name="inherit_id" ref="connector_okticket.view_okticket_backend_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook[@name='bindings']" position="inside">
+                    <page string="Product Template Bindings" name="product_template_bindings">
+                        <button name="%(action_open_okticket_product_template_binding)d"
+                                string="⇒ See Product Template Bindings"
+                                type="action"
+                                class="oe_link"/>
+                        <field name="okticket_product_template_ids" invisible="1">
+                            <tree editable="top" limit="80">
+                                <field name="id"/>
+                                <field name="sync_date"/>
+                                <field name="odoo_id"/>
+                                <field name="external_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

@@ -48,7 +48,6 @@ class HrEmployeeMapper(Component):
     _fields_mapping = {'work_email': 'email'}
 
     def filters_fields_conversion(self, filters):
-        # Conversión de campos Odoo-Okticket para filtrado
         for filter_key in filters.keys():
             if filter_key in self._fields_mapping:
                 filters[self._fields_mapping[filter_key]] = filters.pop(filter_key)
@@ -57,6 +56,14 @@ class HrEmployeeMapper(Component):
     @mapping
     def external_id(self, record):
         return {'external_id': record['id']}
+
+    @mapping
+    def work_email(self, record):
+        return {'work_email': record['email']}
+
+    @mapping
+    def name(self, record):
+        return {'name': record['name']}
 
     @mapping
     def backend_id(self, record):
@@ -81,53 +88,33 @@ class HrEmployeeBatchImporter(Component):
     _usage = 'importer'
 
     def run(self, filters=None, options=None):
-        employee_obj = self.env['hr.employee']
-        # Adapter
         backend_adapter = self.component(usage='backend.adapter')
-        # Read users from OkTicket
         okticket_hr_employee_ids = []
-        # Mapper
         mapper = self.component(usage='mapper')
         filters = mapper.filters_fields_conversion(filters)
-        # Binder
         binder = self.component(usage='binder')
+
         for employee_ext_vals in backend_adapter.search(filters):
+
             # Map to odoo data
             internal_data = mapper.map_record(employee_ext_vals).values()
-            # find if the OkTicket id already exists in odoo
+            # find if the OkTicket user id already exists in odoo
             binding = binder.to_internal(employee_ext_vals['id'])
 
-            user_to_bind_vals = {
-                'okticket_user_id': employee_ext_vals.get('id'),
-                'work_email': employee_ext_vals.get('email'),
-                'name': employee_ext_vals.get('name'),
-            }
-            odoo_user = False
-            if binding:  # User exists and is bound (UPDATE)
-                binding.write(internal_data)
-                try:
-                    odoo_user = employee_obj.browse(internal_data['odoo_id'])
-                except Exception as e:
-                    raise Warning(_('Employee %s (%s) must be deleted') %
-                                  employee_ext_vals['name'], employee_ext_vals['id'])
-            else:  # User doesn't bound
-                if not internal_data.get('odoo_id'):
-                    # User doesn't exist
-                    odoo_user = employee_obj. \
-                        with_context(ignore_okticket_synch=True).create(user_to_bind_vals)
-                else:
-                    # User exists but is not bound
-                    odoo_user = employee_obj.browse(internal_data['odoo_id'])
-                    odoo_user.write(user_to_bind_vals)
-                # Binding between Odoo employee and Okticket user
-                internal_data['odoo_id'] = odoo_user.id
-                binding = self.model.create(internal_data)
-            if binding:
-                okticket_hr_employee_ids.append(binding.id)
-                if 'id' in employee_ext_vals:
-                    external_id = str(employee_ext_vals['id'])
-                    binder.bind(external_id, binding)
-                    _logger.info(_('Imported'))
+            if not binding:
+                if internal_data.get('odoo_id'):
+                    # User exists in Odoo but its binding is not updated
+                    binding = self.model.search([(binder._odoo_field, '=', internal_data['odoo_id']),
+                                                 (binder._backend_field, '=', self.backend_record.id)])
+                    if not binding:
+                        # User or user binding do not exist in Odoo
+                        binding = self.model.with_context(ignore_okticket_synch=True).create(internal_data)
+
+            binding.write(internal_data)
+            binder.bind(employee_ext_vals.get('id'), binding)
+            
+            okticket_hr_employee_ids.append(binding.id)
+            _logger.info('Imported')
 
         _logger.info(_('Import from Okticket DONE'))
         return okticket_hr_employee_ids

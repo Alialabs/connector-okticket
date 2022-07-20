@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+     @author: Alia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+    <data>
+
+        <record id="okticket_hr_employee_binding_view_search" model="ir.ui.view">
+            <field name="name">okticket.hr.employee.binding.view.search</field>
+            <field name="model">okticket.hr.employee</field>
+            <field name="arch" type="xml">
+                <search string="Search Okticket Hr Employee Binding">
+                    <field string="Expense name" name="odoo_id"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="okticket_hr_employee_binding_tree_view" model="ir.ui.view">
+            <field name="name">okticket.hr.employee.binding.tree.view</field>
+            <field name="model">okticket.hr.employee</field>
+            <field name="arch" type="xml">
+                <tree editable="top" limit="80">
+                    <field name="id"/>
+                    <field name="sync_date"/>
+                    <field name="odoo_id"/>
+                    <field name="external_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_okticket_hr_employee_binding" model="ir.actions.act_window">
+            <field name="name">Okticket Hr Employee Bindings</field>
+            <field name="res_model">okticket.hr.employee</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="okticket_hr_employee_binding_tree_view"/>
+        </record>
+
+        <record id="action_open_okticket_hr_employee_binding" model="ir.actions.act_window">
+            <field name="name">Hr Employee Bindings</field>
+            <field name="res_model">okticket.hr.employee</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="action_okticket_hr_employee_binding"/>
+            <field name="search_view_id" ref="okticket_hr_employee_binding_view_search"/>
+            <field name="domain">[('backend_id', '=', active_id)]</field>
+        </record>
+
+    </data>
+</odoo>

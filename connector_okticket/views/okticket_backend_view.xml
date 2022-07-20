@@ -59,8 +59,6 @@
                             </group>
                         </group>
                         <separator/>
-                        <button name="%(action_open_okticket_log)d" string="⇒ See Backend Logs" type="action"
-                                class="oe_link"/>
 <!--                        <group name="okticket" string="Backend Log" groups="connector_okticket.group_okticket_conn_user">-->
 <!--                            <field name="log_event_ids" nolabel="1"-->
 <!--                                   domain="[('backend_id', '=', active_id)]"/>-->
@@ -72,6 +70,27 @@
                             <field name="ignore_import_expenses_since"/>
                             <field name="import_only_reviewed_expenses"/>
                         </group>
+                        <separator/>
+                        <notebook name="bindings">
+                            <page string="Expenses Bindings" name="hr_expense_bindings">
+                                <button name="%(action_open_okticket_hr_expense_binding)d"
+                                        string="⇒ See Hr Expense Bindings"
+                                        type="action"
+                                        class="oe_link"/>
+                                <field name="okticket_hr_expense_ids" invisible="1">
+                                    <tree editable="top" limit="80">
+                                        <field name="id"/>
+                                        <field name="sync_date"/>
+                                        <field name="odoo_id"/>
+                                        <field name="external_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <separator/>
+                        <button name="%(action_open_okticket_log)d" string="⇒ See Backend Logs" type="action"
+                                class="oe_link"/>
+
                     </sheet>
                 </form>
             </field>

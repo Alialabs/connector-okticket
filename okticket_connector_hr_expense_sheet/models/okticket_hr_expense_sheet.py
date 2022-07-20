@@ -45,17 +45,34 @@ class HrExpenseSheet(models.Model):
     okticket_bind_ids = fields.One2many(
         comodel_name='okticket.hr.expense.sheet',
         inverse_name='odoo_id',
-        string='Hr Expense Sheet Bindings', )
+        string='Hr Expense Sheet Bindings')
 
-    def _get_expense_sheet(self):
+    def _get_expense_sheet_okticket_id(self):
         for exp_sheet in self:
             external_ids = [ok_exp_sheet.external_id for ok_exp_sheet in exp_sheet.okticket_bind_ids]
             exp_sheet.okticket_expense_sheet_id = external_ids and external_ids[0] or '-1'
 
+    def _set_expense_sheet_okticket_id(self):
+        for exp_sheet in self.filtered(lambda sheet: sheet.okticket_bind_ids):
+            exp_sheet.okticket_bind_ids.write({'external_id': exp_sheet.okticket_expense_sheet_id})
+
+    def _search_expense_sheet_okticket_id(self, operator, value):
+        if operator not in ['=', '!=']:
+            raise ValueError(_('This operator is not supported'))
+        if not isinstance(value, str):
+            raise ValueError(_('Value should be string (not %s)'), value)
+        domain = []
+        odoo_ids = self.env['okticket.hr.expense.sheet'].search([
+            ('external_id', operator, value)]).mapped('odoo_id').ids
+        if odoo_ids:
+            domain.append(('id', 'in', odoo_ids))
+        return domain
+
     okticket_expense_sheet_id = fields.Char(string="OkTicket Expense_sheet_id",
                                             default='-1',
-                                            compute=_get_expense_sheet,
-                                            readonly=True)
+                                            compute=_get_expense_sheet_okticket_id,
+                                            inverse=_set_expense_sheet_okticket_id,
+                                            search=_search_expense_sheet_okticket_id)
 
     @api.multi
     def export_record(self, *args, **kwargs):
@@ -88,7 +105,7 @@ class OkticketHrExpenseSheet(models.Model):
                 _logger.error('Exception: %s\n', e)
                 import traceback
                 traceback.print_exc()
-                raise UserError(_('Could not connect to Okticket'))
+                raise (e or UserError(_('Could not connect to Okticket')))
 
     @api.multi
     def change_expense_sheet_status(self, expense_sheets, action_id, comments='No comment'):
@@ -102,7 +119,17 @@ class OkticketHrExpenseSheet(models.Model):
                 _logger.error('Exception: %s\n', e)
                 import traceback
                 traceback.print_exc()
-                raise UserError(_('Could not connect to Okticket'))
+                raise (e or UserError(_('Could not connect to Okticket')))
+
+
+class OkticketBackend(models.Model):
+    _inherit = 'okticket.backend'
+
+    okticket_hr_expense_sheet_ids = fields.One2many(
+        comodel_name='okticket.hr.expense.sheet',
+        inverse_name='backend_id',
+        string='Hr Expense Sheet Bindings',
+        context={'active_test': False})
 
 
 class HrExpenseSheetAdapter(Component):
@@ -135,9 +162,7 @@ class HrExpenseSheetAdapter(Component):
             return result['result']
         return False
 
-    # TODO: refactorizar este método para incluir en el connector y reutilizar por las operaciones de create
     def create_expense_sheet(self, values):
-        # Esto en la api
         okticketapi = self.okticket_api
         url = okticketapi.get_full_path('/reports')
         header = {
@@ -148,8 +173,7 @@ class HrExpenseSheetAdapter(Component):
 
     def get_expenses_sheet(self, external_id):
         if self._auth():
-            result = self.get_expenses_sheet_api(external_id)  # para la api
-            # Log event
+            result = self.get_expenses_sheet_api(external_id)
             result['log'].update({
                 'backend_id': self.backend_record.id,
                 'type': result['log'].get('type') or 'success',
@@ -158,7 +182,6 @@ class HrExpenseSheetAdapter(Component):
             return result['result']
         return False
 
-    # TODO : en api
     def get_expenses_sheet_api(self, external_id):
         okticketapi = self.okticket_api
         path = '/reports/%s/expenses' % external_id
@@ -177,12 +200,12 @@ class HrExpenseSheetAdapter(Component):
         expenses_to_unlink = []
         expenses_to_import = []
         for external_id in external_ids_to_unlink:
-            # Se recupera el gasto entre los de Odoo por external_id
+            # Obtains Odoo expense based on external_id
             okticket_expense = self.env['okticket.hr.expense'].search([('external_id', '=', external_id)])
             if okticket_expense:
                 expenses_to_unlink.append(okticket_expense.odoo_id)
             else:
-                # Si no está en Odoo se importa de Okticket
+                # If not exists, tries to import from Okticket
                 expenses_to_import.append(external_id)
             self.set_report_expense(False, expenses_to_unlink)
         return True
@@ -213,9 +236,7 @@ class HrExpenseSheetAdapter(Component):
                 result = self.okticket_api.find_report_by_id(filters['sheet_expense_external_id'],
                                                              https=self.collection.https)
             else:
-                # Esta implementacion de okticket accede directamente a los metodos de find_expense_sheet
                 result = self.okticket_api.find_expense_sheets(https=self.collection.https)
-                # Filtra los resultados obtenidos por el campo y valor indicados en el dict de filters
                 if filters:
                     filter_result = []
                     for okticket_user in result.get('result', []):
@@ -223,13 +244,11 @@ class HrExpenseSheetAdapter(Component):
                         for filter_key, filter_val in filters.items():
                             if not filter_key in okticket_user \
                                     or okticket_user[filter_key] != filter_val:
-                                # Si no tiene alguno de los filtros o no lo cumple, se excluye
                                 valid_result = False
                                 break
                         if valid_result:
                             filter_result.append(okticket_user)
                     result['result'] = filter_result
-            # Log event
             result['log'].update({
                 'backend_id': self.backend_record.id,
                 'type': result['log'].get('type') or 'success',
@@ -258,7 +277,7 @@ class HrExpenseSheetAdapter(Component):
         """
         expense_sheet_backend_adapter = self.component(usage='backend.adapter',
                                                        model_name='okticket.hr.expense.sheet')
-        # Consultar estado actual de hoja de gastos en Okticket
+        # Current Okticket expenses sheets state
         for sheet in expense_sheets:
             sheet_expense_external_id = sheet.okticket_bind_ids and sheet.okticket_bind_ids[0].external_id or False
             if sheet_expense_external_id:
@@ -268,9 +287,9 @@ class HrExpenseSheetAdapter(Component):
                 current_expense_sheet_oktk = expense_sheet_backend_adapter.search(filters=filter)
                 if current_expense_sheet_oktk:
                     current_status_id = current_expense_sheet_oktk.get('status_id')
-                    # Comprobación de que la acción a realizar sobre hoja de gastos con el status_id actual es válida
+                    # Checks if the action is valid
                     if action_id in self._STATUS_TRANSITIONS.get(current_status_id, []):
-                        # Modificar status de la hoja de gastos
+                        # Modify expenses sheet status
                         expense_sheet_backend_adapter.workflow_expense_sheet(sheet_expense_external_id, action_id,
                                                                              comments=comments)
                     else:
@@ -281,7 +300,6 @@ class HrExpenseSheetAdapter(Component):
     def workflow_expense_sheet(self, sheet_expense_external_id, action_id, comments='No comment'):
         if self._auth():
             result = self.okticket_api_workflow_expense_sheet(sheet_expense_external_id, action_id, comments=comments)
-            # Log event
             result['log'].update({
                 'backend_id': self.collection.id,
                 'type': result['log'].get('type') or 'success',
@@ -290,9 +308,7 @@ class HrExpenseSheetAdapter(Component):
             return result.get('result')
         return False
 
-    # TODO: refactorizar este método para incluir en el connector y reutilizar por las operaciones de workflow
     def okticket_api_workflow_expense_sheet(self, sheet_expense_external_id, action_id, comments='No comment'):
-        # Esto en la api
         okticketapi = self.okticket_api
         url = okticketapi.get_full_path('/reports')
         url += '/%s/actions/%s' % (sheet_expense_external_id, action_id)
@@ -300,7 +316,6 @@ class HrExpenseSheetAdapter(Component):
             'Authorization': okticketapi.token_type + ' ' + okticketapi.access_token,
             'Content-Type': 'application/json',
         }
-        # TODO: qué comentario añadir al cambio de estado ??? POR DEFECTO EL DE POSTMAN
         body = {
             'comment': comments
         }

@@ -98,12 +98,7 @@ class HrExpenseExporter(Component):
             binding = expense_sheet.okticket_bind_ids and \
                       expense_sheet.okticket_bind_ids[0] or False
             if not binding:
-                # Crear en OkTicket hoja de gasto y la vincula con la hr.expense.sheet de Odoo
                 creation_result = backend_adapter.create(expense_sheet)
-
-
-                # TODO : solucion temporal. Se crea nueva hoja de gastos para evitar conflicto con otra existente
-                # ya procesada, con otro metodo de pago u otro empleado distinto del gasto que se va a incluir
                 if not creation_result:
                     # New expenses sheet
                     creation_result = self.generate_new_expense_sheet(expense_sheet, backend_adapter)
@@ -114,12 +109,10 @@ class HrExpenseExporter(Component):
                 binding = self.model.create(internal_data)
                 binder.bind(internal_data['external_id'], binding)
                 _logger.info('Created and synchronized expense sheet')
-            # else:
-            # Existe el binding, se actualiza la info de la hoja de gastos de OkTicket
-            # Se recuperan los gastos de la hoja de gastos en Okticket son los mismos que en Odoo
+            # Exists binding. Okticket expenses sheet will be updated.
             expenses_sheet = backend_adapter.get_expenses_sheet(binding.external_id).get('data', [])
             expenses_external_ids_in_oktk = [expense['_id'] for expense in expenses_sheet if '_id' in expense]
-            expenses_to_add = [] # Gastos Odoo para añadir a la hoja de gastos de Okticket
+            expenses_to_add = []
             for expense in expense_sheet.expense_line_ids:
                 if expense.okticket_bind_ids:
                     if not expense.okticket_bind_ids[0].external_id in expenses_external_ids_in_oktk:
