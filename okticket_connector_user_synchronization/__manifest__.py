@@ -33,7 +33,7 @@
 {
     'name': 'Alia Okticket Connector User Synchronization',
     'summary': 'Implements Okticket user synchronization operations.',
-    'version': '12.0.1.0.1',
+    'version': '12.0.1.0.3',
     'category': 'Connector',
     'depends': [
         'hr',

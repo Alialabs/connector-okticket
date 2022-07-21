@@ -32,7 +32,7 @@
 
 {
     'name': 'Alia Okticket Connector Expense Sheet Synchronized Unlink',
-    'version': '12.0.1.0.1',
+    'version': '12.0.1.0.3',
     'category': 'Connector',
     'depends': [
         'okticket_connector_hr_expense_sheet',

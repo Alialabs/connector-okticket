@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 15:20+0000\n"
-"PO-Revision-Date: 2022-07-04 15:20+0000\n"
+"POT-Creation-Date: 2022-07-21 16:48+0000\n"
+"PO-Revision-Date: 2022-07-21 16:48+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -41,6 +41,13 @@ msgstr "Activo"
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__name
 msgid "Analytic Account"
 msgstr "Cuenta analítica"
+
+#. module: okticket_connector_cost_center
+#: model:ir.actions.act_window,name:okticket_connector_cost_center.action_open_okticket_analytic_account_binding
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_backend__okticket_analytic_account_ids
+#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.view_okticket_backend_form
+msgid "Analytic Account Bindings"
+msgstr "Bindings de cuentas analíticas"
 
 #. module: okticket_connector_cost_center
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__line_ids
@@ -98,19 +105,25 @@ msgid "Confirm cost center creation from analytic account"
 msgstr "Creación de centro de coste desde cuenta analítica"
 
 #. module: okticket_connector_cost_center
+#: model:ir.model,name:okticket_connector_cost_center.model_project_cost_center_wizard
+msgid "Confirm cost center creation from project"
+msgstr "Confirmar creación de centro de coste desde el proyecto"
+
+#. module: okticket_connector_cost_center
 #: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.cost_center_creation_from_analytic_view
-msgid ""
-"Cost centers will be created from\n"
+msgid "Cost centers will be created from\n"
 "                            the indicated analytics.\n"
 "                            Do you want to continue?"
-msgstr ""
-"El centro de coste será creado desde\n"
+msgstr "El centro de coste será creado desde\n"
 "                        las cuentas analíticas indicados.\n"
 "                        ¿Desea continuar?"
 
 #. module: okticket_connector_cost_center
-#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:188
-#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:206
+#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:148
+#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:166
+#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:183
+#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:201
+#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:219
 #, python-format
 msgid "Could not connect to Okticket"
 msgstr "No se puede establecer conexión con Okticket"
@@ -185,6 +198,11 @@ msgstr "Confirmación necesaria para duplicados"
 #, python-format
 msgid "Error deleting expense ID: %s not located in Okticket"
 msgstr "Error eliminando gasto con Id: %s no localizado en Okticket"
+
+#. module: okticket_connector_cost_center
+#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.okticket_analytic_account_binding_view_search
+msgid "Expense name"
+msgstr "Gasto"
 
 #. module: okticket_connector_cost_center
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__message_follower_ids
@@ -319,9 +337,19 @@ msgid "OkTicket Cost_center_id"
 msgstr "Centro de coste de Okticket"
 
 #. module: okticket_connector_cost_center
+#: model:ir.actions.act_window,name:okticket_connector_cost_center.action_okticket_analytic_account_binding
+msgid "Okticket Analytic Account Bindings"
+msgstr "Bindings de cuentas analíticas"
+
+#. module: okticket_connector_cost_center
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__backend_id
 msgid "Okticket Backend"
-msgstr "Backend de Okticket"
+msgstr ""
+
+#. module: okticket_connector_cost_center
+#: model:ir.model,name:okticket_connector_cost_center.model_okticket_backend
+msgid "Okticket Backend Configuration"
+msgstr "Configuración de Okticket Backend"
 
 #. module: okticket_connector_cost_center
 #: model:ir.model,name:okticket_connector_cost_center.model_project_project
@@ -344,6 +372,17 @@ msgid "Reference"
 msgstr "Referencia"
 
 #. module: okticket_connector_cost_center
+#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.okticket_analytic_account_binding_view_search
+msgid "Search Okticket Analytic Account Binding"
+msgstr "Buscar bindings de cuentas analíticas"
+
+#. module: okticket_connector_cost_center
+#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:68
+#, python-format
+msgid "This operator is not supported"
+msgstr "Este operador no está soportado"
+
+#. module: okticket_connector_cost_center
 #: model:ir.model.fields,help:okticket_connector_cost_center.field_okticket_account_analytic_account__company_uom_id
 msgid "This will set the unit of measure used in projects and tasks.\n"
 "If you use the timesheet linked to projects, don't forget to setup the right unit of measure in your employees."
@@ -353,7 +392,7 @@ msgstr "Permite fijar la unidad de medida utilizada en proyectos y tareas.\n"
 #. module: okticket_connector_cost_center
 #: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.okticket_view_account_analytic_account_form
 msgid "Unlink Cost Center"
-msgstr ""
+msgstr "Eliminar centro de coste"
 
 #. module: okticket_connector_cost_center
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__message_unread
@@ -366,22 +405,26 @@ msgid "Unread Messages Counter"
 msgstr "Contador de mensajes sin leer"
 
 #. module: okticket_connector_cost_center
-#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:137
-#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:155
-#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:172
-#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:190
-#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:208
+#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:70
+#, python-format
+msgid "Value should be integer (not %s)"
+msgstr "El valor debe ser integer (no %s)"
+
+#. module: okticket_connector_cost_center
+#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:150
+#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:168
+#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:185
+#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:203
+#: code:addons/okticket_connector_cost_center/models/okticket_analytic_account.py:221
 #, python-format
 msgid "WARNING! Not exists backend for company %s (%s)"
 msgstr "¡Atención! No existe backend para la compañía %s (%s)"
 
 #. module: okticket_connector_cost_center
 #: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.cost_center_creation_from_analytic_view
-msgid ""
-"Warning! Duplicated cost center will be created.\n"
+msgid "Warning! Duplicated cost center will be created.\n"
 "                            Check box below if you want to continue."
-msgstr ""
-"¡Atención! Se va a crear un centro de coste duplicado.\n"
+msgstr "¡Atención! Se va a crear un centro de coste duplicado.\n"
 "                            Marque la casilla inferior y confirme para continuar."
 
 #. module: okticket_connector_cost_center
@@ -397,4 +440,10 @@ msgstr "Historial de comunicaciones del sitio web"
 #. module: okticket_connector_cost_center
 #: model:ir.model,name:okticket_connector_cost_center.model_okticket_account_analytic_account
 msgid "okticket.account.analytic.account"
-msgstr "Cuenta analítica Okticket"
+msgstr "Cuenta analítica"
+
+#. module: okticket_connector_cost_center
+#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.view_okticket_backend_form
+msgid "⇒ See Analytic Account Bindings"
+msgstr "⇒ Ver Bindings de cuentas analíticas"
+
