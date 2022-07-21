@@ -210,7 +210,7 @@ msgstr "Fecha de salida"
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__departure_reason_id
 msgid "Departure Reason"
-msgstr "Motivo de salida"
+msgstr ""
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__subordinate_ids
@@ -284,7 +284,7 @@ msgstr "Gasto"
 #. module: okticket_connector_user_synchronization
 #: model_terms:ir.ui.view,arch_db:okticket_connector_user_synchronization.okticket_hr_employee_binding_view_search
 msgid "Expense name"
-msgstr "Gasto"
+msgstr ""
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__study_field
@@ -591,18 +591,18 @@ msgstr "Configuración de backend de Okticket"
 #. module: okticket_connector_user_synchronization
 #: model:ir.actions.act_window,name:okticket_connector_user_synchronization.action_okticket_hr_employee_binding
 msgid "Okticket Hr Employee Bindings"
-msgstr "Bindings de empleados"
+msgstr ""
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_hr_employee__okticket_user_id
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__okticket_user_id
 msgid "Okticket User_Id"
-msgstr "Id de usuario de Okticket"
+msgstr ""
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__pin
 msgid "PIN"
-msgstr "PIN"
+msgstr ""
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__pin
@@ -611,8 +611,6 @@ msgid ""
 " enabled in Configuration) and to change the cashier in the Point of Sale "
 "application."
 msgstr ""
-"PIN utilizado para registrar entradas/salidas en el Modo Quiosco (si está "
-"habilitado en configuración)."
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__user_partner_id
@@ -677,7 +675,7 @@ msgstr "Escuela"
 #. module: okticket_connector_user_synchronization
 #: model_terms:ir.ui.view,arch_db:okticket_connector_user_synchronization.okticket_hr_employee_binding_view_search
 msgid "Search Okticket Hr Employee Binding"
-msgstr "Buscar bindings de empleados"
+msgstr ""
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__coach_id
@@ -772,7 +770,7 @@ msgstr ""
 #: code:addons/okticket_connector_user_synchronization/models/okticket_hr_employee.py:0
 #, python-format
 msgid "This operator is not supported"
-msgstr "Este operador no está soportado"
+msgstr ""
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__timesheet_cost
@@ -820,7 +818,7 @@ msgstr "Socio del usuario"
 #: code:addons/okticket_connector_user_synchronization/models/okticket_hr_employee.py:0
 #, python-format
 msgid "Value should be integer (not %s)"
-msgstr "El valor debe ser un entero (no %s)"
+msgstr ""
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__visa_expire
@@ -855,7 +853,7 @@ msgstr "Correo-e del trabajo"
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__work_location_id
 msgid "Work Location"
-msgstr "Ubicación de trabajo"
+msgstr ""
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__mobile_phone
@@ -900,4 +898,4 @@ msgstr "Empleados de Okticket"
 #. module: okticket_connector_user_synchronization
 #: model_terms:ir.ui.view,arch_db:okticket_connector_user_synchronization.view_okticket_backend_form
 msgid "⇒ See Hr Employee Bindings"
-msgstr "⇒ Ver Bindings de empleados"
+msgstr ""

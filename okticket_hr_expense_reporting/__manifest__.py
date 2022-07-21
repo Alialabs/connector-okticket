@@ -5,7 +5,7 @@
 {
     'name': 'Alia Okticket Hr Expense Reporting',
     'summary': 'Implements Okticket Expense reporting.',
-    'version': '1.0',
+    'version': '15.0.1.0.1',
     'category': 'Reporting',
     'depends': [
         'okticket_connector_hr_expense_sheet',

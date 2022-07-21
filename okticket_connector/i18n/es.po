@@ -6,14 +6,24 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-10 14:17+0000\n"
-"PO-Revision-Date: 2022-05-10 14:17+0000\n"
+"POT-Creation-Date: 2022-07-21 15:35+0000\n"
+"PO-Revision-Date: 2022-07-21 15:35+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: okticket_connector
+#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
+#, python-format
+msgid ""
+"\n"
+"Error while try to unlink expense %s in Odoo: %s"
+msgstr ""
+"\n"
+"Error mientras se trataba de eliminar el gasto %s en Odoo: %s"
 
 #. module: okticket_connector
 #: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
@@ -32,8 +42,8 @@ msgid ""
 "(assign_default_expense_account)> Field \"account_id\" updated from product "
 "for expenses: %s"
 msgstr ""
-"(assign_default_expense_account)> Campo \"account_id\" actualizado desde el producto "
-"para los gastos: %s"
+"(assign_default_expense_account)> Campo \"account_id\" actualizado desde el "
+"producto para los gastos: %s"
 
 #. module: okticket_connector
 #: code:addons/okticket_connector/models/okticket_backend.py:0
@@ -211,6 +221,7 @@ msgid "Cash"
 msgstr "Efectivo"
 
 #. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_product_expense_form_view
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
 msgid "Category_id"
 msgstr "Categoría"
@@ -330,6 +341,19 @@ msgid "Delete"
 msgstr "Suprimir"
 
 #. module: okticket_connector
+#: code:addons/okticket_connector/models/hr_expense.py:0
+#, python-format
+msgid "Delete expenses in a state different from draft is not allowed."
+msgstr "No se puede eliminar un gasto en estado distinto de \"A enviar\"."
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__okticket_deleted
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__okticket_deleted
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_hr_expense_view
+msgid "Deleted in Okticket"
+msgstr "Eliminado en Okticket"
+
+#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__name
 msgid "Description"
 msgstr "Descripción"
@@ -378,6 +402,21 @@ msgstr "Informe de gasto"
 #: model:ir.actions.act_window,name:okticket_connector.action_expense_wizard
 msgid "Expense Wizard"
 msgstr "Asistente de gastos"
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_hr_expense_binding_view_search
+msgid "Expense name"
+msgstr "Nombre del gasto"
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
+msgid "Expenses Bindings"
+msgstr "Bindings de gastos"
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
+msgid "Expenses import Configuration"
+msgstr "Configuración de importación de gastos"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__is_refused
@@ -436,6 +475,12 @@ msgid "Has Message"
 msgstr "Tiene mensaje"
 
 #. module: okticket_connector
+#: model:ir.actions.act_window,name:okticket_connector.action_open_okticket_hr_expense_binding
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__okticket_hr_expense_ids
+msgid "Hr Expense Bindings"
+msgstr "Bindings de gastos"
+
+#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_log_event__id
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__id
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_expense_wizard__id
@@ -490,6 +535,11 @@ msgstr ""
 "pedido de ventas"
 
 #. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__ignore_import_expenses_since
+msgid "Ignore Import Expenses Since"
+msgstr "Ignorar \"Importar gastos desde fecha\""
+
+#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__okticket_img
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__okticket_img
 msgid "Image"
@@ -509,8 +559,13 @@ msgstr "Importación de gastos desde Okticket"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__import_expenses_since
-msgid "Import Expenses since"
-msgstr "Importación de gastos desde"
+msgid "Import Expenses Since"
+msgstr "Importar gastos desde fecha"
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__import_only_reviewed_expenses
+msgid "Import Only Reviewed Expenses"
+msgstr "Importar solo gastos revisados"
 
 #. module: okticket_connector
 #: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
@@ -801,7 +856,7 @@ msgstr "Vínculos de gastos de Okticket"
 #. module: okticket_connector
 #: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
 msgid "OkTicket Test Parameters"
-msgstr ""
+msgstr "Parámetros de prueba de Okticket"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_product_product__okticket_type_prod_id
@@ -863,6 +918,11 @@ msgstr "Gestión de conector Okticket"
 #: model:ir.module.category,description:okticket_connector.module_category_okticket_connector
 msgid "Okticket Connector Operations"
 msgstr "Operaciones de conector Okticket"
+
+#. module: okticket_connector
+#: model:ir.actions.act_window,name:okticket_connector.action_okticket_hr_expense_binding
+msgid "Okticket Hr Expense Bindings"
+msgstr "Bindings de gastos"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_res_users__okticket_backend_ids
@@ -1037,6 +1097,11 @@ msgid "Scope"
 msgstr "Ámbito"
 
 #. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_hr_expense_binding_view_search
+msgid "Search Okticket Hr Expense Binding"
+msgstr "Buscar bindings de gastos"
+
+#. module: okticket_connector
 #: model_terms:ir.ui.view,arch_db:okticket_connector.expense_wizard_view
 msgid "Set accounted false"
 msgstr "Asignar valor 'false' a 'contabilizado'"
@@ -1044,7 +1109,7 @@ msgstr "Asignar valor 'false' a 'contabilizado'"
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__sheet_is_editable
 msgid "Sheet Is Editable"
-msgstr ""
+msgstr "Hoja de gastos editable"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__okticket_status
@@ -1102,19 +1167,19 @@ msgid ""
 "The okticket service from which to import your timesheets. If empty, the "
 "default okticket service will be used instead."
 msgstr ""
-"Servicio de Okticket desde el que importar las hojas de gasto. Si está vacío, "
-"se usará el servicio por defecto de Okticket en su lugar."
+"Servicio de Okticket desde el que importar las hojas de gasto. Si está "
+"vacío, se usará el servicio por defecto de Okticket en su lugar."
 
 #. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__tax_ids
 msgid "The taxes should be \"Included In Price\""
-msgstr ""
+msgstr "Los impuestos deben ser \"Incluido en el precio\""
 
 #. module: okticket_connector
-#: model:product.product,name:okticket_connector.product_product_okticket_toll
-#: model:product.template,name:okticket_connector.product_product_okticket_toll_product_template
-msgid "Toll"
-msgstr "Peaje"
+#: code:addons/okticket_connector/models/okticket_hr_expense.py:0
+#, python-format
+msgid "This operator is not supported"
+msgstr "Este operador no está soportado"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__total_amount_company
@@ -1124,7 +1189,7 @@ msgstr "Total"
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__total_amount
 msgid "Total In Currency"
-msgstr ""
+msgstr "Total"
 
 #. module: okticket_connector
 #: model:ir.model.fields.selection,name:okticket_connector.selection__hr_expense__payment_method__transferencia
@@ -1174,19 +1239,19 @@ msgstr "Unidad de medida"
 #: model:product.product,uom_name:okticket_connector.product_product_okticket_gas
 #: model:product.product,uom_name:okticket_connector.product_product_okticket_invoice
 #: model:product.product,uom_name:okticket_connector.product_product_okticket_km
+#: model:product.product,uom_name:okticket_connector.product_product_okticket_km_rebillable
 #: model:product.product,uom_name:okticket_connector.product_product_okticket_other
 #: model:product.product,uom_name:okticket_connector.product_product_okticket_parking
 #: model:product.product,uom_name:okticket_connector.product_product_okticket_restoration
-#: model:product.product,uom_name:okticket_connector.product_product_okticket_toll
 #: model:product.product,uom_name:okticket_connector.product_product_okticket_transport
 #: model:product.template,uom_name:okticket_connector.product_product_okticket_accommodation_product_template
 #: model:product.template,uom_name:okticket_connector.product_product_okticket_gas_product_template
 #: model:product.template,uom_name:okticket_connector.product_product_okticket_invoice_product_template
 #: model:product.template,uom_name:okticket_connector.product_product_okticket_km_product_template
+#: model:product.template,uom_name:okticket_connector.product_product_okticket_km_rebillable_product_template
 #: model:product.template,uom_name:okticket_connector.product_product_okticket_other_product_template
 #: model:product.template,uom_name:okticket_connector.product_product_okticket_parking_product_template
 #: model:product.template,uom_name:okticket_connector.product_product_okticket_restoration_product_template
-#: model:product.template,uom_name:okticket_connector.product_product_okticket_toll_product_template
 #: model:product.template,uom_name:okticket_connector.product_product_okticket_transport_product_template
 msgid "Units"
 msgstr "Unidades"
@@ -1204,7 +1269,7 @@ msgstr "Nº de mensajes sin leer"
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__product_uom_category_id
 msgid "UoM Category"
-msgstr ""
+msgstr "Categoría UdM"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__api_login
@@ -1229,6 +1294,12 @@ msgid "VAT Number"
 msgstr "NIF"
 
 #. module: okticket_connector
+#: code:addons/okticket_connector/models/okticket_hr_expense.py:0
+#, python-format
+msgid "Value should be string (not %s)"
+msgstr "El valor debe ser un string (no %s)"
+
+#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__version
 msgid "Version"
 msgstr "Version"
@@ -1237,7 +1308,7 @@ msgstr "Version"
 #: model:ir.model.fields,help:okticket_connector.field_product_product__invoice_prod_id
 #: model:ir.model.fields,help:okticket_connector.field_product_template__invoice_prod_id
 msgid "Version of the product to use in invoices"
-msgstr ""
+msgstr "Versión del producto para usar en facturas"
 
 #. module: okticket_connector
 #: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__type__warning
@@ -1253,12 +1324,6 @@ msgstr "Mensajes del sitio web"
 #: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__website_message_ids
 msgid "Website communication history"
 msgstr "Historial de comunicaciones del sitio web"
-
-#. module: okticket_connector
-#: code:addons/okticket_connector/models/hr_expense.py:0
-#, python-format
-msgid "Delete expenses in a state different from draft is not allowed."
-msgstr "No se puede eliminar un gasto en estado distinto de \"A enviar\"."
 
 #. module: okticket_connector
 #: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
@@ -1284,3 +1349,8 @@ msgstr "Gasto de Okticket"
 #: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
 msgid "⇒ See Backend Logs"
 msgstr "⇒ Ver logs"
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
+msgid "⇒ See Hr Expense Bindings"
+msgstr "⇒ Ver Bindings de gastos"
