@@ -8,11 +8,12 @@ from odoo.addons.component.core import Component
 class AccountAnalyticCostCenterBindingExportListener(Component):
     _name = 'account.analytic.account.binding.export.listener'
     _inherit = 'base.connector.listener'
-    _apply_on = ['account.analytic.account']
+    _apply_on = ['project.project']
 
     def on_record_create(self, record, fields=None):
-        record._okticket_create()
+        record.analytic_account_id._okticket_create()
 
     def on_record_write(self, record, fields=None):
         if 'name' in fields:
-            record._okticket_modify_cc_name()
+            record.analytic_account_id.name = record.name
+            record.analytic_account_id._okticket_modify_cc_name()

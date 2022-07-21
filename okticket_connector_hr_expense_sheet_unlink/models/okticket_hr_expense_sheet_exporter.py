@@ -54,6 +54,6 @@ class HrExpenseExporter(Component):
                 try:
                     backend_adapter.delete_expense_sheet(ok_exp_sheet.external_id)
                 except Exception as e:
-                    _logger.error('\n\n    >>> ERROR ELIMINACION EXP SHEET ID: %s no localizacdo en OKTICKET\n',
-                                  ok_exp_sheet.external_id)
-        _logger.info('Deleted related Expense Sheet in Okticket !!!')
+                    _logger.error('\n\n>>> Deleting error in expense sheet id %s :'
+                                  'does not exist in Okticket\n', ok_exp_sheet.external_id)
+        _logger.info('Deleted related Expense Sheet in Okticket')

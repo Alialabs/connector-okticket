@@ -5,7 +5,7 @@
 {
     'name': 'Alia Okticket Connector User Synchronization',
     'summary': 'Implements Okticket user synchronization operations.',
-    'version': '1.0',
+    'version': '15.0.1.0.4',
     'category': 'Connector',
     'depends': [
         'hr',

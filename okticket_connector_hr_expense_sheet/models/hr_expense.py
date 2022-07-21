@@ -24,7 +24,7 @@ class HrExpense(models.Model):
     # def _okticket_remove_expense(self):
     #     self.env['okticket.hr.expense'].sudo().remove_expense(self)
     #     return True
-    
+
     def write(self, vals):
         sheet_to_check = False
         if vals and 'sheet_id' in vals:

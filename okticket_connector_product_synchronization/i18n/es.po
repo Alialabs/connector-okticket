@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-10 14:41+0000\n"
-"PO-Revision-Date: 2022-05-10 14:41+0000\n"
+"POT-Creation-Date: 2022-07-21 16:24+0000\n"
+"PO-Revision-Date: 2022-07-21 16:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -251,6 +251,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__property_account_expense_id
 msgid "Expense Account"
 msgstr "Cuenta de gasto"
+
+#. module: okticket_connector_product_synchronization
+#: model_terms:ir.ui.view,arch_db:okticket_connector_product_synchronization.okticket_product_template_binding_view_search
+msgid "Expense name"
+msgstr "Gasto"
 
 #. module: okticket_connector_product_synchronization
 #: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__expense_policy
@@ -627,12 +632,19 @@ msgid "Okticket Backend Configuration"
 msgstr "Configuración de backend de Okticket"
 
 #. module: okticket_connector_product_synchronization
+#: model:ir.actions.act_window,name:okticket_connector_product_synchronization.action_okticket_product_template_binding
+msgid "Okticket Product Template Bindings"
+msgstr "Bindings de productos"
+
+#. module: okticket_connector_product_synchronization
 #: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__service_tracking
 msgid ""
 "On Sales order confirmation, this product can generate a project and/or task.         From those, you can track the service you are selling.\n"
 "         'In sale order's project': Will use the sale order's configured project if defined or fallback to         creating a new project based on the selected template."
 msgstr ""
-"En la confirmación de pedidos de venta, este producto puede generar un proyecto y/o tarea.         Desde estos, puede seguir el servicio que está vendiendo."
+"En la confirmación de pedidos de venta, este producto puede generar un "
+"proyecto y/o tarea.         Desde estos, puede seguir el servicio que está "
+"vendiendo."
 
 #. module: okticket_connector_product_synchronization
 #: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__invoice_policy
@@ -709,6 +721,13 @@ msgstr "Sincronización de productos desde Okticket"
 #: model:ir.model,name:okticket_connector_product_synchronization.model_product_template
 msgid "Product Template"
 msgstr "Plantilla de producto"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.actions.act_window,name:okticket_connector_product_synchronization.action_open_okticket_product_template_binding
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_backend__okticket_product_template_ids
+#: model_terms:ir.ui.view,arch_db:okticket_connector_product_synchronization.view_okticket_backend_form
+msgid "Product Template Bindings"
+msgstr "Bindings de productos"
 
 #. module: okticket_connector_product_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__product_tooltip
@@ -836,13 +855,18 @@ msgid "Sales Price"
 msgstr "Precio de venta"
 
 #. module: okticket_connector_product_synchronization
+#: model_terms:ir.ui.view,arch_db:okticket_connector_product_synchronization.okticket_product_template_binding_view_search
+msgid "Search Okticket Product Template Binding"
+msgstr "Buscar bindings de productos"
+
+#. module: okticket_connector_product_synchronization
 #: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__project_id
 msgid ""
 "Select a billable project on which tasks can be created. This setting must "
 "be set for each company."
 msgstr ""
-"Seleccionar un proyecto facturable en el que puedan ser creadas tareas. Esta configuración debería "
-"ser realizada para cada compañía."
+"Seleccionar un proyecto facturable en el que puedan ser creadas tareas. Esta"
+" configuración debería ser realizada para cada compañía."
 
 #. module: okticket_connector_product_synchronization
 #: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__project_template_id
@@ -850,8 +874,9 @@ msgid ""
 "Select a billable project to be the skeleton of the new created project when"
 " selling the current product. Its stages and tasks will be duplicated."
 msgstr ""
-"Seleccionar un proyecto facturable para ser la base del nuevo proyecto creado en la"
-" venta del producto actual. Sus etapas y tareas serán duplicadas."
+"Seleccionar un proyecto facturable para ser la base del nuevo proyecto "
+"creado en la venta del producto actual. Sus etapas y tareas serán "
+"duplicadas."
 
 #. module: okticket_connector_product_synchronization
 #: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__categ_id
@@ -952,6 +977,12 @@ msgstr ""
 "de datos."
 
 #. module: okticket_connector_product_synchronization
+#: code:addons/okticket_connector_product_synchronization/models/okticket_product_template.py:0
+#, python-format
+msgid "This operator is not supported"
+msgstr "Este operador no está soportado"
+
+#. module: okticket_connector_product_synchronization
 #: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__property_stock_production
 msgid ""
 "This stock location will be used, instead of the default one, as the source "
@@ -1028,6 +1059,12 @@ msgid "Valid Product Attribute Lines"
 msgstr "Líneas de Atributo de Producto Válidas"
 
 #. module: okticket_connector_product_synchronization
+#: code:addons/okticket_connector_product_synchronization/models/okticket_product_template.py:0
+#, python-format
+msgid "Value should be integer (not %s)"
+msgstr "El valor debe ser un entero (no %s)"
+
+#. module: okticket_connector_product_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__variant_seller_ids
 msgid "Variant Seller"
 msgstr "Variante del vendedor"
@@ -1086,3 +1123,8 @@ msgstr "Etiqueta de Unidad de Medida de peso"
 #: model:ir.model,name:okticket_connector_product_synchronization.model_okticket_product_template
 msgid "okticket.product.template"
 msgstr "Plantilla de producto de Okticket"
+
+#. module: okticket_connector_product_synchronization
+#: model_terms:ir.ui.view,arch_db:okticket_connector_product_synchronization.view_okticket_backend_form
+msgid "⇒ See Product Template Bindings"
+msgstr "⇒ Ver Bindings de productos"
