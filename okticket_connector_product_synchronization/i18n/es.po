@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 15:24+0000\n"
-"PO-Revision-Date: 2022-07-04 15:24+0000\n"
+"POT-Creation-Date: 2022-07-21 16:56+0000\n"
+"PO-Revision-Date: 2022-07-21 16:56+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -175,6 +175,11 @@ msgid "Expense Account"
 msgstr "Cuenta de gasto"
 
 #. module: okticket_connector_product_synchronization
+#: model_terms:ir.ui.view,arch_db:okticket_connector_product_synchronization.okticket_product_template_binding_view_search
+msgid "Expense name"
+msgstr "Gasto"
+
+#. module: okticket_connector_product_synchronization
 #: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__expense_policy
 msgid "Expenses and vendor bills can be re-invoiced to a customer.With this option, a validated expense can be re-invoice to a customer at its cost or sales price."
 msgstr "Los gastos y facturas de vendedor pueden ser refacturados a un cliente. Con esta opción, un gasto validado puede ser refacturado a un cliente con su coste o precio de venta."
@@ -245,7 +250,7 @@ msgid "Image"
 msgstr "Imagen"
 
 #. module: okticket_connector_product_synchronization
-#: code:addons/okticket_connector_product_synchronization/models/okticket_product_template_importer.py:140
+#: code:addons/okticket_connector_product_synchronization/models/okticket_product_template_importer.py:143
 #, python-format
 msgid "Import from Okticket DONE"
 msgstr "Importación de Okticket HECHA"
@@ -424,12 +429,17 @@ msgstr "Tipo de Okticket"
 #. module: okticket_connector_product_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__backend_id
 msgid "Okticket Backend"
-msgstr "Backend de Okticket"
+msgstr ""
 
 #. module: okticket_connector_product_synchronization
 #: model:ir.model,name:okticket_connector_product_synchronization.model_okticket_backend
 msgid "Okticket Backend Configuration"
-msgstr "Configuración de backend de Okticket"
+msgstr "Configuración de Okticket Backend"
+
+#. module: okticket_connector_product_synchronization
+#: model:ir.actions.act_window,name:okticket_connector_product_synchronization.action_okticket_product_template_binding
+msgid "Okticket Product Template Bindings"
+msgstr ""
 
 #. module: okticket_connector_product_synchronization
 #: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__service_tracking
@@ -514,6 +524,13 @@ msgid "Product Template"
 msgstr "Plantilla de producto"
 
 #. module: okticket_connector_product_synchronization
+#: model:ir.actions.act_window,name:okticket_connector_product_synchronization.action_open_okticket_product_template_binding
+#: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_backend__okticket_product_template_ids
+#: model_terms:ir.ui.view,arch_db:okticket_connector_product_synchronization.view_okticket_backend_form
+msgid "Product Template Bindings"
+msgstr "Bindings de productos"
+
+#. module: okticket_connector_product_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__type
 msgid "Product Type"
 msgstr "Tipo de producto"
@@ -582,6 +599,11 @@ msgstr "Línea de pedido de venta"
 #: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__list_price
 msgid "Sales Price"
 msgstr "Precio de venta"
+
+#. module: okticket_connector_product_synchronization
+#: model_terms:ir.ui.view,arch_db:okticket_connector_product_synchronization.okticket_product_template_binding_view_search
+msgid "Search Okticket Product Template Binding"
+msgstr "Buscar bindings de productos"
 
 #. module: okticket_connector_product_synchronization
 #: model:ir.model.fields,help:okticket_connector_product_synchronization.field_okticket_product_template__project_id
@@ -682,6 +704,12 @@ msgid "This field holds the image used as image for the product, limited to 1024
 msgstr "Este campo contiene la imagen usada para el producto, limitada a 1024x1024 px."
 
 #. module: okticket_connector_product_synchronization
+#: code:addons/okticket_connector_product_synchronization/models/okticket_product_template.py:65
+#, python-format
+msgid "This operator is not supported"
+msgstr "Este operador no está soportado"
+
+#. module: okticket_connector_product_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__service_type
 msgid "Track Service"
 msgstr "Seguimiento del Servicio"
@@ -752,6 +780,12 @@ msgid "Valid Product Attributes Without No Variant Attributes"
 msgstr ""
 
 #. module: okticket_connector_product_synchronization
+#: code:addons/okticket_connector_product_synchronization/models/okticket_product_template.py:67
+#, python-format
+msgid "Value should be integer (not %s)"
+msgstr "El valor debe ser un entero (no %s)"
+
+#. module: okticket_connector_product_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_product_synchronization.field_okticket_product_template__variant_seller_ids
 msgid "Variant Seller"
 msgstr "Variante del vendedor"
@@ -804,4 +838,10 @@ msgstr "Etiqueta de Unidad de Medida de peso"
 #. module: okticket_connector_product_synchronization
 #: model:ir.model,name:okticket_connector_product_synchronization.model_okticket_product_template
 msgid "okticket.product.template"
-msgstr "Plantilla de producto de Okticket"
+msgstr "Plantilla de producto"
+
+#. module: okticket_connector_product_synchronization
+#: model_terms:ir.ui.view,arch_db:okticket_connector_product_synchronization.view_okticket_backend_form
+msgid "⇒ See Product Template Bindings"
+msgstr "⇒ Ver Bindings de productos"
+

@@ -33,7 +33,7 @@
 {
     'name': 'Alia Okticket Connector Cost Center',
     'summary': 'Implements Okticket cost center operations.',
-    'version': '12.0.1.0.1',
+    'version': '12.0.1.0.3',
     'category': 'Connector',
     'depends': [
         'connector_okticket',
