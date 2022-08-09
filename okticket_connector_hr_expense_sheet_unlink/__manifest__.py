@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
     'name': 'Alia Okticket Connector Expense Sheet Synchronized Unlink',
-    'version': '15.0.1.0.2',
+    'version': '15.0.1.0.3',
     'category': 'Connector',
     'depends': [
         'okticket_connector_hr_expense_sheet',

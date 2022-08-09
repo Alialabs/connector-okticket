@@ -247,18 +247,25 @@ class HrExpenseBatchImporter(Component):
                 continue
 
             # Restricción de importación de gastos revisados
-            if only_reviewed and expense_ext_vals and 'review' not in expense_ext_vals:
+            if only_reviewed and expense_ext_vals and \
+                    ('review' not in expense_ext_vals or not expense_ext_vals['review']):
                 continue
 
             # Map to odoo data
             internal_data = mapper.map_record(expense_ext_vals).values()
 
             if binding:
-                # If exists, we update it  # TODO analizar error employee_id
+                # If exists, we update it
                 # del internal_data['backend_id']
                 # del internal_data['external_id']
                 # self.env['hr.expense'].browse(binding.odoo_id.id).write(internal_data)
+
+                if internal_data and 'company_id' in internal_data:
+                    # Elimina company_id por problemas de dependencias en write que produce error al actualizar
+                    del internal_data['company_id']
+
                 binding.write(internal_data)
+
             else:
                 values = internal_data.keys()
                 required_fields_not_accomplished = []
