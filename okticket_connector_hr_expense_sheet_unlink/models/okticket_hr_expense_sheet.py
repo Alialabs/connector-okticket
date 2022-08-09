@@ -32,6 +32,7 @@
 
 from odoo import api, fields, models, _
 from odoo.addons.component.core import Component
+from odoo.exceptions import UserError
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -94,3 +95,33 @@ class HrExpenseSheetAdapter(Component):
         }
         return okticketapi.general_request(url, "DELETE", {},
                                            headers=header, only_data=False, https=self.collection.https)
+
+    def link_expenses_sheet(self, sheet_external_id, expenses_to_link):
+        """
+        Adds error managing when it tries to link expenses to indicated expenses sheet
+        and the expense sheet is in a not valid state
+        :param sheet_external_id: Okticket external id of the expense sheet (char)
+        :param expenses_to_link: hr.expense list to link to Okticket expense sheet
+        """
+        result = False
+        try:
+            result = super(HrExpenseSheetAdapter, self).link_expenses_sheet(sheet_external_id, expenses_to_link)
+        except UserError as e:
+            # No puede cambiarse la hoja de gastos asignada a los gastos
+            # Se elimina la hoja de gastos en Odoo y Okticket (hoja que permanecería vacía)
+            # Los gastos permanecen sin hoja de gastos en Odoo
+
+            msg = _('\nError while trying to link expenses to Okticket expense sheet (id: %s): %s') % \
+                  (sheet_external_id, e)
+
+            # Log event
+            log_vals = {
+                'backend_id': self.backend_record.id,
+                'type': 'warning',
+                'msg': msg,
+            }
+            self.env['log.event'].add_event(log_vals)
+            _logger.error(msg)
+            self.delete_expense_sheet(sheet_external_id)
+
+        return result

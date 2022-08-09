@@ -7,8 +7,10 @@
 import logging
 
 from odoo.addons.component.core import Component
-from odoo.addons.component_event import skip_if
+
+from odoo import _
 from odoo import fields, models, api
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -109,12 +111,12 @@ class HrExpenseBatchImporter(Component):
         """
         hr_expense_sheet_obj = self.env['hr.expense.sheet']
         for expense_data in grouped_expenses:
-
+            new_sheet = False
             # Search domain
             sheet_domain = []
             for sheet_field, sheet_value in expense_data['group_fields'].items():
 
-                # TODO desacoplar esta comprobación!!
+                # TODO desacoplar esta comprobación
                 if sheet_field != 'analytic_ids' or sheet_value:
                     # Solo incluye el campo si es distinto a analytic_ids
                     # o si siendo analytic_ids tiene valor distinto de False
@@ -126,6 +128,8 @@ class HrExpenseBatchImporter(Component):
             }
 
             hr_expense_sheet = hr_expense_sheet_obj.search(sheet_domain)
+
+            # try:
             if hr_expense_sheet:  # Update
                 hr_expense_sheet.write(expense_sheet_values)
             else:  # Create
@@ -144,7 +148,9 @@ class HrExpenseBatchImporter(Component):
                 # Prepare de hojas de gastos
                 new_sheet_values = hr_expense_sheet_obj.prepare_expense_sheet_values(new_sheet_values)
                 new_sheet_values.update(expense_sheet_values)
-                hr_expense_sheet_obj.create(new_sheet_values)
+                new_sheet = hr_expense_sheet_obj.create(new_sheet_values)
+                if new_sheet and not new_sheet.okticket_bind_ids:
+                    new_sheet.unlink()  # Delete expense sheet. Some error occurs while Okticket sync.
 
     def sanitize_expenses(self, hr_expense_ids):
         """
@@ -195,6 +201,11 @@ class HrExpenseBatchImporter(Component):
 
 class HrExpenseSheet(models.Model):
     _inherit = 'hr.expense.sheet'
+
+    def delete_expense_sheet(self):
+        """Delete related expense sheet in Okticket"""
+        self.env['okticket.hr.expense.sheet'].sudo().delete_expense_sheet(self)
+        return True
 
     def _search_analytic_ids(self, operator, value):
         if not isinstance(value, list):

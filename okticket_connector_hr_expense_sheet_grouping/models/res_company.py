@@ -18,7 +18,7 @@ class ResCompany(models.Model):
         selection_add=[('standard', 'Standard'),
                        ('single_expense', 'Single expense sheet'),
                        ('no_grouping', 'No grouping')],
-        default='standard',
+        default='no_grouping',
         ondelete={
             'standard': 'set analytic',
             'single_expense': 'set analytic',
