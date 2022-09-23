@@ -213,6 +213,7 @@ class HrExpenseBatchImporter(Component):
         The ledger account of the related project is preferably assigned.
         If it does not have any, it is searched from within the product.
         """
+        okticket_account_id = False
         if record.get('cost_center_id'):
             cc_analytic_binder = self.env['okticket.account.analytic.account'].search([
                 ('external_id', '=', int(record['cost_center_id']))],
@@ -222,15 +223,15 @@ class HrExpenseBatchImporter(Component):
                 okticket_account_id = cc_analytic_binder.odoo_id.okticket_def_account_id \
                                               and cc_analytic_binder.odoo_id.okticket_def_account_id.id \
                                               or False
-                if not okticket_account_id:
-                    # Ledger account from within the product
-                    existing = self.get_base_product(record)
-                    if existing.property_account_expense_id:
-                        okticket_account_id = existing.property_account_expense_id.id
-                if okticket_account_id:
-                    return {
-                        'account_id': okticket_account_id,
-                    }
+        if not okticket_account_id:
+            # Ledger account from within the product
+            existing = self.get_base_product(record)
+            if existing.property_account_expense_id:
+                okticket_account_id = existing.property_account_expense_id.id
+        if okticket_account_id:
+            return {
+                'account_id': okticket_account_id,
+            }
 
     @mapping
     def reference(self, record):
