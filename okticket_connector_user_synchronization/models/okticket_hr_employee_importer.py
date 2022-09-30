@@ -105,7 +105,7 @@ class HrEmployeeBatchImporter(Component):
                 if internal_data.get('odoo_id'):
                     # User exists in Odoo but its binding is not updated
                     binding = self.model.search([(binder._odoo_field, '=', internal_data['odoo_id']),
-                                                 (binder._backend_field, '=', self.backend_record.id)])
+                                                 (binder._backend_field, '=', self.collection.id)])
                 if not binding:
                     # User or user binding do not exist in Odoo
                     binding = self.model.with_context(ignore_okticket_synch=True).create(internal_data)
