@@ -48,11 +48,6 @@
                     </div>
                     <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                 </field>
-
-                <xpath expr="//form/sheet/div[1]" position="before">
-                    <widget name="web_ribbon" title="Deleted in Okticket" bg_color="bg-danger"
-                            attrs="{'invisible': [('okticket_deleted', '=', False)]}"/>
-                </xpath>
             </field>
         </record>
 
