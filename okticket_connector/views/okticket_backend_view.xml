@@ -26,7 +26,7 @@
                         <group name="okticket" string="Okticket Configuration"
                                groups="okticket_connector.group_okticket_conn_user">
                             <group colspan="4" col="4">
-                                <field name="location" placeholder="e.g. http://dev.okticket.es/api/public"
+                                <field name="location"
                                        colspan="4"/>
                                 <field name="key" colspan="2"/>
                                 <button name="check_auth"

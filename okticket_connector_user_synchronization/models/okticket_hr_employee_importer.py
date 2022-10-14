@@ -20,10 +20,13 @@ class HrEmployeeMapper(Component):
     _fields_mapping = {'work_email': 'email'}
 
     def filters_fields_conversion(self, filters):
+        processed_filters = {}
         for filter_key in filters.keys():
+            processed_filter_key = filter_key
             if filter_key in self._fields_mapping:
-                filters[self._fields_mapping[filter_key]] = filters.pop(filter_key)
-        return filters
+                processed_filter_key = self._fields_mapping[filter_key]
+            processed_filters[processed_filter_key] = filters[filter_key]
+        return processed_filters
 
     @mapping
     def external_id(self, record):
