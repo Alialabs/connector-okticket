@@ -6,7 +6,7 @@
 {
     'name': 'Alia Okticket Expense Sheet Grouping',
     'summary': 'Implements different expenses grouping in expenses sheet.',
-    'version': '15.0.1.0.3',
+    'version': '15.0.1.0.4',
     'category': 'Connector',
     'depends': [
         'okticket_connector',
