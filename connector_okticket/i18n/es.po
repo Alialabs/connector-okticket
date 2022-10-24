@@ -744,6 +744,11 @@ msgstr "Id de Okticket"
 msgid "Okticket"
 msgstr "Okticket"
 
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_expense_wizard__accounted_state
+msgid "Okticket Accounted State Expense"
+msgstr "Estado \"contabilizado\" del gasto en Okticket"
+
 #. module: connector_okticket
 #: model:ir.actions.act_window,name:connector_okticket.action_okticket_backend
 #: model:ir.model.fields,field_description:connector_okticket.field_okticket_binding__backend_id
@@ -949,8 +954,8 @@ msgstr "Buscar bindings de gastos"
 
 #. module: connector_okticket
 #: model_terms:ir.ui.view,arch_db:connector_okticket.expense_wizard_view
-msgid "Set accounted false"
-msgstr "Asignar valor 'false' a 'contabilizado'"
+msgid "Set accounted"
+msgstr "Actualizar estado de gasto en Okticket"
 
 #. module: connector_okticket
 #: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense__sheet_id_state
