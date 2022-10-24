@@ -4,7 +4,7 @@
 
 import logging
 
-from odoo import _, models
+from odoo import _, models, fields
 
 _logger = logging.getLogger(__name__)
 
@@ -12,10 +12,13 @@ _logger = logging.getLogger(__name__)
 class ExpenseWizard(models.TransientModel):
     _name = 'okticket.expense.wizard'
 
-    def set_accounted_to_false(self):
+    accounted_state = fields.Boolean('Okticket Accounted State Expense', default=False)
+
+    def set_accounted_state(self):
+        self.ensure_one()
         active_ids = self.env.context.get('active_ids')
         for expense in self.env['hr.expense'].browse(active_ids):
-            expense._okticket_accounted_expense(new_state=False)  # 'accounted'='false' in Okticket
+            expense._okticket_accounted_expense(new_state=self.accounted_state)
 
     def assign_default_expense_account(self):
         info_msg_refs = []
