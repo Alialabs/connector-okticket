@@ -255,55 +255,67 @@ class HrExpenseBatchImporter(Component):
 
         for expense_ext_vals in backend_adapter.search(filters):
 
-            # Searchs if the OkTicket id already exists in odoo
-            binding = binder.to_internal(expense_ext_vals.get('_id'))
+            try:
+                # Searchs if the OkTicket id already exists in odoo
+                binding = binder.to_internal(expense_ext_vals.get('_id'))
 
-            # Gasto eliminado (lógico) en Okticket
-            if 'deleted_at' in expense_ext_vals and expense_ext_vals['deleted_at']:  # deleted_at not null
-                if binding:
-                    self.delete_expense_synchro(binding)
-                continue
-
-            # Restricción de importación de gastos revisados
-            if only_reviewed and expense_ext_vals and 'review' not in expense_ext_vals:
-                continue
-
-            # Map to odoo data
-            internal_data = mapper.map_record(expense_ext_vals).values()
-
-            if binding:
-                # If exists, we update it  # TODO analizar error employee_id
-                # del internal_data['backend_id']
-                # del internal_data['external_id']
-                # self.env['hr.expense'].browse(binding.odoo_id.id).write(internal_data)
-                binding.write(internal_data)
-            else:
-                values = internal_data.keys()
-                required_fields_not_accomplished = []
-                for req_field in required_fields:
-                    if req_field not in values:
-                        required_fields_not_accomplished.append(req_field)
-                if required_fields_not_accomplished:
-                    msg = _('Importing expense ID: %s. It does not have required fields: %s') \
-                          % (expense_ext_vals.get('_id'), required_fields_not_accomplished)
-                    # Log event
-                    log_vals = {
-                        'backend_id': self.backend_record.id,
-                        'type': 'warning',
-                        'msg': msg,
-                    }
-                    self.env['log.event'].add_event(log_vals)
-                    msg = _('\nError: ') + msg
-                    _logger.error(msg)
+                # Gasto eliminado (lógico) en Okticket
+                if 'deleted_at' in expense_ext_vals and expense_ext_vals['deleted_at']:  # deleted_at not null
+                    if binding:
+                        self.delete_expense_synchro(binding)
                     continue
+
+                # Restricción de importación de gastos revisados
+                if only_reviewed and expense_ext_vals and 'review' not in expense_ext_vals:
+                    continue
+
+                # Map to odoo data
+                internal_data = mapper.map_record(expense_ext_vals).values()
+
+                if binding:
+                    # If exists, we update it  # TODO analizar error employee_id
+                    # del internal_data['backend_id']
+                    # del internal_data['external_id']
+                    # self.env['hr.expense'].browse(binding.odoo_id.id).write(internal_data)
+                    binding.write(internal_data)
                 else:
-                    binding = self.model.create(internal_data)
-            okticket_hr_expense_ids.append(binding.id)
-            # Finally, we bind both, so the next time we import
-            # the record, we'll update the same record instead of
-            # creating a new on
-            binder.bind(expense_ext_vals.get('_id'), binding)
-            _logger.info('Imported')
+                    values = internal_data.keys()
+                    required_fields_not_accomplished = []
+                    for req_field in required_fields:
+                        if req_field not in values:
+                            required_fields_not_accomplished.append(req_field)
+                    if required_fields_not_accomplished:
+                        msg = _('Importing expense ID: %s. It does not have required fields: %s') \
+                              % (expense_ext_vals.get('_id'), required_fields_not_accomplished)
+                        # Log event
+                        log_vals = {
+                            'backend_id': self.backend_record.id,
+                            'type': 'warning',
+                            'msg': msg,
+                        }
+                        self.env['log.event'].add_event(log_vals)
+                        msg = _('\nError: ') + msg
+                        _logger.error(msg)
+                        continue
+                    else:
+                        binding = self.model.create(internal_data)
+                okticket_hr_expense_ids.append(binding.id)
+                # Finally, we bind both, so the next time we import
+                # the record, we'll update the same record instead of
+                # creating a new on
+                binder.bind(expense_ext_vals.get('_id'), binding)
+                _logger.info('Imported')
+
+            except Exception as e:
+                msg = _('\nError: %s\n') % e
+                # Log event
+                self.env['log.event'].add_event({
+                    'backend_id': self.backend_record.id,
+                    'type': 'error',
+                    'msg': msg,
+                })
+                _logger.error(msg)
+
         _logger.info(
             'Import from Okticket DONE')
 
