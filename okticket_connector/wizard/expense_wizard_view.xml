@@ -9,7 +9,7 @@
         <field name="model">okticket.expense.wizard</field>
         <field name="arch" type="xml">
             <form>
-                <footer>
+                <sheet>
                     <group>
                         <field name="accounted_state"/>
                         <button name="set_accounted_state" string="Set accounted" type="object"
@@ -19,7 +19,7 @@
 <!--                    <button name="assign_default_expense_account" string="Assign default expenses to accounts"-->
 <!--                            type="object" class="btn-primary"/>-->
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
-                </footer>
+                </sheet>
             </form>
         </field>
     </record>
