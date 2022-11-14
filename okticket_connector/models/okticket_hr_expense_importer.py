@@ -350,7 +350,7 @@ class HrExpenseBatchImporter(Component):
                 }
             })
         else:
-            # All expenses not in "sent" state (this is, state = "draft") are eliminated before new import or
+            # All expenses not in "sent" state (this is, state = "draft") are deleted before new import or
             # synchronization of expenses from OkTicket. This way, we ensure Odoo-OkTicket synchronization.
             states_to_remove = ['draft']
             expenses_to_remove = self.env['hr.expense'].search([('state', 'in', states_to_remove)])

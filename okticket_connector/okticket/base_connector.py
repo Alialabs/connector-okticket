@@ -226,6 +226,7 @@ class BaseConnector(object):
                         "Not fount object!!! Operations will continue...")
                     # It doesn't find an object with OkTicket id
                     result = True
+                    log['type'] = 'error'
                 raise ResourceNotFoundError
             elif response.status == 409:
                 raise ConflictError
@@ -233,15 +234,15 @@ class BaseConnector(object):
                 raise ImpersonateError
             elif response.status == 413:
                 raise RequestEntityTooLargeError
-            elif response.status == 422:
-                errors = response.json()['errors']
-                raise ValidationError(map(str, (', '.join(e if e else ': '.join(e) for e in errors))))
+            elif response.status == 422:  # Unprocessable Entity
+                raise ValidationError(response.reason)
             elif response.status == 500:
                 raise ServerError
             elif response.status == 204:
                 _logger.warning("DELETE done...")
                 # It doesn't find an object with OkTicket id
                 result = True
+                log['type'] = 'error'
             else:
                 raise UnknownError(response.status)
 
