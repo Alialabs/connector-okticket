@@ -30,8 +30,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
-from odoo import _, models, fields
+from odoo import _, models, fields, api
 
+import logging
 _logger = logging.getLogger(__name__)
 
 
