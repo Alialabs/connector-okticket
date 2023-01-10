@@ -60,6 +60,7 @@ class HrEmployeeMapper(Component):
 class HrEmployeeBatchImporter(Component):
     _name = 'okticket.employee.batch.importer'
     _apply_on = 'okticket.hr.employee'
+    _inherit = 'okticket.import.mapper'
     _usage = 'importer'
 
     def run(self, filters=None, options=None):
