@@ -14,7 +14,7 @@ def generate_log_event_content(values):
     else:
         content = values.get('tag', 'OP') + ' (' + str(values['status']) + '): ' + values['url']
         if values.get('type', '') == 'error':
-            content = content + ' - ' + values.get('result')
+            content = str(content) + ' - ' + str(values.get('result'))
     return content
 
 
