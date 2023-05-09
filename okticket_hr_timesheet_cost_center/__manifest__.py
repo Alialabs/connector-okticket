@@ -20,5 +20,5 @@
     ],
     'application': False,
     # 'installable': True,
-    'auto_install': ['hr_timesheet', 'okticket_connector_cost_center']
+    # 'auto_install': ['hr_timesheet', 'okticket_connector_cost_center']
 }

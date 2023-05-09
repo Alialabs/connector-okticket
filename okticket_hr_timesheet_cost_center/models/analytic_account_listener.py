@@ -10,5 +10,5 @@ class AccountAnalyticCostCenterBindingExportListener(Component):
     _inherit = 'account.analytic.account.binding.export.listener'
 
     def on_record_create(self, record, fields=None):
-        if ('ignore_okticket_synch' not in self.env.context or not self.env.context['ignore_okticket_synch']):
+        if 'ignore_okticket_synch' not in self.env.context or not self.env.context['ignore_okticket_synch']:
             super(AccountAnalyticCostCenterBindingExportListener, self).on_record_create(record, fields=fields)

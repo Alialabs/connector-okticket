@@ -5,13 +5,13 @@
 <odoo>
     <data>
 
-        <record id="action_okticket_log" model="ir.actions.act_window">
-            <field name="name">Okticket Backend Logs</field>
-            <field name="res_model">log.event</field>
-            <field name="view_mode">tree</field>
-            <field name="view_id" ref="log_event_view_tree"/>
-            <field name="domain">[('backend_id', '=', active_id)]</field>
-        </record>
+<!--        <record id="action_okticket_log" model="ir.actions.act_window">-->
+<!--            <field name="name">Okticket Backend Logs</field>-->
+<!--            <field name="res_model">log.event</field>-->
+<!--            <field name="view_mode">tree</field>-->
+<!--            <field name="view_id" ref="log_event_view_tree"/>-->
+<!--            <field name="domain">[]</field>-->
+<!--        </record>-->
 
         <record id="view_okticket_backend_form" model="ir.ui.view">
             <field name="name">okticket.backend.form</field>
