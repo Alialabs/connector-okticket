@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -25,6 +26,10 @@ class OkticketHrExpenseSheetBindingExportListener(Component):
         """ Expenses in a expense sheet were modified """
         if fields and 'expense_line_ids' in fields:
             self.export_expense_sheet(record)
+
+    @skip_if(lambda self, record, **kwargs: self.no_connector_export(record))
+    def on_record_unlink(self, record, fields=None):
+        record.delete_expense_sheet()
 
     def export_expense_sheet(self, record):
         if not record.employee_id.okticket_user_id or \

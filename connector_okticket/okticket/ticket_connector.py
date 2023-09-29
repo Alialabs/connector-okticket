@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -66,6 +67,10 @@ class OkTicketOpenConnector(BaseConnector):
 
     def find_expense_sheets(self, params=False, https=False):
         path = "/reports?with=user,expenses"
+        return self.find(path, params=params, https=https, company_in_header=True)
+
+    def find_cost_center(self, params=False, https=False):
+        path = "/cost-centers"
         return self.find(path, params=params, https=https, company_in_header=True)
 
     def autocomplete_relational_fields(self, data):

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+     @author: Alia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+
+    <report
+            id="action_report_img_hr_expense"
+            string="Expenses Image Report"
+            model="hr.expense"
+            report_type="qweb-pdf"
+            name="okticket_hr_expense_reporting.report_img_expense"
+            file="okticket_hr_expense_reporting.report_img_expense"
+    />
+
+    <report
+            id="action_report_img_hr_expense_sheet"
+            string="Expenses Sheet Image Report"
+            model="hr.expense.sheet"
+            report_type="qweb-pdf"
+            name="okticket_hr_expense_reporting.report_img_expense_sheet"
+            file="okticket_hr_expense_reporting.report_img_expense_sheet"
+    />
+
+</odoo>

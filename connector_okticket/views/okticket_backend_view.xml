@@ -5,6 +5,14 @@
 <odoo>
     <data>
 
+        <!--        <record id="action_okticket_log" model="ir.actions.act_window">-->
+        <!--            <field name="name">Okticket Backend Logs</field>-->
+        <!--            <field name="res_model">log.event</field>-->
+        <!--            <field name="view_mode">tree</field>-->
+        <!--            <field name="view_id" ref="log_event_view_tree"/>-->
+        <!--            <field name="domain">[]</field>-->
+        <!--        </record>-->
+
         <record id="view_okticket_backend_form" model="ir.ui.view">
             <field name="name">okticket.backend.form</field>
             <field name="model">okticket.backend</field>
@@ -18,7 +26,7 @@
                         <group name="okticket" string="Okticket Configuration"
                                groups="connector_okticket.group_okticket_conn_user">
                             <group colspan="4" col="4">
-                                <field name="location" placeholder="e.g. http://dev.okticket.es/api/public"
+                                <field name="location"
                                        colspan="4"/>
                                 <field name="key" colspan="2"/>
                                 <button name="check_auth"
@@ -51,11 +59,34 @@
                             </group>
                         </group>
                         <separator/>
-                        <group name="okticket" string="Backend Log" groups="connector_okticket.group_okticket_conn_user">
-                            <field name="log_event_ids" nolabel="1"
-                                   domain="[('backend_id', '=', active_id)]"/>
+                        <group name="expense_config" string="Expenses import Configuration"
+                               groups="connector_okticket.group_okticket_conn_user">
+                            <field name="import_expenses_since"/>
+                            <field name="ignore_import_expenses_since"/>
+                            <field name="import_only_reviewed_expenses"/>
                         </group>
                         <separator/>
+                        <notebook name="bindings">
+                            <page string="Expenses Bindings" name="hr_expense_bindings">
+                                <button name="%(action_open_okticket_hr_expense_binding)d"
+                                        string="⇒ See Hr Expense Bindings"
+                                        type="action"
+                                        class="oe_link"/>
+                                <field name="okticket_hr_expense_ids" invisible="1">
+                                    <tree editable="top" limit="80">
+                                        <field name="id"/>
+                                        <field name="sync_date"/>
+                                        <field name="odoo_id"/>
+                                        <field name="external_id"/>
+                                        <field name="backend_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <separator/>
+                        <button name="%(action_open_okticket_log)d" string="⇒ See Backend Logs" type="action"
+                                class="oe_link"/>
+
                     </sheet>
                 </form>
             </field>
@@ -77,27 +108,6 @@
             <field name="res_model">okticket.backend</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_okticket_backend_tree"/>
-        </record>
-
-        <record id="log_event_view_tree" model="ir.ui.view">
-            <field name="name">log.event.view.tree</field>
-            <field name="model">log.event</field>
-            <field name="arch" type="xml">
-                <tree string="Log events" decoration-warning="type=='warning'" decoration-danger="type=='error'">
-                    <field name="datetime_event"/>
-                    <field name="type"/>
-                    <field name="tag"/>
-                    <field name="content"/>
-                    <field name="backend_id" invisible="1"/>
-                </tree>
-            </field>
-        </record>
-
-        <record id="action_okticket_log" model="ir.actions.act_window">
-            <field name="name">Okticket Backend Logs</field>
-            <field name="res_model">log.event</field>
-            <field name="view_mode">tree</field>
-            <field name="view_id" ref="log_event_view_tree"/>
         </record>
 
     </data>
