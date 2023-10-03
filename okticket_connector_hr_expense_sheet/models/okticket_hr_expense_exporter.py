@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -30,10 +31,10 @@ class HrExpenseExporter(Component):
                 backend_adapter.write_expense(okticket_expense.external_id, vals_dict)
         _logger.info(_('Modify expense accounted field in Okticket'))
 
-    def remove_expense(self, expense):
-        backend_adapter = self.component(usage='backend.adapter')
-        if expense:
-            okticket_expense = self.env['okticket.hr.expense'].search([('odoo_id', '=', expense.id)])
-            if okticket_expense:
-                backend_adapter.remove_expense(okticket_expense.external_id)
-        _logger.info(_('Removed expense in Okticket'))
+    # def remove_expense(self, expense):
+    #     backend_adapter = self.component(usage='backend.adapter')
+    #     if expense:
+    #         okticket_expense = self.env['okticket.hr.expense'].search([('odoo_id', '=', expense.id)])
+    #         if okticket_expense:
+    #             backend_adapter.remove_expense(okticket_expense.external_id)
+    #     _logger.info(_('Removed expense in Okticket'))

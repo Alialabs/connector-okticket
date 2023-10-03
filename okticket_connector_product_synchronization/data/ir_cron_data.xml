@@ -12,10 +12,11 @@
             <field name="interval_number">2</field>
             <field name="interval_type">hours</field>
             <field name="numbercall">-1</field>
-            <field name="doall" eval="False" />
-            <field name="model_id" ref="okticket_connector_product_synchronization.model_okticket_backend"/>
+            <field name="doall" eval="False"/>
             <field name="state">code</field>
-            <field name="code">model._scheduler_synchronize_products()</field>
+            <field name="model">okticket.backend</field>
+            <field name="function">_scheduler_synchronize_products</field>
+            <field name="args" eval="'()'"/>
         </record>
 
     </data>

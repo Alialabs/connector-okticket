@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -8,6 +9,7 @@ from datetime import datetime
 from odoo import _
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -59,6 +61,23 @@ class HrExpenseExporter(Component):
         expense_sheet.write({'name': new_name_to_test})
         return backend_adapter.create(expense_sheet)
 
+    def delete_expense_sheet(self, exp_sheet):
+        """
+        Run the synchronization for all users, using the connector crons.
+        """
+        backend_adapter = self.component(usage='backend.adapter')
+        if exp_sheet:
+            # Eliminar expense.sheet
+            okticket_exp_sheet_ids = [okticket_exp_sheet.id for okticket_exp_sheet in exp_sheet]
+            for ok_exp_sheet in self.env['okticket.hr.expense.sheet'].search(
+                    [('odoo_id', 'in', okticket_exp_sheet_ids)]):
+                try:
+                    backend_adapter.delete_expense_sheet(ok_exp_sheet.external_id)
+                except Exception as e:
+                    _logger.error('\n\n>>> Deleting error in expense sheet id %s :'
+                                  'does not exist in Okticket\n', ok_exp_sheet.external_id)
+        _logger.info('Deleted related Expense Sheet in Okticket')
+
     def run(self, *args):
         """
         Creates new expenses sheet and update expenses that contains
@@ -97,5 +116,7 @@ class HrExpenseExporter(Component):
                 backend_adapter.unlink_expenses_sheet(expenses_external_ids_in_oktk)
             if expenses_to_add:
                 # Add expenses from Odoo expenses sheet to Okticket expenses sheet
-                backend_adapter.link_expenses_sheet(binding.external_id, expenses_to_add)
+                link_result = backend_adapter.link_expenses_sheet(binding.external_id, expenses_to_add)
+                if not link_result:
+                    binding.unlink()  # Delete binding. Some error occurs while linking.
         return True

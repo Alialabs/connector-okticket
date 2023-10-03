@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -5,7 +6,7 @@
 import logging
 
 from odoo import api, fields, models
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 from odoo.tools.translate import _
 
 _logger = logging.getLogger(__name__)
@@ -132,6 +133,13 @@ class OkticketBackend(models.Model):
     https = fields.Boolean(string='HTTPS protocol',
                            default=True)
 
+    # Expenses import config
+    import_expenses_since = fields.Datetime(string='Import Expenses Since')
+    ignore_import_expenses_since = fields.Boolean(string='Ignore Import Expenses Since',
+                                                  default=False)
+    import_only_reviewed_expenses = fields.Boolean(string='Import Only Reviewed Expenses',
+                                                   default=True)
+
     def get_default_backend_okticket_connector(self):
         """
         :return: backends with 'company_id' like the company of the current user
@@ -153,8 +161,8 @@ class OkticketBackend(models.Model):
             _logger.error('Exception: %s\n', e)
             import traceback
             traceback.print_exc()
-            raise Warning(_('Could not connect to Okticket'))
-        raise Warning(
+            raise (e or UserError(_('Could not connect to Okticket')))
+        raise UserError(
             _('Connection test succeeded\n'
               'Everything seems properly set up'))
 

@@ -5,18 +5,50 @@
 <openerp>
     <data>
 
-        <record id="okticket_expense_sheets_view" model="ir.ui.view">
-            <field name="name">okticket.expense.sheets.project.view</field>
+        <record id="view_hr_expense_sheet_form" model="ir.ui.view">
+            <field name="name">okticket.view.hr.expense.sheets.form.view</field>
             <field name="model">hr.expense.sheet</field>
             <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_form"/>
+            <field name="mode">primary</field>
             <field name="arch" type="xml">
-                <notebook position="inside">
-                    <page name="okticket_conn_conf" string="OkTicket Conf.">
-                        <group>
-                            <field name="okticket_expense_sheet_id" string="Expense_sheet_id"/>
-                        </group>
-                    </page>
-                </notebook>
+
+                <xpath expr="//sheet/group[last()]" position="replace"/>
+                <xpath expr="//field[@name='expense_line_ids']" position="replace">
+
+                    <notebook>
+                        <page name="expenses" string="Expense">
+                            <field name="expense_line_ids" nolabel="1" widget="many2many"
+                                   domain="[('state', '=', 'draft')]" options="{'not_delete': True}"
+                                   context="{'expense_adding_line': True}">
+                                <tree>
+                                    <field name="date"/>
+                                    <field name="name"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                                    <field name="message_unread" invisible="1"/>
+                                    <field name="attachment_number" string=" "/>
+                                    <button name="action_get_attachment_view" string="View Attachments" type="object"
+                                            icon="fa-paperclip"/>
+                                    <field name="tax_ids" widget="many2many_tags"/>
+                                    <field name="total_amount" widget="monetary"/>
+                                </tree>
+                            </field>
+                            <group>
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="expense_total">
+                                    <field name="total_amount" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="okticket_conn_conf" string="OkTicket Conf.">
+                            <group>
+                                <field name="okticket_expense_sheet_id" string="Expense_sheet_id"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </xpath>
+
             </field>
         </record>
 

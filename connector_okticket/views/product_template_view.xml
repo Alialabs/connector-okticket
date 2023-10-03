@@ -18,7 +18,7 @@
                         </group>
                         <group string="Rebillable Info">
                             <field name="rebillable_prod_id"/>
-                            <field name="no_rebillable_prod_ids" readonly="1"/>
+                            <field name="no_rebillable_prod_ids" widget="many2many_tags" readonly="1"/>
                         </group>
                         <group string="Invoice version Info">
                             <field name="invoice_prod_id"/>

@@ -11,3 +11,4 @@ access_okticket_binding_manager,access_okticket_binding_manager,model_okticket_b
 access_log_event_all,access_log_event_all,model_log_event,,1,0,0,0
 access_log_event_user,access_log_event_user,model_log_event,connector_okticket.group_okticket_conn_user,1,1,1,1
 access_log_event_manager,access_log_event_manager,model_log_event,connector_okticket.group_okticket_conn_manager,1,1,1,1
+access_okticket_expense_wizard_all,access_okticket_expense_wizard_all,model_okticket_expense_wizard,,1,1,1,1

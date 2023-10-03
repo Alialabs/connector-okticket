@@ -1,11 +1,13 @@
+# -*- coding: utf-8 -*-
 # Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-import http.client
+import httplib
 import json
 import logging
-import urllib.parse
+import urllib
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -136,13 +138,19 @@ class BaseConnector(object):
                 result = self.general_request(url, type_request, fields_dict, headers=headers,
                                               header_gen_method=header_gen_method, params=params,
                                               raw_response=raw_response, only_data=only_data, https=https)
+
+        if result and 'result' in result and not result['result'] \
+                and 'log' in result and result['log'].get('type', '') == 'error':
+            error_msg = "Error status %s: %s" % (result['log']['status'], result['log']['result'])
+            raise UserError(error_msg)
+
         return result
 
     def get_http_connection(self, https=False):
         if https:
-            conn = http.client.HTTPSConnection(self.http_client_conn_url)
+            conn = httplib.HTTPSConnection(self.http_client_conn_url)
         else:
-            conn = http.client.HTTPConnection(self.http_client_conn_url)
+            conn = httplib.HTTPConnection(self.http_client_conn_url)
         return conn
 
     def process_request(self, url, type_request, params=None, data=None, headers=None, raw_response=None,
@@ -153,7 +161,7 @@ class BaseConnector(object):
         assert self.http_client_conn_url, "http_client_conn_url param is required"
 
         if params:  # URL params
-            params = urllib.parse.urlencode(params)
+            params = urllib.urlencode(params)
             url = url + "?" + params if type_request == "GET" and params else url
 
         conn = self.get_http_connection(https=https)
@@ -162,7 +170,7 @@ class BaseConnector(object):
             response = self.request_base(url, type_request, conn, params=params, data=payload_json, headers=headers,
                                          raw_response=raw_response)
             result = response['result']
-            if only_data:
+            if only_data and result:
                 result = result.get('data')
                 # Goes through all the pages
                 if response['result'].get('links'):
@@ -219,6 +227,7 @@ class BaseConnector(object):
                         "Not fount object!!! Operations will continue...")
                     # It doesn't find an object with OkTicket id
                     result = True
+                    log['type'] = 'error'
                 raise ResourceNotFoundError
             elif response.status == 409:
                 raise ConflictError
@@ -226,15 +235,15 @@ class BaseConnector(object):
                 raise ImpersonateError
             elif response.status == 413:
                 raise RequestEntityTooLargeError
-            elif response.status == 422:
-                errors = response.json()['errors']
-                raise ValidationError(map(str, (', '.join(e if e else ': '.join(e) for e in errors))))
+            elif response.status == 422:  # Unprocessable Entity
+                raise ValidationError(response.reason)
             elif response.status == 500:
                 raise ServerError
             elif response.status == 204:
                 _logger.warning("DELETE done...")
                 # It doesn't find an object with OkTicket id
                 result = True
+                log['type'] = 'error'
             else:
                 raise UnknownError(response.status)
 

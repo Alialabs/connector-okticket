@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -14,7 +15,7 @@ def generate_log_event_content(values):
     else:
         content = values.get('tag', 'OP') + ' (' + str(values['status']) + '): ' + values['url']
         if values.get('type', '') == 'error':
-            content = content + ' - ' + values.get('result')
+            content = str(content) + ' - ' + str(values.get('result'))
     return content
 
 

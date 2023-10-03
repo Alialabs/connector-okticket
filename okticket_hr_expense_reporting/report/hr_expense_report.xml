@@ -3,55 +3,49 @@
      @author: Alia
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
 <odoo>
+    <data>
 
-    <template id="report_img_expense">
-        <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="expense">
+        <template id="report_img_expense">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="expense">
                     <t t-call="okticket_hr_expense_reporting.okticket_external_layout">
-                    <div class="page">
-                      <div style="text-align:center;font-family: helvetica;">
-                        <t t-if="expense.analytic_account_id">
-                          <p class="text-uppercase">
-                            <strong>
-                              <span t-field="expense.analytic_account_id.name"/>
-                            </strong>
-                            <br/>
-                          </p>
-                        </t>
-                        <t t-if="expense.product_id">
-                          <p class="text-uppercase">
-                            <SPAN T-FIELD="EXPENSE.PRODUCT_ID.NAME"/>
-                          </p>
-                        </t>
-                      </div>
-                      <div style="text-align:center;font-family: helvetica;">
-                        <t t-if="expense.okticket_img">
-                          <img t-if="expense.okticket_img" t-attf-src="data:image/*;base64,{{expense.okticket_img}}" style="max-height: 750px;"/>
-                        </t>
-                        <t t-else="">
-                            <strong>
-                                <i>
-                                  <p class="text-danger">
-                                  IMG N.A.
-                                  </p>
-                                </i>
-                            </strong>
-                        </t>
-                      </div>
-                    </div>
+                        <div class="page">
+                            <div style="text-align:center;font-family: helvetica;">
+                                <t t-if="expense.analytic_account_id">
+                                    <p class="text-uppercase">
+                                        <strong>
+                                            <span t-field="expense.analytic_account_id.name"/>
+                                        </strong>
+                                        <br/>
+                                    </p>
+                                </t>
+                                <t t-if="expense.product_id">
+                                    <p class="text-uppercase">
+                                        <SPAN T-FIELD="EXPENSE.PRODUCT_ID.NAME"/>
+                                    </p>
+                                </t>
+                            </div>
+                            <div style="text-align:center;font-family: helvetica;">
+                                <t t-if="expense.okticket_img">
+                                    <img t-if="expense.okticket_img"
+                                         t-attf-src="data:image/*;base64,{{expense.okticket_img}}"
+                                         style="max-height: 750px;"/>
+                                </t>
+                                <t t-else="">
+                                    <strong>
+                                        <i>
+                                            <p class="text-danger">
+                                                IMG N.A.
+                                            </p>
+                                        </i>
+                                    </strong>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
                 </t>
             </t>
-        </t>
-    </template>
+        </template>
 
-    <report
-        id="action_report_img_hr_expense"
-        string="Expenses Image Report"
-        model="hr.expense"
-        report_type="qweb-pdf"
-        name="okticket_hr_expense_reporting.report_img_expense"
-        file="okticket_hr_expense_reporting.report_img_expense"
-        print_report_name="'Expenses'"
-    />
-
+    </data>
 </odoo>

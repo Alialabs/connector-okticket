@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -6,6 +7,7 @@ import logging
 
 from odoo import _
 from odoo import models, fields, api
+from odoo.exceptions import UserError
 from odoo.addons.component.core import AbstractComponent
 
 _logger = logging.getLogger(__name__)
@@ -49,7 +51,7 @@ class OkticketBinding(models.AbstractModel):
                 _logger.error('Exception: %s\n', e)
                 import traceback
                 traceback.print_exc()
-                raise Warning(_('Could not connect to Okticket'))
+                raise (e or UserError(_('Could not connect to Okticket')))
 
     @api.model
     def import_record(self, backend, filters=False):
@@ -65,20 +67,3 @@ class OkticketBinding(models.AbstractModel):
         with backend.work_on(self._name) as work:
             exporter = work.component(usage='record.exporter')
             return exporter.run(*args)
-
-
-class OkticketBinder(AbstractComponent):
-    _name = 'okticket.binder'
-    _inherit = ['base.binder', 'base.okticket.connector']
-    _description = 'Okticket Binder'
-
-    backend_id = fields.Many2one(
-        'okticket.backend', 'Okticket Backend', required=True,
-        ondelete='restrict'
-    )
-    okticket_id = fields.Char('ID in Okticket', required=True)
-
-    _sql_constraints = [
-        ('okticket_uniq', 'unique(backend_id, okticket_id)',
-         'A record with same ID on OkTicket already exists.'),
-    ]

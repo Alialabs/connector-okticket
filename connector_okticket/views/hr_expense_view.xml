@@ -5,13 +5,24 @@
 <odoo>
     <data>
 
+        <record id="hr_expense_view_expenses_analysis_tree_okticket" model="ir.ui.view">
+            <field name="name">okticket.hr.expense.tree</field>
+            <field name="model">hr.expense</field>
+            <field name="inherit_id" ref="hr_expense.view_expenses_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='analytic_account_id']" position="after">
+                    <field name="is_invoice" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
         <record model="ir.ui.view" id="okticket_hr_expense_view">
             <field name="name">okticket.hr.expense.form</field>
             <field name="model">hr.expense</field>
-            <field name="inherit_id" ref="hr_expense.hr_expense_view_form"/>
+            <field name="inherit_id" ref="hr_expense.hr_expense_form_view"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <xpath expr='//group/group[last()]' position='replace'/>
+<!--                <xpath expr='//group/group[last()]' position='replace'/>-->
                 <field name="tax_ids" position="after">
                     <field name="okticket_img" widget="image"/>
                 </field>
@@ -19,17 +30,19 @@
                     <field name="is_invoice"/>
                 </field>
                 <field name="company_id" position="after">
+                    <field name="okticket_deleted" invisible="1"/>
                     <field name="okticket_expense_id"/>
                     <field name="okticket_status" widget="statusbar"/>
                     <field name="payment_method" widget="selection"/>
                     <field name="okticket_vat"/>
                     <field name="okticket_partner_name"/>
-                    <label for="payment_mode"/>
-                    <div>
-                        <field name="payment_mode" widget="radio"/>
-                    </div>
-                    <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+<!--                    <label for="payment_mode"/>-->
+<!--                    <div>-->
+<!--                        <field name="payment_mode" widget="radio"/>-->
+<!--                    </div>-->
+<!--                    <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
                 </field>
+
             </field>
         </record>
 
@@ -37,7 +50,7 @@
             <field name="name">My Expenses to Submit</field>
             <field name="res_model">hr.expense</field>
             <field name="view_mode">tree,kanban,form,graph,pivot</field>
-            <field name="search_view_id" ref="hr_expense.hr_expense_view_search"/>
+            <field name="search_view_id" ref="hr_expense.view_hr_expense_filter"/>
             <field name="domain">[]</field>
             <field name="context">{'search_default_to_report': 1}</field>
             <field name="help" type="html">
@@ -53,5 +66,30 @@
             </field>
         </record>
 
+<!--        <record model="ir.ui.view" id="okticket_product_product_expense_form_view">-->
+<!--            <field name="name">okticket.product.product.expense.for</field>-->
+<!--            <field name="model">product.product</field>-->
+<!--            <field name="inherit_id" ref="sale_expense.product_product_view_form_inherit_sale_expense"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//group[@name='product_details']" position="after">-->
+<!--                    <notebook>-->
+<!--                        <page name="okticket_conn_conf" string="OkTicket Conf.">-->
+<!--                            <group>-->
+<!--                                <field name="okticket_categ_prod_id" string="Category_id"/>-->
+<!--                                <field name="okticket_type_prod_id" string="Type_id"/>-->
+<!--                            </group>-->
+<!--                            <group string="Rebillable Info">-->
+<!--                                <field name="rebillable_prod_id"/>-->
+<!--                                <field name="no_rebillable_prod_ids" widget="many2many_tags" readonly="1"/>-->
+<!--                            </group>-->
+<!--                            <group string="Invoice version Info">-->
+<!--                                <field name="invoice_prod_id"/>-->
+<!--                                <field name="base_version_prod_ids" widget="many2many_tags" readonly="1"/>-->
+<!--                            </group>-->
+<!--                        </page>-->
+<!--                    </notebook>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
     </data>
 </odoo>

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -5,6 +6,7 @@
 
 from odoo import _, api, fields, models
 from odoo.addons.component.core import Component
+from odoo.exceptions import UserError
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -17,11 +19,27 @@ class HrExpense(models.Model):
         """
         Set accounted field in OkTicket expense
         """
+        self.ensure_one()  # set_accounted_expense doesn't manage record set of multiple expenses
         self.env['okticket.hr.expense'].sudo().set_accounted_expense(self, new_state=new_state)
 
-    def _okticket_remove_expense(self):
-        self.env['okticket.hr.expense'].sudo().remove_expense(self)
-        return True
+    # def _okticket_remove_expense(self):
+    #     self.env['okticket.hr.expense'].sudo().remove_expense(self)
+    #     return True
+
+    def write(self, vals):
+        sheet_to_check = False
+        if vals and 'sheet_id' in vals:
+            sheet_to_check = self.mapped('sheet_id')
+        result = super(HrExpense, self).write(vals)
+        if vals and 'sheet_id' in vals and sheet_to_check:
+            sheet_to_check.check_empty_sheet()  # Comprueba si la hoja está vacía para eliminarla
+        return result
+
+    def unlink(self):
+        sheet_to_check = self.mapped('sheet_id')
+        result = super(HrExpense, self).unlink()
+        sheet_to_check.check_empty_sheet()  # Comprueba si la hoja está vacía para eliminarla
+        return result
 
 
 class SaleOrderLine(models.Model):
@@ -62,26 +80,26 @@ class OkticketHrExpense(models.Model):
                     _logger.error('Exception: %s\n', e)
                     import traceback
                     traceback.print_exc()
-                    raise Warning(_('Could not connect to Okticket'))
+                    raise (e or UserError(_('Could not connect to Okticket')))
         else:
             _logger.warning(_('WARNING! Not exists backend for company %s (%s)'),
                             self.env.user.company_id.name, self.env.user.company_id.id)
 
-    def remove_expense(self, expense):
-        backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
-        if backend:
-            with backend.work_on(self._name) as work:
-                exporter = work.component(usage='hr.expense.exporter')
-                try:
-                    return exporter.remove_expense(expense)
-                except Exception as e:
-                    _logger.error('Exception: %s\n', e)
-                    import traceback
-                    traceback.print_exc()
-                    raise Warning(_('Could not connect to Okticket'))
-        else:
-            _logger.warning(_('WARNING! Not exists backend for company %s (%s)'),
-                            self.env.user.company_id.name, self.env.user.company_id.id)
+    # def remove_expense(self, expense):
+    #     backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
+    #     if backend:
+    #         with backend.work_on(self._name) as work:
+    #             exporter = work.component(usage='hr.expense.exporter')
+    #             try:
+    #                 return exporter.remove_expense(expense)
+    #             except Exception as e:
+    #                 _logger.error('Exception: %s\n', e)
+    #                 import traceback
+    #                 traceback.print_exc()
+    #                 raise (e or UserError(_('Could not connect to Okticket')))
+    #     else:
+    #         _logger.warning(_('WARNING! Not exists backend for company %s (%s)'),
+    #                         self.env.user.company_id.name, self.env.user.company_id.id)
 
 
 class HrExpenseAdapter(Component):
@@ -99,17 +117,17 @@ class HrExpenseAdapter(Component):
             return result.get('result')
         return False
 
-    def remove_expense(self, external_expense_id):
-        if self._auth():
-            result = self.okticket_api_remove_expense(external_expense_id)
-            # Log event
-            result['log'].update({
-                'backend_id': self.collection.id,
-                'type': result['log'].get('type') or 'success',
-            })
-            self.env['log.event'].add_event(result['log'])
-            return result.get('result')
-        return False
+    # def remove_expense(self, external_expense_id):
+    #     if self._auth():
+    #         result = self.okticket_api_remove_expense(external_expense_id)
+    #         # Log event
+    #         result['log'].update({
+    #             'backend_id': self.collection.id,
+    #             'type': result['log'].get('type') or 'success',
+    #         })
+    #         self.env['log.event'].add_event(result['log'])
+    #         return result.get('result')
+    #     return False
 
     def okticket_write_expense_api(self, external_expense_id, vals_dict):
         okticketapi = self.okticket_api
@@ -123,13 +141,13 @@ class HrExpenseAdapter(Component):
                                                https=self.collection.https)
         return response
 
-    def okticket_api_remove_expense(self, external_expense_id):
-        okticketapi = self.okticket_api
-        url = okticketapi.get_full_path('/expenses')
-        url = url + '/' + external_expense_id
-        header = {
-            'Authorization': okticketapi.token_type + ' ' + okticketapi.access_token,
-            'Content-Type': 'application/json',
-        }
-        return okticketapi.general_request(url, "DELETE", {}, headers=header, only_data=False,
-                                           https=self.collection.https)
+    # def okticket_api_remove_expense(self, external_expense_id):
+    #     okticketapi = self.okticket_api
+    #     url = okticketapi.get_full_path('/expenses')
+    #     url = url + '/' + external_expense_id
+    #     header = {
+    #         'Authorization': okticketapi.token_type + ' ' + okticketapi.access_token,
+    #         'Content-Type': 'application/json',
+    #     }
+    #     return okticketapi.general_request(url, "DELETE", {}, headers=header, only_data=False,
+    #                                        https=self.collection.https)

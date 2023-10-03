@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
@@ -17,9 +18,9 @@ class AccountAnalyticAccountExporter(Component):
     _apply_on = 'okticket.account.analytic.account'
     _usage = 'account.analytic.account.exporter'
 
-    def create_cost_center(self, acc_analyt):
+    def create_cost_center_duplicates_control(self, acc_analyt):
         """
-        Run the synchronization for all users, using the connector crons.
+        Creates cost center in Okticket from Odoo data with control system
         """
         # Adapter
         backend_adapter = self.component(usage='backend.adapter')
@@ -27,18 +28,35 @@ class AccountAnalyticAccountExporter(Component):
         mapper = self.component(usage='account.analytic.account.exporter')
         # Binder
         binder = self.component(usage='account.analytic.account.binder')
-        # Read expenses values from OkTicket
-        if acc_analyt:
-            sale = False
-            for project in acc_analyt.project_ids:
-                if project.sale_order_id:
-                    sale = project.sale_order_id
-                    break
 
-            cost_center_name = acc_analyt.project_ids[0].name
-            if acc_analyt.project_ids[0].partner_id:
-                cost_center_name += ' - ' + acc_analyt.project_ids[0].partner_id.name
+        result = True
+        if acc_analyt:
+            cost_center_name = acc_analyt.generate_cost_center_name_from_analytic()
+            # Comprueba si existe un cost center con el mismo nombre
+            if backend_adapter.search({'name': cost_center_name}):
+                result = False  # Si existe al menos algún cost center con el mismo nombre,
+                # retorna un False que es posteriormente procesado en el método cost_center_from_analytic_confirm()
+            else:
+                # Si no existe ningún cost center con el nombre indicado, se crea de forma regular
+                result = self.create_cost_center(acc_analyt)
+        return result
+
+    def create_cost_center(self, acc_analyt):
+        """
+        Creates cost center in Okticket from Odoo data
+        """
+        # Adapter
+        backend_adapter = self.component(usage='backend.adapter')
+        # Mapper
+        mapper = self.component(usage='account.analytic.account.exporter')
+        # Binder
+        binder = self.component(usage='account.analytic.account.binder')
+
+        if acc_analyt:
+            sale = acc_analyt.get_related_sale_order()
+            cost_center_name = acc_analyt.generate_cost_center_name_from_analytic()
             okticket_company_id = acc_analyt.company_id and acc_analyt.company_id.okticket_company_id
+
             values = {
                 'name': cost_center_name,
                 'code': sale and sale.name or '',
@@ -56,15 +74,16 @@ class AccountAnalyticAccountExporter(Component):
                     'external_id': str(new_cost_center_id),
                 })
                 _logger.info(_('Created new Cost Center in Okticket'))
+        return True
 
     def modify_cc_name(self, acc_analyt):
         # Adapter
         backend_adapter = self.component(usage='backend.adapter')
         if acc_analyt:
             for ok_acc_an_acc in acc_analyt.okticket_bind_ids:
-                cost_center_name = acc_analyt.project_ids[0].name
-                if acc_analyt.project_ids[0].partner_id:
-                    cost_center_name += ' - ' + acc_analyt.project_ids[0].partner_id.name
+                cost_center_name = acc_analyt.name
+                if acc_analyt.partner_id:
+                    cost_center_name += ' - ' + acc_analyt.partner_id.name
                 values = {
                     'name': cost_center_name,
                 }
