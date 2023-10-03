@@ -150,7 +150,7 @@ msgstr "Cancelar"
 #. module: connector_okticket
 #: selection:hr.expense,payment_method:0
 msgid "Cash"
-msgstr "Cash"
+msgstr "Efectivo"
 
 #. module: connector_okticket
 #: model:ir.ui.view,arch_db:connector_okticket.okticket_product_template_form_view
@@ -753,23 +753,23 @@ msgstr "Error de conexión Okticket: clave de auteticación inválida."
 #. module: connector_okticket
 #: selection:log.event,tag:0
 msgid "Operation"
-msgstr "Operation"
+msgstr "Operación"
 
 #. module: connector_okticket
 #: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend_uri_op_path
 msgid "Operations path"
-msgstr "Operations path"
+msgstr "Path Operaciones"
 
 #. module: connector_okticket
 #: model:ir.model.fields,field_description:connector_okticket.field_hr_expense_okticket_partner_name
 #: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense_okticket_partner_name
 msgid "Partner Name"
-msgstr "Partner Name"
+msgstr "Nombre de cliente"
 
 #. module: connector_okticket
 #: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend_api_password
 msgid "Pass"
-msgstr "Pass"
+msgstr "Contraseña"
 
 #. module: connector_okticket
 #: selection:log.event,tag:0
@@ -785,7 +785,7 @@ msgstr "Pago por"
 #: model:ir.model.fields,field_description:connector_okticket.field_hr_expense_payment_method
 #: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense_payment_method
 msgid "Payment method"
-msgstr "Payment method"
+msgstr "Método de pago"
 
 #. module: connector_okticket
 #: selection:hr.expense,payment_method:0
@@ -795,7 +795,7 @@ msgstr "Paypal"
 #. module: connector_okticket
 #: selection:hr.expense,okticket_status:0
 msgid "Pending"
-msgstr "Pending"
+msgstr "Pendiente"
 
 #. module: connector_okticket
 #: selection:log.event,tag:0

@@ -40,7 +40,7 @@
 <!--                    <div>-->
 <!--                        <field name="payment_mode" widget="radio"/>-->
 <!--                    </div>-->
-                    <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+<!--                    <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
                 </field>
 
             </field>
