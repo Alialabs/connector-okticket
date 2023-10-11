@@ -149,7 +149,8 @@ class HrExpenseBatchImporter(Component):
                 new_sheet_values = hr_expense_sheet_obj.prepare_expense_sheet_values(new_sheet_values)
                 new_sheet_values.update(expense_sheet_values)
                 new_sheet = hr_expense_sheet_obj.create(new_sheet_values)
-                if new_sheet and not new_sheet.okticket_bind_ids:
+                if new_sheet and not new_sheet.okticket_bind_ids \
+                        and self.collection.okticket_exp_sheet_sync:  # Si está activa la sincronización
                     new_sheet.unlink()  # Delete expense sheet. Some error occurs while Okticket sync.
 
     def sanitize_expenses(self, hr_expense_ids):
@@ -278,7 +279,7 @@ class HrExpenseSheet(models.Model):
             - Set 'accounted' = 'true' in expenses from Okticket expense sheet.
             - Action [347] Okticket
         """
-        super(HrExpenseSheet, self).action_submit_sheet()
+        # super(HrExpenseSheet, self).action_submit_sheet()
         for expense in self.expense_line_ids:
             expense._okticket_accounted_expense(new_state=True)  # 'accounted': 'True'
         action_id = 347
@@ -331,8 +332,10 @@ class HrExpenseSheet(models.Model):
         """
         "Aprobar"/"Aprobar(Admin)"
         Implied actions:
+            - [Warning! implies] "Send to responsable" (Action [347] Okticket and 'accounted' = True)
             - Action [349] Okticket
         """
+        self.action_submit_sheet()  # Implicit call to Okticket action 347
         super(HrExpenseSheet, self).approve_expense_sheets()
         # Product "expense" is included as sale.order.line in sale.order related with hr.expense
         action_id = 349
