@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-03 14:53+0000\n"
-"PO-Revision-Date: 2023-10-03 14:53+0000\n"
+"POT-Creation-Date: 2023-10-11 17:11+0000\n"
+"PO-Revision-Date: 2023-10-11 17:11+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: okticket_connector_hr_expense_sheet
-#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:240
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:247
 #, python-format
 msgid "\n"
 "Error while trying to link expenses to Okticket expense sheet (id: %s): %s"
@@ -27,8 +27,7 @@ msgstr "\n"
 #: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet_exporter.py:58
 #, python-format
 msgid "(generate_new_expense_sheet): It is not possible to find a valid name for expenses sheet: %s"
-msgstr "(generate_new_expense_sheet): No es posible encontrar un nombre válido para"
-"la hoja de gastos: %s"
+msgstr "(generate_new_expense_sheet): No es posible encontrar un nombre válido parala hoja de gastos: %s"
 
 #. module: okticket_connector_hr_expense_sheet
 #: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet_accounting_date
@@ -38,10 +37,10 @@ msgstr "Fecha contable"
 #. module: okticket_connector_hr_expense_sheet
 #: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet_message_needaction
 msgid "Action Needed"
-msgstr "Acción requerida"
+msgstr "Acción Necesaria"
 
 #. module: okticket_connector_hr_expense_sheet
-#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:344
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:351
 #, python-format
 msgid "Action not valid for Okticket expense sheet %s in state %s"
 msgstr "Acción no válida para hoa de gastos de Okticket %s en estado %s"
@@ -74,9 +73,9 @@ msgstr "Compañía"
 
 #. module: okticket_connector_hr_expense_sheet
 #: code:addons/okticket_connector_hr_expense_sheet/models/hr_expense.py:83
-#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:80
-#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:93
-#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:107
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:81
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:95
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:109
 #, python-format
 msgid "Could not connect to Okticket"
 msgstr "No es posible establecer la conexión con Okticket"
@@ -163,6 +162,11 @@ msgid "Expense Sheet Grouping Time interval"
 msgstr "Intervalo temporal de agrupación de hojas de gastos"
 
 #. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_backend_okticket_exp_sheet_sync
+msgid "Expense Sheets Synchronization"
+msgstr "Sincronización de hojas de gasto"
+
+#. module: okticket_connector_hr_expense_sheet
 #: code:addons/okticket_connector_hr_expense_sheet/models/hr_expense_sheet_listener.py:37
 #, python-format
 msgid "Expense employee %s (%s) not related with Okticket user!"
@@ -183,8 +187,7 @@ msgstr "Expense_sheet_id"
 msgid "Expenses grouping method for expense sheets managing:\n"
 "- Analytic Account: expenses group by analytic account, employee and payment mode- Standard: expenses grouped by employee and payment mode (Odoo standard)"
 msgstr "Método de agrupación de gastos para gestión de hojas de gastos:\n"
-"- Cuenta analítica: gastos agrupados por cuenta analítica, empleado y modo de pago"
-"- Estándar: gastos agrupados por empleado y modo de pago (estándar Odoo)"
+"- Cuenta analítica: gastos agrupados por cuenta analítica, empleado y modo de pago- Estándar: gastos agrupados por empleado y modo de pago (estándar Odoo)"
 
 #. module: okticket_connector_hr_expense_sheet
 #: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet_message_follower_ids
