@@ -15,9 +15,9 @@
                   parent="menu_okticket_root"
                   action="action_okticket_backend"/>
 
-        <menuitem id="menu_okticket_log_event"
-                  name="Logs"
-                  parent="menu_okticket_root"
-                  action="action_okticket_log"/>
+<!--        <menuitem id="menu_okticket_log_event"-->
+<!--                  name="Logs"-->
+<!--                  parent="menu_okticket_root"-->
+<!--                  action="action_okticket_log"/>-->
     </data>
 </odoo>
