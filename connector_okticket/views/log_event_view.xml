@@ -19,12 +19,13 @@
             </field>
         </record>
 
-<!--        <record id="action_okticket_log" model="ir.actions.act_window">-->
-<!--            <field name="name">Okticket Backend Logs</field>-->
-<!--            <field name="res_model">log.event</field>-->
-<!--            <field name="view_mode">tree</field>-->
-<!--            <field name="view_id" ref="log_event_view_tree"/>-->
-<!--        </record>-->
+        <record id="action_okticket_log" model="ir.actions.act_window">
+            <field name="name">Okticket Backend Logs</field>
+            <field name="res_model">log.event</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="log_event_view_tree"/>
+            <field name="domain">[]</field>
+        </record>
 
         <record id="action_open_okticket_log" model="ir.actions.act_window">
             <field name="name">Okticket Backend Logs</field>
