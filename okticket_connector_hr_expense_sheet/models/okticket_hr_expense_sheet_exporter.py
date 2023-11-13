@@ -84,7 +84,8 @@ class HrExpenseExporter(Component):
         backend_adapter = self.component(usage='backend.adapter')
         binder = self.component(usage='binder')
         expense_sheet = args and args[0] or False
-        if expense_sheet:
+        # Habilitada la sincronización de hojas en okticket
+        if expense_sheet and self.work.collection.okticket_exp_sheet_sync:
             binding = expense_sheet.okticket_bind_ids and \
                       expense_sheet.okticket_bind_ids[0] or False
             if not binding:
