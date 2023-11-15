@@ -171,7 +171,11 @@ class HrExpenseBatchImporter(Component):
                 # Prepare de hojas de gastos
                 new_sheet_values = hr_expense_sheet_obj.prepare_expense_sheet_values(new_sheet_values)
                 new_sheet_values.update(expense_sheet_values)
-                hr_expense_sheet_obj.create(new_sheet_values)
+                new_sheet = hr_expense_sheet_obj.create(new_sheet_values)
+                if new_sheet and not new_sheet.okticket_bind_ids \
+                        and self.collection.okticket_exp_sheet_sync:  # Si está activa la sincronización
+                    new_sheet.unlink()  # Delete expense sheet. Some error occurs while Okticket sync.
+
 
     def sanitize_expenses(self, hr_expense_ids):
         """

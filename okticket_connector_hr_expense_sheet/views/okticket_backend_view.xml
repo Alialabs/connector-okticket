@@ -10,6 +10,11 @@
             <field name="model">okticket.backend</field>
             <field name="inherit_id" ref="connector_okticket.view_okticket_backend_form"/>
             <field name="arch" type="xml">
+
+                <xpath expr="//group[@name='expense_config']" position="inside">
+                    <field name="okticket_exp_sheet_sync"/>
+                </xpath>
+
                 <xpath expr="//notebook[@name='bindings']" position="inside">
                     <page string="Hr Expense Sheet Bindings" name="hr_expense_sheet_bindings">
                         <button name="%(action_open_okticket_hr_expense_sheet_binding)d"
