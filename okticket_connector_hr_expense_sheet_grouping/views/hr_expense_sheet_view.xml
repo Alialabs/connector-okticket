@@ -2,7 +2,7 @@
 <!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
      @author: Alia
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
-<openerp>
+<odoo>
     <data>
 
         <record id="okticket_expense_sheets_grouping_view" model="ir.ui.view">
@@ -18,4 +18,4 @@
         </record>
 
     </data>
-</openerp>
+</odoo>

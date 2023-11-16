@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-24 09:47+0000\n"
-"PO-Revision-Date: 2022-10-24 09:47+0000\n"
+"POT-Creation-Date: 2023-11-16 17:24+0000\n"
+"PO-Revision-Date: 2023-11-16 17:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -150,11 +150,6 @@ msgid "Approved On"
 msgstr "Aprobado en"
 
 #. module: okticket_connector
-#: model_terms:ir.ui.view,arch_db:okticket_connector.expense_wizard_view
-msgid "Assign default expenses to accounts"
-msgstr "Asignar gastos por defecto a las cuentas"
-
-#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__message_attachment_count
 msgid "Attachment Count"
 msgstr "Nº de archivos adjuntos"
@@ -168,11 +163,6 @@ msgstr "Autentificación"
 #: model:ir.model.fields,field_description:okticket_connector.field_log_event__backend_id
 msgid "Backend"
 msgstr ""
-
-#. module: okticket_connector
-#: model:ir.actions.act_window,name:okticket_connector.action_open_okticket_log
-msgid "Backend Logs"
-msgstr "Log de backend"
 
 #. module: okticket_connector
 #: model:ir.ui.menu,name:okticket_connector.menu_okticket_backend
@@ -499,7 +489,6 @@ msgid "Has Message"
 msgstr "Tiene mensaje"
 
 #. module: okticket_connector
-#: model:ir.actions.act_window,name:okticket_connector.action_open_okticket_hr_expense_binding
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__okticket_hr_expense_ids
 msgid "Hr Expense Bindings"
 msgstr "Bindings de gastos"
@@ -919,6 +908,7 @@ msgstr "Configuración de backend de Okticket"
 
 #. module: okticket_connector
 #: model:ir.actions.act_window,name:okticket_connector.action_okticket_log
+#: model:ir.actions.act_window,name:okticket_connector.action_open_okticket_log
 msgid "Okticket Backend Logs"
 msgstr "Logs de backend de Okticket"
 
@@ -948,7 +938,7 @@ msgid "Okticket Connector Operations"
 msgstr "Operaciones de conector Okticket"
 
 #. module: okticket_connector
-#: model:ir.actions.act_window,name:okticket_connector.action_okticket_hr_expense_binding
+#: model:ir.actions.act_window,name:okticket_connector.action_open_okticket_hr_expense_binding
 msgid "Okticket Hr Expense Bindings"
 msgstr "Bindings de gastos"
 
@@ -960,7 +950,7 @@ msgstr "Servidor Okticket"
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_hr_employee__okticket_user_id
 msgid "Okticket User_Id"
-msgstr ""
+msgstr "Id de usuario de Okticket"
 
 #. module: okticket_connector
 #: code:addons/okticket_connector/components/backend_adapter.py:0

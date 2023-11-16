@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 15.0\n"
+"Project-Id-Version: Odoo Server 15.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-21 16:27+0000\n"
-"PO-Revision-Date: 2022-07-21 16:27+0000\n"
+"POT-Creation-Date: 2023-11-16 17:33+0000\n"
+"PO-Revision-Date: 2023-11-16 17:33+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -332,7 +332,6 @@ msgid "Hr Employee"
 msgstr "Empleado"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.actions.act_window,name:okticket_connector_user_synchronization.action_open_okticket_hr_employee_binding
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_hr_employee__okticket_bind_ids
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_backend__okticket_hr_employee_ids
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__okticket_bind_ids
@@ -589,7 +588,7 @@ msgid "Okticket Backend Configuration"
 msgstr "Configuración de backend de Okticket"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.actions.act_window,name:okticket_connector_user_synchronization.action_okticket_hr_employee_binding
+#: model:ir.actions.act_window,name:okticket_connector_user_synchronization.action_open_okticket_hr_employee_binding
 msgid "Okticket Hr Employee Bindings"
 msgstr "Bindings de empleados"
 
@@ -696,6 +695,12 @@ msgid ""
 msgstr ""
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__timesheet_manager_id
+msgid "Select the user responsible for approving \"Timesheet\" of this employee.\n"
+"If empty, the approval is done by an Administrator or Team Approver (determined in settings/users)."
+msgstr ""
+
+#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__sinid
 msgid "Social Insurance Number"
 msgstr "Número de seguridad social"
@@ -773,6 +778,11 @@ msgstr ""
 #, python-format
 msgid "This operator is not supported"
 msgstr "Este operador no está soportado"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__timesheet_manager_id
+msgid "Timesheet"
+msgstr ""
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__timesheet_cost

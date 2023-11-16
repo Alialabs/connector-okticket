@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 15.0\n"
+"Project-Id-Version: Odoo Server 15.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-21 16:07+0000\n"
-"PO-Revision-Date: 2022-07-21 16:07+0000\n"
+"POT-Creation-Date: 2023-11-16 17:26+0000\n"
+"PO-Revision-Date: 2023-11-16 17:26+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -43,7 +43,6 @@ msgid "Analytic Account"
 msgstr "Cuenta analítica"
 
 #. module: okticket_connector_cost_center
-#: model:ir.actions.act_window,name:okticket_connector_cost_center.action_open_okticket_analytic_account_binding
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_backend__okticket_analytic_account_ids
 #: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.view_okticket_backend_form
 msgid "Analytic Account Bindings"
@@ -329,7 +328,7 @@ msgid "OkTicket Cost_center_id"
 msgstr "Centro de coste de Okticket"
 
 #. module: okticket_connector_cost_center
-#: model:ir.actions.act_window,name:okticket_connector_cost_center.action_okticket_analytic_account_binding
+#: model:ir.actions.act_window,name:okticket_connector_cost_center.action_open_okticket_analytic_account_binding
 msgid "Okticket Analytic Account Bindings"
 msgstr "Bindings de cuentas analíticas"
 

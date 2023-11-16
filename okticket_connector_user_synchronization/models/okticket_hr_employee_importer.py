@@ -88,7 +88,7 @@ class HrEmployeeBatchImporter(Component):
 
             binding.write(internal_data)
             binder.bind(employee_ext_vals.get('id'), binding)
-            
+
             okticket_hr_employee_ids.append(binding.id)
             _logger.info('Imported')
 
