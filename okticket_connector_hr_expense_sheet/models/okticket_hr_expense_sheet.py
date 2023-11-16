@@ -97,30 +97,49 @@ class OkticketHrExpenseSheet(models.Model):
     def export_expense_sheet(self, backend=False, filters=None, **kwargs):
         backend = backend or self.env['okticket.backend'].get_default_backend_okticket_connector()
         backend.ensure_one()
-        with backend.work_on(self._name) as work:
-            importer = work.component(usage='importer')
-            try:
-                importer.run(filters=filters)
-            except Exception as e:
-                _logger.error('Exception: %s\n', e)
-                import traceback
-                traceback.print_exc()
-                raise (e or UserError(_('Could not connect to Okticket')))
+        if backend and backend.okticket_exp_sheet_sync:
+            with backend.work_on(self._name) as work:
+                importer = work.component(usage='importer')
+                try:
+                    importer.run(filters=filters)
+                except Exception as e:
+                    _logger.error('Exception: %s\n', e)
+                    import traceback
+                    traceback.print_exc()
+                    raise (e or UserError(_('Could not connect to Okticket')))
 
     @api.multi
     def change_expense_sheet_status(self, expense_sheets, action_id, comments='No comment'):
         backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
         backend.ensure_one()
-        with backend.work_on(self._name) as work:
-            adapter = work.component(usage='backend.adapter')
-            try:
-                return adapter.change_expense_sheet_status(expense_sheets, action_id, comments=comments)
-            except Exception as e:
-                _logger.error('Exception: %s\n', e)
-                import traceback
-                traceback.print_exc()
-                raise (e or UserError(_('Could not connect to Okticket')))
+        if backend and backend.okticket_exp_sheet_sync:
+            with backend.work_on(self._name) as work:
+                adapter = work.component(usage='backend.adapter')
+                try:
+                    return adapter.change_expense_sheet_status(expense_sheets, action_id, comments=comments)
+                except Exception as e:
+                    _logger.error('Exception: %s\n', e)
+                    import traceback
+                    traceback.print_exc()
+                    raise (e or UserError(_('Could not connect to Okticket')))
 
+    @api.multi
+    def delete_expense_sheet(self, exp_sheet):
+        """ Delete expense sheet in OkTicket related with Odoo hr.expense.sheet that is being unlinked"""
+        backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
+        if backend and backend.okticket_exp_sheet_sync:
+            with backend.work_on(self._name) as work:
+                exporter = work.component(usage='record.exporter')
+                try:
+                    return exporter.delete_expense_sheet(exp_sheet)
+                except Exception as e:
+                    _logger.error('Exception: %s\n', e)
+                    import traceback
+                    traceback.print_exc()
+                    raise Warning(_('Could not connect to Okticket'))
+        else:
+            _logger.warning('WARNING! NO EXISTE BACKEND PARA LA COMPANY %s (%s)\n',
+                            self.env.user.company_id.name, self.env.user.company_id.id)
 
 class OkticketBackend(models.Model):
     _inherit = 'okticket.backend'
@@ -130,6 +149,11 @@ class OkticketBackend(models.Model):
         inverse_name='backend_id',
         string='Hr Expense Sheet Bindings',
         context={'active_test': False})
+
+    okticket_exp_sheet_sync = fields.Boolean(
+        'Expense Sheets Synchronization',
+        default=True
+    )
 
 
 class HrExpenseSheetAdapter(Component):
@@ -210,13 +234,68 @@ class HrExpenseSheetAdapter(Component):
             self.set_report_expense(False, expenses_to_unlink)
         return True
 
+    def delete_expense_sheet(self, expense_sheet_id):
+        if self._auth():
+            result = self.okticket_api_delete_expense_sheet(expense_sheet_id)
+            # Log event
+            result['log'].update({
+                'backend_id': self.collection.id,
+                'type': result['log'].get('type') or 'success',
+            })
+            self.env['log.event'].add_event(result['log'])
+            return result.get('result')
+        return False
+
+    # TODO: refactorizar este método para incluir en el connector y reutilizar por las operaciones de unlink
+    def okticket_api_delete_expense_sheet(self, expense_sheet_id):
+        # Esto en la api
+        okticketapi = self.okticket_api
+        url = okticketapi.get_full_path('/reports')
+        url = url + '/' + expense_sheet_id
+        header = {
+            'Authorization': okticketapi.token_type + ' ' + okticketapi.access_token,
+            'Content-Type': 'application/json',
+        }
+        return okticketapi.general_request(url, "DELETE", {},
+                                           headers=header, only_data=False, https=self.collection.https)
+
     def link_expenses_sheet(self, sheet_external_id, expenses_to_link):
         """
-        Links expenses to indicated expenses sheet
+        Adds error managing when it tries to link expenses to indicated expenses sheet
+        and the expense sheet is in a not valid state
         :param sheet_external_id: Okticket external id of the expense sheet (char)
         :param expenses_to_link: hr.expense list to link to Okticket expense sheet
         """
-        return self.set_report_expense(sheet_external_id, expenses_to_link)
+        result = False
+        try:
+            result = self.set_report_expense(sheet_external_id, expenses_to_link)
+        except UserError as e:
+            # No puede cambiarse la hoja de gastos asignada a los gastos
+            # Se elimina la hoja de gastos en Odoo y Okticket (hoja que permanecería vacía)
+            # Los gastos permanecen sin hoja de gastos en Odoo
+
+            msg = _('\nError while trying to link expenses to Okticket expense sheet (id: %s): %s') % \
+                  (sheet_external_id, e)
+
+            # Log event
+            log_vals = {
+                'backend_id': self.backend_record.id,
+                'type': 'warning',
+                'msg': msg,
+            }
+            self.env['log.event'].add_event(log_vals)
+            _logger.error(msg)
+            self.delete_expense_sheet(sheet_external_id)
+
+        return result
+
+    # def link_expenses_sheet(self, sheet_external_id, expenses_to_link):
+    #     """
+    #     Links expenses to indicated expenses sheet
+    #     :param sheet_external_id: Okticket external id of the expense sheet (char)
+    #     :param expenses_to_link: hr.expense list to link to Okticket expense sheet
+    #     """
+    #     return self.set_report_expense(sheet_external_id, expenses_to_link)
 
     def set_report_expense(self, report_id, expenses):
         expense_backend_adapter = self.component(usage='backend.adapter', model_name='okticket.hr.expense')
@@ -229,6 +308,7 @@ class HrExpenseSheetAdapter(Component):
             expense_external_id = expense.okticket_bind_ids and expense.okticket_bind_ids[0].external_id or False
             if expense_external_id:
                 expense_backend_adapter.write_expense(expense_external_id, vals_dict)
+        return True
 
     def search(self, filters=False):
         if self._auth():
@@ -254,6 +334,11 @@ class HrExpenseSheetAdapter(Component):
                 'type': result['log'].get('type') or 'success',
             })
             self.env['log.event'].add_event(result['log'])
+
+            # Si el resultado es un valor True / False (control de errores que no interrumpen ejecución, ej.: 422))
+            if isinstance(result['result'], bool):
+                return []
+
             return result['result']
         return []
 

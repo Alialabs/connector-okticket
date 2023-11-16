@@ -254,6 +254,7 @@ class BaseConnector(object):
                         "Not fount object!!! Operations will continue...")
                     # It doesn't find an object with OkTicket id
                     result = True
+                    log['type'] = 'error'
                 raise ResourceNotFoundError
             elif response.status == 409:
                 raise ConflictError
@@ -270,6 +271,7 @@ class BaseConnector(object):
                 _logger.warning("DELETE done...")
                 # It doesn't find an object with OkTicket id
                 result = True
+                log['type'] = 'error'
             else:
                 raise UnknownError(response.status)
 
