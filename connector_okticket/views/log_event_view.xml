@@ -9,7 +9,7 @@
             <field name="name">log.event.view.tree</field>
             <field name="model">log.event</field>
             <field name="arch" type="xml">
-                <tree string="Log events" colors="red:type=='error';yellow:type=='warning'">
+                <tree string="Log events" decoration-warning="type=='warning'" decoration-danger="type=='error'">
                     <field name="datetime_event"/>
                     <field name="type"/>
                     <field name="tag"/>

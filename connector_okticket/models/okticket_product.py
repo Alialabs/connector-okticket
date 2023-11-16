@@ -57,7 +57,8 @@ class ProductTemplate(models.Model):
 
     def get_base_product(self):
         self.ensure_one()
-        # TODO refactorizar para analizar todos los campos que pueden hacer referencia a otro producto "base" sin if's
+        # TODO refactorizar para analizar todos los campos que pueden hacer referencia a otro producto "base"
+        #  para no tener que hacerlo con 'ifs'
         base_product = self
         if self.base_version_prod_ids:
             base_product = self.base_version_prod_ids[0]

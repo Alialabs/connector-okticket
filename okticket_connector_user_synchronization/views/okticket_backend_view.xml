@@ -16,12 +16,13 @@
                                 string="⇒ See Hr Employee Bindings"
                                 type="action"
                                 class="oe_link"/>
-                        <field name="okticket_hr_employee_ids" invisible="1">
+                        <field name="okticket_hr_employee_ids" invisible="1" context="{'default_backend_id': active_id}">
                             <tree editable="top" limit="80">
                                 <field name="id"/>
                                 <field name="sync_date"/>
                                 <field name="odoo_id"/>
                                 <field name="external_id"/>
+                                <field name="backend_id" invisible="1"/>
                             </tree>
                         </field>
                     </page>

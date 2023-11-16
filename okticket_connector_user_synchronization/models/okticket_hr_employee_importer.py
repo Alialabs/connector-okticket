@@ -88,6 +88,7 @@ class HrEmployeeMapper(Component):
 class HrEmployeeBatchImporter(Component):
     _name = 'okticket.employee.batch.importer'
     _apply_on = 'okticket.hr.employee'
+    _inherit = 'okticket.import.mapper'
     _usage = 'importer'
 
     def run(self, filters=None, options=None):
@@ -108,14 +109,14 @@ class HrEmployeeBatchImporter(Component):
                 if internal_data.get('odoo_id'):
                     # User exists in Odoo but its binding is not updated
                     binding = self.model.search([(binder._odoo_field, '=', internal_data['odoo_id']),
-                                                 (binder._backend_field, '=', self.collection.id)])
+                                                 (binder._backend_field, '=', self.backend_record.id)])
                 if not binding:
                     # User or user binding do not exist in Odoo
                     binding = self.model.with_context(ignore_okticket_synch=True).create(internal_data)
 
             binding.write(internal_data)
             binder.bind(employee_ext_vals.get('id'), binding)
-            
+
             okticket_hr_employee_ids.append(binding.id)
             _logger.info('Imported')
 
