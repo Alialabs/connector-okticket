@@ -81,6 +81,7 @@ class ProductTemplateBatchImporter(Component):
         prod_type = 'service'
         return {
             'type': prod_type,
+            # 'detailed_type': prod_type
         }
 
     @mapping
@@ -116,7 +117,7 @@ class ProductTemplateBatchImporter(Component):
             if not binding:
                 if internal_data.get('odoo_id'):
                     binding = self.model.search([(binder._odoo_field, '=', internal_data['odoo_id']),
-                                                 (binder._backend_field, '=', self.collection.id)])
+                                                 (binder._backend_field, '=', self.backend_record.id)])
                 if not binding:
                     # Product or product binding do not exist in Odoo
                     binding = self.model.create(internal_data)

@@ -253,6 +253,11 @@ class AccountAnalyticAccountAdapter(Component):
                 'type': result['log'].get('type') or 'success',
             })
             self.env['log.event'].add_event(result['log'])
+
+            # Si el resultado es un valor True / False (control de errores que no interrumpen ejecución, ej.: 422))
+            if isinstance(result['result'], bool):
+                return []
+
             return result['result']
         return []
 
