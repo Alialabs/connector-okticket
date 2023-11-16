@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-03 14:37+0000\n"
-"PO-Revision-Date: 2023-10-03 14:37+0000\n"
+"POT-Creation-Date: 2023-11-16 18:11+0000\n"
+"PO-Revision-Date: 2023-11-16 18:11+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgstr "Bindings de cuentas analíticas"
 #. module: okticket_connector_cost_center
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account_message_needaction
 msgid "Action Needed"
-msgstr "Acción requerida"
+msgstr "Acción Necesaria"
 
 #. module: okticket_connector_cost_center
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account_active
@@ -87,7 +87,7 @@ msgstr "Confirmar"
 #. module: okticket_connector_cost_center
 #: model:ir.actions.server,name:okticket_connector_cost_center.cost_center_creation_from_analytic_action
 msgid "Confirm Cost Center Creation from Analytic"
-msgstr "Confirmar creación de centro de coste desde proyecto"
+msgstr "Confirm Cost Center Creation from Analytic"
 
 #. module: okticket_connector_cost_center
 #: model:ir.ui.view,arch_db:okticket_connector_cost_center.cost_center_creation_from_analytic_view
@@ -197,7 +197,7 @@ msgstr "Error eliminando gasto con Id: %s no localizado en Okticket"
 #. module: okticket_connector_cost_center
 #: model:ir.ui.view,arch_db:okticket_connector_cost_center.okticket_analytic_account_binding_view_search
 msgid "Expense name"
-msgstr "Gastos"
+msgstr "Gasto"
 
 #. module: okticket_connector_cost_center
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account_message_follower_ids

@@ -128,8 +128,6 @@ class HrExpenseBatchImporter(Component):
             }
 
             hr_expense_sheet = hr_expense_sheet_obj.search(sheet_domain)
-
-            # try:
             if hr_expense_sheet:  # Update
                 hr_expense_sheet.write(expense_sheet_values)
             else:  # Create
