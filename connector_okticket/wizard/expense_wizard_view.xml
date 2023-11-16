@@ -16,8 +16,8 @@
                                 class="btn-primary"/>
                     </group>
 
-<!--                    <button name="assign_default_expense_account" string="Assign default expenses to accounts"-->
-<!--                            type="object" class="btn-primary"/>-->
+                    <!--                    <button name="assign_default_expense_account" string="Assign default expenses to accounts"-->
+                    <!--                            type="object" class="btn-primary"/>-->
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </sheet>
             </form>

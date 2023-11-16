@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-29 09:53+0000\n"
-"PO-Revision-Date: 2023-09-29 09:53+0000\n"
+"POT-Creation-Date: 2023-11-16 18:10+0000\n"
+"PO-Revision-Date: 2023-11-16 18:10+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -253,7 +253,7 @@ msgstr "Fecha del evento"
 #: model:ir.model.fields,field_description:connector_okticket.field_account_analytic_account_okticket_def_account_id
 #: model:ir.model.fields,field_description:connector_okticket.field_project_project_okticket_def_account_id
 msgid "Default Account for Expenses"
-msgstr "Cuenta por defecto para gastos"
+msgstr "Cuenta contable por defeto para gastos"
 
 #. module: connector_okticket
 #: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend_default_lang_id
@@ -326,7 +326,7 @@ msgstr "Asistente de gastos"
 #. module: connector_okticket
 #: model:ir.ui.view,arch_db:connector_okticket.okticket_hr_expense_binding_view_search
 msgid "Expense name"
-msgstr "Nombre de gasto"
+msgstr "Gasto"
 
 #. module: connector_okticket
 #: model:ir.ui.view,arch_db:connector_okticket.view_okticket_backend_form
@@ -460,7 +460,7 @@ msgstr "Info"
 #: model:ir.model.fields,field_description:connector_okticket.field_product_product_invoice_prod_id
 #: model:ir.model.fields,field_description:connector_okticket.field_product_template_invoice_prod_id
 msgid "Invoice product version"
-msgstr "Versión de producto facturable"
+msgstr "Versión producto facturable"
 
 #. module: connector_okticket
 #: model:ir.ui.view,arch_db:connector_okticket.okticket_product_template_form_view
@@ -488,7 +488,7 @@ msgstr "Es factura"
 #: model:ir.model.fields,field_description:connector_okticket.field_product_product_rebillable_product_version
 #: model:ir.model.fields,field_description:connector_okticket.field_product_template_rebillable_product_version
 msgid "Is rebillable product version"
-msgstr "Es una versión de producto refacturable"
+msgstr "Versión de refalcturable de producto"
 
 #. module: connector_okticket
 #: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend_key
@@ -505,7 +505,7 @@ msgstr "Kilometres"
 #: model:product.product,name:connector_okticket.product_product_okticket_km_rebillable
 #: model:product.template,name:connector_okticket.product_product_okticket_km_rebillable_product_template
 msgid "Kilometres-Rebillable"
-msgstr "Kilometres-Refacturable"
+msgstr "Kilometres-Rebillable"
 
 #. module: connector_okticket
 #: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend_name
@@ -843,7 +843,7 @@ msgstr "Versión de producto refacturable"
 #: model:ir.model.fields,help:connector_okticket.field_product_product_rebillable_prod_id
 #: model:ir.model.fields,help:connector_okticket.field_product_template_rebillable_prod_id
 msgid "Rebillable version of the product"
-msgstr "Versión de producto refacturable"
+msgstr "Versión de productos refacturable"
 
 #. module: connector_okticket
 #: model:ir.model.fields,field_description:connector_okticket.field_hr_expense_okticket_remote_path
@@ -912,8 +912,7 @@ msgstr "Prueba de autenticación"
 #. module: connector_okticket
 #: model:ir.model.fields,help:connector_okticket.field_res_users_okticket_backend_ids
 msgid "The okticket service from which to import your timesheets. If empty, the default okticket service will be used instead."
-msgstr "Servicio de Okticket desde el que importar las hojas de gasto. Si está vacío, "
-"se usará el servicio por defecto de Okticket en su lugar."
+msgstr "Servicio de Okticket desde el que importar las hojas de gasto. Si está vacío, se usará el servicio por defecto de Okticket en su lugar."
 
 #. module: connector_okticket
 #: code:addons/connector_okticket/models/okticket_hr_expense.py:29
@@ -935,7 +934,7 @@ msgstr "Transfer"
 #: model:ir.model.fields,help:connector_okticket.field_product_product_rebillable_product_version
 #: model:ir.model.fields,help:connector_okticket.field_product_template_rebillable_product_version
 msgid "True if the product has other version no rebillable"
-msgstr "Marcado si el producto tiene otra versión no refacturable"
+msgstr "Verdadero si el producto tiene otra versión no refacturable"
 
 #. module: connector_okticket
 #: model:ir.model.fields,field_description:connector_okticket.field_log_event_type
@@ -965,7 +964,7 @@ msgstr "Mensajes por leer"
 #. module: connector_okticket
 #: model:ir.model.fields,field_description:connector_okticket.field_okticket_hr_expense_message_unread_counter
 msgid "Unread Messages Counter"
-msgstr "Nº de mensajes sin leer"
+msgstr "Contador de mensajes sin leer"
 
 #. module: connector_okticket
 #: model:ir.model.fields,field_description:connector_okticket.field_okticket_backend_api_login

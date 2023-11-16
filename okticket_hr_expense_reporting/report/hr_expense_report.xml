@@ -21,7 +21,7 @@
                                 </t>
                                 <t t-if="expense.product_id">
                                     <p class="text-uppercase">
-                                        <SPAN T-FIELD="EXPENSE.PRODUCT_ID.NAME"/>
+                                        <span t-field="expense.product_id.name"/>
                                     </p>
                                 </t>
                             </div>
