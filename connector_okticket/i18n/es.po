@@ -518,14 +518,12 @@ msgid "Key"
 msgstr "Clave"
 
 #. module: connector_okticket
-#: model:product.product,name:connector_okticket.product_product_okticket_kilometres
-#: model:product.template,name:connector_okticket.product_product_okticket_kilometres_product_template
+#: model:product.template,name:connector_okticket.product_template_okticket_kilometres
 msgid "Kilometres"
 msgstr "Kilómetros"
 
 #. module: connector_okticket
-#: model:product.product,name:connector_okticket.product_product_okticket_kilometres_rebillable
-#: model:product.template,name:connector_okticket.product_product_okticket_kilometres_rebillable_product_template
+#: model:product.template,name:connector_okticket.product_template_okticket_kilometres_rebillable
 msgid "Kilometres-Rebillable"
 msgstr "Kilómetros-Refacturable"
 
@@ -1051,10 +1049,8 @@ msgid "Unit of Measure"
 msgstr "Unidad de medida"
 
 #. module: connector_okticket
-#: model:product.product,uom_name:connector_okticket.product_product_okticket_kilometres
-#: model:product.product,uom_name:connector_okticket.product_product_okticket_kilometres_rebillable
-#: model:product.template,uom_name:connector_okticket.product_product_okticket_kilometres_product_template
-#: model:product.template,uom_name:connector_okticket.product_product_okticket_kilometres_rebillable_product_template
+#: model:product.template,uom_name:connector_okticket.product_template_okticket_kilometres
+#: model:product.template,uom_name:connector_okticket.product_template_okticket_kilometres_rebillable
 msgid "Unit(s)"
 msgstr "Unidad(es)"
 
@@ -1123,10 +1119,8 @@ msgid "Website communication history"
 msgstr "Historial de comunicaciones del sitio web"
 
 #. module: connector_okticket
-#: model:product.product,weight_uom_name:connector_okticket.product_product_okticket_kilometres
-#: model:product.product,weight_uom_name:connector_okticket.product_product_okticket_kilometres_rebillable
-#: model:product.template,weight_uom_name:connector_okticket.product_product_okticket_kilometres_product_template
-#: model:product.template,weight_uom_name:connector_okticket.product_product_okticket_kilometres_rebillable_product_template
+#: model:product.template,weight_uom_name:connector_okticket.product_template_okticket_kilometres
+#: model:product.template,weight_uom_name:connector_okticket.product_template_okticket_kilometres_rebillable
 msgid "kg"
 msgstr ""
 
