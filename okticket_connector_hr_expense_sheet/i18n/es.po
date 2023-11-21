@@ -6,14 +6,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-21 16:10+0000\n"
-"PO-Revision-Date: 2022-07-21 16:10+0000\n"
+"POT-Creation-Date: 2023-11-21 16:43+0000\n"
+"PO-Revision-Date: 2023-11-21 16:43+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: okticket_connector_hr_expense_sheet
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
+#, python-format
+msgid ""
+"\n"
+"Error while trying to link expenses to Okticket expense sheet (id: %s): %s"
+msgstr ""
 
 #. module: okticket_connector_hr_expense_sheet
 #: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet_exporter.py:0
@@ -116,6 +124,7 @@ msgstr "Compañía"
 #: code:addons/okticket_connector_hr_expense_sheet/models/hr_expense.py:0
 #: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
 #: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
 #, python-format
 msgid "Could not connect to Okticket"
 msgstr "No es posible establecer la conexión con Okticket"
@@ -201,6 +210,11 @@ msgid "Expense Sheet Grouping Time interval"
 msgstr "Intervalo temporal de agrupación de gastos en hojas de gasto"
 
 #. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_backend__okticket_exp_sheet_sync
+msgid "Expense Sheets Synchronization"
+msgstr "Sincronización de hojas de gasto"
+
+#. module: okticket_connector_hr_expense_sheet
 #: code:addons/okticket_connector_hr_expense_sheet/models/hr_expense_sheet_listener.py:0
 #, python-format
 msgid "Expense employee %s (%s) not related with Okticket user!"
@@ -257,7 +271,6 @@ msgid "Hr Expense Sheet"
 msgstr "Hoja gastos RRHH"
 
 #. module: okticket_connector_hr_expense_sheet
-#: model:ir.actions.act_window,name:okticket_connector_hr_expense_sheet.action_open_okticket_hr_expense_sheet_binding
 #: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_hr_expense_sheet__okticket_bind_ids
 #: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_backend__okticket_hr_expense_sheet_ids
 #: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__okticket_bind_ids
@@ -293,7 +306,6 @@ msgstr "Si está marcado hay nuevos mensajes que requieren su atención."
 
 #. module: okticket_connector_hr_expense_sheet
 #: model:ir.model.fields,help:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_has_error
-#: model:ir.model.fields,help:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr "Si se encuentra marcado, algunos mensajes tienen error de envío."
 
@@ -430,7 +442,7 @@ msgid "Okticket Backend Configuration"
 msgstr "Configuración de backend de Okticket"
 
 #. module: okticket_connector_hr_expense_sheet
-#: model:ir.actions.act_window,name:okticket_connector_hr_expense_sheet.action_okticket_hr_expense_sheet_binding
+#: model:ir.actions.act_window,name:okticket_connector_hr_expense_sheet.action_open_okticket_hr_expense_sheet_binding
 msgid "Okticket Hr Expense Sheet Bindings"
 msgstr "Bindings de hojas de gastos"
 
@@ -453,11 +465,6 @@ msgstr "Registrar pago"
 #: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__activity_user_id
 msgid "Responsible User"
 msgstr "Usuario responsable"
-
-#. module: okticket_connector_hr_expense_sheet
-#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_has_sms_error
-msgid "SMS Delivery error"
-msgstr "Error de entrega del SMS"
 
 #. module: okticket_connector_hr_expense_sheet
 #: model:ir.model,name:okticket_connector_hr_expense_sheet.model_sale_order_line

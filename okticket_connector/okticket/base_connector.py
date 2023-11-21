@@ -234,8 +234,9 @@ class BaseConnector(object):
                 raise ImpersonateError
             elif response.status == 413:
                 raise RequestEntityTooLargeError
-            elif response.status == 422:  # Unprocessable Entity
-                raise ValidationError(response.reason)
+            elif response.status == 422:
+                errors = response.json()['errors']
+                raise ValidationError(map(str, (', '.join(e if e else ': '.join(e) for e in errors))))
             elif response.status == 500:
                 raise ServerError
             elif response.status == 204:

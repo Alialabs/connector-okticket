@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-21 16:27+0000\n"
-"PO-Revision-Date: 2022-07-21 16:27+0000\n"
+"POT-Creation-Date: 2023-11-21 16:46+0000\n"
+"PO-Revision-Date: 2023-11-21 16:46+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -332,7 +332,6 @@ msgid "Hr Employee"
 msgstr "Empleado"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.actions.act_window,name:okticket_connector_user_synchronization.action_open_okticket_hr_employee_binding
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_hr_employee__okticket_bind_ids
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_backend__okticket_hr_employee_ids
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__okticket_bind_ids
@@ -393,7 +392,6 @@ msgstr "Si está marcado hay nuevos mensajes que requieren su atención."
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__message_has_error
-#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr "Si se encuentra marcado, algunos mensajes tienen error de envío."
 
@@ -589,7 +587,7 @@ msgid "Okticket Backend Configuration"
 msgstr "Configuración de backend de Okticket"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.actions.act_window,name:okticket_connector_user_synchronization.action_okticket_hr_employee_binding
+#: model:ir.actions.act_window,name:okticket_connector_user_synchronization.action_open_okticket_hr_employee_binding
 msgid "Okticket Hr Employee Bindings"
 msgstr "Bindings de empleados"
 
@@ -602,7 +600,7 @@ msgstr "Id de usuario de Okticket"
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__pin
 msgid "PIN"
-msgstr "PIN"
+msgstr ""
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__pin
@@ -658,11 +656,6 @@ msgstr "Usuario responsable"
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__sinid
 msgid "SIN No"
 msgstr "Núm. SIN"
-
-#. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__message_has_sms_error
-msgid "SMS Delivery error"
-msgstr "Error de entrega del SMS"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__ssnid

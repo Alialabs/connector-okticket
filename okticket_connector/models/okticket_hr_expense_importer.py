@@ -237,7 +237,6 @@ class HrExpenseBatchImporter(Component):
         only_reviewed = self.backend_record.import_only_reviewed_expenses
 
         for expense_ext_vals in backend_adapter.search(filters):
-
             try:
                 # Searchs if the OkTicket id already exists in odoo
                 binding = binder.to_internal(expense_ext_vals.get('_id'))
