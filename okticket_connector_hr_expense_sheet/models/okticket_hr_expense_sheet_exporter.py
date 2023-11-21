@@ -8,7 +8,6 @@ from datetime import datetime
 from odoo import _
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
-from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
