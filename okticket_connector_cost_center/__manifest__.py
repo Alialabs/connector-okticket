@@ -5,10 +5,10 @@
 {
     'name': 'Alia Okticket Connector Cost Center',
     'summary': 'Implements Okticket cost center operations.',
-    'version': '1.0',
+    'version': '14.0.1.0.1',
     'category': 'Connector',
     'depends': [
-        'connector_okticket',
+        'okticket_connector',
         'project',
     ],
     'author': "Alia Technologies",
@@ -16,8 +16,10 @@
     'website': 'http://www.alialabs.com',
     'data': [
         'security/ir.model.access.csv',
-        'wizard/project_cost_center_view.xml',
-        'views/project_view.xml',
+        'wizard/analytic_cost_center_view.xml',
+        'views/okticket_analytic_account_view.xml',
+        'views/account_analytic_account_view.xml',
+        'views/okticket_backend_view.xml',
     ],
     'application': False,
     'installable': True,

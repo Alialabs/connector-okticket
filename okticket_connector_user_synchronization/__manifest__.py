@@ -5,11 +5,11 @@
 {
     'name': 'Alia Okticket Connector User Synchronization',
     'summary': 'Implements Okticket user synchronization operations.',
-    'version': '1.0',
+    'version': '14.0.1.0.1',
     'category': 'Connector',
     'depends': [
         'hr',
-        'connector_okticket',
+        'okticket_connector',
     ],
     'author': "Alia Technologies",
     'license': 'AGPL-3',
@@ -17,6 +17,8 @@
     'data': [
         'security/ir.model.access.csv',
         'data/ir_cron_data.xml',
+        'views/okticket_hr_employee_view.xml',
+        'views/okticket_backend_view.xml',
     ],
     'application': False,
     'installable': True,
