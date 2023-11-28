@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
+     @author: Alia
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<openerp>
+    <data noupdate="1">
+
+        <record forcecreate="True" id="ir_cron_hr_expenses_import" model="ir.cron">
+            <field name="name">Import Expenses From Okticket</field>
+            <field name="active" eval="False"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">2</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model_id" ref="okticket_connector.model_okticket_backend"/>
+            <field name="state">code</field>
+            <field name="code">model._scheduler_import_expenses()</field>
+        </record>
+
+    </data>
+</openerp>

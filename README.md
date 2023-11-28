@@ -36,31 +36,31 @@ Gestiona tus gastos profesionales desde el móvil , sin tener que conservar tick
 
 Una vez dentro de la app de OKticket podremos ver los tickets introducidos en el mes actual
 
-![view_all_icono](connector_okticket/static/images/view_all_icono.png)
+![view_all_icono](okticket_connector/static/images/view_all_icono.png)
 
 ---
 
 Si presionamos en el icono de añadir nos desplegará 3 iconos; el primero para **editar** el ticket a mano, el segundo para **sacar una foto** de un ticket y el tercero para introducir el **kilometraje**.
 
-![iconos](connector_okticket/static/images/iconos.png)
+![iconos](okticket_connector/static/images/iconos.png)
 
 ---
 
 Al sacar la foto del ticket podremos introducir los datos (O si previamente has seleccionado el icono del lápiz)
 
-![datos_iniciales](connector_okticket/static/images/datos_iniciales.png)
+![datos_iniciales](okticket_connector/static/images/datos_iniciales.png)
 
 ---
 
 Si realizamos scroll vertical, veremos más datos a introducir. Cabe destacar que los campos **Hoja de gasto**, **Centro de gasto**, **Método de pago** y la **Categoría** son proporcionados por el conector de Odoo.
 
-![datos_conector](connector_okticket/static/images/datos_conector.png)
+![datos_conector](okticket_connector/static/images/datos_conector.png)
 
 ---
 
 Finalmente podremos seleccionar si es *REFACTURABLE* o el *REEMBOLSO* y podremos guardar la información del ticket
 
-![datos_final](connector_okticket/static/images/datos_final.png)
+![datos_final](okticket_connector/static/images/datos_final.png)
 
 ---
 
@@ -68,13 +68,13 @@ Finalmente podremos seleccionar si es *REFACTURABLE* o el *REEMBOLSO* y podremos
 
 Una vez creado el ticket podremos acceder al portal web que nos permite gestionar los datos de los usuarios.
 
-![view_all_web](connector_okticket/static/images/view_all_web.png)
+![view_all_web](okticket_connector/static/images/view_all_web.png)
 
 ---
 
 En el caso de que no aparezca el ticket que hemos creado recientemente, deberemos sincronizar, utilizando la opción *Sincronizar* del menú lateral de la app
 
-![menu_lateral](connector_okticket/static/images/menu_lateral.png)
+![menu_lateral](okticket_connector/static/images/menu_lateral.png)
 
 ---
 
@@ -82,13 +82,13 @@ En el caso de que no aparezca el ticket que hemos creado recientemente, deberemo
 
 En la parte del ERP de Odoo tendremos acceder a la opción del menu *Gastos*
 
-![mis_gastos](connector_okticket/static/images/mis_gastos.png)
+![mis_gastos](okticket_connector/static/images/mis_gastos.png)
 
 ---
 
 También podremos ver los detalles del gasto deseado al pinchar. Esto nos muestra una vista detallada del mismo.
 
-![gasto_view](connector_okticket/static/images/gasto_view.png)
+![gasto_view](okticket_connector/static/images/gasto_view.png)
 
 ---
 
@@ -96,39 +96,39 @@ También podremos ver los detalles del gasto deseado al pinchar. Esto nos muestr
 
 - Crear *Proyecto*
 
-![crear_proyecto](connector_okticket/static/images/crear_proyecto.png)
+![crear_proyecto](okticket_connector/static/images/crear_proyecto.png)
 
 Podremos ver los detalles del mismo
 
-![proyecto_view](connector_okticket/static/images/proyecto_view.png)
+![proyecto_view](okticket_connector/static/images/proyecto_view.png)
 
 ---
 
 - Ver detalles de **Cost Center**: Para ello nos tenderemos que ir al presupuesto indicado y ver la información del proyecto
 
-![ver_info_proyect](connector_okticket/static/images/ver_info_proyect.png)
+![ver_info_proyect](okticket_connector/static/images/ver_info_proyect.png)
 
 Seguidamente pulsaremos en proyecto
 
-![proyecto_edit](connector_okticket/static/images/proyecto_edit.png)
+![proyecto_edit](okticket_connector/static/images/proyecto_edit.png)
 
 ---
 
 También podremos ver información general de un *Presupuesto*, si así lo deseamos
 
-![centro_coste](connector_okticket/static/images/centro_costes.png)
+![centro_coste](okticket_connector/static/images/centro_costes.png)
 
 ---
 
 - **Hoja de gastos** : Podremos encontrar la información en la vista del cliente
 
-![expense_sheet](connector_okticket/static/images/expense_sheet.png)
+![expense_sheet](okticket_connector/static/images/expense_sheet.png)
 
 ---
 
 - En **Empleados**, sección donde se ecuentra los RRHH  aparecerá el *user_id*, el cual se sincroniza automáticamente en base al mail del cliente.
 
-![user_id](connector_okticket/static/images/user_id.png)
+![user_id](okticket_connector/static/images/user_id.png)
 
 ---
 ### Contacto
