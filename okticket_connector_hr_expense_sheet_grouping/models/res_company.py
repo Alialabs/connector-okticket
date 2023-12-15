@@ -27,8 +27,12 @@ class ResCompany(models.Model):
         ),
     )
     expense_sheet_grouping_time = fields.Selection(
-        selection_add=[('monthly', 'Monthly')],
+        selection_add=[('monthly', 'Monthly'), ('biweekly', 'Biweekly')],
         # ondelete={
         #     'monthly': 'set no_interval',
         # }
     )
+
+    month_day_limit = fields.Integer(
+        string='Month day',
+        default=15)

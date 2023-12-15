@@ -6,10 +6,10 @@
 
 import logging
 from calendar import monthrange
-
+from datetime import datetime
 from odoo.addons.component.core import Component
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 
 _logger = logging.getLogger(__name__)
 
@@ -30,6 +30,7 @@ class HrExpenseBatchImporter(Component):
         conf_dict = super(HrExpenseBatchImporter, self)._time_grouping_configuration_dict()
         conf_dict.update({
             'monthly': 'expenses_by_monthly_time_method',
+            'biweekly': 'expenses_by_biweekly_time_method',
         })
         return conf_dict
 
@@ -95,13 +96,41 @@ class HrExpenseBatchImporter(Component):
         Expenses grouped by month (date)
         """
         for expense_data in grouped_expenses:
-            expense_date = expense_data['expense'].date
+            expense_date = datetime.strptime(expense_data['expense'].date, '%Y-%m-%d').date()
             month = expense_date.strftime("%B").capitalize()
             expense_data['sheet_name'] = '%s-%s' % (expense_data['sheet_name'], month)
             expense_data['group_fields'].update({
                 'init_date': expense_date.replace(day=1),
                 'end_date': expense_date.replace(day=monthrange(expense_date.year, expense_date.month)[1]),
             })
+        return grouped_expenses
+
+    def expenses_by_biweekly_time_method(self, grouped_expenses):
+        """
+        Expenses grouped biweekly (date)
+        """
+        # Indica el día de referencia para dividir el mes
+        month_limit_day = self.backend_record.company_id.month_day_limit
+        for expense_data in grouped_expenses:
+            expense_date = datetime.strptime(expense_data['expense'].date, '%Y-%m-%d').date()
+            month = expense_date.strftime("%B").capitalize()
+
+            init_date = expense_date.replace(day=1)
+            end_date = expense_date.replace(day=monthrange(expense_date.year, expense_date.month)[1])
+
+            if expense_date.day <= month_limit_day:  # 1ª quincena
+                end_date = expense_date.replace(day=month_limit_day)
+            else:  # 2ª quincena
+                init_date = expense_date.replace(day=month_limit_day)
+
+            expense_data['sheet_name'] = _('%s-%s %s-%s') % \
+                                         (expense_data['sheet_name'], month, init_date.day, end_date.day)
+
+            expense_data['group_fields'].update({
+                'init_date': init_date,
+                'end_date': end_date,
+            })
+
         return grouped_expenses
 
 
