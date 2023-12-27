@@ -26,7 +26,8 @@ class HrExpenseBatchImporter(Component):
 
     @mapping
     def name(self, record):
-        return {'name': record.get('name') or record.get('ticket_num') or record.get('_id')}
+        name = record.get('comments') or record.get('name') or record.get('ticket_num') or record.get('_id')
+        return {'name': name}
 
     @mapping
     def external_id(self, record):

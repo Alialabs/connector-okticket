@@ -65,6 +65,15 @@ class HrExpenseBatchImporter(Component):
             return getattr(self, time_method)
         raise NotImplementedError('Function %s is not implemented', time_method)
 
+    def _get_base_sheet_name(self, expense):
+        """
+        Sheet name base for generic sheet grouping
+        """
+        base_sheet_name = expense.employee_id and expense.employee_id.name or \
+                          expense.analytic_account_id and expense.analytic_account_id.name or \
+                          expense.name
+        return base_sheet_name
+
     ### Funciones de clasificación de gastos ###
     def analytic_classification_method(self, expense_ids):
         """
@@ -92,7 +101,7 @@ class HrExpenseBatchImporter(Component):
                     'analytic_ids': expense.analytic_account_id and expense.analytic_account_id.id or False,
                 },
                 'expense': expense,
-                'sheet_name': expense.analytic_account_id and expense.analytic_account_id.name or expense.name,
+                'sheet_name': self._get_base_sheet_name(expense),
             })
         return grouped_expenses
 
@@ -144,6 +153,7 @@ class HrExpenseBatchImporter(Component):
                     new_sheet_values['name'] = expense_data['sheet_name']
 
                 # Prepare de hojas de gastos
+                new_sheet_values['company'] = expense_data['expense'].company_id
                 new_sheet_values = hr_expense_sheet_obj.prepare_expense_sheet_values(new_sheet_values)
                 new_sheet_values.update(expense_sheet_values)
                 new_sheet = hr_expense_sheet_obj.create(new_sheet_values)
@@ -261,6 +271,13 @@ class HrExpenseSheet(models.Model):
                 complete_name = '-'.join([sale_order.partner_id.name, analytic.name])
             else:
                 complete_name = analytic.name  # Sin cliente
+
+        # Obtención del diario de gasto de hoja de gastos de la configuración de la compañía
+        company = raw_values.pop('company')
+        if company.expense_sheet_journal_id:
+            raw_values.update({
+                'bank_journal_id': company.expense_sheet_journal_id.id
+            })
 
         raw_values.update({
             'name': complete_name or 'NO-NAME-EXP-SHEET',  # En última instancia (no debería de ejecutarse nunca

@@ -14,6 +14,11 @@ _logger = logging.getLogger(__name__)
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
+    expense_sheet_journal_id = fields.Many2one(
+        'account.journal',
+        required=True,
+        string='Expense Sheet Journal'
+    )
     expense_sheet_grouping_method = fields.Selection(
         [('analytic', 'Analytic Account')],
         default='analytic', required=True,

@@ -11,7 +11,7 @@
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
                 <notebook position="inside">
-                    <page name="okticket_conn_conf" string="OkTicket Conf.">
+                    <page name="okticket_conn_conf" string="OkTicket Conf." groups="base.group_no_one">
                         <group>
                             <field name="okticket_categ_prod_id" string="Category_id"/>
                             <field name="okticket_type_prod_id" string="Type_id"/>

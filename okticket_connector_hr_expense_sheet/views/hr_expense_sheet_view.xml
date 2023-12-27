@@ -41,7 +41,7 @@
                                 </group>
                             </group>
                         </page>
-                        <page name="okticket_conn_conf" string="OkTicket Conf.">
+                        <page name="okticket_conn_conf" string="OkTicket Conf." groups="base.group_no_one">
                             <group>
                                 <field name="okticket_expense_sheet_id" string="Expense_sheet_id"/>
                             </group>
