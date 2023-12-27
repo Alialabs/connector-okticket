@@ -55,5 +55,24 @@ action = {
             </field>
         </record>
 
+        <record model="ir.actions.server" id="cost_center_creation_from_sale_order">
+            <field name="name">Cost Center Creation from Sale Order</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="state">code</field>
+            <field name="code">
+warning_analytic = []
+for order in records:
+    acc_an = order.project_id
+    if acc_an and not acc_an.okticket_bind_ids:
+        acc_an._okticket_create()
+    else:
+        warning_analytic.append(acc_an.name)
+if warning_analytic:
+    warning_msg = 'These analytic accounts have already a related cost center: %s' % warning_analytic
+    log(warning_msg)
+log("Cost Center from sale order synchronized!")
+</field>
+        </record>
+
     </data>
 </odoo>

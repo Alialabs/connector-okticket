@@ -60,7 +60,8 @@ class HrExpenseBatchImporter(Component):
                     'payment_mode': expense.payment_mode,
                 },
                 'expense': expense,
-                'sheet_name': expense.name,
+                # 'sheet_name': _('%s - %s') % (self._get_base_sheet_name(expense), expense.payment_mode),
+                'sheet_name': self._get_base_sheet_name(expense),
             })
         return grouped_expenses
 
@@ -80,7 +81,7 @@ class HrExpenseBatchImporter(Component):
                     'name': expense.okticket_expense_id,  # Campo para generar una hoja por gasto
                 },
                 'expense': expense,
-                'sheet_name': '%s-%s' % (expense.name, expense.employee_id.name),
+                'sheet_name': _('%s - %s') % (self._get_base_sheet_name(expense), expense.name),  # Empleado - Descripción gasto
             })
         return grouped_expenses
 
@@ -98,7 +99,7 @@ class HrExpenseBatchImporter(Component):
         for expense_data in grouped_expenses:
             expense_date = datetime.strptime(expense_data['expense'].date, '%Y-%m-%d').date()
             month = expense_date.strftime("%B").capitalize()
-            expense_data['sheet_name'] = '%s-%s' % (expense_data['sheet_name'], month)
+            expense_data['sheet_name'] = _('%s - %s') % (expense_data['sheet_name'], month)
             expense_data['group_fields'].update({
                 'init_date': expense_date.replace(day=1),
                 'end_date': expense_date.replace(day=monthrange(expense_date.year, expense_date.month)[1]),
@@ -123,7 +124,7 @@ class HrExpenseBatchImporter(Component):
             else:  # 2ª quincena
                 init_date = expense_date.replace(day=month_limit_day)
 
-            expense_data['sheet_name'] = _('%s-%s %s-%s') % \
+            expense_data['sheet_name'] = _('%s - %s %s-%s') % \
                                          (expense_data['sheet_name'], month, init_date.day, end_date.day)
 
             expense_data['group_fields'].update({
