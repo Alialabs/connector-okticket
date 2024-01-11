@@ -12,7 +12,7 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <notebook position="inside">
-                    <page name="okticket_conn_conf" string="OkTicket Conf." groups="base.group_no_one">
+                    <page name="okticket_conn_conf" string="OkTicket Conf.">
                         <group>
                             <field name="okticket_company_id" string="Company_id"/>
                         </group>
