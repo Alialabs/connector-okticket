@@ -96,6 +96,10 @@ class HrExpenseBatchImporter(Component):
         """
         Expenses grouped by month (date)
         """
+        current_locale = locale.getlocale()
+        locale_code = self.env.user.lang and self.env.user.lang + '.UTF-8' or ''
+        locale.setlocale(locale.LC_TIME, locale_code)
+
         for expense_data in grouped_expenses:
             expense_date = datetime.strptime(expense_data['expense'].date, '%Y-%m-%d').date()
             month = expense_date.strftime("%B").capitalize()
@@ -104,18 +108,31 @@ class HrExpenseBatchImporter(Component):
                 'init_date': expense_date.replace(day=1),
                 'end_date': expense_date.replace(day=monthrange(expense_date.year, expense_date.month)[1]),
             })
+
+        locale.setlocale(locale.LC_TIME, current_locale)
         return grouped_expenses
+
+    def _get_date_names(self, date):
+        toret = {
+            'month_name': date.strftime("%B").capitalize(),
+            'month_number': date.strftime("%m"),
+            'year': date.strftime("%Y"),
+            'year_short': date.strftime("%y"),
+         }
+        return toret
 
     def expenses_by_biweekly_time_method(self, grouped_expenses):
         """
         Expenses grouped biweekly (date)
         """
         # Indica el día de referencia para dividir el mes
+
+        locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
+
         month_limit_day = self.backend_record.company_id.month_day_limit
         for expense_data in grouped_expenses:
             expense_date = datetime.strptime(expense_data['expense'].date, '%Y-%m-%d').date()
-            month = expense_date.strftime("%B").capitalize()
-
+            date_names = self._get_date_names(expense_date)
             init_date = expense_date.replace(day=1)
             end_date = expense_date.replace(day=monthrange(expense_date.year, expense_date.month)[1])
 
@@ -123,15 +140,19 @@ class HrExpenseBatchImporter(Component):
                 end_date = expense_date.replace(day=month_limit_day)
             else:  # 2ª quincena
                 init_date = expense_date.replace(day=month_limit_day)
-
-            expense_data['sheet_name'] = _('%s - %s %s-%s') % \
-                                         (expense_data['sheet_name'], month, init_date.day, end_date.day)
-
+            sheet_name = self.backend_record.company_id.sheet_name_format or '{name}: {B} - {m} - {Y} - {y}'
+            sheet_name = sheet_name.format(name=expense_data['sheet_name'],
+                                           B=date_names['month_name'],
+                                           m=date_names['month_number'],
+                                           Y=date_names['year'],
+                                           y=date_names['year_short'],
+                                           id=init_date.day,
+                                           ed=end_date.day)
+            expense_data['sheet_name'] = sheet_name
             expense_data['group_fields'].update({
                 'init_date': init_date,
                 'end_date': end_date,
             })
-
         return grouped_expenses
 
 
