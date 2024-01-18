@@ -127,8 +127,6 @@ class HrExpenseBatchImporter(Component):
         """
         # Indica el día de referencia para dividir el mes
 
-        locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
-
         month_limit_day = self.backend_record.company_id.month_day_limit
         for expense_data in grouped_expenses:
             expense_date = datetime.strptime(expense_data['expense'].date, '%Y-%m-%d').date()
