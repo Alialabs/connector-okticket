@@ -32,7 +32,7 @@ class ResCompany(models.Model):
         #     'monthly': 'set no_interval',
         # }
     )
-    sheet_name_format = fields.Char(string='Sheet Name Format', default='{name} - {m}/{y} - {init_date}-{end_date}',
+    sheet_name_format = fields.Char(string='Sheet Name Format', default='{name} - {m}/{y} - {id}-{ed}',
                                     help=(
                                         "{name} - Sheet Name\n"
                                         "{M} - Full month name. January, February, ...\n"
