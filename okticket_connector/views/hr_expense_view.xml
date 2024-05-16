@@ -51,6 +51,10 @@
 
                 </field>
 
+                <field name="analytic_distribution" position="after">
+                      <field name="analytic_account_id"/>
+                 </field>
+
                 <xpath expr="//form/sheet/div[1]" position="before">
                     <widget name="web_ribbon" title="Deleted in Okticket" bg_color="bg-danger"
                             attrs="{'invisible': [('okticket_deleted', '=', False)]}"/>
@@ -58,25 +62,25 @@
             </field>
         </record>
 
-        <record id="hr_expense.hr_expense_actions_my_unsubmitted" model="ir.actions.act_window">
-            <field name="name">My Expenses to Submit</field>
-            <field name="res_model">hr.expense</field>
-            <field name="view_mode">tree,kanban,form,graph,pivot</field>
-            <field name="search_view_id" ref="hr_expense.hr_expense_view_search"/>
-            <field name="domain">[]</field>
-            <field name="context">{'search_default_to_report': 1}</field>
-            <field name="help" type="html">
-                <p>
-                    The steps to process expenses are:
-                    <ol>
-                        <li>You record expenses,</li>
-                        <li>Periodically, you submit expenses report to your manager,</li>
-                        <li>Once approved, your expense report, goes to the accounting,</li>
-                        <li>The accountant validates entries and reimburse you.</li>
-                    </ol>
-                </p>
-            </field>
-        </record>
+<!--        <record id="hr_expense.hr_expense_actions_my_unsubmitted" model="ir.actions.act_window">-->
+<!--            <field name="name">My Expenses to Submit</field>-->
+<!--            <field name="model">hr.expense</field>-->
+<!--            <field name="view_mode">tree,kanban,form,graph,pivot</field>-->
+<!--            <field name="search_view_id" ref="hr_expense.hr_expense_view_search"/>-->
+<!--            <field name="domain">[]</field>-->
+<!--            <field name="context">{'search_default_to_report': 1}</field>-->
+<!--            <field name="help" type="html">-->
+<!--                <p>-->
+<!--                    The steps to process expenses are:-->
+<!--                    <ol>-->
+<!--                        <li>You record expenses,</li>-->
+<!--                        <li>Periodically, you submit expenses report to your manager,</li>-->
+<!--                        <li>Once approved, your expense report, goes to the accounting,</li>-->
+<!--                        <li>The accountant validates entries and reimburse you.</li>-->
+<!--                    </ol>-->
+<!--                </p>-->
+<!--            </field>-->
+<!--        </record>-->
 
         <record model="ir.ui.view" id="okticket_product_product_expense_form_view">
             <field name="name">okticket.product.product.expense.for</field>

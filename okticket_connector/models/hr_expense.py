@@ -31,6 +31,13 @@ class HrExpense(models.Model):
     okticket_deleted = fields.Boolean(string='Deleted in Okticket',
                                       default=False)
 
+    analytic_account_id = fields.Many2one(
+        string="Analytic account from OkTicket",
+        comodel_name="account.analytic.account",
+        store=True,
+        help="Cost center (analytical account) from OkTicket synchronization",
+    )
+
     @api.depends('sheet_id', 'sheet_id.account_move_id', 'sheet_id.state')
     def _compute_state(self):
         """
