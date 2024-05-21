@@ -96,9 +96,6 @@ class HrExpenseBatchImporter(Component):
         """
         Expenses grouped by month (date)
         """
-        current_locale = locale.getlocale()
-        locale_code = self.env.user.lang and self.env.user.lang + '.UTF-8' or ''
-        locale.setlocale(locale.LC_TIME, locale_code)
 
         for expense_data in grouped_expenses:
             expense_date = datetime.strptime(expense_data['expense'].date, '%Y-%m-%d').date()
@@ -109,7 +106,6 @@ class HrExpenseBatchImporter(Component):
                 'end_date': expense_date.replace(day=monthrange(expense_date.year, expense_date.month)[1]),
             })
 
-        locale.setlocale(locale.LC_TIME, current_locale)
         return grouped_expenses
 
     def _get_date_names(self, date):
