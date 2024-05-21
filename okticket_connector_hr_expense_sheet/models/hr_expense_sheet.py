@@ -122,7 +122,7 @@ class HrExpenseBatchImporter(Component):
         for expense_data in grouped_expenses:
             new_sheet = False
             # Search domain
-            sheet_domain = [('state', 'in', ['draft'])]
+            sheet_domain = [('state', 'in', ['submit'])]
             for sheet_field, sheet_value in expense_data['group_fields'].items():
 
                 # TODO desacoplar esta comprobación
