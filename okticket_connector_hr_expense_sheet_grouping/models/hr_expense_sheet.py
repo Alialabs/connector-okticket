@@ -53,15 +53,18 @@ class HrExpenseBatchImporter(Component):
             #     'sheet_name': expense.name,
             # }
         ]
+
         for expense in self.env['hr.expense'].browse(expense_ids):
+            group_fields = {
+                'employee_id': expense.employee_id and expense.employee_id.id,
+                'payment_mode': expense.payment_mode,
+            }
             grouped_expenses.append({
-                'group_fields': {
-                    'employee_id': expense.employee_id and expense.employee_id.id,
-                    'payment_mode': expense.payment_mode,
-                },
+                'group_fields': group_fields,
                 'expense': expense,
                 # 'sheet_name': _('%s - %s') % (self._get_base_sheet_name(expense), expense.payment_mode),
-                'sheet_name': self._get_base_sheet_name(expense),
+                'sheet_name': self._get_base_sheet_name(expense, group_fields),
+                'suffix': self.build_sheet_name_group_suffix(group_fields)
             })
         return grouped_expenses
 
@@ -73,15 +76,18 @@ class HrExpenseBatchImporter(Component):
         """
         grouped_expenses = []
         for expense in self.env['hr.expense'].browse(expense_ids):
+            group_fields = {
+                'employee_id': expense.employee_id and expense.employee_id.id,
+                'payment_mode': expense.payment_mode,
+                'analytic_ids': expense.analytic_account_id and expense.analytic_account_id.id,
+                'name': expense.okticket_expense_id,  # Campo para generar una hoja por gasto
+            }
             grouped_expenses.append({
-                'group_fields': {
-                    'employee_id': expense.employee_id and expense.employee_id.id,
-                    'payment_mode': expense.payment_mode,
-                    'analytic_ids': expense.analytic_account_id and expense.analytic_account_id.id,
-                    'name': expense.okticket_expense_id,  # Campo para generar una hoja por gasto
-                },
+                'group_fields': group_fields,
                 'expense': expense,
-                'sheet_name': _('%s - %s') % (self._get_base_sheet_name(expense), expense.name),  # Empleado - Descripción gasto
+                'sheet_name': _('%s - %s') % (self._get_base_sheet_name(expense, group_fields), expense.name),
+                'suffix': self.build_sheet_name_group_suffix(group_fields)
+                # Empleado - Descripción gasto
             })
         return grouped_expenses
 
@@ -134,19 +140,34 @@ class HrExpenseBatchImporter(Component):
                 end_date = expense_date.replace(day=month_limit_day)
             else:  # 2ª quincena
                 init_date = expense_date.replace(day=month_limit_day)
+
+            # Remove suffix from original sheet name
+            original_sheet_name = expense_data['sheet_name']
+            if 'suffix' in expense_data:
+                suffix = expense_data['suffix']
+                original_sheet_name = original_sheet_name.replace(suffix, '')
+
             sheet_name = self.backend_record.company_id.sheet_name_format or '{name}: {B} - {m} - {Y} - {y}'
-            sheet_name = sheet_name.format(name=expense_data['sheet_name'],
+            sheet_name = sheet_name.format(name=original_sheet_name,
                                            B=date_names['month_name'],
                                            m=date_names['month_number'],
                                            Y=date_names['year'],
                                            y=date_names['year_short'],
                                            id=init_date.day,
                                            ed=end_date.day)
-            expense_data['sheet_name'] = sheet_name
+
             expense_data['group_fields'].update({
                 'init_date': init_date,
                 'end_date': end_date,
             })
+
+            # Add suffix at end of name
+            if 'suffix' in expense_data:
+                sheet_name += expense_data['suffix']
+
+            expense_data['sheet_name'] = sheet_name
+
+
         return grouped_expenses
 
 

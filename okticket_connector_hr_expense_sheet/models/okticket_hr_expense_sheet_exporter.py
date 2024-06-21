@@ -44,19 +44,21 @@ class HrExpenseExporter(Component):
         index = 0
         date_now = datetime.now()
         date_str = str(date_now)[:-7]
-        new_name_to_test = expense_sheet.name + '-' + date_str
-        new_name_to_test = new_name_to_test.replace(" ", "_")
+        new_name_to_test = expense_sheet.name
+        # new_name_to_test = expense_sheet.name + '-' + date_str
+        # new_name_to_test = new_name_to_test.replace(" ", "_")
         found_exp_sheets = True
         max_tries = 20  # Tries search a valid name until 20 times
         while found_exp_sheets:
             found_exp_sheets = backend_adapter.search({'name': new_name_to_test})
             if found_exp_sheets:
-                new_name_to_test = new_name_to_test + '-' + str(index)
+                new_name_to_test = new_name_to_test + ' | ' + str(index + 1)
                 index += 1
             max_tries -= 1
             if max_tries == 0:
-                raise Exception(_("(generate_new_expense_sheet): It is not possible to find a valid name for "
-                                  "expenses sheet: %s"), expense_sheet.name)
+                new_name_to_test = expense_sheet.name + '-' + date_str
+                # raise Exception(_("(generate_new_expense_sheet): It is not possible to find a valid name for "
+                #                   "expenses sheet: %s"), expense_sheet.name)
         expense_sheet = self.env['hr.expense.sheet'].browse(expense_sheet.id)
         expense_sheet.write({'name': new_name_to_test})
         return backend_adapter.create(expense_sheet)
