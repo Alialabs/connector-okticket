@@ -6,6 +6,7 @@
 import base64
 import datetime
 import logging
+import json
 
 import requests
 from odoo import _
@@ -145,6 +146,16 @@ class HrExpenseBatchImporter(Component):
             }
 
     @mapping
+    def okticket_response(self, record):
+        res = ''
+        try:
+            res = json.dumps(record, indent=4, sort_keys=True)
+        except Exception as e:
+            res = ''
+        # result = json.dumps(record)
+        return {'okticket_response': res}
+
+    @mapping
     def payment_method(self, record):
         # TODO a futuro, sincronizar métodos de pago con Okticket
         payment_method = 'na'
@@ -197,8 +208,8 @@ class HrExpenseBatchImporter(Component):
             if cc_analytic_binder and cc_analytic_binder.odoo_id:
                 # Ledger account of the related project
                 okticket_account_id = cc_analytic_binder.odoo_id.okticket_def_account_id \
-                                              and cc_analytic_binder.odoo_id.okticket_def_account_id.id \
-                                              or False
+                                      and cc_analytic_binder.odoo_id.okticket_def_account_id.id \
+                                      or False
         if not okticket_account_id:
             # Ledger account from within the product
             existing = self.get_base_product(record)

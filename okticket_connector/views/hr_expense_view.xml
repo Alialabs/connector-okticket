@@ -23,10 +23,10 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
 
-<!--                <xpath expr="//group/field[@name='product_id']" position="replace">-->
-<!--                    <field name="product_id" required="1" attrs="{'readonly': [('sheet_is_editable', '=', False)]}"-->
-<!--                           context="{'default_can_be_expensed': 1, 'tree_view_ref': 'hr_expense.product_product_expense_tree_view', 'form_view_ref': 'hr_expense.product_product_expense_form_view'}"/>-->
-<!--                </xpath>-->
+                <!--                <xpath expr="//group/field[@name='product_id']" position="replace">-->
+                <!--                    <field name="product_id" required="1" attrs="{'readonly': [('sheet_is_editable', '=', False)]}"-->
+                <!--                           context="{'default_can_be_expensed': 1, 'tree_view_ref': 'hr_expense.product_product_expense_tree_view', 'form_view_ref': 'hr_expense.product_product_expense_form_view'}"/>-->
+                <!--                </xpath>-->
 
                 <field name="tax_ids" position="after">
                     <field name="okticket_img" widget="image"/>
@@ -42,6 +42,7 @@
                     <field name="okticket_vat"/>
                     <field name="okticket_partner_name"/>
 
+
                     <!-- Campos ya presentes en la interfaz -->
                     <!--                    <label for="payment_mode"/>-->
                     <!--                    <div>-->
@@ -51,9 +52,28 @@
 
                 </field>
 
+                <!--                <field name="payment_mode" position="after">-->
+                <!--                    <notebook>-->
+                <!--                        <page name="okticket_expense_response" string="Okticket Response">-->
+                <!--                            <group>-->
+                <!--                                <field name="okticket_response"/>-->
+                <!--                            </group>-->
+                <!--                        </page>-->
+                <!--                    </notebook>-->
+                <!--                </field>-->
+
                 <xpath expr="//form/sheet/div[1]" position="before">
                     <widget name="web_ribbon" title="Deleted in Okticket" bg_color="bg-danger"
                             attrs="{'invisible': [('okticket_deleted', '=', False)]}"/>
+                </xpath>
+                <xpath expr="//form/sheet" position="inside">
+                    <notebook>
+                        <page name="okticket_expense_response" string="Okticket Response" groups="base.group_no_one">
+                            <group>
+                                <field name="okticket_response" nolabel="1" height="100" class="overflow-x: scroll" />
+                            </group>
+                        </page>
+                    </notebook>
                 </xpath>
             </field>
         </record>

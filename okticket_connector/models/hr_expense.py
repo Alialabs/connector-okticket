@@ -31,6 +31,8 @@ class HrExpense(models.Model):
     okticket_deleted = fields.Boolean(string='Deleted in Okticket',
                                       default=False)
 
+    okticket_response = fields.Text(string='Okticket Response')
+
     @api.depends('sheet_id', 'sheet_id.account_move_id', 'sheet_id.state')
     def _compute_state(self):
         """

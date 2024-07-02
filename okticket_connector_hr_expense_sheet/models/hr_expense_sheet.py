@@ -65,6 +65,36 @@ class HrExpenseBatchImporter(Component):
             return getattr(self, time_method)
         raise NotImplementedError('Function %s is not implemented', time_method)
 
+    def build_sheet_name_group_suffix(self, group_fields={}):
+        suffix_translations = {
+            'own_account': _('Own Account'),
+            'company_account': _('Company Account')
+        }
+
+        suffix = ''
+        if 'payment_mode' in group_fields:
+            payment_mode = group_fields['payment_mode']
+            if payment_mode in suffix_translations:
+                payment_mode = suffix_translations[payment_mode]
+            suffix += ' | ' + payment_mode
+        # TODO - Evaluate if necessary add analytic account to name
+        # if 'analytic_ids' in group_fields:
+        #     analytic_ids = group_fields['analytic_ids']
+        #     suffix += ' | ' + analytic_ids
+
+
+        return suffix
+
+    def _get_base_sheet_name(self, expense, group_fields={}):
+        """
+        Sheet name base for generic sheet grouping
+        """
+        base_sheet_name = expense.employee_id and expense.employee_id.name or \
+                          expense.analytic_account_id and expense.analytic_account_id.name or \
+                          expense.name
+        base_sheet_name += self.build_sheet_name_group_suffix(group_fields)
+        return base_sheet_name
+
     ### Funciones de clasificación de gastos ###
     def analytic_classification_method(self, expense_ids):
         """
@@ -85,14 +115,16 @@ class HrExpenseBatchImporter(Component):
             # }
         ]
         for expense in self.env['hr.expense'].browse(expense_ids):
+            group_fields = {
+                'employee_id': expense.employee_id and expense.employee_id.id,
+                'payment_mode': expense.payment_mode,
+                'analytic_ids': expense.analytic_account_id and expense.analytic_account_id.id or False,
+            }
             grouped_expenses.append({
-                'group_fields': {
-                    'employee_id': expense.employee_id and expense.employee_id.id,
-                    'payment_mode': expense.payment_mode,
-                    'analytic_ids': expense.analytic_account_id and expense.analytic_account_id.id or False,
-                },
+                'group_fields': group_fields,
                 'expense': expense,
-                'sheet_name': expense.analytic_account_id and expense.analytic_account_id.name or expense.name,
+                'sheet_name': self._get_base_sheet_name(expense, group_fields),
+                'suffix': self.build_sheet_name_group_suffix(group_fields)
             })
         return grouped_expenses
 
@@ -113,6 +145,7 @@ class HrExpenseBatchImporter(Component):
         for expense_data in grouped_expenses:
             new_sheet = False
             # Search domain
+            #sheet_domain = [('state', 'in', ['draft'])]
             sheet_domain = []
             for sheet_field, sheet_value in expense_data['group_fields'].items():
 
@@ -166,6 +199,7 @@ class HrExpenseBatchImporter(Component):
         """
         okticket_hr_expense_ids = super(HrExpenseBatchImporter, self).run(filters=filters, options=options)
 
+        # TODO - Ver si es viable de pasar por parámetro el object expense
         # Recupera hr.expenses relacionados con los gastos de okticket. Solo aquellos con cuenta anlítica
         hr_expense_ids = [rel.odoo_id.id for rel in self.env['okticket.hr.expense'].search([
             ('id', 'in', okticket_hr_expense_ids)])]
