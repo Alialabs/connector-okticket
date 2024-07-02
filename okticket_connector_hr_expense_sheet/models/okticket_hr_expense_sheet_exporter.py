@@ -60,7 +60,7 @@ class HrExpenseExporter(Component):
 
         expense_sheet = self.env['hr.expense.sheet'].browse(expense_sheet.id)
         expense_sheet.write({'name': new_name_to_test})
-        print(f'Creating conficting in okticket {expense_sheet.name}')
+        _logger.info('Creating conficting in okticket {expense_sheet.name}')
         res = backend_adapter.create(expense_sheet)
         if not res:
             raise Exception(_("(generate_new_expense_sheet): It is not possible to find a valid name for "
@@ -96,7 +96,7 @@ class HrExpenseExporter(Component):
             binding = expense_sheet.okticket_bind_ids and \
                       expense_sheet.okticket_bind_ids[0] or False
             if not binding:
-                print(f'Creating in okticket {expense_sheet.name}')
+                _logger.info(f'Creating in okticket {expense_sheet.name}')
                 creation_result = backend_adapter.create(expense_sheet)
                 if not creation_result:
                     # New expenses sheet
