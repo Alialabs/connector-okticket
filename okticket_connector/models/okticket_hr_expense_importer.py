@@ -272,9 +272,9 @@ class HrExpenseBatchImporter(Component):
                     # del internal_data['external_id']
                     # self.env['hr.expense'].browse(binding.odoo_id.id).write(internal_data)
 
-                    if internal_data and 'company_id' in internal_data:
-                        # Elimina company_id por problemas de dependencias en write que produce error al actualizar
-                        del internal_data['company_id']
+                    # if internal_data and 'company_id' in internal_data:
+                    # Elimina company_id por problemas de dependencias en write que produce error al actualizar
+                    #    del internal_data['company_id']
 
                     binding.write(internal_data)
 
@@ -319,7 +319,7 @@ class HrExpenseBatchImporter(Component):
         _logger.info('Import from Okticket DONE')
 
         # Actualizar fecha de última importación de gastos
-        self.backend_record.import_expenses_since = last_expenses_import
+        # self.backend_record.import_expenses_since = last_expenses_import
         return okticket_hr_expense_ids
 
     def delete_expense_synchro(self, binding):
@@ -363,8 +363,13 @@ class HrExpenseBatchImporter(Component):
             # All expenses not in "sent" state (this is, state = "draft") are deleted before new import or
             # synchronization of expenses from OkTicket. This way, we ensure Odoo-OkTicket synchronization.
             states_to_remove = ['draft']
-            expenses_to_remove = self.env['hr.expense'].search([('state', 'in', states_to_remove)])
-            expenses_to_remove = self.env['hr.expense'].browse([exp.id for exp in expenses_to_remove
-                                                                if exp.okticket_expense_id])
+            company_id = self.backend_record.company_id.id
+            expenses_to_remove = self.env['hr.expense'].search([
+                ('state', 'in', states_to_remove),
+                ('company_id', '=', company_id)
+            ])
+            expenses_to_remove = self.env['hr.expense'].browse([
+                exp.id for exp in expenses_to_remove if exp.okticket_expense_id
+            ])
             expenses_to_remove.unlink()
         return filters, last_expenses_import
