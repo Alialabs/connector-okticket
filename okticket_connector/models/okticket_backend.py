@@ -56,8 +56,8 @@ class OkticketBackend(models.Model):
              "will be imported in the translation of this language.\n"
              "Note that a similar configuration exists "
              "for each storeview.")
-    company_id = fields.Many2one('res.company', string='Company', required=True,
-                                 default=lambda self: self.env.user.company_id)
+    company_id = fields.Many2one('res.company', required=True, readonly=True, default=lambda self: self.env.company)
+
     okticket_company_id = fields.Integer(string='Okticket Company Id',
                                          related='company_id.okticket_company_id')
     active = fields.Boolean('Active', default=True)

@@ -16,7 +16,15 @@
     <record id="group_okticket_conn_manager" model="res.groups">
         <field name="name">Manager</field>
         <field name="category_id" ref="module_category_okticket_connector"/>
-        <field name="implied_ids" eval="[(4, ref('group_okticket_conn_user')), (4, ref('connector.group_connector_manager'))]"/>
+        <field name="implied_ids"
+               eval="[(4, ref('group_okticket_conn_user')), (4, ref('connector.group_connector_manager'))]"/>
 
     </record>
+
+    <record id="okticket_backend_company_rule" model="ir.rule">
+        <field name="name">Okticket Backend Multi-Company</field>
+        <field name="model_id" ref="model_okticket_backend"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+
 </odoo>
