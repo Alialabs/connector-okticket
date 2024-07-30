@@ -1,11 +1,5 @@
-# Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
-# @author: Alia
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-
 import logging
-
-from odoo import _
-from odoo import models, fields, api
+from odoo import _, models, fields, api
 from odoo.exceptions import UserError
 from odoo.addons.component.core import AbstractComponent
 
@@ -40,8 +34,7 @@ class OkticketBinding(models.AbstractModel):
     def import_batch(self, backend, filters=None, **kwargs):
         """ Prepares a batch import of records from OkTicket """
         backend.ensure_one()
-        if filters is None:
-            filters = {}
+        filters = filters or {}
         with backend.work_on(self._name) as work:
             importer = work.component(usage='importer')
             try:
