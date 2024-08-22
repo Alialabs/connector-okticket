@@ -51,7 +51,12 @@ class OkticketExpense(models.Model):
     )
 
     def import_expenses_since(self, backend, since_date=None, **kwargs):
-        self.env['okticket.hr.expense'].sudo().import_batch(backend, priority=5)
+        # Reasignar el contexto para incluir la compañía
+        self = self.with_company(self.backend_record.company_id)
+
+        # Llamar al método import_batch con el contexto actualizado
+        self.env['okticket.hr.expense'].sudo().with_context(company_id=backend.company_id.id).import_batch(backend,
+                                                                                                           priority=5)
         return True
 
 

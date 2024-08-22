@@ -48,7 +48,9 @@ class HrExpenseSheet(models.Model):
 
     def export_record(self, *args, **kwargs):
         """ Creates a new expense sheet on Okticket """
-        self.env['okticket.hr.expense.sheet'].sudo().export_record(self)
+        backend = self.env['okticket.backend'].search([('company_id', '=', self.company_id.id)], limit=1)
+        # Call the export_record method with the backend and args
+        self.env['okticket.hr.expense.sheet'].export_record(backend, self, *args)
         return True
 
 
@@ -80,7 +82,7 @@ class OkticketHrExpenseSheet(models.Model):
                     raise (e or UserError(_('Could not connect to Okticket')))
 
     def change_expense_sheet_status(self, expense_sheets, action_id, comments='No comment'):
-        backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
+        backend = self.env['okticket.backend'].get_default_backend_okticket_connector(company=expense_sheets[0].company_id)
         backend.ensure_one()
         if backend and backend.okticket_exp_sheet_sync:
             with backend.work_on(self._name) as work:
@@ -95,7 +97,7 @@ class OkticketHrExpenseSheet(models.Model):
 
     def delete_expense_sheet(self, exp_sheet):
         """ Delete expense sheet in OkTicket related with Odoo hr.expense.sheet that is being unlinked"""
-        backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
+        backend = self.env['okticket.backend'].get_default_backend_okticket_connector(company=exp_sheet.company_id)
         if backend and backend.okticket_exp_sheet_sync:
             with backend.work_on(self._name) as work:
                 exporter = work.component(usage='record.exporter')

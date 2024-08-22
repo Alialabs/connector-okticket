@@ -225,11 +225,21 @@ class HrExpenseBatchImporter(Component):
         # 2º) Reclasificación en base a parámetros temporales
         expense_time_interval_method = self.get_expense_sheet_grouping_time_method()
         grouped_expenses = expense_time_interval_method(grouped_expenses)
+        grouped_expenses = self.assign_company_to_expenses(grouped_expenses)
 
         # 3º) Creación/actualización de hojas de gasto
         self.grouped_expenses_managing(grouped_expenses)
 
         return True
+
+    def assign_company_to_expenses(self, grouped_expenses):
+        # Asegurarse de iterar sobre cada elemento en la lista grouped_expenses
+        for expense_group in grouped_expenses:
+            # Actualizar el diccionario group_fields en cada elemento
+            expense_group['group_fields'].update({
+                'company_id': self.backend_record.company_id.id,
+            })
+        return grouped_expenses
 
 
 class HrExpenseSheet(models.Model):
@@ -301,6 +311,7 @@ class HrExpenseSheet(models.Model):
             'employee_id': raw_values['employee_id'],
             'user_id': sale_order and sale_order.user_id and sale_order.user_id.id or False,
             'payment_mode': raw_values['payment_mode'],
+            'company_id': raw_values['company_id']
         })
         return raw_values
 

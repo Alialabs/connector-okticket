@@ -56,12 +56,16 @@ class OkticketBackend(models.Model):
     def _select_versions(self):
         return [('1.0', _('1.0 and higher'))]
 
-    def get_default_backend_okticket_connector(self):
+    def get_default_backend_okticket_connector(self, company=False):
         """
         Get backends with 'company_id' like the company of the current user.
         :return: okticket.backend record or False
         """
-        return self.search([('company_id', '=', self.env.user.company_id.id)], limit=1) or False
+        if company:
+            backend = self.search([('company_id', '=', company.id)], limit=1)
+        else:
+            backend = False
+        return backend
 
     def check_auth(self):
         """

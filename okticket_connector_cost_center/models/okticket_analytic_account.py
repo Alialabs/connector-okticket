@@ -107,7 +107,7 @@ class OkticketAccountAnalyticAccount(models.Model):
         Create new cost center in OkTicket and relates with an Odoo account.analytic.account.
         Checks and inform about cost center duplicates.
         """
-        backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
+        backend = self.env['okticket.backend'].get_default_backend_okticket_connector(company=acc_analyt.company_id)
         if backend:
             with backend.work_on(self._name) as work:
                 exporter = work.component(usage='account.analytic.account.exporter')
@@ -124,7 +124,7 @@ class OkticketAccountAnalyticAccount(models.Model):
 
     def create_cost_center(self, acc_analyt):
         """ Create new cost center in OkTicket and relates with an Odoo account.analytic.account """
-        backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
+        backend = self.env['okticket.backend'].get_default_backend_okticket_connector(company=acc_analyt.company_id)
         if backend:
             with backend.work_on(self._name) as work:
                 exporter = work.component(usage='account.analytic.account.exporter')
@@ -140,7 +140,7 @@ class OkticketAccountAnalyticAccount(models.Model):
                             self.env.user.company_id.name, self.env.user.company_id.id)
 
     def modify_cc_name(self, acc_analyt):
-        backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
+        backend = self.env['okticket.backend'].get_default_backend_okticket_connector(company=acc_analyt.company_id)
         if backend:
             with backend.work_on(self._name) as work:
                 exporter = work.component(usage='account.analytic.account.exporter')
@@ -157,7 +157,7 @@ class OkticketAccountAnalyticAccount(models.Model):
 
     def delete_cost_center(self, acc_analyt):
         """ Delete cost center in OkTicket related with Odoo account.analytic.account that is being unlinked """
-        backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
+        backend = self.env['okticket.backend'].get_default_backend_okticket_connector(company=acc_analyt.company_id)
         if backend:
             with backend.work_on(self._name) as work:
                 exporter = work.component(usage='account.analytic.account.exporter')
@@ -174,7 +174,7 @@ class OkticketAccountAnalyticAccount(models.Model):
 
     def modify_active_state_cost_center(self, acc_analyt, new_state):
         """ Modify cost center active state in OkTicket"""
-        backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
+        backend = self.env['okticket.backend'].get_default_backend_okticket_connector(company=acc_analyt.company_id)
         if backend:
             with backend.work_on(self._name) as work:
                 exporter = work.component(usage='account.analytic.account.exporter')

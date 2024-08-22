@@ -52,10 +52,8 @@ class OkticketBinding(models.AbstractModel):
             importer = work.component(usage='record.importer')
             return importer.run(filters=filters)
 
-    def export_record(self, *args):
+    def export_record(self, backend, *args):
         """ Exports record on OkTicket """
-        backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
-        backend.ensure_one()
         with backend.work_on(self._name) as work:
             exporter = work.component(usage='record.exporter')
             return exporter.run(*args)
