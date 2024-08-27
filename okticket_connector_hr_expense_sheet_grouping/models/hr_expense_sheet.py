@@ -195,8 +195,11 @@ class HrExpenseBatchImporter(Component):
                 original_sheet_name = original_sheet_name.replace(suffix, '')
 
             week_prefix = _('WK')
-            sheet_name = week_prefix + '{w} {Y} | {name}'
-            sheet_name = sheet_name.format(name=original_sheet_name, w=date_names['week'], Y=date_names['year'])
+            prefix = week_prefix + '{w} {Y}'
+            prefix = prefix.format(w=date_names['week'], Y=date_names['year'])
+            sheet_name = prefix + '|' + expense_data['sheet_name']
+            # sheet_name = week_prefix + '{w} {Y} | {name}'
+            # sheet_name = sheet_name.format(name=original_sheet_name, w=date_names['week'], Y=date_names['year'])
 
             expense_data['group_fields'].update({
                 'init_date': init_date,
