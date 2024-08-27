@@ -45,10 +45,15 @@ class HrEmployeeMapper(Component):
         return {'backend_id': self.backend_record.id}
 
     @mapping
+    def company_id(self, record):
+        return {'company_id': self.backend_record.company_id.id}
+
+    @mapping
     def odoo_id(self, record):
         """ Will bind the category on a existing one with the same name."""
         existing = self.env['hr.employee'].search(
             [('work_email', '=', record['email']),
+             ('company_id', '=', self.backend_record.company_id.id),
              ('active', 'in', [True, False])],  # Allows modify an archived employee preventing
                                                 # new one creation (duplicaded)
             limit=1,
@@ -90,13 +95,13 @@ class HrEmployeeBatchImporter(Component):
             binder.bind(employee_ext_vals.get('id'), binding)
 
             okticket_hr_employee_ids.append(binding.id)
-            _logger.info('Imported')
+            _logger.info('Imported user %s with company %s', internal_data['name'], self.backend_record.company_id.id)
 
         _logger.info(_('Import from Okticket DONE'))
         return okticket_hr_employee_ids
 
 
-class HrEmployeeRecordImporter(Component):
+'''class HrEmployeeRecordImporter(Component):
     _name = 'okticket.employee.record.exporter'
     _apply_on = 'okticket.hr.employee'
     _usage = 'record.importer'
@@ -134,4 +139,4 @@ class HrEmployeeRecordImporter(Component):
                 binder.bind(employee_ext_vals.get('id'), binding)
                 _logger.info('Imported ')
         _logger.info(_('Import from Okticket DONE'))
-        return okticket_hr_employee_ids
+        return okticket_hr_employee_ids'''

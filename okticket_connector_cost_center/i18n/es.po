@@ -43,6 +43,7 @@ msgid "Analytic Account"
 msgstr "Cuenta analítica"
 
 #. module: okticket_connector_cost_center
+#: model:ir.actions.act_window,name:okticket_connector_cost_center.action_open_okticket_analytic_account_binding
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_backend__okticket_analytic_account_ids
 #: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.view_okticket_backend_form
 msgid "Analytic Account Bindings"
@@ -229,6 +230,7 @@ msgstr "Si está marcado hay nuevos mensajes que requieren su atención."
 
 #. module: okticket_connector_cost_center
 #: model:ir.model.fields,help:okticket_connector_cost_center.field_okticket_account_analytic_account__message_has_error
+#: model:ir.model.fields,help:okticket_connector_cost_center.field_okticket_account_analytic_account__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr "Si se encuentra marcado, algunos mensajes tienen error de envío."
 
@@ -327,7 +329,7 @@ msgid "OkTicket Cost_center_id"
 msgstr "Centro de coste de Okticket"
 
 #. module: okticket_connector_cost_center
-#: model:ir.actions.act_window,name:okticket_connector_cost_center.action_open_okticket_analytic_account_binding
+#: model:ir.actions.act_window,name:okticket_connector_cost_center.action_okticket_analytic_account_binding
 msgid "Okticket Analytic Account Bindings"
 msgstr "Bindings de cuentas analíticas"
 
@@ -360,6 +362,11 @@ msgstr "Proyectos"
 #: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__code
 msgid "Reference"
 msgstr "Referencia"
+
+#. module: okticket_connector_cost_center
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_okticket_account_analytic_account__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "Error de entrega del SMS"
 
 #. module: okticket_connector_cost_center
 #: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.okticket_analytic_account_binding_view_search

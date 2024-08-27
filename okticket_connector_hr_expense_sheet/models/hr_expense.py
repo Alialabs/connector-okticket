@@ -69,7 +69,7 @@ class OkticketHrExpense(models.Model):
     _inherit = 'okticket.hr.expense'
 
     def set_accounted_expense(self, expense, new_state=True):
-        backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
+        backend = self.env['okticket.backend'].get_default_backend_okticket_connector(company=expense.company_id)
         if backend:
             with backend.work_on(self._name) as work:
                 exporter = work.component(usage='hr.expense.exporter')
