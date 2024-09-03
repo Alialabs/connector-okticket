@@ -15,8 +15,9 @@
                     <group>
                         <field name="month_day_limit"
                                attrs="{'invisible': [('expense_sheet_grouping_time', '!=', 'biweekly')],'required': [('expense_sheet_grouping_time', '=', 'biweekly')]}"/>
-                        <field name="sheet_name_format"
-                               attrs="{'invisible': [('expense_sheet_grouping_time', '!=', 'biweekly')],'required': [('expense_sheet_grouping_time', '=', 'biweekly')]}"/>                    </group>
+                        <!--<field name="sheet_name_format"
+                               attrs="{'invisible': [('expense_sheet_grouping_time', '!=', 'biweekly')],'required': [('expense_sheet_grouping_time', '=', 'biweekly')]}"/>-->
+                    </group>
                  </xpath>
             </field>
         </record>
