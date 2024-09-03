@@ -6,3 +6,4 @@ from . import project
 from . import okticket_analytic_account
 from . import okticket_analytic_account_exporter
 from . import analytic_account_listener
+from . import res_company
