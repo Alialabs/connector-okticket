@@ -79,8 +79,10 @@ class HrExpenseBatchImporter(Component):
             if payment_mode in suffix_translations:
                 payment_mode = suffix_translations[payment_mode]
             suffix += ' | ' + payment_mode
-
-
+        if 'name' in group_fields:
+            name = group_fields['name']
+            if name:
+                suffix += ' | ' + name
         return suffix
 
     def _get_base_sheet_name(self, expense, group_fields=None):

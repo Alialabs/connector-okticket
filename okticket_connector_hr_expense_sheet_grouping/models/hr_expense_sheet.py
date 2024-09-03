@@ -83,7 +83,7 @@ class HrExpenseBatchImporter(Component):
                 'employee_id': expense.employee_id and expense.employee_id.id,
                 'payment_mode': expense.payment_mode,
                 #'analytic_ids': expense.analytic_account_id and expense.analytic_account_id.id,
-                'name': expense.okticket_expense_id,
+                'name': expense.name,
             }, suffix=_(" - %s") % expense.name) for expense in self.env['hr.expense'].browse(expense_ids)
         ]
 
