@@ -52,6 +52,16 @@
 
                 </field>
 
+                <!--                <field name="payment_mode" position="after">-->
+                <!--                    <notebook>-->
+                <!--                        <page name="okticket_expense_response" string="Okticket Response">-->
+                <!--                            <group>-->
+                <!--                                <field name="okticket_response"/>-->
+                <!--                            </group>-->
+                <!--                        </page>-->
+                <!--                    </notebook>-->
+                <!--                </field>-->
+
                 <xpath expr="//form/sheet/div[1]" position="before">
                     <widget name="web_ribbon" title="Deleted in Okticket" bg_color="bg-danger"
                             attrs="{'invisible': [('okticket_deleted', '=', False)]}"/>

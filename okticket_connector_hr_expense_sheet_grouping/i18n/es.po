@@ -16,6 +16,23 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: okticket_connector_hr_expense_sheet_grouping
+#: code:addons/okticket_connector_hr_expense_sheet_grouping/models/hr_expense_sheet.py:0
+#, python-format
+msgid "%s - %s"
+msgstr ""
+
+#. module: okticket_connector_hr_expense_sheet_grouping
+#: code:addons/okticket_connector_hr_expense_sheet_grouping/models/hr_expense_sheet.py:0
+#, python-format
+msgid "BI"
+msgstr "QUI"
+
+#. module: okticket_connector_hr_expense_sheet_grouping
+#: model:ir.model.fields.selection,name:okticket_connector_hr_expense_sheet_grouping.selection__res_company__expense_sheet_grouping_time__biweekly
+msgid "Biweekly"
+msgstr "Quincenal"
+
+#. module: okticket_connector_hr_expense_sheet_grouping
 #: model:ir.model,name:okticket_connector_hr_expense_sheet_grouping.model_res_company
 msgid "Companies"
 msgstr "Compañías"
@@ -58,6 +75,17 @@ msgid "Init Date"
 msgstr "Fecha inicio"
 
 #. module: okticket_connector_hr_expense_sheet_grouping
+#: code:addons/okticket_connector_hr_expense_sheet_grouping/models/hr_expense_sheet.py:0
+#, python-format
+msgid "MO"
+msgstr "MES"
+
+#. module: okticket_connector_hr_expense_sheet_grouping
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet_grouping.field_res_company__month_day_limit
+msgid "Month day"
+msgstr "Día del mes"
+
+#. module: okticket_connector_hr_expense_sheet_grouping
 #: model:ir.model.fields.selection,name:okticket_connector_hr_expense_sheet_grouping.selection__res_company__expense_sheet_grouping_time__monthly
 msgid "Monthly"
 msgstr "Mensual"
@@ -66,6 +94,11 @@ msgstr "Mensual"
 #: model:ir.model.fields.selection,name:okticket_connector_hr_expense_sheet_grouping.selection__res_company__expense_sheet_grouping_method__no_grouping
 msgid "No grouping"
 msgstr "Sin agrupar"
+
+#. module: okticket_connector_hr_expense_sheet_grouping
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet_grouping.field_res_company__sheet_name_format
+msgid "Sheet Name Format"
+msgstr "Formato de nombre para hoja de gastos"
 
 #. module: okticket_connector_hr_expense_sheet_grouping
 #: model:ir.model.fields.selection,name:okticket_connector_hr_expense_sheet_grouping.selection__res_company__expense_sheet_grouping_method__single_expense
@@ -83,3 +116,26 @@ msgstr ""
 #: model:ir.model.fields.selection,name:okticket_connector_hr_expense_sheet_grouping.selection__res_company__expense_sheet_grouping_method__standard
 msgid "Standard"
 msgstr "Estándar"
+
+#. module: okticket_connector_hr_expense_sheet_grouping
+#: code:addons/okticket_connector_hr_expense_sheet_grouping/models/hr_expense_sheet.py:0
+#, python-format
+msgid "WK"
+msgstr "S"
+
+#. module: okticket_connector_hr_expense_sheet_grouping
+#: model:ir.model.fields.selection,name:okticket_connector_hr_expense_sheet_grouping.selection__res_company__expense_sheet_grouping_time__weekly
+msgid "Weekly"
+msgstr "Semanal"
+
+#. module: okticket_connector_hr_expense_sheet_grouping
+#: model:ir.model.fields,help:okticket_connector_hr_expense_sheet_grouping.field_res_company__sheet_name_format
+msgid ""
+"{name} - Sheet Name\n"
+"{M} - Full month name. January, February, ...\n"
+"{m} - Month as a zero-padded decimal number. 01, 02, ..., 12\n"
+"{Y} - Year with century as a decimal number. 2013, 2019\n"
+"{y} - Year without century as a zero-padded decimal number. 00, 01, ..., 99\n"
+"{id} - First day as number. 1, 2, ..., 31\n"
+"{ed} - Last day as number. 1, 2, ..., 31\n"
+msgstr ""

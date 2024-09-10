@@ -97,8 +97,8 @@ class OkticketHrExpenseSheet(models.Model):
 
     def delete_expense_sheet(self, exp_sheet):
         """ Delete expense sheet in OkTicket related with Odoo hr.expense.sheet that is being unlinked"""
-        backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
-        if backend:
+        backend = self.env['okticket.backend'].get_default_backend_okticket_connector(company=exp_sheet.company_id)
+        if backend and backend.okticket_exp_sheet_sync:
             with backend.work_on(self._name) as work:
                 exporter = work.component(usage='record.exporter')
                 try:

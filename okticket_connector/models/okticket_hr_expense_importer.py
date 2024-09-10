@@ -273,6 +273,7 @@ class HrExpenseBatchImporter(Component):
                     binder.bind(expense_ext_vals.get('_id'), binding)
                     _logger.info('Imported')
 
+                self.backend_record.import_expenses_since = last_expenses_import
             except Exception as e:
                 msg = _('\nError: %s\n') % e
                 log_vals = {

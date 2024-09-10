@@ -121,6 +121,12 @@ msgid "Company"
 msgstr "Compañía"
 
 #. module: okticket_connector_hr_expense_sheet
+#: code:addons/okticket_connector_hr_expense_sheet/models/hr_expense_sheet.py:0
+#, python-format
+msgid "Company Account"
+msgstr "CC"
+
+#. module: okticket_connector_hr_expense_sheet
 #: code:addons/okticket_connector_hr_expense_sheet/models/hr_expense.py:0
 #: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
 #: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
@@ -371,6 +377,12 @@ msgid "My Activity Deadline"
 msgstr ""
 
 #. module: okticket_connector_hr_expense_sheet
+#: code:addons/okticket_connector_hr_expense_sheet/models/hr_expense_sheet.py:0
+#, python-format
+msgid "NO COST CENTER"
+msgstr "SIN CENTRO DE COSTE"
+
+#. module: okticket_connector_hr_expense_sheet
 #: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__activity_date_deadline
 msgid "Next Activity Deadline"
 msgstr "Siguiente plazo de actividad"
@@ -447,6 +459,12 @@ msgid "Okticket Hr Expense Sheet Bindings"
 msgstr "Bindings de hojas de gastos"
 
 #. module: okticket_connector_hr_expense_sheet
+#: code:addons/okticket_connector_hr_expense_sheet/models/hr_expense_sheet.py:0
+#, python-format
+msgid "Own Account"
+msgstr "CT"
+
+#. module: okticket_connector_hr_expense_sheet
 #: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__payment_mode
 msgid "Paid By"
 msgstr "Pagado Por"
@@ -465,6 +483,11 @@ msgstr "Registrar pago"
 #: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__activity_user_id
 msgid "Responsible User"
 msgstr "Usuario responsable"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "Error de envio de SMS"
 
 #. module: okticket_connector_hr_expense_sheet
 #: model:ir.model,name:okticket_connector_hr_expense_sheet.model_sale_order_line
