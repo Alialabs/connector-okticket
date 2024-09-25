@@ -43,13 +43,19 @@ class ProductTemplate(models.Model):
         if not isinstance(value, int):
             raise ValueError(_('Value should be integer (not %s)') % type(value).__name__)
 
-        odoo_ids = self.env['okticket.product.template'].search(
-            [('external_id', operator, value)]
-        ).mapped('odoo_id.id')
+        domain = []
+        odoo_ids = []
+        for product in self.env['okticket.product.template'].search([('external_id', operator, value)]).mapped(
+                'odoo_id'):
+            odoo_ids.append(product.id)
+            if product.rebillable_prod_id:
+                odoo_ids.append(product.rebillable_prod_id.id)
+            if product.invoice_prod_id:
+                odoo_ids.append(product.invoice_prod_id.id)
 
         if odoo_ids:
-            return [('id', 'in', odoo_ids)]
-        return []
+            domain.append(('id', 'in', odoo_ids))
+        return domain
 
 
 class OkticketProductTemplate(models.Model):
