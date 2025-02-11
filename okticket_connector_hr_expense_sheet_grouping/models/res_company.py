@@ -29,8 +29,23 @@ class ResCompany(models.Model):
         ),
     )
     expense_sheet_grouping_time = fields.Selection(
-        selection_add=[('monthly', 'Monthly')],
+        selection_add=[('monthly', 'Monthly'), ('biweekly', 'Biweekly'), ('weekly', 'Weekly')],
         ondelete={
             'monthly': 'set no_interval',
+            'biweekly': 'set no_interval',
+            'weekly': 'set no_interval',
         }
     )
+    sheet_name_format = fields.Char(string='Sheet Name Format', default='BI {id}-{ed} {B} {Y} | {name}',
+                                    help=(
+                                        "{name} - Sheet Name\n"
+                                        "{M} - Full month name. January, February, ...\n"
+                                        "{m} - Month as a zero-padded decimal number. 01, 02, ..., 12\n"
+                                        "{Y} - Year with century as a decimal number. 2013, 2019\n"
+                                        "{y} - Year without century as a zero-padded decimal number. 00, 01, ..., 99\n"
+                                        "{id} - First day as number. 1, 2, ..., 31\n"
+                                        "{ed} - Last day as number. 1, 2, ..., 31\n"
+                                    ))
+    month_day_limit = fields.Integer(
+        string='Month day',
+        default=15)

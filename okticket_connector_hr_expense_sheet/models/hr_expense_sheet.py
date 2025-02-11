@@ -65,6 +65,41 @@ class HrExpenseBatchImporter(Component):
             return getattr(self, time_method)
         raise NotImplementedError('Function %s is not implemented', time_method)
 
+    def build_sheet_name_group_suffix(self, group_fields=None):
+        if group_fields is None:
+            group_fields = {}
+        suffix_translations = {
+            'own_account': _('Own Account'),
+            'company_account': _('Company Account')
+        }
+
+        suffix = ''
+        if 'payment_mode' in group_fields:
+            payment_mode = group_fields['payment_mode']
+            if payment_mode in suffix_translations:
+                payment_mode = suffix_translations[payment_mode]
+            suffix += ' | ' + payment_mode
+        if 'name' in group_fields:
+            name = group_fields['name']
+            if name:
+                suffix += ' | ' + name
+        return suffix
+
+    def _get_base_sheet_name(self, expense, group_fields=None):
+        """
+        Sheet name base for generic sheet grouping.
+        """
+        if group_fields is None:
+            group_fields = {}
+        employee_name = expense.employee_id.name if expense.employee_id else ""
+        base_sheet_name = f"{employee_name}"
+        if 'analytic_ids' in group_fields:
+            analytic_ids = group_fields['analytic_ids']
+            analytic_account_name = expense.analytic_account_id.name if expense.analytic_account_id else _("NO COST CENTER")
+            base_sheet_name += f" | {analytic_account_name}"
+        base_sheet_name += self.build_sheet_name_group_suffix(group_fields)
+        return base_sheet_name
+
     ### Funciones de clasificación de gastos ###
     def analytic_classification_method(self, expense_ids):
         """
@@ -85,14 +120,16 @@ class HrExpenseBatchImporter(Component):
             # }
         ]
         for expense in self.env['hr.expense'].browse(expense_ids):
+            group_fields = {
+                'employee_id': expense.employee_id and expense.employee_id.id,
+                'payment_mode': expense.payment_mode,
+                'analytic_ids': expense.analytic_account_id and expense.analytic_account_id.id or False,
+            }
             grouped_expenses.append({
-                'group_fields': {
-                    'employee_id': expense.employee_id and expense.employee_id.id,
-                    'payment_mode': expense.payment_mode,
-                    'analytic_ids': expense.analytic_account_id and expense.analytic_account_id.id or False,
-                },
+                'group_fields': group_fields,
                 'expense': expense,
-                'sheet_name': expense.analytic_account_id and expense.analytic_account_id.name or expense.name,
+                'sheet_name': self._get_base_sheet_name(expense, group_fields),
+                'suffix': self.build_sheet_name_group_suffix(group_fields)
             })
         return grouped_expenses
 
@@ -110,46 +147,54 @@ class HrExpenseBatchImporter(Component):
         :param grouped_expenses: list of dict with 'group_fields' dict with key hr.expense.sheet field and value
         """
         hr_expense_sheet_obj = self.env['hr.expense.sheet']
+
         for expense_data in grouped_expenses:
+            # Inicializa la variable para la nueva hoja de gastos
             new_sheet = False
-            # Search domain
+
+            # Construye el dominio de búsqueda para la hoja de gastos
             sheet_domain = []
             for sheet_field, sheet_value in expense_data['group_fields'].items():
-
-                # TODO desacoplar esta comprobación
                 if sheet_field != 'analytic_ids' or sheet_value:
-                    # Solo incluye el campo si es distinto a analytic_ids
-                    # o si siendo analytic_ids tiene valor distinto de False
+                    # Si el campo no es 'analytic_ids' o si lo es pero tiene un valor, añadir al dominio
                     sheet_domain.append((sheet_field, '=', sheet_value))
+                else:
+                    # Si no hay cuenta analítica, usar 'IS NULL'
+                    sheet_domain.append(('analytic_ids', '=', False))
 
-            # Expense sheet values to update/create
+            # Valores a actualizar/crear en la hoja de gastos
             expense_sheet_values = {
                 'expense_line_ids': [(4, expense_data['expense'].id)],
             }
 
+            # Busca si ya existe una hoja de gastos con el dominio especificado
             hr_expense_sheet = hr_expense_sheet_obj.search(sheet_domain)
-            if hr_expense_sheet:  # Update
-                hr_expense_sheet.write(expense_sheet_values)
-            else:  # Create
 
-                # Genera diccionario de valores para crear la hoja de gasto
-                # en base a los parámetros identificativos del gasto
+            if hr_expense_sheet:  # Actualiza la hoja existente
+                hr_expense_sheet.write(expense_sheet_values)
+            else:  # Crea una nueva hoja de gastos
                 new_sheet_values = {}
                 for sheet_field, sheet_value in expense_data['group_fields'].items():
                     if sheet_field not in new_sheet_values:
                         new_sheet_values[sheet_field] = sheet_value
 
-                # Se incluye el name de la hoja de gastos, si exsite
+                # Agrega el nombre de la hoja si está disponible
                 if 'sheet_name' in expense_data and expense_data['sheet_name']:
                     new_sheet_values['name'] = expense_data['sheet_name']
 
-                # Prepare de hojas de gastos
+                # Prepara y actualiza los valores de la nueva hoja de gastos
                 new_sheet_values = hr_expense_sheet_obj.prepare_expense_sheet_values(new_sheet_values)
                 new_sheet_values.update(expense_sheet_values)
+
+                # Crea la nueva hoja de gastos
                 new_sheet = hr_expense_sheet_obj.create(new_sheet_values)
+
+                # Manejo de errores durante la sincronización con Okticket
                 if new_sheet and not new_sheet.okticket_bind_ids \
-                        and self.collection.okticket_exp_sheet_sync:  # Si está activa la sincronización
-                    new_sheet.unlink()  # Delete expense sheet. Some error occurs while Okticket sync.
+                        and self.collection.okticket_exp_sheet_sync:
+                    new_sheet.unlink()  # Elimina la hoja de gastos si ocurre un error
+
+        return grouped_expenses
 
     def sanitize_expenses(self, hr_expense_ids):
         """
@@ -166,12 +211,15 @@ class HrExpenseBatchImporter(Component):
         """
         okticket_hr_expense_ids = super(HrExpenseBatchImporter, self).run(filters=filters, options=options)
 
+        # TODO - Ver si es viable de pasar por parámetro el object expense
         # Recupera hr.expenses relacionados con los gastos de okticket. Solo aquellos con cuenta anlítica
         hr_expense_ids = [rel.odoo_id.id for rel in self.env['okticket.hr.expense'].search([
             ('id', 'in', okticket_hr_expense_ids)])]
 
         hr_expense_ids = self.sanitize_expenses(hr_expense_ids)
         self.expense_sheet_processing(hr_expense_ids)
+
+        self.env.cr.commit()  # Fin de proceso de backend
 
         return okticket_hr_expense_ids
 
@@ -191,11 +239,21 @@ class HrExpenseBatchImporter(Component):
         # 2º) Reclasificación en base a parámetros temporales
         expense_time_interval_method = self.get_expense_sheet_grouping_time_method()
         grouped_expenses = expense_time_interval_method(grouped_expenses)
+        grouped_expenses = self.assign_company_to_expenses(grouped_expenses)
 
         # 3º) Creación/actualización de hojas de gasto
         self.grouped_expenses_managing(grouped_expenses)
 
         return True
+
+    def assign_company_to_expenses(self, grouped_expenses):
+        # Asegurarse de iterar sobre cada elemento en la lista grouped_expenses
+        for expense_group in grouped_expenses:
+            # Actualizar el diccionario group_fields en cada elemento
+            expense_group['group_fields'].update({
+                'company_id': self.backend_record.company_id.id,
+            })
+        return grouped_expenses
 
 
 class HrExpenseSheet(models.Model):
@@ -210,13 +268,24 @@ class HrExpenseSheet(models.Model):
         if not isinstance(value, list):
             value = [value]
 
-        self.env.cr.execute("""
-            SELECT DISTINCT sheet.id
-            FROM hr_expense_sheet sheet
-            INNER JOIN hr_expense exp
-            ON sheet.id = exp.sheet_id
-            WHERE exp.analytic_account_id IN %s
-        """, (tuple(value),))
+        # Si el valor es False, significa que estamos buscando registros donde analytic_account_id es NULL
+        if value == [False] or value == [None]:
+            self.env.cr.execute("""
+                SELECT DISTINCT sheet.id
+                FROM hr_expense_sheet sheet
+                INNER JOIN hr_expense exp
+                ON sheet.id = exp.sheet_id
+                WHERE exp.analytic_account_id IS NULL
+            """)
+        else:
+            self.env.cr.execute("""
+                SELECT DISTINCT sheet.id
+                FROM hr_expense_sheet sheet
+                INNER JOIN hr_expense exp
+                ON sheet.id = exp.sheet_id
+                WHERE exp.analytic_account_id IN %s
+            """, (tuple(value),))
+
         return [('id', 'in', [sheet_id[0] for sheet_id in self.env.cr.fetchall()])]
 
     analytic_ids = fields.Many2many('account.analytic.account',
@@ -267,6 +336,7 @@ class HrExpenseSheet(models.Model):
             'employee_id': raw_values['employee_id'],
             'user_id': sale_order and sale_order.user_id and sale_order.user_id.id or False,
             'payment_mode': raw_values['payment_mode'],
+            'company_id': raw_values['company_id']
         })
         return raw_values
 

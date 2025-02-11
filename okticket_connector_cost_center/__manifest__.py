@@ -20,6 +20,7 @@
         'views/okticket_analytic_account_view.xml',
         'views/account_analytic_account_view.xml',
         'views/okticket_backend_view.xml',
+        'views/company_view.xml'
     ],
     'application': False,
     'installable': True,

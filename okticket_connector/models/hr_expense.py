@@ -1,7 +1,3 @@
-# Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
-# @author: Alia
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-
 from odoo import fields, models, api, _
 from odoo.exceptions import UserError
 
@@ -14,7 +10,8 @@ _payment_method_selection = [('efectivo', 'Cash'), ('tarjeta', 'Business card'),
 class HrExpense(models.Model):
     _inherit = 'hr.expense'
 
-    payment_method = fields.Selection(_payment_method_selection, string='Payment method', readonly=True,
+    payment_method = fields.Selection(_payment_method_selection,
+                                      string='Payment method', readonly=True,
                                       copy=False, index=True, track_visibility='onchange', default='na')
     okticket_vat = fields.Char(string='VAT Number')
     okticket_partner_name = fields.Char(string='Partner Name')
@@ -31,6 +28,8 @@ class HrExpense(models.Model):
     okticket_deleted = fields.Boolean(string='Deleted in Okticket',
                                       default=False)
 
+    okticket_response = fields.Text(string='Okticket Response')
+
     analytic_account_id = fields.Many2one(
         string="Analytic account from OkTicket",
         comodel_name="account.analytic.account",
@@ -41,29 +40,36 @@ class HrExpense(models.Model):
     @api.depends('sheet_id', 'sheet_id.account_move_id', 'sheet_id.state')
     def _compute_state(self):
         """
-        Checks if expense is in draft state and has okticket_deleted = True.
-        If true, removes expense.
+        Checks if the expense is in draft state and has okticket_deleted = True.
+        If true, removes the expense.
         """
         super(HrExpense, self)._compute_state()
+        self._remove_deleted_draft_expenses()
+
+    def _remove_deleted_draft_expenses(self):
         expenses_to_unlink = self.filtered(lambda exp: exp.okticket_deleted and exp.state == 'draft')
         if expenses_to_unlink:
             expenses_to_unlink.unlink()
 
     def unlink(self):
-        for expense in self:
-            if expense.state not in ['draft']:
-                raise UserError(_('Delete expenses in a state different from draft is not allowed.'))
-        if self:
-            self.registry_expense_unlink_op()
+        self._check_unlink_conditions()
+        self._log_expense_unlink_op()
         return super(HrExpense, self).unlink()
 
-    def registry_expense_unlink_op(self):
-        """
-        Generates log.event message to registry expense unlink
-        """
-        msg = 'User %s [ID: %s] has deleted the following expenses: ' % (self.env.user.name, self.env.uid)
-        msg += " | ".join(['ID: %s - OKTICKET_ID: %s' % (exp.id, exp.okticket_expense_id) for exp in self])
-        self.env['log.event'].add_event({
-            'backend_id': False,
-            'msg': msg,
-        })
+    def _check_unlink_conditions(self):
+        for expense in self:
+            if expense.state != 'draft':
+                raise UserError(_('Deleting expenses in a state different from draft is not allowed.'))
+
+    def _log_expense_unlink_op(self):
+        if self:
+            msg = self._generate_unlink_log_message()
+            self.env['log.event'].add_event({
+                'backend_id': False,
+                'msg': msg,
+            })
+
+    def _generate_unlink_log_message(self):
+        user_info = 'User %s [ID: %s]' % (self.env.user.name, self.env.uid)
+        expense_info = " | ".join(['ID: %s - OKTICKET_ID: %s' % (exp.id, exp.okticket_expense_id) for exp in self])
+        return f'{user_info} has deleted the following expenses: {expense_info}'

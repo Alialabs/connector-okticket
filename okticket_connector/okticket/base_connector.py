@@ -1,7 +1,3 @@
-# Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
-# @author: Alia
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-
 import http.client
 import json
 import logging
@@ -25,19 +21,7 @@ from .exceptions import (
 )
 
 
-class BaseConnector(object):
-    # Attributes
-    http_client_conn_url = None
-    base_url = None
-    auth_uri = None
-    uri_op_path = None
-    token_type = None
-    access_token = None
-    refresh_token = None
-    okticket_company_id = None
-    backend_id = None
-    https = False
-
+class BaseConnector:
     def __init__(self):
         self.http_client_conn_url = ""
         self.base_url = ""
@@ -64,8 +48,10 @@ class BaseConnector(object):
         User login. Stores token_type and access_token
         """
         fields_dict = self.get_login_values()
-        response = self.general_request(self.base_url + self.auth_uri, "POST", fields_dict,
-                                        header_gen_method=self.login_header_generator, only_data=False, https=https)
+        response = self.general_request(
+            self.base_url + self.auth_uri, "POST", fields_dict,
+            header_gen_method=self.login_header_generator, only_data=False, https=https
+        )
         if response and response.get('result'):
             self.token_type = response['result'].get('token_type')
             self.access_token = response['result'].get('access_token')
@@ -75,120 +61,84 @@ class BaseConnector(object):
         return self.base_url + self.uri_op_path + path
 
     def find_header_generator(self, params):
-        result = {
-            'Authorization': self.token_type + ' ' + self.access_token,
+        return {
+            'Authorization': f"{self.token_type} {self.access_token}",
             'Accept': "application/json",
         }
-        return result
 
     def default_header_generator(self):
-        """Generates a header template"""
         return {
-            'Authorization': self.token_type + ' ' + self.access_token,
+            'Authorization': f"{self.token_type} {self.access_token}",
             'Accept': "application/json",
             'company': self.okticket_company_id,
         }
 
     def find(self, path, params=None, https=False, company_in_header=False):
-        """
-        GET call to obtain the list of items
-        :param path: object's specific path
-        :param params: filter params
-        :return: [ dict ]
-        """
         url = self.get_full_path(path)
-        headers = {}
-        if company_in_header:
-            header_gen_method = False
-        else:
-            header_gen_method = self.find_header_generator
-        response = self.general_request(url, "GET", fields_dict={}, headers=headers,
-                                        header_gen_method=header_gen_method,
-                                        params=params, https=https)
-        return response
+        header_gen_method = None if company_in_header else self.find_header_generator
+        return self.general_request(url, "GET", {}, header_gen_method=header_gen_method, params=params, https=https)
 
     def find_one(self, path, params=None, https=False, company_in_header=False):
-        url = self.get_full_path(path)
-        headers = {}
-        if company_in_header:
-            header_gen_method = False
-        else:
-            header_gen_method = self.find_header_generator
-        response = self.general_request(url, "GET", fields_dict={}, headers=headers,
-                                        header_gen_method=header_gen_method,
-                                        params=params, https=https)
-        return response
+        return self.find(path, params=params, https=https, company_in_header=company_in_header)
 
     def general_request(self, url, type_request, fields_dict, headers=None,
                         header_gen_method=None, params=None, raw_response=False, only_data=True, https=False):
         try:
-            # Dynamic headers and params generation
-            default_header = {}
-            if not header_gen_method:
-                default_header = self.default_header_generator()
-            headers = headers or header_gen_method and header_gen_method(fields_dict) or {}
+            default_header = self.default_header_generator() if not header_gen_method else {}
+            headers = headers or (header_gen_method(fields_dict) if header_gen_method else {})
             default_header.update(headers)
-            result = self.process_request(url, type_request, params=params, data=fields_dict, headers=default_header,
-                                          raw_response=raw_response, only_data=only_data, https=https)
+            result = self.process_request(
+                url, type_request, params=params, data=fields_dict, headers=default_header,
+                raw_response=raw_response, only_data=only_data, https=https
+            )
         except AuthError:
-            # Retry after new authentication
             if url != 'http://dev.okticket.es/api/public/oauth/token':
                 self.login(https=https)
-                result = self.general_request(url, type_request, fields_dict, headers=headers,
-                                              header_gen_method=header_gen_method, params=params,
-                                              raw_response=raw_response, only_data=only_data, https=https)
+                result = self.general_request(
+                    url, type_request, fields_dict, headers=headers,
+                    header_gen_method=header_gen_method, params=params,
+                    raw_response=raw_response, only_data=only_data, https=https
+                )
 
         if result and 'result' in result and not result['result'] \
-                and 'log' in result and result['log'].get('type', '') == 'error':
-            error_msg = "Error status %s: %s" % (result['log']['status'], result['log']['result'])
+                and 'log' in result and result['log'].get('type') == 'error':
+            error_msg = f"Error status {result['log']['status']}: {result['log']['result']}"
             raise UserError(error_msg)
 
         return result
 
     def get_http_connection(self, https=False):
-        if https:
-            conn = http.client.HTTPSConnection(self.http_client_conn_url)
-        else:
-            conn = http.client.HTTPConnection(self.http_client_conn_url)
-        return conn
+        return http.client.HTTPSConnection(self.http_client_conn_url) if https else http.client.HTTPConnection(self.http_client_conn_url)
 
     def process_request(self, url, type_request, params=None, data=None, headers=None, raw_response=None,
                         only_data=True, https=False):
-        """
-        HTTP request processing
-        """
         assert self.http_client_conn_url, "http_client_conn_url param is required"
 
         if params:  # URL params
             params = urllib.parse.urlencode(params)
-            url = url + "?" + params if type_request == "GET" and params else url
+            if type_request == "GET" and params:
+                url = f"{url}?{params}"
 
         conn = self.get_http_connection(https=https)
         try:
-            payload_json = json.dumps(data)  # JSON
+            payload_json = json.dumps(data)
             response = self.request_base(url, type_request, conn, params=params, data=payload_json, headers=headers,
                                          raw_response=raw_response)
             result = response['result']
             if only_data and result:
                 result = result.get('data')
-                # Goes through all the pages
-                if response['result'].get('links'):
-                    while response['result']['links'].get('next'):
-                        # Close and open once again the connection for making the requests for the next "page"
-                        conn.close()
-                        conn = self.get_http_connection(https=https)
-                        next_url = response['result']['links']['next']
-                        next_url = next_url + "&" + params if type_request == "GET" and params else next_url
-                        response = self.request_base(next_url, type_request, conn, params=params, data=data,
-                                                     headers=headers,
-                                                     raw_response=raw_response)
-                        result = result + response['result'].get('data')
+                while response['result'].get('links', {}).get('next'):
+                    conn.close()
+                    conn = self.get_http_connection(https=https)
+                    next_url = response['result']['links']['next']
+                    if type_request == "GET" and params:
+                        next_url = f"{next_url}&{params}"
+                    response = self.request_base(next_url, type_request, conn, params=params, data=data,
+                                                 headers=headers, raw_response=raw_response)
+                    result += response['result'].get('data')
         finally:
             conn.close()
-        return {
-            'result': result,
-            'log': response['log'],
-        }
+        return {'result': result, 'log': response['log']}
 
     def request_base(self, url, type_request, conn, params={}, data={}, headers={}, raw_response=None):
         """ Log.event structure """
