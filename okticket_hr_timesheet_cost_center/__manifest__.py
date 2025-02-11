@@ -7,7 +7,7 @@
     'summary': 'When a new company is created with hr_timesheet addon, a new project is created too. '
                'That starts an Odoo analytic account - Okticket cost center synchronization. '
                'This add-on manages this process.',
-    'version': '16.0.1.0.1',
+    'version': '17.0.1.0.0',
     'category': 'Connector',
     'depends': [
         'hr_timesheet',

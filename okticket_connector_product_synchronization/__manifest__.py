@@ -5,7 +5,7 @@
 {
     'name': 'Alia Okticket Connector Product Synchronization',
     'summary': 'Implements Okticket product synchronization operations.',
-    'version': '16.0.1.0.1',
+    'version': '17.0.1.0.0',
     'category': 'Connector',
     'depends': [
         'okticket_connector',
