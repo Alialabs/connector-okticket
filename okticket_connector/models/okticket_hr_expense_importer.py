@@ -167,8 +167,12 @@ class HrExpenseBatchImporter(Component):
             cc_analytic_binder = self.env['okticket.account.analytic.account'].search(
                 [('external_id', '=', int(record['cost_center_id']))], limit=1
             )
+
             if cc_analytic_binder and cc_analytic_binder.odoo_id:
-                fields = {'analytic_account_id': cc_analytic_binder.odoo_id.id}
+                fields = {
+                    'analytic_account_id': cc_analytic_binder.odoo_id.id,
+                    'analytic_distribution': {cc_analytic_binder.odoo_id.id: 100}
+                }
                 sale_order = cc_analytic_binder.odoo_id.get_related_sale_order()
                 if sale_order:
                     fields.update({'sale_order_id': sale_order.id})
