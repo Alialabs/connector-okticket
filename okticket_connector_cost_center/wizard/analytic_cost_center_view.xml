@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
-     @author: Alia
-     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data>
 
@@ -11,14 +8,14 @@
             <field name="arch" type="xml">
                 <form string="Confirm Cost Center from Analytic">
                     <field name="duplicate_confirmation_needed" invisible="1"/>
-                    <group attrs="{'invisible': [('duplicate_confirmation_needed', '=', True)]}">
+                    <group invisible="duplicate_confirmation_needed">
                         <p class="body">
                             Cost centers will be created from
                             the indicated analytics.
                             Do you want to continue?
                         </p>
                     </group>
-                    <group attrs="{'invisible': [('duplicate_confirmation_needed', '=', False)]}">
+                    <group invisible="not duplicate_confirmation_needed">
                         <p class="body">
                             Warning! Duplicated cost center will be created.
                             Check box below if you want to continue.
@@ -26,8 +23,7 @@
                         <field name="confirm_duplicate"/>
                     </group>
                     <footer>
-                        <button string="Confirm" name="cost_center_from_analytic_confirm" type="object" default_focus="1"
-                                class="btn-primary"/>
+                        <button string="Confirm" name="cost_center_from_analytic_confirm" type="object" default_focus="1" class="btn-primary"/>
                         <button string="Cancel" class="btn-secondary" special="cancel"/>
                     </footer>
                 </form>

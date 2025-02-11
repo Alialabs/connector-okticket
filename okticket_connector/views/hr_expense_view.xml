@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
-     @author: Alia
-     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data>
 
@@ -63,14 +60,13 @@
                 <!--                </field>-->
 
                 <xpath expr="//form/sheet/div[1]" position="before">
-                    <widget name="web_ribbon" title="Deleted in Okticket" bg_color="bg-danger"
-                            attrs="{'invisible': [('okticket_deleted', '=', False)]}"/>
+                    <widget name="web_ribbon" title="Deleted in Okticket" bg_color="bg-danger" invisible="not okticket_deleted"/>
                 </xpath>
                 <xpath expr="//form/sheet" position="inside">
                     <notebook>
                         <page name="okticket_expense_response" string="Okticket Response" groups="base.group_no_one">
                             <group>
-                                <field name="okticket_response" nolabel="1" height="100" class="overflow-x: scroll" />
+                                <field name="okticket_response" nolabel="1" height="100" class="overflow-x: scroll"/>
                             </group>
                         </page>
                     </notebook>

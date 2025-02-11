@@ -3,7 +3,7 @@
 # @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 {
-    'name': 'Okticket HR Timesheet Cost Center',
+    'name': 'Alia Okticket HR Timesheet Cost Center',
     'summary': 'When a new company is created with hr_timesheet addon, a new project is created too. '
                'That starts an Odoo analytic account - Okticket cost center synchronization. '
                'This add-on manages this process.',

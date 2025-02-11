@@ -73,7 +73,7 @@ class HrExpenseBatchImporter(Component):
     @mapping
     def amount(self, record):
         return {
-            'unit_amount': 0.0,  # Para hacer visibles los impuestos en la interfaz Odoo 15
+            'price_unit': 0.0,  # Para hacer visibles los impuestos en la interfaz Odoo 15
             'total_amount': record['amount']
         }
 

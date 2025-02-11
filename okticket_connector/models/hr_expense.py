@@ -37,7 +37,7 @@ class HrExpense(models.Model):
         help="Cost center (analytical account) from OkTicket synchronization",
     )
 
-    @api.depends('sheet_id', 'sheet_id.account_move_id', 'sheet_id.state')
+    @api.depends('sheet_id', 'sheet_id.account_move_ids', 'sheet_id.state')
     def _compute_state(self):
         """
         Checks if the expense is in draft state and has okticket_deleted = True.

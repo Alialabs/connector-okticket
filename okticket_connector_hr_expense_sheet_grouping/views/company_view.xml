@@ -1,11 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
-     @author: Alia
-     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html). -->
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data>
 
-        <record id="okticket_view_grouping_company_form" model="ir.ui.view" >
+        <record id="okticket_view_grouping_company_form" model="ir.ui.view">
             <field name="name">okticket.view.grouping.company.form</field>
             <field name="model">res.company</field>
             <field name="inherit_id" ref="okticket_connector.okticket_view_company_form"/>
@@ -13,8 +10,7 @@
             <field name="arch" type="xml">
                   <xpath expr="//page[@name='okticket_conn_conf']" position="inside">
                     <group>
-                        <field name="month_day_limit"
-                               attrs="{'invisible': [('expense_sheet_grouping_time', '!=', 'biweekly')],'required': [('expense_sheet_grouping_time', '=', 'biweekly')]}"/>
+                        <field name="month_day_limit" invisible="expense_sheet_grouping_time != 'biweekly'" required="expense_sheet_grouping_time == 'biweekly'"/>
                         <!--<field name="sheet_name_format"
                                attrs="{'invisible': [('expense_sheet_grouping_time', '!=', 'biweekly')],'required': [('expense_sheet_grouping_time', '=', 'biweekly')]}"/>-->
                     </group>
