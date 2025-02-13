@@ -20,7 +20,7 @@ class AccountAnalyticAccount(models.Model):
         """
         self.ensure_one()
         sale_order = self.env['sale.order'].search([
-            ('analytic_account_id', '=', self.id),
+            ('project_account_id', '=', self.id),
             ('state', '=', 'sale')
         ], limit=1)
         return sale_order if sale_order else False

@@ -30,14 +30,14 @@ class Project(models.Model):
     def unlink(self):
         analytic_accounts_to_delete = self.env['account.analytic.account']
         for project in self:
-            if project.analytic_account_id and not project.analytic_account_id.line_ids:
-                analytic_accounts_to_delete |= project.analytic_account_id
+            if project.account_id and not project.account_id.line_ids:
+                analytic_accounts_to_delete |= project.account_id
         analytic_accounts_to_delete._okticket_unlink()
         return super(Project, self).unlink()
 
     def toggle_active(self):
         for project in self:
-            if project.analytic_account_id:
+            if project.account_id:
                 # Modificar estado de project.project
-                project.analytic_account_id._okticket_modify_active_state_cost_center(not project.active)
+                project.account_id._okticket_modify_active_state_cost_center(not project.active)
         super(Project, self).toggle_active()

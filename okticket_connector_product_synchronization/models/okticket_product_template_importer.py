@@ -46,7 +46,7 @@ class ProductTemplateBatchImporter(Component):
         prod_type = 'service'
         return {
             'type': prod_type,
-            'detailed_type': prod_type
+            # 'detailed_type': prod_type
         }
 
     @mapping

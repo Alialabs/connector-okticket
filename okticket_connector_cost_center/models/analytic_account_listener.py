@@ -14,10 +14,10 @@ class AccountAnalyticCostCenterBindingExportListener(Component):
     @skip_if(lambda self, record, **kwargs: self.no_connector_export(record))
     def on_record_create(self, record, fields=None):
         if record.company_id.create_cost_center_automatically:
-            record.analytic_account_id._okticket_create()
+            record.account_id._okticket_create()
 
     @skip_if(lambda self, record, **kwargs: self.no_connector_export(record))
     def on_record_write(self, record, fields=None):
         if 'name' in fields:
-            record.analytic_account_id.name = record.name
-            record.analytic_account_id._okticket_modify_cc_name()
+            record.account_id.name = record.name
+            record.account_id._okticket_modify_cc_name()
