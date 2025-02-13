@@ -31,6 +31,7 @@ def prepare_log_event(values):
 
 class LogEvent(models.Model):
     _name = 'log.event'
+    _description = 'Log Event'
     _order = 'datetime_event desc, id desc'
 
     type = fields.Selection(

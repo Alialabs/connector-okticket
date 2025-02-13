@@ -4,6 +4,7 @@ from odoo.addons.component.core import Component
 
 class HrExpense(models.Model):
     _inherit = 'hr.expense'
+    _description = 'HR Expense'
 
     okticket_bind_ids = fields.One2many(
         comodel_name='okticket.hr.expense',
@@ -40,6 +41,8 @@ class HrExpense(models.Model):
 
 class OkticketExpense(models.Model):
     _name = 'okticket.hr.expense'
+    _description = 'Okticket HR Expense Binding'
+
     _inherit = 'okticket.binding'
     _inherits = {'hr.expense': 'odoo_id'}
 

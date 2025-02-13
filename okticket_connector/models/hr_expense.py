@@ -9,10 +9,11 @@ _payment_method_selection = [('efectivo', 'Cash'), ('tarjeta', 'Business card'),
 
 class HrExpense(models.Model):
     _inherit = 'hr.expense'
+    _description = 'HR Expense'
 
     payment_method = fields.Selection(_payment_method_selection,
                                       string='Payment method', readonly=True,
-                                      copy=False, index=True, track_visibility='onchange', default='na')
+                                      copy=False, index=True, tracking=True, default='na')
     okticket_vat = fields.Char(string='VAT Number')
     okticket_partner_name = fields.Char(string='Partner Name')
     okticket_remote_path = fields.Char(string='Remote Path')
@@ -21,7 +22,7 @@ class HrExpense(models.Model):
     okticket_status = fields.Selection([
         ('confirmed', 'Confirmed'),
         ('pending', 'Pending'),
-    ], string='Status', readonly=True, copy=False, index=True, track_visibility='onchange', default='pending')
+    ], string='Status', readonly=True, copy=False, index=True, tracking=True, default='pending')
 
     is_invoice = fields.Boolean(string='Is invoice',
                                 default=False)

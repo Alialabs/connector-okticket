@@ -54,6 +54,7 @@ class ProductTemplate(models.Model):
 
 class OkticketProductTemplate(models.Model):
     _name = 'okticket.product.template'
+    _description = 'Okticket Product Template Binding'
     _inherit = 'okticket.binding'
     _inherits = {'product.template': 'odoo_id'}
 

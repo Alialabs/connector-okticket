@@ -56,6 +56,7 @@ class HrExpenseSheet(models.Model):
 
 class OkticketHrExpenseSheet(models.Model):
     _name = 'okticket.hr.expense.sheet'
+    _description = 'Okticket Hr Expense Sheet'
     _inherit = 'okticket.binding'
     _inherits = {'hr.expense.sheet': 'odoo_id'}
 

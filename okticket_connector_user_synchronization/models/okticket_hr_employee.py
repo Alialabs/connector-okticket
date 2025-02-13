@@ -56,6 +56,7 @@ class HrEmployee(models.Model):
 
 class OkticketHrEmployee(models.Model):
     _name = 'okticket.hr.employee'
+    _description = 'Okticket Hr Employee Binding'
     _inherit = 'okticket.binding'
     _inherits = {'hr.employee': 'odoo_id'}
 

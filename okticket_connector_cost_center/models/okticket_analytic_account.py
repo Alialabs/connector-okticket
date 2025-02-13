@@ -92,6 +92,7 @@ class AccountAnalyticAccount(models.Model):
 
 class OkticketAccountAnalyticAccount(models.Model):
     _name = 'okticket.account.analytic.account'
+    _description = 'Okticket Account Analytic Account Binding'
     _inherit = 'okticket.binding'
     _inherits = {'account.analytic.account': 'odoo_id'}
 

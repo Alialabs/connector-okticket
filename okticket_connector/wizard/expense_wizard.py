@@ -11,6 +11,7 @@ _logger = logging.getLogger(__name__)
 
 class ExpenseWizard(models.TransientModel):
     _name = 'okticket.expense.wizard'
+    _description = 'Okticket Expense Wizard'
 
     accounted_state = fields.Boolean('Okticket Accounted State Expense', default=False)
 
