@@ -11,8 +11,6 @@
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">2</field>
             <field name="interval_type">hours</field>
-            <field name="numbercall">-1</field>
-            <field name="doall" eval="False"/>
             <field name="model_id" ref="okticket_connector.model_okticket_backend"/>
             <field name="state">code</field>
             <field name="code">model._scheduler_import_expenses()</field>

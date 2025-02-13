@@ -15,35 +15,35 @@
 <!--            </field>-->
 <!--        </record>-->
 
-        <record id="log_event_view_tree" model="ir.ui.view">
-            <field name="name">log.event.view.tree</field>
+        <record id="log_event_view_list" model="ir.ui.view">
+            <field name="name">log.event.view.list</field>
             <field name="model">log.event</field>
             <field name="arch" type="xml">
-                <tree string="Log events" decoration-warning="type=='warning'" decoration-danger="type=='error'">
+                <list string="Log events" decoration-warning="type=='warning'" decoration-danger="type=='error'">
                     <field name="datetime_event"/>
                     <field name="type"/>
                     <field name="tag"/>
                     <field name="content"/>
                     <field name="backend_id" invisible="1"/>
-                </tree>
+                </list>
             </field>
         </record>
 
         <record id="action_okticket_log" model="ir.actions.act_window">
             <field name="name">Okticket Backend Logs</field>
             <field name="res_model">log.event</field>
-            <field name="view_mode">tree</field>
-            <field name="view_id" ref="log_event_view_tree"/>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="log_event_view_list"/>
             <field name="domain">[]</field>
         </record>
 
         <record id="action_open_okticket_log" model="ir.actions.act_window">
             <field name="name">Okticket Backend Logs</field>
             <field name="res_model">log.event</field>
-            <field name="view_mode">tree</field>
-<!--            <field name="view_id" ref="log_event_view_tree"/>-->
+            <field name="view_mode">list</field>
+<!--            <field name="view_id" ref="log_event_view_list"/>-->
             <field name="view_ids" eval="[(5, 0, 0),
-            (0, 0, {'view_mode': 'tree', 'view_id': ref('log_event_view_tree')})]"/>
+            (0, 0, {'view_mode': 'list', 'view_id': ref('log_event_view_list')})]"/>
 <!--            <field name="search_view_id" ref="hr_applicant_view_search_bis"/>-->
             <field name="domain">['|', ('backend_id', '=', False), ('backend_id', '=', active_id)]</field>
         </record>

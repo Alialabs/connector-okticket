@@ -22,13 +22,13 @@
                                 type="action"
                                 class="oe_link"/>
                         <field name="okticket_hr_expense_sheet_ids" invisible="1">
-                            <tree editable="top" limit="80">
+                            <list editable="top" limit="80">
                                 <field name="id"/>
                                 <field name="sync_date"/>
                                 <field name="odoo_id"/>
                                 <field name="external_id"/>
                                 <field name="backend_id" invisible="1"/>
-                            </tree>
+                            </list>
                         </field>
                     </page>
                 </xpath>

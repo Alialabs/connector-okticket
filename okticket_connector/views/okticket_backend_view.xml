@@ -72,13 +72,13 @@
                                         type="action"
                                         class="oe_link"/>
                                 <field name="okticket_hr_expense_ids" invisible="1">
-                                    <tree editable="top" limit="80">
+                                    <list editable="top" limit="80">
                                         <field name="id"/>
                                         <field name="sync_date"/>
                                         <field name="odoo_id"/>
                                         <field name="external_id"/>
                                         <field name="backend_id" invisible="1"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                         </notebook>
@@ -91,22 +91,22 @@
             </field>
         </record>
 
-        <record id="view_okticket_backend_tree" model="ir.ui.view">
-            <field name="name">okticket.backend.tree</field>
+        <record id="view_okticket_backend_list" model="ir.ui.view">
+            <field name="name">okticket.backend.list</field>
             <field name="model">okticket.backend</field>
             <field name="arch" type="xml">
-                <tree string="Okticket Backend">
+                <list string="Okticket Backend">
                     <field name="name"/>
                     <field name="location"/>
-                </tree>
+                </list>
             </field>
         </record>
 
         <record id="action_okticket_backend" model="ir.actions.act_window">
             <field name="name">Okticket Backend</field>
             <field name="res_model">okticket.backend</field>
-            <field name="view_mode">tree,form</field>
-            <field name="view_id" ref="view_okticket_backend_tree"/>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_okticket_backend_list"/>
         </record>
 
     </data>
