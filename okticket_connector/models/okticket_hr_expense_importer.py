@@ -24,9 +24,17 @@ class HrExpenseBatchImporter(Component):
     _apply_on = 'okticket.hr.expense'
     _usage = 'importer'
 
-    @mapping
+    # @mapping
     def name(self, record):
-        return {'name': record.get('name') or record.get('ticket_num') or record.get('_id')}
+        return {
+            'name': record.get('ticket_num') or record.get('name') or record.get('_id')
+        }
+
+    @mapping
+    def description(self, record):
+        return {
+            'description': record.get('name') or False
+        }
 
     @mapping
     def external_id(self, record):
@@ -146,7 +154,7 @@ class HrExpenseBatchImporter(Component):
     def payment_method(self, record):
         payment_method = 'na'
         if record.get('payment_method') and \
-                record['payment_method'] in [method[0] for method in hr_expense._payment_method_selection]:
+            record['payment_method'] in [method[0] for method in hr_expense._payment_method_selection]:
             payment_method = record['payment_method']
         return {'payment_method': payment_method}
 
@@ -198,9 +206,9 @@ class HrExpenseBatchImporter(Component):
         if okticket_account_id:
             return {'account_id': okticket_account_id}
 
-    @mapping
-    def reference(self, record):
-        return {'reference': record.get('ticket_num') or 'N.A.'}
+    # @mapping
+    # def reference(self, record):
+    #     return {'reference': record.get('ticket_num') or 'N.A.'}
 
     @mapping
     def is_invoice(self, record):
@@ -230,7 +238,7 @@ class HrExpenseBatchImporter(Component):
 
                 # Restricción de importación de gastos revisados
                 if only_reviewed and expense_ext_vals and \
-                        ('review' not in expense_ext_vals or not expense_ext_vals['review']):
+                    ('review' not in expense_ext_vals or not expense_ext_vals['review']):
                     continue
 
                 # Map to odoo data
@@ -240,7 +248,7 @@ class HrExpenseBatchImporter(Component):
                 missing_fields = [field for field in required_fields if field not in internal_data]
                 if missing_fields:
                     msg = _('Importing expense ID: %s. It does not have required fields: %s') % (
-                    expense_ext_vals.get('_id'), missing_fields)
+                        expense_ext_vals.get('_id'), missing_fields)
                     log_vals = {
                         'backend_id': self.backend_record.id,
                         'type': 'warning',
@@ -262,7 +270,7 @@ class HrExpenseBatchImporter(Component):
                         if any(field not in internal_data for field in required_fields):
                             missing_fields = [field for field in required_fields if field not in internal_data]
                             msg = _('Importing expense ID: %s. It does not have required fields: %s') % (
-                            expense_ext_vals.get('_id'), missing_fields)
+                                expense_ext_vals.get('_id'), missing_fields)
                             log_vals = {
                                 'backend_id': self.backend_record.id,
                                 'type': 'warning',
