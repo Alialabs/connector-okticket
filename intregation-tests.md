@@ -34,9 +34,9 @@ Validate the synchronization and integration between Odoo and Okticket, ensuring
 ### **3. Create a Project in Odoo and Sync it as an Analytic Account in Okticket**
 - **Test ID:** INT-003
 - **Description:** Ensure that when a project is created in Odoo, the corresponding analytic account is created in Okticket as a cost center.
-- **Preconditions:** Odoo has projects configured with analytic accounts enabled.
+- **Preconditions:**Create Costs Center Automatically must be enabled in Company.
 - **Steps:**
-  1. Create a new project in Odoo.
+  1. Create a new project in Odoo and assign company.
   2. Verify that an analytic account is automatically created in Odoo for the project.
   3. Check if the analytic account is synchronized with Okticket as a cost center.
   4. Validate that the cost center in Okticket reflects the correct project name and details.

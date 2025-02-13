@@ -24,7 +24,7 @@ class HrExpenseBatchImporter(Component):
     _apply_on = 'okticket.hr.expense'
     _usage = 'importer'
 
-    # @mapping
+    @mapping
     def name(self, record):
         return {
             'name': record.get('ticket_num') or record.get('name') or record.get('_id')
