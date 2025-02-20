@@ -55,12 +55,14 @@ class ProductTemplate(models.Model):
             if rebillable_prod:
                 rebillable_prod.write({
                     'okticket_type_prod_id': product.okticket_type_prod_id,
+                    'okticket_categ_prod_id': product.okticket_categ_prod_id
                 })
             else:
                 rebill_name = f"{product.name}-{_('Rebillable')}"
                 rebillable_prod = product.copy(default={
                     'name': rebill_name,
                     'expense_policy': 'cost',
+                    'okticket_categ_prod_id': product.okticket_categ_prod_id
                 })
                 product.rebillable_prod_id = rebillable_prod.id
             rebillable_products.append(rebillable_prod)
@@ -74,12 +76,14 @@ class ProductTemplate(models.Model):
             if invoice_prod:
                 invoice_prod.write({
                     'okticket_type_prod_id': _default_invoice_type_id,
+                    'okticket_categ_prod_id': product.okticket_categ_prod_id
                 })
             else:
                 inv_name = f"{product.name}-{_('Invoiceable')}"
                 invoice_prod = product.copy(default={
                     'name': inv_name,
                     'okticket_type_prod_id': _default_invoice_type_id,
+                    'okticket_categ_prod_id': product.okticket_categ_prod_id
                 })
                 product.invoice_prod_id = invoice_prod.id
             invoice_version_products_ids.append(invoice_prod.id)

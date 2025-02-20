@@ -70,10 +70,12 @@ class HrExpenseBatchImporter(Component):
     @mapping
     def product_id(self, record):
         existing = self.get_base_product(record)
+        company_id = self.company_id(record).get('company_id')
         if existing:
             result = {'product_id': existing.id}
             if record['type_id'] != 0:
-                tax_ids = [(4, stax.id) for stax in existing.supplier_taxes_id]
+                #tax_ids = [(4, stax.id) for stax in existing.supplier_taxes_id]
+                tax_ids = [(4, stax.id) for stax in existing.supplier_taxes_id if stax.company_id.id == company_id]
                 if tax_ids:
                     result.update({'tax_ids': tax_ids})
             return result
