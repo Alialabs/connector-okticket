@@ -275,7 +275,7 @@ class HrExpenseSheetAdapter(Component):
             vals_dict = {
                 'company_id': expense.company_id.okticket_company_id,
                 'user_id': expense.employee_id.okticket_user_id,
-                'report_id': report_id,
+                'report_id': report_id or "",
             }
             expense_external_id = expense.okticket_bind_ids and expense.okticket_bind_ids[0].external_id or False
             if expense_external_id:
