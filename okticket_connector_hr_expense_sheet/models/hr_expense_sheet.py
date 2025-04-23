@@ -445,6 +445,6 @@ class AccountPaymentRegister(models.TransientModel):
     _inherit = 'account.payment.register'
 
     def _create_payments(self):
-        super(AccountPaymentRegister, self.with_context(
+        return super(AccountPaymentRegister, self.with_context(
             okticket_synch=True,
         ))._create_payments()
