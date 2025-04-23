@@ -153,7 +153,8 @@ class HrExpenseBatchImporter(Component):
             new_sheet = False
 
             # Construye el dominio de búsqueda para la hoja de gastos
-            sheet_domain = []
+            # sheet_domain = []
+            sheet_domain = [('state', 'in', ['draft'])]
             for sheet_field, sheet_value in expense_data['group_fields'].items():
                 if sheet_field != 'analytic_ids' or sheet_value:
                     # Si el campo no es 'analytic_ids' o si lo es pero tiene un valor, añadir al dominio
