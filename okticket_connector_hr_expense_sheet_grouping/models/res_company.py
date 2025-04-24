@@ -36,7 +36,7 @@ class ResCompany(models.Model):
             'weekly': 'set no_interval',
         }
     )
-    sheet_name_format = fields.Char(string='Sheet Name Format', default='{name} - {m}/{y} - {id}-{ed}',
+    sheet_name_format = fields.Char(string='Sheet Name Format', default='BI {id}-{ed} {B} {Y} | {name}',
                                     help=(
                                         "{name} - Sheet Name\n"
                                         "{M} - Full month name. January, February, ...\n"

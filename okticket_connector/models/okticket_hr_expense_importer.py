@@ -39,7 +39,6 @@ class HrExpenseBatchImporter(Component):
     @only_create
     @mapping
     def odoo_id(self, record):
-        """ Will bind the category on a existing one with the same name."""
         existing = self.env['hr.expense'].search(
             [('name', '=', record['_id'])],
             limit=1,
@@ -48,28 +47,16 @@ class HrExpenseBatchImporter(Component):
             return {'odoo_id': existing.id}
 
     def get_base_product(self, record):
-        """ Gets product of expenses """
-        params = []
-        existing = False
-        if 'type_id' in record:
-            # Gasto: type_id = 0; Factura: type_id = 1; Kilómetros: type_id = 2
-            params = [('okticket_type_prod_id', '=', record['type_id'])]
-            if record['type_id'] in [0, 1]:  # Gastos y facturas
-                params.append(('okticket_categ_prod_id', '=', record['category_id']))
-            existing = self.env['product.product'].search(params, limit=1)
+        params = [('okticket_type_prod_id', '=', record.get('type_id'))]
+        if record.get('type_id') in [0, 1]:
+            params.append(('okticket_categ_prod_id', '=', record.get('category_id')))
+        existing = self.env['product.product'].search(params, limit=1)
 
-            # By default, it's used 'no refacturable' in product.template
-            # If 'custom_field' from Okticket expense is
-            # 'refacturable'="1" ("0": False='no refacturable'; "1": True='refacturable')
-            # then it's choosen 'refacturable' in Odoo's product
-            if 'custom_fields' in record and 'refacturable' in record['custom_fields'] and \
-                    ((isinstance(record['custom_fields']['refacturable'], int) and
-                      record['custom_fields']['refacturable'] == 1) or
-                     (isinstance(record['custom_fields']['refacturable'], str) and
-                      record['custom_fields']['refacturable'] == '1')):
-                if existing.rebillable_prod_id:
-                    existing = self.env['product.product']. \
-                        search([('product_tmpl_id', '=', existing.rebillable_prod_id.id)], limit=1)
+        if 'custom_fields' in record and record['custom_fields'].get('refacturable') in [1, '1']:
+            if existing.rebillable_prod_id:
+                existing = self.env['product.product'].search(
+                    [('product_tmpl_id', '=', existing.rebillable_prod_id.id)], limit=1
+                )
         return existing
 
     @mapping
@@ -78,10 +65,9 @@ class HrExpenseBatchImporter(Component):
         if existing:
             result = {'product_id': existing.id}
             if record['type_id'] != 0:
-                # Assign taxes on product only if it is not of the "ticket" type.
                 tax_ids = [(4, stax.id) for stax in existing.supplier_taxes_id]
                 if tax_ids:
-                    result.update({'tax_ids': tax_ids, })
+                    result.update({'tax_ids': tax_ids})
             return result
 
     @mapping
@@ -104,21 +90,24 @@ class HrExpenseBatchImporter(Component):
     @mapping
     def company_id(self, record):
         if record.get('user_id'):
-            backend = self.env['okticket.backend'].search([('okticket_company_id', '=', record['company_id'])],
-                                                          limit=1, )
+            backend = self.env['okticket.backend'].search(
+                [('okticket_company_id', '=', record['company_id'])], limit=1
+            )
             if backend:
                 return {'company_id': backend.company_id.id}
 
     @mapping
     def employee_id(self, record):
         if record.get('user_id'):
-            existing = self.env['hr.employee'].search([('okticket_user_id', '=', record['user_id'])], limit=1, )
+            existing = self.env['hr.employee'].search(
+                [('okticket_user_id', '=', record['user_id'])], limit=1
+            )
             if existing:
                 return {'employee_id': existing.id}
 
     @mapping
     def okticket_status(self, record):
-        return {'okticket_status': record['status_id'] == 1 and 'confirmed' or 'pending'}
+        return {'okticket_status': 'confirmed' if record['status_id'] == 1 else 'pending'}
 
     @mapping
     def okticket_vat(self, record):
@@ -127,7 +116,7 @@ class HrExpenseBatchImporter(Component):
 
     @mapping
     def okticket_partner_name(self, record):
-        if 'name' in record:  # and 'type_id' in record and record['type_id'] == 1:
+        if 'name' in record:
             return {'okticket_partner_name': record['name']}
 
     @mapping
@@ -147,48 +136,39 @@ class HrExpenseBatchImporter(Component):
 
     @mapping
     def okticket_response(self, record):
-        res = ''
         try:
             res = json.dumps(record, indent=4, sort_keys=True)
-        except Exception as e:
+        except Exception:
             res = ''
-        # result = json.dumps(record)
         return {'okticket_response': res}
 
     @mapping
     def payment_method(self, record):
-        # TODO a futuro, sincronizar métodos de pago con Okticket
         payment_method = 'na'
         if record.get('payment_method') and \
-                record['payment_method'] in [tuple_sel[0] for tuple_sel in hr_expense._payment_method_selection]:
+                record['payment_method'] in [method[0] for method in hr_expense._payment_method_selection]:
             payment_method = record['payment_method']
         return {'payment_method': payment_method}
 
     @mapping
     def payment_mode(self, record):
-        # Si el método de pago es 'efectivo', el modo de pago es 'pagado por el empleado'
-        # En caso contrario, es 'pagado por la empresa'
-        # Si existe campo 'refundable' en 'custom_fields', se evalúa para asignar 'pagado por la empresa'
-        payment_mode = 'payment_method' in record and record['payment_method'] == 'efectivo' and 'own_account' \
-                       or 'company_account'
+        payment_mode = 'own_account' if record.get('payment_method') == 'efectivo' else 'company_account'
 
         if record.get('custom_fields') and record['custom_fields'].get('refundable'):
-            payment_mode = 'own_account'  # Pago por cliente ('refundable' == 'refund')
+            payment_mode = 'own_account'
             if record['custom_fields']['refundable'] == 'payed':
-                payment_mode = 'company_account'  # Pago por empresa
+                payment_mode = 'company_account'
 
         return {'payment_mode': payment_mode}
 
     @mapping
     def analytic_account_id(self, record):
         if record.get('cost_center_id'):
-            cc_analytic_binder = self.env['okticket.account.analytic.account'].search([
-                ('external_id', '=', int(record['cost_center_id']))],
-                limit=1, )
+            cc_analytic_binder = self.env['okticket.account.analytic.account'].search(
+                [('external_id', '=', int(record['cost_center_id']))], limit=1
+            )
             if cc_analytic_binder and cc_analytic_binder.odoo_id:
-                fields = {
-                    'analytic_account_id': cc_analytic_binder.odoo_id.id
-                }
+                fields = {'analytic_account_id': cc_analytic_binder.odoo_id.id}
                 sale_order = cc_analytic_binder.odoo_id.get_related_sale_order()
                 if sale_order:
                     fields.update({'sale_order_id': sale_order.id})
@@ -202,23 +182,17 @@ class HrExpenseBatchImporter(Component):
         """
         okticket_account_id = False
         if record.get('cost_center_id'):
-            cc_analytic_binder = self.env['okticket.account.analytic.account'].search([
-                ('external_id', '=', int(record['cost_center_id']))],
-                limit=1)
+            cc_analytic_binder = self.env['okticket.account.analytic.account'].search(
+                [('external_id', '=', int(record['cost_center_id']))], limit=1
+            )
             if cc_analytic_binder and cc_analytic_binder.odoo_id:
-                # Ledger account of the related project
-                okticket_account_id = cc_analytic_binder.odoo_id.okticket_def_account_id \
-                                      and cc_analytic_binder.odoo_id.okticket_def_account_id.id \
-                                      or False
+                okticket_account_id = cc_analytic_binder.odoo_id.okticket_def_account_id.id if cc_analytic_binder.odoo_id.okticket_def_account_id else False
         if not okticket_account_id:
-            # Ledger account from within the product
             existing = self.get_base_product(record)
             if existing.property_account_expense_id:
                 okticket_account_id = existing.property_account_expense_id.id
         if okticket_account_id:
-            return {
-                'account_id': okticket_account_id,
-            }
+            return {'account_id': okticket_account_id}
 
     @mapping
     def reference(self, record):
@@ -226,22 +200,14 @@ class HrExpenseBatchImporter(Component):
 
     @mapping
     def is_invoice(self, record):
-        return {'is_invoice': record.get('type_id') and record['type_id'] == 1 or False}
+        return {'is_invoice': record.get('type_id') == 1}
 
     def run(self, filters=None, options=None):
-        """
-        Run the synchronization for all users, using the connector crons.
-        """
-        # Adapter
         backend_adapter = self.component(usage='backend.adapter')
-        # Expenses values from OkTicket
         okticket_hr_expense_ids = []
-        # Mapper
         mapper = self.component(usage='importer')
-        # Binder
         binder = self.component(usage='binder')
 
-        # Fields needed to be able to import a expense
         required_fields = ['product_id', 'employee_id', 'company_id']
 
         filters, last_expenses_import = self.datetime_expenses_import_backend_filter(filters)
@@ -266,90 +232,62 @@ class HrExpenseBatchImporter(Component):
                 # Map to odoo data
                 internal_data = mapper.map_record(expense_ext_vals).values()
 
-                if binding:
-                    # If exists, we update it
-                    # del internal_data['backend_id']
-                    # del internal_data['external_id']
-                    # self.env['hr.expense'].browse(binding.odoo_id.id).write(internal_data)
+                # Check and log missing required fields
+                missing_fields = [field for field in required_fields if field not in internal_data]
+                if missing_fields:
+                    msg = _('Importing expense ID: %s. It does not have required fields: %s') % (
+                    expense_ext_vals.get('_id'), missing_fields)
+                    log_vals = {
+                        'backend_id': self.backend_record.id,
+                        'type': 'warning',
+                        'msg': msg,
+                    }
+                    self.env['log.event'].add_event(log_vals)
+                    _logger.error(msg)
+                    continue
 
-                    if internal_data and 'company_id' in internal_data:
-                        # Elimina company_id por problemas de dependencias en write que produce error al actualizar
-                        del internal_data['company_id']
-
-                    binding.write(internal_data)
-
-                else:
-                    values = internal_data.keys()
-                    required_fields_not_accomplished = []
-                    for req_field in required_fields:
-                        if req_field not in values:
-                            required_fields_not_accomplished.append(req_field)
-                    if required_fields_not_accomplished:
-                        msg = _('Importing expense ID: %s. It does not have required fields: %s') \
-                              % (expense_ext_vals.get('_id'), required_fields_not_accomplished)
-                        # Log event
-                        log_vals = {
-                            'backend_id': self.backend_record.id,
-                            'type': 'warning',
-                            'msg': msg,
-                        }
-                        self.env['log.event'].add_event(log_vals)
-                        msg = _('\nError: ') + msg
-                        _logger.error(msg)
-                        continue
+                company_id = internal_data.get('company_id')
+                with self.env.cr.savepoint():
+                    if binding:
+                        _logger.info('Updating expense with employee_id: %s', internal_data.get('employee_id'))
+                        if internal_data.get('employee_id') is None:
+                            _logger.error('Employee ID is missing for expense ID: %s', expense_ext_vals.get('_id'))
+                            continue
+                        binding.with_company(company_id).sudo().write(internal_data)
                     else:
-                        binding = self.model.create(internal_data)
-                okticket_hr_expense_ids.append(binding.id)
-                # Finally, we bind both, so the next time we import
-                # the record, we'll update the same record instead of
-                # creating a new on
-                binder.bind(expense_ext_vals.get('_id'), binding)
-                _logger.info('Imported')
+                        if any(field not in internal_data for field in required_fields):
+                            missing_fields = [field for field in required_fields if field not in internal_data]
+                            msg = _('Importing expense ID: %s. It does not have required fields: %s') % (
+                            expense_ext_vals.get('_id'), missing_fields)
+                            log_vals = {
+                                'backend_id': self.backend_record.id,
+                                'type': 'warning',
+                                'msg': msg,
+                            }
+                            self.env['log.event'].add_event(log_vals)
+                            _logger.error(msg)
+                            continue
+                        binding = self.model.with_company(company_id).sudo().create(internal_data)
 
+                    okticket_hr_expense_ids.append(binding.id)
+                    binder.bind(expense_ext_vals.get('_id'), binding)
+                    _logger.info('Imported')
+
+                self.backend_record.import_expenses_since = last_expenses_import
             except Exception as e:
                 msg = _('\nError: %s\n') % e
-                # Log event
-                self.env['log.event'].add_event({
+                log_vals = {
                     'backend_id': self.backend_record.id,
                     'type': 'error',
                     'msg': msg,
-                })
+                }
+                self.env['log.event'].add_event(log_vals)
                 _logger.error(msg)
 
         _logger.info('Import from Okticket DONE')
-
-        # Actualizar fecha de última importación de gastos
-        self.backend_record.import_expenses_since = last_expenses_import
         return okticket_hr_expense_ids
 
-    def delete_expense_synchro(self, binding):
-        """
-        Tries to unlink Odoo expense if it was deleted (logically) in Okticket.
-        If it couldn't be possible, a "deleted in Okticket" flag is actived in the expense. Odoo will try deleted the
-        expenses with this flag active when it could be possible (state changes in expense sheets).
-        :param binding:
-        """
-        try:
-            binding.odoo_id.unlink()  # Se trata de eliminar el gasto en Odoo
-        except Exception as e:
-            # Se marca como "gasto eliminado en Okticket" y se registra el evento
-            binding.odoo_id.okticket_deleted = True
-            msg = _('\nError while try to unlink expense %s in Odoo: %s') % (binding.odoo_id.id, e)
-            # Log event
-            log_vals = {
-                'backend_id': self.backend_record.id,
-                'type': 'warning',
-                'msg': msg,
-            }
-            self.env['log.event'].add_event(log_vals)
-            _logger.error(msg)
-
     def datetime_expenses_import_backend_filter(self, filters):
-        """
-        Manages datetime last expenses import backend param to be added in update_after API-REST request
-        :param filters: searching filters dict
-        :return: filters dict, last import datetime
-        """
         last_expenses_import = datetime.datetime.now()
         if not self.backend_record.ignore_import_expenses_since and self.backend_record.import_expenses_since:
             # Restricción de importación de gastos por fecha de última importación
@@ -363,8 +301,10 @@ class HrExpenseBatchImporter(Component):
             # All expenses not in "sent" state (this is, state = "draft") are deleted before new import or
             # synchronization of expenses from OkTicket. This way, we ensure Odoo-OkTicket synchronization.
             states_to_remove = ['draft']
-            expenses_to_remove = self.env['hr.expense'].search([('state', 'in', states_to_remove)])
-            expenses_to_remove = self.env['hr.expense'].browse([exp.id for exp in expenses_to_remove
-                                                                if exp.okticket_expense_id])
+            company_id = self.backend_record.company_id.id
+            expenses_to_remove = self.env['hr.expense'].search([
+                ('state', 'in', states_to_remove),
+                ('company_id', '=', company_id)
+            ]).filtered(lambda exp: exp.okticket_expense_id)
             expenses_to_remove.unlink()
         return filters, last_expenses_import

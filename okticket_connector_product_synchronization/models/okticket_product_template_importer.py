@@ -1,7 +1,6 @@
+# -*- coding: utf-8 -*-
 # Copyright 2021 Alia Technologies, S.L. - http://www.alialabs.com
-# @author: Alia
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-
 
 import logging
 
@@ -22,8 +21,7 @@ class ProductTemplateBatchImporter(Component):
 
     @mapping
     def external_id(self, record):
-        external_id = str(record['id'])
-        return {'external_id': external_id}
+        return {'external_id': str(record['id'])}
 
     @mapping
     def backend_id(self, record):
@@ -38,15 +36,10 @@ class ProductTemplateBatchImporter(Component):
              ('rebillable_product_version', '=', False)]
         )
         if existing:
-            valid_prod = False
-            if len(existing) > 1:
-                for prod in existing:
-                    if prod.okticket_bind_ids:
-                        valid_prod = prod
-                        break
-            if not valid_prod:
-                valid_prod = existing[0]
-            return {'odoo_id': valid_prod.id}
+            for prod in existing:
+                if prod.okticket_bind_ids:
+                    return {'odoo_id': prod.id}
+            return {'odoo_id': existing[0].id}
 
     @mapping
     def type(self, record):
@@ -74,9 +67,9 @@ class ProductTemplateBatchImporter(Component):
 
     def run(self, filters=None, options=None):
         backend_adapter = self.component(usage='backend.adapter')
-        okticket_product_template_ids = []
         mapper = self.component(usage='importer')
         binder = self.component(usage='binder')
+        okticket_product_template_ids = []
 
         # WARNING: it only gets products (expenses) with type_id = 0 ("ticket" type)
         for product_ext_vals in backend_adapter.search(filters):
@@ -88,8 +81,10 @@ class ProductTemplateBatchImporter(Component):
 
             if not binding:
                 if internal_data.get('odoo_id'):
-                    binding = self.model.search([(binder._odoo_field, '=', internal_data['odoo_id']),
-                                                 (binder._backend_field, '=', self.backend_record.id)])
+                    binding = self.model.search([
+                        (binder._odoo_field, '=', internal_data['odoo_id']),
+                        (binder._backend_field, '=', self.backend_record.id)
+                    ])
                 if not binding:
                     # Product or product binding do not exist in Odoo
                     binding = self.model.create(internal_data)
