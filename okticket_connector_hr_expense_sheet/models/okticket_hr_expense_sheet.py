@@ -318,12 +318,12 @@ class HrExpenseSheetAdapter(Component):
     # key: status_id from expense sheet
     # values: valid action_id that could be apply in this state
     _STATUS_TRANSITIONS = {
-        0: [347],
-        34: [348, 349, 350],
-        3: [354],
-        5: [351, 352],
-        35: [353],
-        36: []
+        0: [347],               # Open -> ['Submit']
+        34: [348, 349, 350],    # 'Submited' -> ['Reset (Draft) from submitted', 'Approve', 'Cancel from submitted']
+        3: [354],               # 'Rejected' -> ['Reset (Draft) from rejected']
+        5: [351, 352],          # 'Approved' -> ['Post (Registered)', 'Refuse from approved']
+        35: [353],              # 'Posted' -> ['Paid']
+        36: []                  # 'Paid' -> []
     }
 
     def change_expense_sheet_status(self, expense_sheets, action_id, comments='No comment'):
