@@ -416,7 +416,7 @@ class HrExpenseSheet(models.Model):
             expense._okticket_accounted_expense(new_state=False)
         self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id, comments=reason)
 
-    def action_reset_approval_expense_sheets(self):
+    def action_reset_expense_sheets(self):
         """
             Available when state == post
             TODO: Not flow implemented in okticket to change state from post to draft
