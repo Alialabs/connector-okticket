@@ -22,7 +22,8 @@ class ProductTemplate(models.Model):
         default=-1.0,
         compute='_compute_okticket_categ_prod_id',
         inverse='_inverse_okticket_categ_prod_id',
-        search='_search_okticket_categ_prod_id'
+        search='_search_okticket_categ_prod_id',
+        store=True
     )
 
     def _compute_okticket_categ_prod_id(self):
