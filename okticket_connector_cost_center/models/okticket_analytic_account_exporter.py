@@ -52,9 +52,10 @@ class AccountAnalyticAccountExporter(Component):
         binder = self.component(usage='account.analytic.account.binder')
 
         if acc_analyt:
+            company_id = acc_analyt.company_id or self.env.user.company_id
             sale = acc_analyt.get_related_sale_order()
             cost_center_name = acc_analyt.generate_cost_center_name_from_analytic()
-            okticket_company_id = acc_analyt.company_id and acc_analyt.company_id.okticket_company_id
+            okticket_company_id = company_id.okticket_company_id
 
             values = {
                 'name': cost_center_name,
