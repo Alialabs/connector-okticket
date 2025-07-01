@@ -174,7 +174,6 @@ class HrExpenseBatchImporter(Component):
                 else:
                     # Si no hay cuenta analítica, usar 'IS NULL'
                     sheet_domain.append(('analytic_ids', '=', False))
-
             # Valores a actualizar/crear en la hoja de gastos
             expense_sheet_values = {
                 'expense_line_ids': [(4, expense_data['expense'].id)],
@@ -277,35 +276,57 @@ class HrExpenseSheet(models.Model):
         self.env['okticket.hr.expense.sheet'].sudo().delete_expense_sheet(self)
         return True
 
+    # def _search_analytic_ids(self, operator, value):
+    #     print('SEARCH', operator, value)
+    #     if not isinstance(value, list):
+    #         value = [value]
+    #
+    #     # Si el valor es False, significa que estamos buscando registros donde analytic_account_id es NULL
+    #     if value == [False] or value == [None]:
+    #         print('SEARCH FALSE')
+    #         self.env.cr.execute("""
+    #             SELECT DISTINCT sheet.id
+    #             FROM hr_expense_sheet sheet
+    #             INNER JOIN hr_expense exp
+    #             ON sheet.id = exp.sheet_id
+    #             WHERE exp.analytic_account_id IS NULL
+    #         """)
+    #     else:
+    #         print('SEARCH IN', value)
+    #         self.env.cr.execute("""
+    #             SELECT DISTINCT sheet.id
+    #             FROM hr_expense_sheet sheet
+    #             INNER JOIN hr_expense exp
+    #             ON sheet.id = exp.sheet_id
+    #             WHERE exp.analytic_account_id IN %s
+    #         """, (tuple(value),))
+    #
+    #     return [('id', 'in', [sheet_id[0] for sheet_id in self.env.cr.fetchall()])]
+
     def _search_analytic_ids(self, operator, value):
         if not isinstance(value, list):
             value = [value]
 
         # Si el valor es False, significa que estamos buscando registros donde analytic_account_id es NULL
         if value == [False] or value == [None]:
-            self.env.cr.execute("""
-                SELECT DISTINCT sheet.id
-                FROM hr_expense_sheet sheet
-                INNER JOIN hr_expense exp
-                ON sheet.id = exp.sheet_id
-                WHERE exp.analytic_account_id IS NULL
-            """)
+            expenses = self.env['hr.expense'].search([
+                ('analytic_account_id', '=', False)
+            ])
+            sheet_ids = expenses.mapped('sheet_id').ids
         else:
-            self.env.cr.execute("""
-                SELECT DISTINCT sheet.id
-                FROM hr_expense_sheet sheet
-                INNER JOIN hr_expense exp
-                ON sheet.id = exp.sheet_id
-                WHERE exp.analytic_account_id IN %s
-            """, (tuple(value),))
+            expenses = self.env['hr.expense'].search([
+                ('analytic_account_id', 'in', value)
+            ])
+            sheet_ids = expenses.mapped('sheet_id').ids
 
-        return [('id', 'in', [sheet_id[0] for sheet_id in self.env.cr.fetchall()])]
+        return [('id', 'in', sheet_ids)]
 
     analytic_ids = fields.Many2many('account.analytic.account',
                                     string='Analytic account',
                                     readonly=True,
                                     compute='_compute_analytic_ids',
-                                    search="_search_analytic_ids")
+                                    search="_search_analytic_ids"
+                                    )
 
     @api.depends('expense_line_ids')
     def _compute_analytic_ids(self):
@@ -380,13 +401,13 @@ class HrExpenseSheet(models.Model):
         action_id = OkticketSheetStatusTransitions.APPROVE.value
         self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
 
-    def action_sheet_move_create(self):
+    def action_sheet_move_post(self):
         """
            "Registrar asientos"
            Implied actions:
                - Action [351, 353] Okticket
         """
-        res = super(HrExpenseSheet, self).action_sheet_move_create()
+        res = super(HrExpenseSheet, self).action_sheet_move_post()
         action_id = OkticketSheetStatusTransitions.POST.value
         self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
         if self.payment_mode == 'company_account':
@@ -422,7 +443,8 @@ class HrExpenseSheet(models.Model):
             TODO: Not flow implemented in okticket to change state from post to draft
             TODO: In Okticket when state is 'post' it only possible to change to 'paid'
         """
-        super(HrExpenseSheet, self).action_reset_approval_expense_sheets()
+        self.action_reset_approval_expense_sheets()
+        # super(HrExpenseSheet, self).action_reset_expense_sheets()
 
     def action_reset_approval_expense_sheets(self):
         """
@@ -445,19 +467,22 @@ class HrExpenseSheet(models.Model):
         if self.state == 'cancel':
             action_id = OkticketSheetStatusTransitions.RESET_FROM_CANCEL.value  # From "Rechazada"
 
-        if super(HrExpenseSheet, self).action_reset_expense_sheets():
-            # Check if exists sheet. It could be deleted if only had one expense with okticket_deleted  = True
-            if self.search([('id', '=', self.id)]):
-                for expense in self.expense_line_ids:
-                    expense._okticket_accounted_expense(new_state=False)
-                if reset_from_approved:
-                    # Force flow in okticket to change state from approved to draft
-                    action_id = OkticketSheetStatusTransitions.REFUSE_FROM_APPROVED.value  # From "Aprobada"
-                    self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
-                    action_id = OkticketSheetStatusTransitions.RESET_FROM_CANCEL.value  # From "Cancel"
-                    self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
-                else:
-                    self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
+
+        super(HrExpenseSheet, self).action_reset_expense_sheets()
+        # Check if exists sheet. It could be deleted if only had one expense with okticket_deleted  = True
+        if self.search([('id', '=', self.id)]):
+            for expense in self.expense_line_ids:
+                expense._okticket_accounted_expense(new_state=False)
+
+            # Execute update in Okticket
+            if reset_from_approved:
+                # Force flow in okticket to change state from approved to draft
+                action_id = OkticketSheetStatusTransitions.REFUSE_FROM_APPROVED.value  # From "Aprobada"
+                self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
+                action_id = OkticketSheetStatusTransitions.RESET_FROM_CANCEL.value  # From "Cancel"
+                self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
+            else:
+                self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
 
     def okticket_sheet_payment_registry(self):
         """
