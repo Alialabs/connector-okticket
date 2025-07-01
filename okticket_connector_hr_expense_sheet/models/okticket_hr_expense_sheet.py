@@ -83,7 +83,8 @@ class OkticketHrExpenseSheet(models.Model):
                     raise (e or UserError(_('Could not connect to Okticket')))
 
     def change_expense_sheet_status(self, expense_sheets, action_id, comments='No comment'):
-        backend = self.env['okticket.backend'].get_default_backend_okticket_connector(company=expense_sheets[0].company_id)
+        backend = self.env['okticket.backend'].get_default_backend_okticket_connector(
+            company=expense_sheets[0].company_id)
         backend.ensure_one()
         if backend and backend.okticket_exp_sheet_sync:
             with backend.work_on(self._name) as work:
@@ -112,6 +113,7 @@ class OkticketHrExpenseSheet(models.Model):
         else:
             _logger.warning('WARNING! NO EXISTE BACKEND PARA LA COMPANY %s (%s)\n',
                             self.env.user.company_id.name, self.env.user.company_id.id)
+
 
 class OkticketBackend(models.Model):
     _inherit = 'okticket.backend'
@@ -318,12 +320,12 @@ class HrExpenseSheetAdapter(Component):
     # key: status_id from expense sheet
     # values: valid action_id that could be apply in this state
     _STATUS_TRANSITIONS = {
-        0: [347],               # Open -> ['Submit']
-        34: [348, 349, 350],    # 'Submited' -> ['Reset (Draft) from submitted', 'Approve', 'Cancel from submitted']
-        3: [354],               # 'Rejected' -> ['Reset (Draft) from rejected']
-        5: [351, 352],          # 'Approved' -> ['Post (Registered)', 'Refuse from approved']
-        35: [353],              # 'Posted' -> ['Paid']
-        36: []                  # 'Paid' -> []
+        0: [347],  # Open -> ['Submit']
+        34: [348, 349, 350],  # 'Submited' -> ['Reset (Draft) from submitted', 'Approve', 'Cancel from submitted']
+        3: [354],  # 'Rejected' -> ['Reset (Draft) from rejected']
+        5: [351, 352],  # 'Approved' -> ['Post (Registered)', 'Refuse from approved']
+        35: [353],  # 'Posted' -> ['Paid']
+        36: []  # 'Paid' -> []
     }
 
     def change_expense_sheet_status(self, expense_sheets, action_id, comments='No comment'):
@@ -350,8 +352,17 @@ class HrExpenseSheetAdapter(Component):
                         expense_sheet_backend_adapter.workflow_expense_sheet(sheet_expense_external_id, action_id,
                                                                              comments=comments)
                     else:
-                        _logger.warning(_('Action not valid for Okticket expense sheet %s in state %s'),
-                                        sheet_expense_external_id, current_status_id)
+                        # If the action is not valid, raise a warning
+                        warning_msg = _('Okticket not permit the transition between this states. Status of expense sheet not sincronized') % (
+                            current_status_id, action_id)
+                        _logger.warning(warning_msg)
+
+                        # Añadir mensaje al chatter de la hoja de gastos
+                        sheet.message_post(
+                            body=warning_msg,
+                            message_type='comment',
+                            subtype_xmlid='mail.mt_comment'
+                        )
         return True
 
     def workflow_expense_sheet(self, sheet_expense_external_id, action_id, comments='No comment'):
