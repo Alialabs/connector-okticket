@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 15.0\n"
+"Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-21 16:44+0000\n"
-"PO-Revision-Date: 2023-11-21 16:44+0000\n"
+"POT-Creation-Date: 2025-06-27 09:51+0000\n"
+"PO-Revision-Date: 2025-06-27 09:51+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,14 +16,8 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: okticket_connector_hr_expense_sheet_grouping
+#. odoo-python
 #: code:addons/okticket_connector_hr_expense_sheet_grouping/models/hr_expense_sheet.py:0
-#, python-format
-msgid "%s - %s"
-msgstr ""
-
-#. module: okticket_connector_hr_expense_sheet_grouping
-#: code:addons/okticket_connector_hr_expense_sheet_grouping/models/hr_expense_sheet.py:0
-#, python-format
 msgid "BI"
 msgstr "QUI"
 
@@ -75,8 +69,8 @@ msgid "Init Date"
 msgstr "Fecha inicio"
 
 #. module: okticket_connector_hr_expense_sheet_grouping
+#. odoo-python
 #: code:addons/okticket_connector_hr_expense_sheet_grouping/models/hr_expense_sheet.py:0
-#, python-format
 msgid "MO"
 msgstr "MES"
 
@@ -118,8 +112,8 @@ msgid "Standard"
 msgstr "Estándar"
 
 #. module: okticket_connector_hr_expense_sheet_grouping
+#. odoo-python
 #: code:addons/okticket_connector_hr_expense_sheet_grouping/models/hr_expense_sheet.py:0
-#, python-format
 msgid "WK"
 msgstr "S"
 

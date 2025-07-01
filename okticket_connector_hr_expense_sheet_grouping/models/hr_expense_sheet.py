@@ -98,7 +98,7 @@ class HrExpenseBatchImporter(Component):
         """
         Agrupa gastos por mes (fecha).
         """
-        month_prefix = _("MO")
+        month_prefix = _("M")
         for expense_data in grouped_expenses:
             expense_date = expense_data['expense'].date
             month_number = expense_date.strftime("%m")
@@ -112,7 +112,7 @@ class HrExpenseBatchImporter(Component):
         """
         Agrupa gastos quincenalmente (fecha).
         """
-        biweekly_prefix = _("BI")
+        biweekly_prefix = _("Q")
         month_limit_day = self.backend_record.company_id.month_day_limit
         for expense_data in grouped_expenses:
             expense_date = expense_data['expense'].date
@@ -128,7 +128,7 @@ class HrExpenseBatchImporter(Component):
         """
         Agrupa gastos semanalmente (fecha).
         """
-        week_prefix = _("WK")
+        week_prefix = _("S")
         for expense_data in grouped_expenses:
             expense_date = expense_data['expense'].date
             date_names = self._get_date_names(expense_date)
