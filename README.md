@@ -2,7 +2,7 @@
 
 ### [Alia Technologies](http://www.alialabs.com/)
 
-<img src="http://www.alialabs.com/images/logos/logo-full-big.png" width="215px">
+<img src="http://www.alialabs.com/images/logos/logo-full-big.png" width="215px" alt="">
 
 ---
 ### [Okticket](https://www.okticket.es/)
