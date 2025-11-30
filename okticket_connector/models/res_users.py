@@ -14,8 +14,9 @@ class ResUsers(models.Model):
              "your timesheets. If empty, the default okticket service "
              "will be used instead.")
 
-    # Fixed with https://www.odoo.com/es_ES/forum/ayuda-1/my-profile-gives-access-error-for-employee-fields-167590
-    def __init__(self, *args):
-        super(ResUsers, self).__init__(*args)
-        type(self).SELF_WRITEABLE_FIELDS = list(self.SELF_WRITEABLE_FIELDS)
-        type(self).SELF_WRITEABLE_FIELDS.extend(['okticket_backend_ids'])
+    @property
+    def SELF_WRITEABLE_FIELDS(self):
+        return super().SELF_WRITEABLE_FIELDS + [
+            "okticket_backend_ids",
+        ]
+
