@@ -49,7 +49,9 @@ class HrEmployee(models.Model):
 
     def synchronize_record(self, fields=None, **kwargs):
         """ Synchronization with user on Okticket """
-        backend = self.env['okticket.backend'].get_default_backend_okticket_connector()
+        backend = self.env['okticket.backend'].get_default_backend_okticket_connector(company=self.company_id)
+        if not backend:
+            return True
         self.env['okticket.hr.employee'].sudo().import_batch(backend, filters=fields)
         return True
 

@@ -96,12 +96,14 @@ class OkticketBackend(models.Model):
         """
         for backend_record in self.search([]):
             _logger.info('Scheduling expenses batch import from Okticket with backend %s.', backend_record.name)
-            backend_record.import_expenses()
+            backend_record.with_company(backend_record.company_id).import_expenses()
 
     def import_expenses(self):
         """
         Import expenses from Okticket.
         """
         self.ensure_one()
-        self.env['okticket.hr.expense'].sudo().import_batch(self)
+        self.env['okticket.hr.expense'].sudo().with_company(
+            self.company_id
+        ).import_batch(self)
         return True
