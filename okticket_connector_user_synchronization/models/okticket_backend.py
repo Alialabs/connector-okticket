@@ -19,9 +19,11 @@ class OkticketBackend(models.Model):
             _logger.info(
                 'Scheduling employees batch import from Okticket '
                 'with backend %s.' % backend_record.name)
-            backend_record.import_employees()
+            backend_record.with_company(backend_record.company_id).import_employees()
 
     def import_employees(self):
         self.ensure_one()
-        self.env['okticket.hr.employee'].sudo().import_batch(self)
+        self.env['okticket.hr.employee'].sudo().with_company(
+            self.company_id
+        ).import_batch(self)
         return True
