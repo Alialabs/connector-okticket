@@ -124,7 +124,7 @@
     <li><a href="#adjuntos">Imagen del ticket y facturas PDF</a></li>
     <li><a href="#categorias">Categorías y productos</a></li>
     <li><a href="#empleados">Empleados y usuarios</a></li>
-    <li><a href="#centros">Proyectos y centros de coste</a></li>
+    <li><a href="#centros">Cuentas analíticas y centros de coste</a></li>
     <li><a href="#tramitar">Qué hacer con un gasto importado</a></li>
     <li><a href="#dudas">Dudas frecuentes</a></li>
   </ol>
@@ -264,11 +264,44 @@ muestra el identificador con el que quedó vinculado.</p>
   tickets. Revisa que el correo de trabajo sea exactamente el mismo.
 </div>
 
-<h2 id="centros">8. Proyectos y centros de coste</h2>
+<h2 id="centros">8. Cuentas analíticas y centros de coste</h2>
 
-<p>Si tu compañía tiene activada la creación automática, al dar de alta un <b>proyecto</b> en Odoo se
-publica su cuenta analítica en OkTicket como <b>centro de coste</b>. A partir de ese momento, al
-registrar un ticket desde el móvil puedes imputarlo a ese proyecto.</p>
+<p>Lo que se publica en OkTicket como <b>centro de coste</b> es una <b>cuenta analítica</b> de Odoo. Una vez
+publicada, al registrar un ticket desde el móvil puedes imputarlo a ese centro de coste.</p>
+
+<h3>Publicar cuentas analíticas a mano</h3>
+
+<p>Es la forma habitual y funciona con cualquier cuenta analítica, tenga o no un proyecto detrás.
+Ve a la lista de <b>cuentas analíticas</b>, marca las que quieras publicar y despliega el menú
+<b>Acciones</b>: encontrarás <b>Creación de centro de coste desde cuenta analítica</b>.</p>
+
+<figure>
+  <img src="img/u07-accion-analiticas.png" alt="Acción de creación de centro de coste en la lista de cuentas analíticas"/>
+  <figcaption>La acción aparece en el menú <i>Acciones</i> tras seleccionar una o varias cuentas analíticas.</figcaption>
+</figure>
+
+<p>Odoo pide confirmación antes de crear nada:</p>
+
+<figure>
+  <img src="img/u08-wizard-centro-coste.png" alt="Asistente de confirmación de creación de centro de coste"/>
+  <figcaption>Asistente de confirmación. Puedes seleccionar varias cuentas y publicarlas de una vez.</figcaption>
+</figure>
+
+<div class="callout">
+  <span class="tag">Duplicados</span>
+  Si en OkTicket ya existe un centro de coste con ese nombre, el asistente avisa y pide una
+  confirmación adicional antes de crear el duplicado. Cuando el conflicto afecta a una selección
+  múltiple, hay que procesar las cuentas <b>de una en una</b>.
+  Las cuentas que ya estén vinculadas se ignoran, así que repetir la acción es inofensivo.
+</div>
+
+<h3>Publicación automática desde proyectos</h3>
+
+<p>Además, si tu compañía tiene activada la opción <i>Autocrear centro de coste del proyecto</i>, al
+dar de alta un <b>proyecto</b> en Odoo su cuenta analítica se publica sola, sin pasar por la acción
+anterior.</p>
+
+<h3>Comprobar el vínculo</h3>
 
 <figure>
   <img src="img/u06-centro-coste.png" alt="Cuenta analítica vinculada a un centro de coste de OkTicket"/>

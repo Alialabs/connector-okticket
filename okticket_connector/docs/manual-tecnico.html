@@ -132,6 +132,7 @@
     <li><a href="#compania">Configuración de la compañía</a></li>
     <li><a href="#backend">Configuración del backend</a></li>
     <li><a href="#crons">Acciones planificadas</a></li>
+    <li><a href="#centros">Centros de coste</a></li>
     <li><a href="#multicompania">Multi-compañía</a></li>
     <li><a href="#logs">Logs y diagnóstico</a></li>
     <li><a href="#problemas">Problemas frecuentes</a></li>
@@ -423,7 +424,58 @@ usuario, contraseña, <i>client id</i>, secreto y la conectividad de salida haci
 recorre la API paginada y confirma al final, de modo que <b>consultar la tabla a mitad del
 proceso devuelve cero legítimamente</b>: espera a que termine antes de dar nada por fallido.</p>
 
-<h2 id="multicompania">10. Multi-compañía</h2>
+<h2 id="centros">10. Centros de coste</h2>
+
+<p>Es la única sincronización que va de <b>Odoo hacia OkTicket</b>, y la aporta el módulo
+<code>okticket_connector_cost_center</code>. Lo que se publica es una <b>cuenta analítica</b>
+(<code>account.analytic.account</code>), no un proyecto: el proyecto solo interviene como
+disparador de la variante automática.</p>
+
+<h3>Publicación manual desde la lista de cuentas analíticas</h3>
+
+<p>El módulo registra un <code>ir.actions.server</code> anclado a la <b>vista lista</b> de
+<code>account.analytic.account</code> (<code>binding_view_types=list</code>). Aparece en el menú
+<b>Acciones</b> al seleccionar uno o varios registros.</p>
+
+<figure>
+  <img src="img/u07-accion-analiticas.png" alt="Acción de creación de centro de coste en la lista de cuentas analíticas"/>
+  <figcaption>«Creación de centro de coste desde cuenta analítica», en el menú <i>Acciones</i>.</figcaption>
+</figure>
+
+<p>La acción abre el asistente <code>analytic.cost.center.wizard</code>, que confirma antes de
+escribir en OkTicket.</p>
+
+<figure>
+  <img src="img/u08-wizard-centro-coste.png" alt="Asistente de confirmación de creación de centro de coste"/>
+  <figcaption>Asistente de confirmación, con soporte para selección múltiple.</figcaption>
+</figure>
+
+<p>Su comportamiento:</p>
+
+<ul>
+  <li>Ignora las cuentas que <b>ya tienen binding</b> (<code>okticket_bind_ids</code>), de modo que
+      relanzar la acción es idempotente.</li>
+  <li>Antes de crear comprueba si en OkTicket existe ya un centro de coste con el mismo nombre.
+      Si lo hay, pide una <b>confirmación explícita de duplicado</b>.</li>
+  <li>Si el conflicto surge con <b>varias cuentas seleccionadas</b>, aborta con un
+      <code>ValidationError</code> y obliga a procesarlas de una en una.</li>
+</ul>
+
+<h3>Publicación automática desde proyectos</h3>
+
+<p>Con <i>Autocrear centro de coste del proyecto</i> activo en la compañía, un <i>listener</i> sobre
+<code>project.project</code> llama a <code>_okticket_create()</code> sobre la cuenta analítica del
+proyecto en cuanto este se crea. Renombrar el proyecto propaga el nuevo nombre; archivarlo
+desactiva el centro de coste, y borrarlo lo elimina en OkTicket.</p>
+
+<div class="callout">
+  <span class="tag">Nota</span>
+  El módulo opcional <code>okticket_hr_timesheet_cost_center</code> existe precisamente para que el
+  proyecto que Odoo crea de oficio al dar de alta una compañía con <code>hr_timesheet</code> no
+  dispare esta publicación.
+</div>
+
+<h2 id="multicompania">11. Multi-compañía</h2>
 
 <p>El conector soporta varias compañías simultáneamente. El esquema es:</p>
 
@@ -438,7 +490,7 @@ proceso devuelve cero legítimamente</b>: espera a que termine antes de dar nada
 <p>Los productos, en cambio, son compartidos: si dos compañías de OkTicket exponen el mismo árbol
 de categorías, ambas apuntarán a las mismas plantillas de producto en Odoo.</p>
 
-<h2 id="logs">11. Logs y diagnóstico</h2>
+<h2 id="logs">12. Logs y diagnóstico</h2>
 
 <p>Cada llamada a la API queda registrada en <i>Conectores → Okticket → Logs</i>, con su tipo
 (<i>Éxito</i>, <i>Aviso</i>, <i>Error</i>), la etiqueta de la operación y la URL con el código de respuesta.</p>
@@ -451,7 +503,7 @@ de categorías, ambas apuntarán a las mismas plantillas de producto en Odoo.</p
 <p>Es el primer sitio donde mirar cuando una sincronización no produce lo esperado. Una
 importación sana no deja ninguna entrada de tipo <i>Error</i>.</p>
 
-<h2 id="problemas">12. Problemas frecuentes</h2>
+<h2 id="problemas">13. Problemas frecuentes</h2>
 
 <table>
   <thead><tr><th>Síntoma</th><th>Causa habitual</th><th>Solución</th></tr></thead>
