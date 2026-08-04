@@ -30,8 +30,9 @@ La sincronización va principalmente de **OkTicket a Odoo**:
 
 Y en sentido inverso, de **Odoo a OkTicket**:
 
-- **Centros de coste** — publica las cuentas analíticas de los proyectos de Odoo como centros de
-  coste, para poder imputar un ticket a un proyecto desde el móvil.
+- **Centros de coste** — publica cuentas analíticas de Odoo como centros de coste, desde una acción
+  en la lista de cuentas analíticas o automáticamente al crear un proyecto, para poder imputar un
+  ticket desde el móvil.
 
 Está construido sobre el framework [`connector`](https://github.com/OCA/connector) de la OCA:
 cada entidad tiene un modelo *binding* que mantiene la correspondencia entre el registro de Odoo
@@ -41,11 +42,14 @@ y su identificador remoto.
 
 | Documento | Para quién | Contenido |
 |---|---|---|
-| **[Manual técnico](okticket_connector/docs/manual-tecnico.html)** ([PDF](okticket_connector/docs/manual-tecnico.pdf)) | Implantadores y administradores | Clonado del repositorio, dependencias, instalación de los módulos, grupos y permisos, configuración de la compañía y del backend, acciones planificadas, multi-compañía y resolución de problemas. |
-| **[Manual de usuario](okticket_connector/docs/manual-usuario.html)** ([PDF](okticket_connector/docs/manual-usuario.pdf)) | Usuarios finales | Cómo llegan los gastos, dónde consultarlos, qué añade el conector a la ficha del gasto, adjuntos, categorías, empleados, centros de coste y dudas frecuentes. |
+| **[Manual técnico](okticket_connector/docs/manual-tecnico.md)** · [descargar PDF](https://raw.githubusercontent.com/Alialabs/connector-okticket/19.0/okticket_connector/docs/manual-tecnico.pdf) | Implantadores y administradores | Clonado del repositorio, dependencias, instalación de los módulos, grupos y permisos, configuración de la compañía y del backend, acciones planificadas, centros de coste, multi-compañía y resolución de problemas. |
+| **[Manual de usuario](okticket_connector/docs/manual-usuario.md)** · [descargar PDF](https://raw.githubusercontent.com/Alialabs/connector-okticket/19.0/okticket_connector/docs/manual-usuario.pdf) | Usuarios finales | Cómo llegan los gastos, dónde consultarlos, qué añade el conector a la ficha del gasto, adjuntos, categorías, empleados, cuentas analíticas y centros de coste, y dudas frecuentes. |
 
-> Los `.html` se ven mejor descargados y abiertos en el navegador: GitHub no renderiza HTML
-> directamente desde el repositorio. Los `.pdf` se pueden previsualizar aquí mismo.
+Los enlaces del título se leen aquí mismo en GitHub. El **PDF** es la versión maquetada, pensada
+para imprimir o enviar al cliente. También existe el `.html` de cada manual
+([técnico](okticket_connector/docs/manual-tecnico.html) ·
+[usuario](okticket_connector/docs/manual-usuario.html)), que es la fuente con la que se genera el
+PDF; GitHub no lo renderiza, hay que descargarlo y abrirlo en el navegador.
 
 ## Módulos
 
@@ -91,7 +95,7 @@ okticket_connector_product_synchronization,okticket_connector_cost_center
 
 Después hay que configurar el identificador de compañía, el backend con las credenciales que
 facilita OkTicket, y activar las tres acciones planificadas —que se instalan **desactivadas** a
-propósito. El [manual técnico](okticket_connector/docs/manual-tecnico.html) lo detalla paso a paso.
+propósito. El [manual técnico](okticket_connector/docs/manual-tecnico.md) lo detalla paso a paso.
 
 > **Las credenciales de la API son secretos de producción.** No las escribas en documentación,
 > capturas ni ficheros versionados.
