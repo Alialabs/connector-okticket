@@ -76,6 +76,33 @@ Validate the synchronization and integration between Odoo and Okticket, ensuring
   2. Verify that the status update is sent to Okticket.
   3. Check if Okticket reflects the correct expense sheet status.
 - **Expected Result:** The status of the expense sheet in Odoo is mirrored in Okticket in real-time.
+- **Note (19.0):** expense sheets do not exist in Odoo 19; the sheet modules are not part of the 19.0 connector, so imported expenses stay as individual draft expenses.
+---
+
+### **7. Import Invoice-type Expenses (Facturas / PDFs sent to the robot)**
+- **Test ID:** INT-007
+- **Description:** Ensure expenses classified in OkTicket as *Factura* (`type_id = 1`) are imported with their `-Invoiceable` product instead of being silently discarded for a missing `product_id`.
+- **Root cause fixed:** `_search_okticket_categ_prod_id` returns base + `invoice_prod_id`; the non-working `store=True` attempt was removed so the search method is actually used.
+- **Result (19.0, 2026-07-29):** OK — 7 invoice expenses imported.
+
+### **8. Import the PDF document into the expense chatter**
+- **Test ID:** INT-008
+- **Description:** The actual PDF (`signed_pdf_url`) is attached to the hr.expense chatter (alongside the ticket image), idempotently.
+- **Result (19.0, 2026-07-29):** OK — 5 PDFs attached to expense chatters; PDF renders in the attachment preview.
+
+### **9. Robustness against missing optional fields**
+- **Test ID:** INT-009
+- **Description:** Importer does not crash when expenses omit optional fields (`comments`, `status_id`, `amount`, `type_id`, `company_id`); the mapper uses `record.get(...)`.
+- **Result (19.0, 2026-07-29):** OK — 0 error/warning log events over a full import.
+
+### **10. Multi-company: employee/account company scoping**
+- **Test ID:** INT-010
+- **Description:** `employee_id` and cost-center/account lookups are scoped by the expense company to avoid cross-company mismatches.
+
+### **11. Full clean-DB import run**
+- **Test ID:** INT-011
+- **Description:** From a freshly reset DB, configure the backend via UI and run the three scheduled actions (Users → Products → Expenses) through the UI.
+- **Result (19.0, 2026-07-29):** OK — 44 expenses (28 tickets, 7 invoices, 9 kilometres), 0 errors, PDFs in chatter.
 ---
 
 ## **Final Validation**

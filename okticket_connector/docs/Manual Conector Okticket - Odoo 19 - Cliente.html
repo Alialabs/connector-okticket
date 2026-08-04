@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conector Okticket · Manual de uso · Odoo 19</title>
+<style>
+  :root{
+    --ink:#1f2937; --muted:#6b7280; --faint:#9ca3af;
+    --teal:#0f766e; --teal-soft:#e6f2f1; --line:#e5e7eb;
+    --ok-bg:#eaf5ec; --ok-ink:#2f6b3c;
+    --note-bg:#e8f1f5; --note-edge:#15697c;
+    --warn-bg:#fdf3dd; --warn-edge:#b7791f;
+    --danger-bg:#fdeaea; --danger-edge:#c53030; --danger-ink:#9b2c2c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:15px}
+  body{font-family:Helvetica,Arial,sans-serif;color:var(--ink);line-height:1.55;
+       max-width:820px;margin:0 auto;padding:48px 28px 64px;background:#fff}
+  code,kbd,.mono{font-family:"DejaVu Sans Mono",Menlo,Consolas,monospace;font-size:.86em}
+  h1{font-size:2rem;letter-spacing:-.01em;margin:.35rem 0 1rem}
+  .eyebrow{color:var(--teal);font-weight:700;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}
+  .lede{font-size:1.12rem;color:#374151;max-width:60ch}
+  .meta{display:flex;flex-wrap:wrap;gap:.4rem 2.2rem;margin:1.3rem 0 1.6rem;font-size:.9rem;color:var(--muted)}
+  .meta b{color:var(--ink)}
+  hr{border:0;border-top:1px solid var(--line);margin:1.6rem 0}
+
+  section{margin-top:2.8rem}
+  h2{font-size:1.5rem;margin-bottom:.25rem;display:flex;align-items:baseline;gap:.6rem}
+  h2 .num{color:var(--teal);font-family:"DejaVu Sans Mono",monospace;font-size:.95rem;font-weight:600}
+  .sub{color:var(--muted);font-size:.92rem;margin-bottom:1.1rem}
+  h3{font-size:1.08rem;margin:1.5rem 0 .6rem}
+  p{margin:.55rem 0;max-width:72ch}
+  ul{margin:.5rem 0 .5rem 1.2rem}
+  li{margin:.3rem 0;max-width:70ch}
+
+  .crumbs{display:inline-flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+  .crumb{background:#f3f4f6;border:1px solid var(--line);border-radius:6px;
+         padding:.1rem .55rem;font-family:"DejaVu Sans Mono",monospace;font-size:.8rem;white-space:nowrap}
+  .crumb.first{background:var(--teal-soft);border-color:#cde5e3;color:var(--teal);font-weight:600}
+  .sep{color:var(--faint);font-size:.8rem}
+
+  .steps{list-style:none;margin:1rem 0 0;counter-reset:step}
+  .steps>li{counter-increment:step;position:relative;padding:0 0 1.05rem 2.6rem;margin:0;max-width:none;
+            border-left:2px solid #eef0f2;margin-left:.95rem}
+  .steps>li:last-child{border-left-color:transparent}
+  .steps>li::before{content:counter(step);position:absolute;left:-.95rem;top:-.1rem;width:1.9rem;height:1.9rem;
+            background:var(--teal);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;
+            font-size:.85rem;font-weight:700;transform:translateX(-1px)}
+  .steps>li>*{max-width:66ch}
+
+  .check{background:var(--ok-bg);color:var(--ok-ink);border-radius:8px;padding:.6rem .8rem .6rem 2rem;
+         margin:.6rem 0;position:relative;font-size:.93rem;max-width:66ch}
+  .check::before{content:"✓";position:absolute;left:.75rem;font-weight:700}
+  .check b{color:#25572f}
+
+  .callout{border-radius:10px;padding:.85rem 1rem;margin:1rem 0;max-width:70ch}
+  .callout .tag{display:block;font-size:.72rem;font-weight:700;letter-spacing:.12em;margin-bottom:.25rem}
+  .note{background:var(--note-bg);border-left:4px solid var(--note-edge)}
+  .note .tag{color:var(--note-edge)}
+  .warn{background:var(--warn-bg);border-left:4px solid var(--warn-edge)}
+  .warn .tag{color:var(--warn-edge)}
+  .danger{background:var(--danger-bg);border-left:4px solid var(--danger-edge);color:var(--danger-ink)}
+  .danger .tag{color:var(--danger-edge)}
+
+  table{width:100%;border-collapse:collapse;margin:.9rem 0;font-size:.92rem}
+  th{color:var(--faint);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;text-align:left;
+     padding:.5rem .7rem;border-bottom:1px solid var(--line)}
+  td{padding:.55rem .7rem;border-bottom:1px solid #f0f1f3;vertical-align:top}
+  td:first-child{font-weight:700;white-space:nowrap}
+  .tablewrap{overflow-x:auto}
+
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1rem 0}
+  .card{border:1px solid var(--line);border-radius:10px;padding:.8rem .95rem}
+  .card code{color:var(--teal);font-weight:600;font-size:.83rem}
+  .card p{font-size:.9rem;color:#4b5563;margin:.35rem 0 0}
+  .card.wide{grid-column:1/-1}
+
+  .flow{border:1px solid var(--line);border-radius:10px;padding:.85rem 1rem;margin:.7rem 0}
+  .flow b{display:block;margin-bottom:.25rem}
+  .flow p{font-size:.9rem;color:#4b5563;margin:0}
+  .flowarrows{text-align:center;color:var(--muted);font-family:"DejaVu Sans Mono",monospace;font-size:.82rem;margin:.45rem 0}
+
+  .pill{display:inline-block;border-radius:20px;padding:.05rem .6rem;font-size:.74rem;font-weight:600;vertical-align:1px}
+  .pill.on{background:var(--ok-bg);color:var(--ok-ink)}
+  .pill.off{background:var(--danger-bg);color:var(--danger-ink)}
+  .pill.default{background:#f3f4f6;color:var(--muted)}
+
+  dl.fields{margin:.6rem 0}
+  dl.fields dt{font-weight:700;margin-top:.7rem}
+  dl.fields dt .pill{margin-left:.4rem}
+  dl.fields dd{margin-left:0;color:#4b5563;font-size:.93rem;max-width:68ch}
+
+  /* checklist */
+  .progress{border:1px solid var(--line);border-radius:10px;padding:.6rem .9rem;display:flex;align-items:center;gap:.9rem;margin:1rem 0}
+  .progress .bar{flex:1;height:8px;background:#f0f1f3;border-radius:6px;overflow:hidden}
+  .progress .bar i{display:block;height:100%;width:0;background:var(--teal);border-radius:6px;transition:width .2s}
+  .progress .count{font-size:.86rem;color:var(--muted);white-space:nowrap}
+  .chk-group{color:var(--faint);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;margin:1.2rem 0 .4rem}
+  label.chk{display:flex;gap:.7rem;align-items:flex-start;border:1px solid var(--line);border-radius:10px;
+            padding:.6rem .8rem;margin:.45rem 0;cursor:pointer;font-size:.93rem}
+  label.chk input{width:1.05rem;height:1.05rem;margin-top:.15rem;accent-color:var(--teal);flex:none}
+  label.chk:has(input:checked){background:#fafcfb}
+  label.chk:has(input:checked) span{color:var(--faint);text-decoration:line-through}
+
+  footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:var(--faint);font-size:.85rem}
+
+  @media print{
+    body{padding:24px 8px}
+    section{break-inside:auto}
+    h2{break-after:avoid}
+    .card,.callout,.check,table tr,label.chk{break-inside:avoid}
+    section{break-before:page}
+    section.nobreak,section:first-of-type{break-before:auto}
+    a{color:inherit;text-decoration:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Manual de usuario · Odoo 19</div>
+  <h1>Conector Okticket para Odoo</h1>
+  <p class="lede">Integración entre la app de digitalización de tickets <b>Okticket</b> y la gestión de
+  gastos de <b>Odoo</b>: tus empleados fotografían sus tickets en el móvil y los gastos aparecen en Odoo
+  con su imagen, su producto y su centro de coste, listos para aprobar y contabilizar.</p>
+  <div class="meta">
+    <span>Versión Odoo <b>19.0</b></span>
+    <span>Módulos <b>Alia Okticket Connector</b></span>
+    <span>Requisitos: usuario de Odoo con permisos de administración</span>
+  </div>
+</header>
+
+<div class="callout note">
+  <span class="tag">Antes de empezar</span>
+  Para poner en marcha la integración necesitas las <b>credenciales de la API de Okticket</b> de tu empresa
+  (usuario, contraseña, <i>Oauth client id</i> y <i>Oauth secret</i>) y el <b>identificador de compañía
+  (Company_id)</b> de cada una de tus empresas en Okticket. Todo ello te lo facilita <b>Okticket</b>. Los
+  módulos ya vienen instalados en tu Odoo; esta guía cubre la configuración y el uso del día a día.
+</div>
+
+<hr>
+
+<section class="nobreak">
+  <h2><span class="num">1</span> Qué hace el conector</h2>
+  <p class="sub">Tres flujos de datos entre Okticket y Odoo, más la publicación de centros de coste.</p>
+
+  <div class="flow">
+    <b>Okticket</b>
+    <p>App móvil y plataforma web donde tus empleados capturan tickets, kilometraje y facturas.
+    El equipo revisa los gastos en Okticket.</p>
+  </div>
+  <div class="flowarrows">usuarios · productos · gastos ↓&nbsp;&nbsp;&nbsp;↑ centros de coste</div>
+  <div class="flow">
+    <b>Odoo</b>
+    <p>Recibe los gastos con imagen y datos fiscales, listos para el circuito estándar de aprobación
+    y contabilización de Odoo 19, y publica en Okticket los centros de coste de sus cuentas analíticas.</p>
+  </div>
+
+  <div class="callout warn">
+    <span class="tag">Importante · Odoo 19 no tiene hojas de gasto</span>
+    En Odoo 19 el circuito de presentación, aprobación y contabilización se hace <b>directamente sobre cada
+    gasto</b> (ya no existen las hojas / informes de gastos). Por ello, el conector <b>no comunica ningún
+    estado de vuelta a Okticket</b>: la aprobación y contabilización viven en Odoo, y la revisión y el ciclo
+    de vida del informe se gestionan en Okticket. Esto evita descuadres entre ambos sistemas. Ten en cuenta
+    que el empleado <b>no verá en la app de Okticket</b> el avance de sus gastos en Odoo. El detalle está en
+    la sección 8.
+  </div>
+
+  <h3>Los módulos instalados</h3>
+  <div class="cards">
+    <div class="card"><code>okticket_connector</code>
+      <p>Núcleo: conexión con la API, importación de gastos con su imagen, logs y permisos.</p></div>
+    <div class="card"><code>okticket_connector_user_synchronization</code>
+      <p>Importa los usuarios de Okticket y los empareja con empleados de Odoo por email.</p></div>
+    <div class="card"><code>okticket_connector_product_synchronization</code>
+      <p>Importa los tipos de gasto de Okticket como productos, con variantes refacturable y facturable.</p></div>
+    <div class="card"><code>okticket_connector_cost_center</code>
+      <p>Sincroniza cuentas analíticas de Odoo con centros de coste de Okticket.</p></div>
+    <div class="card wide"><code>okticket_hr_timesheet_cost_center</code>
+      <p>Evita que los proyectos internos autogenerados al crear una compañía generen centros de coste
+      en Okticket. Sin pantallas propias.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">2</span> Acceso y permisos</h2>
+  <p class="sub">Quién puede ver y administrar el conector.</p>
+
+  <p>El conector añade la categoría de permisos <b>Okticket Connector Management</b> con dos niveles:</p>
+  <table>
+    <tr><th>Grupo</th><th>Qué permite</th></tr>
+    <tr><td>User</td><td>Ver el menú Okticket, consultar backends (solo lectura), ver logs y vínculos (bindings).</td></tr>
+    <tr><td>Manager</td><td>Todo lo anterior y además crear y modificar la configuración del backend.</td></tr>
+  </table>
+
+  <ol class="steps">
+    <li>
+      <p>Asigna el grupo al usuario que vaya a administrar el conector:</p>
+      <p class="crumbs"><span class="crumb first">Ajustes</span><span class="sep">›</span>
+        <span class="crumb">Usuarios y compañías</span><span class="sep">›</span>
+        <span class="crumb">Usuarios</span><span class="sep">›</span><span class="crumb">(usuario)</span></p>
+      <p>En la pestaña de permisos, busca <b>Okticket Connector Management</b> y selecciona <i>Manager</i>.</p>
+    </li>
+    <li>
+      <p>Comprueba que aparece el menú del conector en el lanzador de aplicaciones:</p>
+      <p class="crumbs"><span class="crumb first">Conectores</span><span class="sep">›</span><span class="crumb">Okticket</span></p>
+      <div class="check">Verás dos entradas: <b>Backends</b> y <b>Logs</b>.</div>
+    </li>
+  </ol>
+
+  <div class="callout note">
+    <span class="tag">Nota</span>
+    La instalación crea un usuario técnico <code>okticket_connector_user</code> que usan los procesos
+    automáticos; no lo desactives.
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">3</span> Configurar la conexión (backend)</h2>
+  <p class="sub">El backend es la ficha que guarda las credenciales y opciones de conexión con la API de Okticket.</p>
+
+  <ol class="steps">
+    <li>
+      <p>Abre la lista de backends y crea uno nuevo con <b>Nuevo</b>:</p>
+      <p class="crumbs"><span class="crumb first">Conectores</span><span class="sep">›</span>
+        <span class="crumb">Okticket</span><span class="sep">›</span><span class="crumb">Backends</span></p>
+      <div class="callout note">
+        <span class="tag">Una compañía, un backend</span>
+        Si trabajas con <b>varias compañías</b> en Odoo, crea <b>un backend por compañía</b> (aunque la
+        cuenta de Okticket sea la misma): el conector añade en cada llamada la compañía del backend con su
+        <b>Company_id</b> (sección 4), de modo que cada backend solo ve los datos de su empresa en Okticket.
+        Empleados, productos y gastos se sincronizan por compañía.
+      </div>
+    </li>
+    <li>
+      <p>Rellena los parámetros de conexión. Los <b>datos técnicos vienen rellenos por defecto</b> al crear
+      el backend; en la práctica solo tienes que introducir las <b>cuatro credenciales</b> que te facilita
+      Okticket (marcadas abajo).</p>
+      <div class="tablewrap">
+      <table>
+        <tr><th>Campo en pantalla</th><th>Valor</th></tr>
+        <tr><td>HTTP connection url</td><td><code>api.okticket.es</code> <span class="pill default">por defecto</span></td></tr>
+        <tr><td>Base url</td><td><code>https://api.okticket.es/v2/public</code> <span class="pill default">por defecto</span></td></tr>
+        <tr><td>Image Base url</td><td><code>https://api.okticket.es/v2/public</code> <span class="pill default">por defecto</span></td></tr>
+        <tr><td>Oauth path</td><td><code>/oauth/token</code> <span class="pill default">por defecto</span></td></tr>
+        <tr><td>Operations path</td><td><code>/api</code> <span class="pill default">por defecto</span></td></tr>
+        <tr><td>Grant type</td><td><code>password</code> <span class="pill default">por defecto</span></td></tr>
+        <tr><td>Scope</td><td><code>*</code> <span class="pill default">por defecto</span></td></tr>
+        <tr><td>HTTPS protocol</td><td>Activado <span class="pill default">por defecto</span></td></tr>
+        <tr><td>User</td><td><i>el usuario que te facilita Okticket</i> <span class="pill on">a introducir</span></td></tr>
+        <tr><td>Pass</td><td><i>la contraseña que te facilita Okticket</i> <span class="pill on">a introducir</span></td></tr>
+        <tr><td>Oauth client id</td><td><i>el que te facilita Okticket</i> <span class="pill on">a introducir</span></td></tr>
+        <tr><td>Oauth secret</td><td><i>el que te facilita Okticket</i> <span class="pill on">a introducir</span></td></tr>
+      </table>
+      </div>
+      <div class="callout danger">
+        <span class="tag">Confidencial</span>
+        Estas credenciales dan acceso a la cuenta de Okticket de tu empresa. Guárdalas de forma segura y no
+        las compartas fuera del equipo autorizado.
+      </div>
+    </li>
+    <li>
+      <p>Pulsa el botón <b>Prueba de autenticación</b>, en la barra superior del formulario.</p>
+      <div class="check">Aparece una notificación verde <b>«Prueba de conexión correcta — Todo parece
+      configurado correctamente»</b>. Si en su lugar ves un error, revisa usuario, contraseña, client id
+      y secret.</div>
+    </li>
+    <li>
+      <p>Revisa el bloque <b>Configuración de importación de gastos</b>:</p>
+      <dl class="fields">
+        <dt>Import Expenses since <span class="mono" style="color:var(--faint);font-weight:400">fecha y hora</span></dt>
+        <dd>Solo se importan gastos modificados en Okticket después de esta fecha. Se actualiza sola tras
+        cada importación, de modo que cada ejecución trae únicamente lo nuevo.</dd>
+        <dt>Importar solo gastos revisados <span class="pill on">activado por defecto</span></dt>
+        <dd>Solo entran en Odoo los gastos marcados como revisados en Okticket. Ten en cuenta que la
+        revisión en Okticket se hace sobre <b>hojas de gastos enviadas</b> (el empleado crea la hoja con
+        sus gastos y la envía; el validador la revisa desde el gestor web): un gasto suelto, sin hoja,
+        no se puede revisar y nunca pasará este filtro. Desactívalo únicamente si quieres importar todo
+        sin filtro.</dd>
+        <dt>Ignorar «Importar gastos desde fecha» <span class="pill off">desactivado por defecto</span></dt>
+        <dd>Fuerza una reimportación completa ignorando la fecha anterior. <b>Atención:</b> antes de
+        reimportar, elimina los gastos en borrador que vinieron de Okticket para recrearlos desde cero.</dd>
+      </dl>
+      <div class="callout warn">
+        <span class="tag">Importante</span>
+        No actives «Ignorar Importar gastos desde fecha» en el día a día: borra los gastos en borrador de
+        origen Okticket antes de reimportarlos. Úsalo solo para resincronizaciones completas y controladas.
+      </div>
+    </li>
+    <li>
+      <p>En la parte inferior del formulario tienes accesos a los datos vinculados:
+      <b>⇒ See Hr Expense Bindings</b>, <b>⇒ See Backend Logs</b> y, en sus pestañas, los vínculos de
+      empleados, productos, analíticas y gastos. Un <i>binding</i> es la pareja «registro de Odoo ↔ registro
+      de Okticket»; útil para diagnosticar.</p>
+    </li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="num">4</span> Configurar la compañía</h2>
+  <p class="sub">Cada compañía de Odoo debe apuntar a su id de compañía en Okticket.</p>
+
+  <ol class="steps">
+    <li>
+      <p>Abre la ficha de la compañía:</p>
+      <p class="crumbs"><span class="crumb first">Ajustes</span><span class="sep">›</span>
+        <span class="crumb">Usuarios y compañías</span><span class="sep">›</span>
+        <span class="crumb">Compañías</span><span class="sep">›</span><span class="crumb">(tu compañía)</span></p>
+    </li>
+    <li>
+      <p>Ve a la pestaña <b>OkTicket Conf.</b> y rellena <b>Company_id</b> con el identificador que te
+      facilita Okticket para esa compañía. Repite en cada una de tus compañías.</p>
+    </li>
+    <li>
+      <p>En la misma pestaña puedes activar <b>Autocrear centro de coste del proyecto</b>: si está activo, al
+      crear un proyecto en Odoo se crea automáticamente su centro de coste en Okticket (sección 9).</p>
+    </li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="num">5</span> Sincronizar empleados</h2>
+  <p class="sub">Cada gasto de Okticket pertenece a un usuario; para importarlo, ese usuario debe estar
+  emparejado con un empleado de Odoo.</p>
+
+  <h3>Cómo empareja</h3>
+  <p>La sincronización descarga los usuarios de Okticket y busca en Odoo un empleado cuyo
+  <b>email de trabajo</b> coincida con el email del usuario en Okticket (también entre empleados
+  archivados, para no crear duplicados). Si no lo encuentra, <b>crea el empleado</b> con el nombre y el
+  email de Okticket.</p>
+  <p>Además, al <b>crear un empleado nuevo en Odoo</b> con email de trabajo, el conector intenta
+  vincularlo automáticamente con su usuario de Okticket en ese momento.</p>
+
+  <h3>Ejecutar la sincronización a mano</h3>
+  <ol class="steps">
+    <li>
+      <p>Activa el modo desarrollador (<span class="crumbs"><span class="crumb first">Ajustes</span>
+      <span class="sep">›</span><span class="crumb">General</span><span class="sep">›</span>
+      <span class="crumb">Herramientas de desarrollador</span></span>) y abre:</p>
+      <p class="crumbs"><span class="crumb first">Ajustes</span><span class="sep">›</span>
+        <span class="crumb">Técnico</span><span class="sep">›</span>
+        <span class="crumb">Automatización</span><span class="sep">›</span>
+        <span class="crumb">Acciones planificadas</span></p>
+    </li>
+    <li>
+      <p>Busca <b>User Synchronization From Okticket</b>, ábrela y pulsa <b>Ejecutar manualmente</b>.</p>
+      <div class="check">Se importan tus empleados de Okticket y quedan disponibles en <b>Empleados</b>.</div>
+    </li>
+    <li>
+      <p>Verifica el resultado en el empleado:</p>
+      <p class="crumbs"><span class="crumb first">Empleados</span><span class="sep">›</span>
+        <span class="crumb">(empleado)</span><span class="sep">›</span>
+        <span class="crumb">pestaña OkTicket Conf.</span></p>
+      <div class="check">El campo <b>Id de usuario de Okticket</b> está relleno.</div>
+    </li>
+    <li>
+      <p>También puedes ver todos los vínculos desde el backend: pestaña <b>Hr Employee Bindings</b>.</p>
+    </li>
+  </ol>
+
+  <div class="callout note">
+    <span class="tag">Consejo</span>
+    Si un gasto no se importa por «empleado no encontrado», comprueba que el email del usuario en Okticket
+    coincida exactamente con el <i>email de trabajo</i> del empleado en Odoo, y relanza esta sincronización
+    antes que la de gastos.
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">6</span> Sincronizar productos (tipos de gasto)</h2>
+  <p class="sub">Los tipos de gasto de Okticket (restauración, alojamiento, gasolina…) se convierten en
+  productos de Odoo.</p>
+
+  <h3>Qué crea exactamente</h3>
+  <p>Por cada tipo de gasto de Okticket, el conector busca un producto de Odoo con el mismo nombre (o lo
+  crea como servicio marcable como gasto) y además genera dos variantes vinculadas:</p>
+  <table>
+    <tr><th>Producto</th><th>Sufijo</th><th>Para qué sirve</th></tr>
+    <tr><td>Base</td><td>—</td><td>El gasto normal del empleado.</td></tr>
+    <tr><td>Refacturable</td><td><code>-Rebillable</code></td><td>Se usa automáticamente cuando el gasto viene
+      marcado como refacturable al cliente en Okticket (política de facturación «al coste»).</td></tr>
+    <tr><td>Facturable</td><td><code>-Invoiceable</code></td><td>Versión para gastos de tipo factura.</td></tr>
+  </table>
+
+  <h3>Ejecutar y comprobar</h3>
+  <ol class="steps">
+    <li>
+      <p>En <span class="crumbs"><span class="crumb first">Ajustes</span><span class="sep">›</span>
+      <span class="crumb">Técnico</span><span class="sep">›</span><span class="crumb">Acciones planificadas</span></span>
+      ejecuta manualmente <b>Product Synchronization From Okticket</b>.</p>
+      <div class="check">Se importan tus tipos de gasto de Okticket como productos, con sus variantes.</div>
+    </li>
+    <li>
+      <p>Abre cualquiera de ellos en <span class="crumbs"><span class="crumb first">Ventas</span>
+      <span class="sep">›</span><span class="crumb">Productos</span></span> y mira la pestaña <b>OkTicket Conf.</b></p>
+      <div class="check">Verás los identificadores de Okticket (<b>Category_id</b>, <b>Type_id</b>) y los
+      enlaces a sus versiones <b>Rebillable</b> e <b>Invoiceable</b>.</div>
+    </li>
+  </ol>
+
+  <div class="callout note">
+    <span class="tag">Nota</span>
+    La instalación también precarga los productos <b>Kilometres</b> y <b>Kilometres-Rebillable</b> para los
+    gastos de kilometraje.
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">7</span> Importar gastos</h2>
+  <p class="sub">El flujo principal: los tickets capturados en Okticket se convierten en gastos de Odoo
+  con su imagen.</p>
+
+  <h3>Reglas de importación</h3>
+  <ul>
+    <li>Se importan los gastos <b>modificados después</b> de la fecha «Import Expenses since» del backend y,
+    con la opción por defecto, <b>solo los revisados</b> por Okticket.</li>
+    <li>El gasto necesita resolver <b>empleado</b> (por id de usuario Okticket), <b>producto</b> (por
+    tipo/categoría) y <b>compañía</b>. Si falta alguno, se omite y queda constancia en los logs.</li>
+    <li>Si el gasto viene marcado como <b>refacturable</b>, se usa la variante «-Rebillable» del producto;
+    si es de tipo <b>factura</b>, la variante «-Invoiceable».</li>
+    <li>Si el <b>NIF capturado</b> coincide exactamente con el de un único contacto de Odoo (con o sin
+    prefijo de país), se rellena automáticamente el campo <b>Proveedor</b> del gasto (visible cuando el
+    pago es por cuenta de la empresa).</li>
+    <li>Si trae <b>centro de coste</b>, se asigna la cuenta analítica vinculada (100 % de la distribución
+    analítica) y, si esa analítica tiene definida una <i>cuenta contable por defecto para gastos</i>,
+    también la cuenta contable.</li>
+    <li>La <b>imagen del ticket</b> se descarga y se guarda en el propio gasto.</li>
+    <li>Los gastos <b>borrados en Okticket</b> se marcan con una cinta roja «Deleted in Okticket»; si
+    estaban en borrador, se eliminan.</li>
+  </ul>
+
+  <h3>Ejecutar y comprobar</h3>
+  <ol class="steps">
+    <li><p>Asegúrate de haber sincronizado antes empleados y productos (en ese orden).</p></li>
+    <li>
+      <p>En <span class="crumbs"><span class="crumb first">Ajustes</span><span class="sep">›</span>
+      <span class="crumb">Técnico</span><span class="sep">›</span><span class="crumb">Acciones planificadas</span></span>
+      ejecuta manualmente <b>Import Expenses From Okticket</b>.</p>
+    </li>
+    <li>
+      <p>Abre los gastos importados:</p>
+      <p class="crumbs"><span class="crumb first">Gastos</span><span class="sep">›</span>
+        <span class="crumb">Mis gastos / Todos</span></p>
+      <div class="check">Cada gasto llega con su imagen, su <b>OkTicket ID</b> y su estado.</div>
+    </li>
+    <li>
+      <p>Dentro del gasto, fíjate en qué añade el conector:</p>
+      <dl class="fields">
+        <dt>Imagen del ticket</dt>
+        <dd>Se adjunta <b>en el chatter</b> del gasto (mensaje «Imagen del ticket importada de OkTicket»)
+        y queda como adjunto principal, visible en el panel de previsualización del formulario.</dd>
+        <dt>Cinta «Deleted in Okticket»</dt>
+        <dd>Aparece en rojo si el gasto se borró en Okticket después de importarlo.</dd>
+        <dt>Pestaña «Servidor Okticket»</dt>
+        <dd>Agrupa todos los datos propios del conector: OkTicket ID, ID de informe, estado en Okticket
+        (<i>Confirmado</i>/<i>Pendiente</i>), Es factura, modo de pago, NIF y nombre del contacto capturados,
+        la <b>distribución analítica</b> (el centro de coste que trajo el gasto) y el <b>nombre de la
+        hoja de gastos de Okticket</b> a la que pertenece el gasto. Aunque las hojas ya no se gestionen
+        en Odoo, este campo permite <b>filtrar y agrupar</b> los gastos por su hoja de origen. La sección
+        <b>«Respuesta JSON»</b> (la respuesta cruda de la API) solo aparece con el <b>modo desarrollador</b>
+        activo.</dd>
+      </dl>
+    </li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="num">8</span> El flujo de gastos en Odoo 19 (sin hojas)</h2>
+  <p class="sub">Qué hacer con los gastos una vez importados, y qué se comunica a Okticket.</p>
+
+  <p>En Odoo 19 no existen las hojas de gasto: cada gasto sigue su propio circuito con los botones
+  estándar de la aplicación Gastos (presentar → aprobar → registrar asiento → pagar/reembolsar, o
+  rechazar / restablecer a borrador).</p>
+
+  <div class="callout warn">
+    <span class="tag">Odoo no comunica estados a Okticket</span>
+    Por decisión funcional, el conector <b>no envía ningún cambio de estado a Okticket</b>: ni el estado
+    de las hojas/informes (que en Odoo 19 ya no existen y se gestionan íntegramente en Okticket), ni el
+    indicador «contabilizado» del gasto. Todo el circuito de aprobación y contabilización vive solo en
+    Odoo, y la revisión y ciclo de vida del informe, solo en Okticket. Esto evita desajustes contables
+    entre ambos sistemas. Tenlo en cuenta al validar el circuito con tu equipo: el empleado
+    no verá en la app de Okticket el avance de sus gastos en Odoo.
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">9</span> Centros de coste</h2>
+  <p class="sub">Las cuentas analíticas de Odoo se corresponden con los centros de coste de Okticket,
+  para que cada ticket llegue imputado a su proyecto.</p>
+
+  <h3>Creación automática desde proyectos</h3>
+  <p>Con <b>Autocrear centro de coste del proyecto</b> activo en la compañía (sección 4): al <b>crear un
+  proyecto</b> se crea su centro de coste en Okticket; al <b>renombrarlo</b>, se renombra; al
+  <b>archivarlo o desarchivarlo</b>, se activa/desactiva; y al <b>eliminarlo</b> (si su analítica no tiene
+  apuntes), se elimina también en Okticket. El nombre del centro de coste es «Analítica – Cliente» y, si el
+  proyecto viene de un pedido de venta, lleva su código.</p>
+
+  <div class="callout note">
+    <span class="tag">Nota</span>
+    Los proyectos internos que Odoo genera solos al crear una compañía nueva <b>no</b> crean centro de
+    coste (módulo <code>okticket_hr_timesheet_cost_center</code>).
+  </div>
+
+  <h3>Creación manual desde cuentas analíticas</h3>
+  <ol class="steps">
+    <li>
+      <p>Abre las cuentas analíticas:</p>
+      <p class="crumbs"><span class="crumb first">Contabilidad</span><span class="sep">›</span>
+        <span class="crumb">Configuración</span><span class="sep">›</span>
+        <span class="crumb">Cuentas analíticas</span></p>
+    </li>
+    <li>
+      <p>Selecciona en la lista las analíticas que quieras publicar en Okticket y ejecuta
+      <b>Acción</b> → <b>Creación de centro de coste desde cuenta analítica</b>.</p>
+    </li>
+    <li>
+      <p>Confirma en el asistente («Cost centers will be created from the indicated analytics…»).</p>
+      <div class="check">Se crea el centro de coste en Okticket y la analítica queda vinculada
+      (campo <b>Cost_center_id</b> en su pestaña OkTicket Conf.).</div>
+    </li>
+  </ol>
+
+  <p>Casos especiales que gestiona el asistente: si ya existe en Okticket un centro de coste con el mismo
+  nombre, pide confirmación con la casilla <b>Confirm Duplicate</b> (y si hay varias analíticas en
+  conflicto, obliga a procesarlas de una en una); si la analítica ya tiene centro de coste, avisa y no
+  duplica.</p>
+  <p>Para desvincular una analítica sin borrar nada en Okticket, usa el botón <b>Unlink Cost Center</b>
+  junto al campo Cost_center_id.</p>
+  <p>Además, en la pestaña OkTicket Conf. de cada analítica puedes definir la <b>cuenta contable por
+  defecto para gastos</b>: los gastos importados con ese centro de coste se contabilizarán en esa cuenta.</p>
+</section>
+
+<section>
+  <h2><span class="num">10</span> Automatización (acciones planificadas)</h2>
+  <p class="sub">Las tres sincronizaciones pueden ejecutarse solas de forma periódica. Vienen desactivadas
+  de fábrica.</p>
+
+  <div class="tablewrap">
+  <table>
+    <tr><th>Acción planificada</th><th>Qué hace</th><th>Intervalo por defecto</th><th>Estado inicial</th></tr>
+    <tr><td>User Synchronization From Okticket</td><td>Importa/empareja empleados</td><td>Cada 2 horas</td>
+      <td><span class="pill off">Desactivada</span></td></tr>
+    <tr><td>Product Synchronization From Okticket</td><td>Importa tipos de gasto como productos</td><td>Cada 2 horas</td>
+      <td><span class="pill off">Desactivada</span></td></tr>
+    <tr><td>Import Expenses From Okticket</td><td>Importa gastos (con imagen)</td><td>Cada 2 horas</td>
+      <td><span class="pill off">Desactivada</span></td></tr>
+  </table>
+  </div>
+
+  <ol class="steps">
+    <li>
+      <p>Con el modo desarrollador activo, abre:</p>
+      <p class="crumbs"><span class="crumb first">Ajustes</span><span class="sep">›</span>
+        <span class="crumb">Técnico</span><span class="sep">›</span>
+        <span class="crumb">Automatización</span><span class="sep">›</span>
+        <span class="crumb">Acciones planificadas</span></p>
+    </li>
+    <li>
+      <p>Busca «Okticket» para ver las tres, ábrelas y actívalas con el interruptor. Puedes ajustar el
+      intervalo si 2 horas no encaja con tu operativa.</p>
+    </li>
+    <li>
+      <p>Para forzar una ejecución inmediata en cualquier momento, usa el botón <b>Ejecutar manualmente</b>
+      dentro de la acción.</p>
+      <div class="check">Orden recomendado la primera vez: <b>usuarios → productos → gastos</b>.</div>
+    </li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="num">11</span> Logs y diagnóstico</h2>
+  <p class="sub">Toda llamada a la API y todo incidente de importación queda registrado.</p>
+
+  <ol class="steps">
+    <li>
+      <p>Abre el registro:</p>
+      <p class="crumbs"><span class="crumb first">Conectores</span><span class="sep">›</span>
+        <span class="crumb">Okticket</span><span class="sep">›</span><span class="crumb">Logs</span></p>
+    </li>
+    <li>
+      <p>Cada línea indica tipo (<span class="pill on">Info / Success</span>
+      <span class="pill default">Warning</span> <span class="pill off">Error</span>), operación
+      (autenticación, GET, POST…), backend, fecha y detalle. Los avisos se muestran en amarillo y los
+      errores en rojo.</p>
+    </li>
+  </ol>
+
+  <h3>Incidencias típicas</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Síntoma</th><th>Causa probable</th><th>Solución</th></tr>
+    <tr><td style="white-space:normal">Un gasto no aparece tras importar</td>
+      <td>No está revisado en Okticket (¿pertenece a una hoja enviada y revisada?), o es anterior a
+      «Import Expenses since»</td>
+      <td>Revisarlo en Okticket, o ajustar la fecha del backend y reimportar</td></tr>
+    <tr><td style="white-space:normal">Warning «empleado no encontrado» en logs</td>
+      <td>El email del usuario de Okticket no coincide con ningún email de trabajo</td>
+      <td>Corregir el email del empleado y relanzar la sincronización de usuarios</td></tr>
+    <tr><td style="white-space:normal">Warning «producto no encontrado»</td>
+      <td>Tipos de gasto sin sincronizar</td>
+      <td>Ejecutar la sincronización de productos y reimportar gastos</td></tr>
+    <tr><td style="white-space:normal">Nada cambia en Okticket al aprobar/contabilizar en Odoo</td>
+      <td>Comportamiento esperado: por diseño, Odoo no comunica ningún estado a Okticket (sección 8)</td>
+      <td>Gestionar informes y revisión desde la propia web/app de Okticket</td></tr>
+    <tr><td style="white-space:normal">Error de autenticación</td>
+      <td>Credenciales o client id/secret incorrectos</td>
+      <td>Revisar la sección 3 y usar «Prueba de autenticación»</td></tr>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">12</span> Checklist de puesta en marcha</h2>
+  <p class="sub">Recorrido completo para dejar la integración lista. Las casillas se guardan en este navegador:
+  puedes cerrar y retomar.</p>
+
+  <div class="progress"><span class="count" id="chk-count">0 / 16</span><span class="bar"><i id="chk-bar"></i></span></div>
+
+  <div class="chk-group">Configuración</div>
+  <label class="chk"><input type="checkbox" data-k="c1"><span>El menú <b>Conectores › Okticket</b> es visible con tu usuario administrador</span></label>
+  <label class="chk"><input type="checkbox" data-k="c2"><span>El backend tiene las cuatro credenciales que te facilitó Okticket</span></label>
+  <label class="chk"><input type="checkbox" data-k="c3"><span><b>Prueba de autenticación</b> muestra la notificación verde de conexión correcta</span></label>
+  <label class="chk"><input type="checkbox" data-k="c4"><span>Cada compañía tiene su <b>Company_id</b> en la pestaña OkTicket Conf. y su propio backend</span></label>
+  <label class="chk"><input type="checkbox" data-k="c5"><span>Con varias compañías, los gastos importados llevan el <b>empleado de su misma compañía</b> (sin errores de multicompañía en Logs)</span></label>
+
+  <div class="chk-group">Sincronizaciones</div>
+  <label class="chk"><input type="checkbox" data-k="s1"><span>Ejecutada <b>User Synchronization From Okticket</b>: los empleados importados aparecen en Empleados con su Id de usuario de Okticket</span></label>
+  <label class="chk"><input type="checkbox" data-k="s2"><span>Ejecutada <b>Product Synchronization From Okticket</b>: existen los productos y sus variantes -Rebillable / -Invoiceable</span></label>
+  <label class="chk"><input type="checkbox" data-k="s3"><span>Ejecutada <b>Import Expenses From Okticket</b>: los gastos aparecen con su imagen en el chatter y sus datos técnicos en la pestaña de desarrollador</span></label>
+  <label class="chk"><input type="checkbox" data-k="s4"><span>Los bindings se ven desde las pestañas del backend (empleados, productos, gastos)</span></label>
+
+  <div class="chk-group">Flujo de gastos (Odoo 19)</div>
+  <label class="chk"><input type="checkbox" data-k="f1"><span>Un gasto importado se puede <b>presentar</b> y <b>aprobar</b> con el circuito estándar de Gastos</span></label>
+  <label class="chk"><input type="checkbox" data-k="f2"><span>Al <b>registrar el asiento</b>, los gastos aprobados del empleado se agrupan en un asiento contable</span></label>
+  <label class="chk"><input type="checkbox" data-k="f3"><span>Al aprobar, contabilizar, rechazar o restablecer un gasto <b>no se envía nada a Okticket</b> (comportamiento esperado)</span></label>
+  <label class="chk"><input type="checkbox" data-k="f5"><span>La imagen del ticket aparece <b>en el chatter</b> del gasto y en el panel de previsualización</span></label>
+
+  <div class="chk-group">Centros de coste y automatización</div>
+  <label class="chk"><input type="checkbox" data-k="cc1"><span>La acción «Creación de centro de coste desde cuenta analítica» crea el CC y rellena Cost_center_id</span></label>
+  <label class="chk"><input type="checkbox" data-k="a1"><span>Las tres acciones planificadas quedan <b>activadas</b> con el intervalo deseado</span></label>
+</section>
+
+<footer>
+  Manual del conector Okticket ↔ Odoo 19 · Preparado por Alia Technologies.
+</footer>
+
+<script>
+(function(){
+  var KEY="okticket-manual-odoo19-cliente-checklist";
+  var boxes=[].slice.call(document.querySelectorAll("label.chk input"));
+  var saved={};
+  try{saved=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+  boxes.forEach(function(b){ b.checked=!!saved[b.dataset.k];
+    b.addEventListener("change",function(){ saved[b.dataset.k]=b.checked;
+      try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){} update(); }); });
+  function update(){
+    var done=boxes.filter(function(b){return b.checked}).length;
+    document.getElementById("chk-count").textContent=done+" / "+boxes.length;
+    document.getElementById("chk-bar").style.width=(100*done/boxes.length)+"%";
+  }
+  update();
+})();
+</script>
+</body>
+</html>

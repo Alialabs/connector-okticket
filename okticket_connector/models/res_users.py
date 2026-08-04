@@ -6,16 +6,19 @@ from odoo import fields, models
 
 
 class ResUsers(models.Model):
-    _inherit = 'res.users'
+    _inherit = "res.users"
 
     okticket_backend_ids = fields.Many2many(
-        'okticket.backend', string='Okticket Server',
+        "okticket.backend",
+        string="Okticket Server",
         help="The okticket service from which to import "
-             "your timesheets. If empty, the default okticket service "
-             "will be used instead.")
+        "your timesheets. If empty, the default okticket service "
+        "will be used instead.",
+    )
 
-    # Fixed with https://www.odoo.com/es_ES/forum/ayuda-1/my-profile-gives-access-error-for-employee-fields-167590
-    def __init__(self, *args):
-        super(ResUsers, self).__init__(*args)
-        type(self).SELF_WRITEABLE_FIELDS = list(self.SELF_WRITEABLE_FIELDS)
-        type(self).SELF_WRITEABLE_FIELDS.extend(['okticket_backend_ids'])
+    # Allow users to write this field on their own user record.
+    # In Odoo 19 SELF_WRITEABLE_FIELDS is a read-only property, so it must be
+    # extended by overriding the property on the model extension.
+    @property
+    def SELF_WRITEABLE_FIELDS(self):
+        return super().SELF_WRITEABLE_FIELDS + ["okticket_backend_ids"]

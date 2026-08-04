@@ -26,9 +26,7 @@ class OkticketBackend(models.Model):
     }
 
     name = fields.Char(string="Label", copy=False)
-    location = fields.Char(string='Location', size=128, required=True)
     key = fields.Char(string='Key', size=64, groups='connector.group_connector_manager')
-    version = fields.Selection(selection='_select_versions', string='Version', required=True)
     default_lang_id = fields.Many2one('res.lang', string='Default Language', help=(
         "If a default language is selected, the records "
         "will be imported in the translation of this language.\n"
@@ -39,17 +37,27 @@ class OkticketBackend(models.Model):
     okticket_company_id = fields.Integer(string='Okticket Company Id', related='company_id.okticket_company_id')
     active = fields.Boolean('Active', default=True)
     import_expenses_since = fields.Datetime('Import Expenses since')
-    http_client_conn_url = fields.Char(string='HTTP connection url', size=64, required=True, groups='connector.group_connector_manager')
-    base_url = fields.Char(string='Base url', size=64, required=True, groups='connector.group_connector_manager')
-    image_base_url = fields.Char(string='Image Base url', size=64, required=True, groups='connector.group_connector_manager')
-    auth_uri = fields.Char(string='Oauth path', size=64, required=True, groups='connector.group_connector_manager')
-    uri_op_path = fields.Char(string='Operations path', size=64, required=True, groups='connector.group_connector_manager')
+    http_client_conn_url = fields.Char(string='HTTP connection url', size=64, required=True,
+                                       default='api.okticket.es',
+                                       groups='connector.group_connector_manager')
+    base_url = fields.Char(string='Base url', size=64, required=True,
+                           default='https://api.okticket.es/v2/public',
+                           groups='connector.group_connector_manager')
+    image_base_url = fields.Char(string='Image Base url', size=64, required=True,
+                                 default='https://api.okticket.es/v2/public',
+                                 groups='connector.group_connector_manager')
+    auth_uri = fields.Char(string='Oauth path', size=64, required=True, default='/oauth/token',
+                           groups='connector.group_connector_manager')
+    uri_op_path = fields.Char(string='Operations path', size=64, required=True, default='/api',
+                              groups='connector.group_connector_manager')
     api_login = fields.Char(string='User', size=64, required=True, groups='connector.group_connector_manager')
     api_password = fields.Char(string='Pass', size=64, required=True, groups='connector.group_connector_manager')
-    grant_type = fields.Char(string='Grant type', size=64, required=True, groups='connector.group_connector_manager')
+    grant_type = fields.Char(string='Grant type', size=64, required=True, default='password',
+                             groups='connector.group_connector_manager')
     oauth_client_id = fields.Char(string='Oauth client id', size=64, required=True, groups='connector.group_connector_manager')
     oauth_secret = fields.Char(string='Oauth secret', size=64, required=True, groups='connector.group_connector_manager')
-    scope = fields.Char(string='Scope', size=64, required=True, groups='connector.group_connector_manager')
+    scope = fields.Char(string='Scope', size=64, required=True, default='*',
+                        groups='connector.group_connector_manager')
     log_event_ids = fields.One2many('log.event', 'backend_id', string='Log Events', help='Log events related with this backend')
     https = fields.Boolean(string='HTTPS protocol', default=True)
 
@@ -57,20 +65,13 @@ class OkticketBackend(models.Model):
     ignore_import_expenses_since = fields.Boolean(string='Ignore Import Expenses Since', default=False)
     import_only_reviewed_expenses = fields.Boolean(string='Import Only Reviewed Expenses', default=True)
 
-    @api.model
-    def _select_versions(self):
-        return [('1.0', _('1.0 and higher'))]
-
     def get_default_backend_okticket_connector(self, company=False):
         """
         Get backends with 'company_id' like the company of the current user.
         :return: okticket.backend record or False
         """
-        if company:
-            backend = self.search([('company_id', '=', company.id)], limit=1)
-        else:
-            backend = False
-        return backend
+        company = company or self.env.company
+        return self.search([('company_id', '=', company.id)], limit=1)
 
     def check_auth(self):
         """
@@ -87,7 +88,16 @@ class OkticketBackend(models.Model):
             import traceback
             traceback.print_exc()
             raise (e or UserError(_('Could not connect to Okticket')))
-        raise UserError(_('Connection test succeeded\nEverything seems properly set up'))
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Connection test succeeded'),
+                'message': _('Everything seems properly set up'),
+                'type': 'success',
+                'sticky': False,
+            },
+        }
 
     @api.model
     def _scheduler_import_expenses(self):

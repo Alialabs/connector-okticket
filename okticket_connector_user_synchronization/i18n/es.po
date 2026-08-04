@@ -10,6 +10,7 @@ msgstr ""
 "PO-Revision-Date: 2023-11-21 16:46+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -24,6 +25,12 @@ msgstr "Acción requerida"
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__active
 msgid "Active"
 msgstr "Activo"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__active_employee
+#, fuzzy
+msgid "Active Employee"
+msgstr "Empleado"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__activity_ids
@@ -56,16 +63,9 @@ msgid "Additional Note"
 msgstr "Nota adicional"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__address_home_id
-msgid "Address"
-msgstr "Dirección"
-
-#. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__lang
-msgid ""
-"All the emails and documents sent to this contact will be translated in this"
-" language."
-msgstr ""
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__allowed_country_state_ids
+msgid "Allowed Country State"
+msgstr "Provincia de país permitida"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__message_attachment_count
@@ -103,19 +103,26 @@ msgid "Badge ID"
 msgstr "ID de credencial"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__bank_account_id
-msgid "Bank Account Number"
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__bank_account_ids
+#, fuzzy
+msgid "Bank Accounts"
 msgstr "Número de Cuenta Bancaria"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__calendar_mismatch
-msgid "Calendar Mismatch"
-msgstr "No coinciden los calendarios"
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__birthday
+msgid "Birthday"
+msgstr "Fecha de nacimiento"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__certificate
 msgid "Certificate Level"
 msgstr "Nivel de certificado"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__certification_ids
+#, fuzzy
+msgid "Certification"
+msgstr "Nº identificación"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__coach_id
@@ -135,27 +142,47 @@ msgstr "Compañía"
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__company_country_id
 msgid "Company Country"
-msgstr ""
-
-#. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__vehicle
-msgid "Company Vehicle"
-msgstr "Vehículo de la compañía"
-
-#. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__contracts_count
-msgid "Contract Count"
-msgstr "Recuento de contratos"
-
-#. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__contract_warning
-msgid "Contract Warning"
-msgstr "Advertencia de contrato"
+msgstr "País de la empresa"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__company_country_code
+msgid "Company Country Code"
+msgstr "Código de país de la empresa"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__contract_date_end
+#, fuzzy
+msgid "Contract End Date"
+msgstr "Primera fecha del contrato"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__contract_date_start
+#, fuzzy
+msgid "Contract Start Date"
+msgstr "Primera fecha del contrato"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__contract_template_id
+#, fuzzy
+msgid "Contract Template"
+msgstr "Primera fecha del contrato"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__contract_type_id
+#, fuzzy
+msgid "Contract Type"
+msgstr "Recuento de contratos"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__contract_wage
+#, fuzzy
+msgid "Contract Wage"
+msgstr "Advertencia de contrato"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__country_code
 msgid "Country Code"
-msgstr ""
+msgstr "Código de país"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__country_of_birth
@@ -178,28 +205,53 @@ msgid "Currency"
 msgstr "Moneda"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__contract_id
-msgid "Current Contract"
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__exceptional_location_id
+#, fuzzy
+msgid "Current"
+msgstr "Moneda"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__current_date_version
+msgid "Current Date Version"
+msgstr "Versión de fecha actual"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__current_employee_skill_ids
+#, fuzzy
+msgid "Current Employee Skill"
+msgstr "Empleado"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__current_version_id
+#, fuzzy
+msgid "Current Version"
 msgstr "Contrato Actual"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__contract_id
-msgid "Current contract of the employee"
-msgstr "Contrato actual del empleado"
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__date_end
+msgid "Date End"
+msgstr "Fecha de fin"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__birthday
-msgid "Date of Birth"
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__date_start
+#, fuzzy
+msgid "Date Start"
 msgstr "Fecha de nacimiento"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__resource_calendar_id
-msgid "Define the schedule of resource"
-msgstr "Define la planificación del recurso"
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__date_version
+msgid "Date Version"
+msgstr "Versión de fecha"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__department_id
 msgid "Department"
+msgstr "Departamento"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__department_color
+#, fuzzy
+msgid "Department Color"
 msgstr "Departamento"
 
 #. module: okticket_connector_user_synchronization
@@ -213,6 +265,17 @@ msgid "Departure Reason"
 msgstr "Motivo de salida"
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__children
+msgid "Dependent Children"
+msgstr "Hijos dependientes"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__child_count
+#, fuzzy
+msgid "Direct Subordinates Count"
+msgstr "Nº de subordinados indirectos"
+
+#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__subordinate_ids
 msgid "Direct and indirect subordinates"
 msgstr "Subordinados directos e indirectos"
@@ -223,6 +286,13 @@ msgid "Direct subordinates"
 msgstr "Subordinados directos"
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__display_certification_page
+msgid "Display Certification Page"
+msgstr "Mostrar página de certificación"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_hr_employee__display_name
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_backend__display_name
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
@@ -230,7 +300,13 @@ msgstr "Nombre mostrado"
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__driving_license
 msgid "Driving License"
-msgstr ""
+msgstr "Permiso de conducir"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__email
+#, fuzzy
+msgid "Email"
+msgstr "Correo-e del trabajo"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__emergency_contact
@@ -244,13 +320,9 @@ msgstr "Teléfono de emergencia"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model,name:okticket_connector_user_synchronization.model_hr_employee
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__employee_id
 msgid "Employee"
 msgstr "Empleado"
-
-#. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__contract_ids
-msgid "Employee Contracts"
-msgstr "Contratos de los empleados"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__name
@@ -260,25 +332,56 @@ msgstr "Nombre del empleado"
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__employee_type
 msgid "Employee Type"
-msgstr ""
+msgstr "Tipo de empleado"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__bank_account_id
-msgid "Employee bank salary account"
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__version_ids
+#, fuzzy
+msgid "Employee Versions"
+msgstr "Contratos de los empleados"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__bank_account_ids
+#, fuzzy
+msgid "Employee bank accounts to pay salaries"
 msgstr "Cuenta bancaria de salario del empleado"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__address_home_id
-msgid ""
-"Enter here the private address of the employee, not the one linked to your "
-"company."
+#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__wage
+msgid "Employee's monthly gross wage."
+msgstr "Salario bruto mensual del empleado."
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__contract_date_end
+msgid "End date of the contract (if it's a fixed-term contract)."
 msgstr ""
-"Registrar aquí la dirección privada del empleado, no la asociada a la "
-"compañía."
+"Fecha de fin del contrato (si es un contrato de duración determinada)."
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__trial_date_end
+msgid "End date of the trial period (if there is one)."
+msgstr "Fecha de fin del período de prueba (si lo hay)."
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__trial_date_end
+msgid "End of Trial Period"
+msgstr "Fin del período de prueba"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__identification_id
+msgid ""
+"Enter the employee's National Identification Number issued by the government"
+" (e.g., Aadhaar, SIN, NIN). This is used for official records and statutory "
+"compliance."
+msgstr ""
+"Introduzca el número de identificación nacional del empleado emitido por el "
+"gobierno (p. ej., DNI, NIE, NSS). Se utiliza para registros oficiales y "
+"cumplimiento legal."
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__expense_manager_id
-msgid "Expense"
+#, fuzzy
+msgid "Expense Approver"
 msgstr "Gasto"
 
 #. module: okticket_connector_user_synchronization
@@ -287,14 +390,23 @@ msgid "Expense name"
 msgstr "Gasto"
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__share
+msgid ""
+"External user with limited access, created only for the purpose of sharing "
+"data."
+msgstr ""
+"Usuario externo con acceso limitado, creado únicamente con el fin de "
+"compartir datos."
+
+#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__study_field
 msgid "Field of Study"
 msgstr "Campo de estudio"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__first_contract_date
-msgid "First Contract Date"
-msgstr "Primera fecha del contrato"
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__filter_for_expense
+msgid "Filter For Expense"
+msgstr "Filtro para gasto"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__message_follower_ids
@@ -312,19 +424,52 @@ msgid "Font awesome icon e.g. fa-tasks"
 msgstr "Icono de Font Awesome ej. fa-tasks"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__gender
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__friday_location_id
+msgid "Friday"
+msgstr "Viernes"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__sex
 msgid "Gender"
 msgstr "Sexo"
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__hr_responsible_id
+#, fuzzy
+msgid "HR Responsible"
+msgstr "Usuario responsable"
+
+#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__has_message
 msgid "Has Message"
-msgstr ""
+msgstr "Tiene mensaje"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__has_multiple_bank_accounts
+msgid "Has Multiple Bank Accounts"
+msgstr "Tiene varias cuentas bancarias"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__distance_home_work
+msgid "Home-Work Distance"
+msgstr "Distancia casa-trabajo"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__km_home_work
-msgid "Home-Work Distance"
+#, fuzzy
+msgid "Home-Work Distance in Km"
 msgstr "Distancia casa-trabajo"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__distance_home_work_unit
+#, fuzzy
+msgid "Home-Work Distance unit"
+msgstr "Distancia casa-trabajo"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__hourly_cost
+msgid "Hourly Cost"
+msgstr "Coste por hora"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__odoo_id
@@ -350,6 +495,8 @@ msgid "Hr Presence State"
 msgstr "Estado de presencia de recursos humanos"
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_hr_employee__id
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_backend__id
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__id
 msgid "ID"
 msgstr "Id"
@@ -357,7 +504,7 @@ msgstr "Id"
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__id_card
 msgid "ID Card Copy"
-msgstr ""
+msgstr "Copia del DNI"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__external_id
@@ -368,6 +515,12 @@ msgstr "Id en Okticket"
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__barcode
 msgid "ID used for employee identification."
 msgstr "ID usado para identificación del empleado."
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__im_status
+#, fuzzy
+msgid "IM Status"
+msgstr "Estado civil"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__activity_exception_icon
@@ -386,23 +539,29 @@ msgstr "Nº identificación"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__message_needaction
-#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__message_unread
 msgid "If checked, new messages require your attention."
 msgstr "Si está marcado hay nuevos mensajes que requieren su atención."
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__message_has_error
+#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr "Si se encuentra marcado, algunos mensajes tienen error de envío."
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__active
+#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__active_employee
 msgid ""
 "If the active field is set to False, it will allow you to hide the resource "
 "record without removing it."
 msgstr ""
 "Si el campo activo se desmarca, permite ocultar el registro del recurso sin "
 "eliminarlo."
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__private_car_plate
+msgid "If you have more than one car, just separate the plates by a space."
+msgstr "Si tiene más de un coche, separe las matrículas con un espacio."
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__image_1920
@@ -430,11 +589,10 @@ msgid "Image 512"
 msgstr "Imagen 512"
 
 #. module: okticket_connector_user_synchronization
+#. odoo-python
 #: code:addons/okticket_connector_user_synchronization/models/okticket_hr_employee_importer.py:0
-#: code:addons/okticket_connector_user_synchronization/models/okticket_hr_employee_importer.py:0
-#, python-format
 msgid "Import from Okticket DONE"
-msgstr ""
+msgstr "Importación desde Okticket COMPLETADA"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__child_all_count
@@ -442,13 +600,63 @@ msgid "Indirect Subordinates Count"
 msgstr "Nº de subordinados indirectos"
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__is_current
+#, fuzzy
+msgid "Is Current"
+msgstr "Moneda"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__is_custom_job_title
+#, fuzzy
+msgid "Is Custom Job Title"
+msgstr "Título del trabajo"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__is_flexible
+#, fuzzy
+msgid "Is Flexible"
+msgstr "Es un seguidor"
+
+#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__message_is_follower
 msgid "Is Follower"
 msgstr "Es un seguidor"
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__is_fully_flexible
+msgid "Is Fully Flexible"
+msgstr "Es totalmente flexible"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__is_future
+msgid "Is Future"
+msgstr "Es futuro"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__is_in_contract
+#, fuzzy
+msgid "Is In Contract"
+msgstr "Contrato Actual"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__is_past
+msgid "Is Past"
+msgstr "Es pasado"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__is_subordinate
+#, fuzzy
+msgid "Is Subordinate"
+msgstr "Subordinados"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__is_trusted_bank_account
+msgid "Is Trusted Bank Account"
+msgstr "Es cuenta bancaria de confianza"
+
+#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__job_id
-msgid "Job Position"
+msgid "Job"
 msgstr "Puesto de trabajo"
 
 #. module: okticket_connector_user_synchronization
@@ -459,7 +667,7 @@ msgstr "Título del trabajo"
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__lang
 msgid "Lang"
-msgstr ""
+msgstr "Idioma"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__last_activity
@@ -472,7 +680,13 @@ msgid "Last Activity Time"
 msgstr "Último tiempo de actividad"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee____last_update
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__last_modified_uid
+#, fuzzy
+msgid "Last Modified by"
+msgstr "Última modificación el"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__last_modified_date
 msgid "Last Modified on"
 msgstr "Última modificación el"
 
@@ -492,6 +706,11 @@ msgid "Last synchronization date"
 msgstr "Última fecha de sincronización"
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__legal_name
+msgid "Legal Name"
+msgstr "Nombre legal"
+
+#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__message_main_attachment_id
 msgid "Main Attachment"
 msgstr "Adjuntos principales"
@@ -507,6 +726,12 @@ msgid "Marital Status"
 msgstr "Estado civil"
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__member_of_department
+#, fuzzy
+msgid "Member of department"
+msgstr "Número de hijos"
+
+#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__message_has_error
 msgid "Message Delivery error"
 msgstr "Error de Envío de Mensaje"
@@ -517,14 +742,24 @@ msgid "Messages"
 msgstr "Mensajes"
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__monday_location_id
+msgid "Monday"
+msgstr "Lunes"
+
+#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__my_activity_date_deadline
 msgid "My Activity Deadline"
-msgstr ""
+msgstr "Fecha límite de mi actividad"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__country_id
 msgid "Nationality (Country)"
 msgstr "Nacionalidad (País)"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__newly_hired
+msgid "Newly Hired"
+msgstr "Recién contratado"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__activity_date_deadline
@@ -542,19 +777,9 @@ msgid "Next Activity Type"
 msgstr "Siguiente tipo de actividad"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__notes
-msgid "Notes"
-msgstr "Notas"
-
-#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__message_needaction_counter
 msgid "Number of Actions"
 msgstr "Número de acciones"
-
-#. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__children
-msgid "Number of Children"
-msgstr "Número de hijos"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__message_has_error_counter
@@ -563,18 +788,14 @@ msgstr "Numero de errores"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__message_needaction_counter
-msgid "Number of messages which requires an action"
+#, fuzzy
+msgid "Number of messages requiring action"
 msgstr "Número de mensajes que requieren una acción"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__message_has_error_counter
 msgid "Number of messages with delivery error"
 msgstr "Número de mensajes con error de envío"
-
-#. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__message_unread_counter
-msgid "Number of unread messages"
-msgstr "Número de mensajes no leidos"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__backend_id
@@ -585,6 +806,12 @@ msgstr "Backend de Okticket"
 #: model:ir.model,name:okticket_connector_user_synchronization.model_okticket_backend
 msgid "Okticket Backend Configuration"
 msgstr "Configuración de backend de Okticket"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model,name:okticket_connector_user_synchronization.model_okticket_hr_employee
+#, fuzzy
+msgid "Okticket Hr Employee Binding"
+msgstr "Bindings de empleados"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.actions.act_window,name:okticket_connector_user_synchronization.action_open_okticket_hr_employee_binding
@@ -618,9 +845,26 @@ msgid "Partner-related data of the user"
 msgstr "Datos de contacto del usuario."
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__passport_expiration_date
+#, fuzzy
+msgid "Passport Expiration Date"
+msgstr "Fecha expiración visado"
+
+#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__passport_id
 msgid "Passport No"
 msgstr "Nº Pasaporte"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__hr_responsible_id
+msgid "Person responsible for validating the employee's contracts."
+msgstr "Persona responsable de validar los contratos del empleado."
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__phone
+#, fuzzy
+msgid "Phone"
+msgstr "Teléfono trabajo"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__place_of_birth
@@ -628,14 +872,83 @@ msgid "Place of Birth"
 msgstr "Lugar de nacimiento"
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__primary_bank_account_id
+#, fuzzy
+msgid "Primary Bank Account"
+msgstr "Número de Cuenta Bancaria"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__private_car_plate
+#, fuzzy
+msgid "Private Car Plate"
+msgstr "Correo electronico privado"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__private_city
+#, fuzzy
+msgid "Private City"
+msgstr "Correo electronico privado"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__private_country_id
+#, fuzzy
+msgid "Private Country"
+msgstr "Teléfono privado"
+
+#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__private_email
 msgid "Private Email"
 msgstr "Correo electronico privado"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__phone
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__private_phone
 msgid "Private Phone"
 msgstr "Teléfono privado"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__private_state_id
+#, fuzzy
+msgid "Private State"
+msgstr "Correo electronico privado"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__private_street
+#, fuzzy
+msgid "Private Street"
+msgstr "Teléfono privado"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__private_street2
+#, fuzzy
+msgid "Private Street2"
+msgstr "Teléfono privado"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__private_zip
+#, fuzzy
+msgid "Private Zip"
+msgstr "Correo electronico privado"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__employee_properties
+msgid "Properties"
+msgstr "Propiedades"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__birthday_public_display_string
+#, fuzzy
+msgid "Public Date of Birth"
+msgstr "Fecha de nacimiento"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__rating_ids
+msgid "Ratings"
+msgstr "Valoraciones"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__related_partners_count
+msgid "Related Partners Count"
+msgstr "Número de contactos relacionados"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__user_id
@@ -653,14 +966,35 @@ msgid "Responsible User"
 msgstr "Usuario responsable"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__sinid
-msgid "SIN No"
-msgstr "Núm. SIN"
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__resume_line_ids
+msgid "Resume lines"
+msgstr "Líneas de currículum"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__message_has_sms_error
+#, fuzzy
+msgid "SMS Delivery error"
+msgstr "Error de Envío de Mensaje"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__ssnid
 msgid "SSN No"
 msgstr "Nº Seguridad Social"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__salary_distribution
+msgid "Salary Distribution"
+msgstr "Distribución salarial"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__structure_type_id
+msgid "Salary Structure Type"
+msgstr "Tipo de estructura salarial"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__saturday_location_id
+msgid "Saturday"
+msgstr "Sábado"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__study_school
@@ -671,6 +1005,16 @@ msgstr "Escuela"
 #: model_terms:ir.ui.view,arch_db:okticket_connector_user_synchronization.okticket_hr_employee_binding_view_search
 msgid "Search Okticket Hr Employee Binding"
 msgstr "Buscar bindings de empleados"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__contract_template_id
+msgid ""
+"Select a contract template to auto-fill the contract form with predefined "
+"values. You can still edit the fields as needed after applying the template."
+msgstr ""
+"Seleccione una plantilla de contrato para rellenar automáticamente el "
+"formulario del contrato con valores predefinidos. Podrá editar los campos "
+"según sea necesario tras aplicar la plantilla."
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__coach_id
@@ -687,11 +1031,34 @@ msgid ""
 "Select the user responsible for approving \"Expenses\" of this employee.\n"
 "If empty, the approval is done by an Administrator or Approver (determined in settings/users)."
 msgstr ""
+"Seleccione el usuario responsable de aprobar los \"Gastos\" de este empleado.\n"
+"Si está vacío, la aprobación la realiza un Administrador o Aprobador (definido en ajustes/usuarios)."
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__sinid
-msgid "Social Insurance Number"
-msgstr "Número de seguridad social"
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__share
+msgid "Share User"
+msgstr "Usuario compartido"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__show_hr_icon_display
+#, fuzzy
+msgid "Show Hr Icon Display"
+msgstr "Visualización del icono RH"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__birthday_public_display
+msgid "Show to all employees"
+msgstr "Mostrar a todos los empleados"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__skill_ids
+msgid "Skill"
+msgstr "Competencia"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__employee_skill_ids
+msgid "Skills"
+msgstr "Competencias"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__ssnid
@@ -705,7 +1072,8 @@ msgstr "Fecha de nacimiento del cónyuge"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__spouse_complete_name
-msgid "Spouse Complete Name"
+#, fuzzy
+msgid "Spouse Legal Name"
 msgstr "Nombre completo del cónyuge"
 
 #. module: okticket_connector_user_synchronization
@@ -727,30 +1095,24 @@ msgid "Subordinates"
 msgstr "Subordinados"
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__sunday_location_id
+msgid "Sunday"
+msgstr "Domingo"
+
+#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__category_ids
 msgid "Tags"
 msgstr "Categorías"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__company_country_code
+#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__country_code
 msgid ""
 "The ISO country code in two chars. \n"
 "You can use this field for quick search."
 msgstr ""
-
-#. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__is_address_home_a_company
-msgid "The employee address has a company linked"
-msgstr "La dirección del empleado tiene una empresa vinculada"
-
-#. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__employee_type
-msgid ""
-"The employee type. Although the primary purpose may seem to categorize "
-"employees, this field has also an impact in the Contract History. Only "
-"Employee type is supposed to be under contract and will have a Contract "
-"History."
-msgstr ""
+"El código ISO de país de dos caracteres. \n"
+"Puede usar este campo para búsquedas rápidas."
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__tz
@@ -762,15 +1124,25 @@ msgstr ""
 "recursos."
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__exceptional_location_id
+msgid "This is the exceptional, non-weekly, location set for today."
+msgstr "Esta es la ubicación excepcional, no semanal, establecida para hoy."
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__sex
+msgid "This is the legal sex recognized by the state."
+msgstr "Este es el sexo legal reconocido por el estado."
+
+#. module: okticket_connector_user_synchronization
+#. odoo-python
 #: code:addons/okticket_connector_user_synchronization/models/okticket_hr_employee.py:0
-#, python-format
 msgid "This operator is not supported"
 msgstr "Este operador no está soportado"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__timesheet_cost
-msgid "Timesheet Cost"
-msgstr "Coste del parte de horas"
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__thursday_location_id
+msgid "Thursday"
+msgstr "Jueves"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__tz
@@ -778,19 +1150,20 @@ msgid "Timezone"
 msgstr "Zona horaria"
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__today_location_name
+#, fuzzy
+msgid "Today Location Name"
+msgstr "Ubicación de trabajo"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__tuesday_location_id
+msgid "Tuesday"
+msgstr "Martes"
+
+#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__activity_exception_decoration
 msgid "Type of the exception activity on record."
 msgstr "Tipo de actividad de excepción registrada."
-
-#. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__message_unread
-msgid "Unread Messages"
-msgstr "Mensajes sin leer"
-
-#. module: okticket_connector_user_synchronization
-#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__message_unread_counter
-msgid "Unread Messages Counter"
-msgstr "Nº de mensajes sin leer"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__user_id
@@ -799,10 +1172,14 @@ msgstr "Usuario"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.actions.server,name:okticket_connector_user_synchronization.ir_cron_hr_employee_import_ir_actions_server
-#: model:ir.cron,cron_name:okticket_connector_user_synchronization.ir_cron_hr_employee_import
-#: model:ir.cron,name:okticket_connector_user_synchronization.ir_cron_hr_employee_import
 msgid "User Synchronization From Okticket"
 msgstr "Sincronización de usuarios desde Okticket"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__is_user_active
+#, fuzzy
+msgid "User's active"
+msgstr "Socio del usuario"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__user_partner_id
@@ -810,20 +1187,41 @@ msgid "User's partner"
 msgstr "Socio del usuario"
 
 #. module: okticket_connector_user_synchronization
+#. odoo-python
 #: code:addons/okticket_connector_user_synchronization/models/okticket_hr_employee.py:0
-#, python-format
 msgid "Value should be integer (not %s)"
 msgstr "El valor debe ser un entero (no %s)"
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__version_id
+msgid "Version"
+msgstr "Versión"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__version_revision
+msgid "Version Revision"
+msgstr "Revisión de versión"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__versions_count
+msgid "Versions Count"
+msgstr "Número de versiones"
+
+#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__visa_expire
-msgid "Visa Expire Date"
+#, fuzzy
+msgid "Visa Expiration Date"
 msgstr "Fecha expiración visado"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__visa_no
 msgid "Visa No"
 msgstr "Número de Visado"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__wage
+msgid "Wage"
+msgstr "Salario"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__website_message_ids
@@ -836,9 +1234,29 @@ msgid "Website communication history"
 msgstr "Historial de comunicaciones del sitio web"
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__wednesday_location_id
+msgid "Wednesday"
+msgstr "Miércoles"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,help:okticket_connector_user_synchronization.field_okticket_hr_employee__member_of_department
+msgid ""
+"Whether the employee is a member of the active user's department or one of "
+"it's child department."
+msgstr ""
+"Indica si el empleado pertenece al departamento del usuario activo o a uno "
+"de sus departamentos hijos."
+
+#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__address_id
 msgid "Work Address"
 msgstr "Dirección de trabajo"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__work_contact_id
+#, fuzzy
+msgid "Work Contact"
+msgstr "Contrato Actual"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__work_email
@@ -851,6 +1269,18 @@ msgid "Work Location"
 msgstr "Ubicación de trabajo"
 
 #. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__work_location_name
+#, fuzzy
+msgid "Work Location Name"
+msgstr "Ubicación de trabajo"
+
+#. module: okticket_connector_user_synchronization
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__work_location_type
+#, fuzzy
+msgid "Work Location Type"
+msgstr "Ubicación de trabajo"
+
+#. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__mobile_phone
 msgid "Work Mobile"
 msgstr "Móvil del trabajo"
@@ -858,12 +1288,12 @@ msgstr "Móvil del trabajo"
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__has_work_permit
 msgid "Work Permit"
-msgstr ""
+msgstr "Permiso de trabajo"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__work_permit_expiration_date
 msgid "Work Permit Expiration Date"
-msgstr ""
+msgstr "Fecha de caducidad del permiso de trabajo"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__permit_no
@@ -873,7 +1303,7 @@ msgstr "Número de permiso de trabajo"
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__work_permit_scheduled_activity
 msgid "Work Permit Scheduled Activity"
-msgstr ""
+msgstr "Actividad programada del permiso de trabajo"
 
 #. module: okticket_connector_user_synchronization
 #: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__work_phone
@@ -886,11 +1316,66 @@ msgid "Working Hours"
 msgstr "Horas laborales"
 
 #. module: okticket_connector_user_synchronization
-#: model:ir.model,name:okticket_connector_user_synchronization.model_okticket_hr_employee
-msgid "okticket.hr.employee"
-msgstr "Empleados de Okticket"
+#: model:ir.model.fields,field_description:okticket_connector_user_synchronization.field_okticket_hr_employee__work_permit_name
+msgid "work_permit_name"
+msgstr ""
 
 #. module: okticket_connector_user_synchronization
 #: model_terms:ir.ui.view,arch_db:okticket_connector_user_synchronization.view_okticket_backend_form
 msgid "⇒ See Hr Employee Bindings"
 msgstr "⇒ Ver Bindings de empleados"
+
+#~ msgid "Address"
+#~ msgstr "Dirección"
+
+#~ msgid "Calendar Mismatch"
+#~ msgstr "No coinciden los calendarios"
+
+#~ msgid "Company Vehicle"
+#~ msgstr "Vehículo de la compañía"
+
+#~ msgid "Current contract of the employee"
+#~ msgstr "Contrato actual del empleado"
+
+#~ msgid "Define the schedule of resource"
+#~ msgstr "Define la planificación del recurso"
+
+#~ msgid ""
+#~ "Enter here the private address of the employee, not the one linked to your "
+#~ "company."
+#~ msgstr ""
+#~ "Registrar aquí la dirección privada del empleado, no la asociada a la "
+#~ "compañía."
+
+#~ msgid "Expense"
+#~ msgstr "Gasto"
+
+#~ msgid "Job Position"
+#~ msgstr "Puesto de trabajo"
+
+#~ msgid "Notes"
+#~ msgstr "Notas"
+
+#~ msgid "Number of unread messages"
+#~ msgstr "Número de mensajes no leidos"
+
+#~ msgid "SIN No"
+#~ msgstr "Núm. SIN"
+
+#~ msgid "Social Insurance Number"
+#~ msgstr "Número de seguridad social"
+
+#~ msgid "The employee address has a company linked"
+#~ msgstr "La dirección del empleado tiene una empresa vinculada"
+
+#~ msgid "Timesheet Cost"
+#~ msgstr "Coste del parte de horas"
+
+#~ msgid "Unread Messages"
+#~ msgstr "Mensajes sin leer"
+
+#~ msgid "Unread Messages Counter"
+#~ msgstr "Nº de mensajes sin leer"
+
+#~ msgid "okticket.hr.employee"
+#~ msgstr "Empleados de Okticket"

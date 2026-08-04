@@ -4,5 +4,4 @@
 
 from . import components
 from . import okticket
-from . import wizard
 from . import models

@@ -30,13 +30,15 @@ class HrExpense(models.Model):
             exp.okticket_bind_ids.write({'external_id': exp.okticket_expense_id})
 
     def _search_okticket_expense_id(self, operator, value):
-        if operator not in ['=', '!=']:
+        # Odoo 19 normalizes '='/'!=' into 'in'/'not in' before calling field search
+        if operator in ('=', '!='):
+            operator = 'in' if operator == '=' else 'not in'
+            value = [value]
+        if operator not in ('in', 'not in'):
             raise ValueError(_('This operator is not supported'))
-        if not isinstance(value, str):
-            raise ValueError(_('Value should be string (not %s)') % type(value).__name__)
-
-        odoo_ids = self.env['okticket.hr.expense'].search([('external_id', operator, value)]).mapped('odoo_id').ids
-        return [('id', 'in', odoo_ids)] if odoo_ids else []
+        odoo_ids = self.env['okticket.hr.expense'].search([
+            ('external_id', 'in', list(value))]).mapped('odoo_id').ids
+        return [('id', 'not in' if operator == 'not in' else 'in', odoo_ids)]
 
 
 class OkticketExpense(models.Model):
@@ -115,4 +117,10 @@ class ExpensesAdapter(Component):
         if isinstance(result['result'], bool):
             return []
 
-        return result['result']
+        expenses = result['result']
+        # find_expense_by_id returns a single record instead of a list
+        if isinstance(expenses, dict):
+            expenses = expenses.get('data', expenses)
+        if isinstance(expenses, dict):
+            expenses = [expenses]
+        return expenses

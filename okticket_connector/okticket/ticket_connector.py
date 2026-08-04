@@ -56,7 +56,11 @@ class OkTicketOpenConnector(BaseConnector):
         return self.find("/users", params=params, https=https, company_in_header=True)
 
     def find_products(self, params=None, https=False):
-        return self.find("/categories", params=params, https=https, company_in_header=True)
+        # Do NOT send the company header here: with it, the OkTicket API
+        # returns only global root categories, omitting subcategories and
+        # company-specific ones. Without it, the API scopes by the
+        # authenticated user's company and returns the full category tree.
+        return self.find("/categories", params=params, https=https, company_in_header=False)
 
     def find_expense_sheets(self, params=None, https=False):
         return self.find("/reports?with=user,expenses", params=params, https=https, company_in_header=True)

@@ -30,16 +30,15 @@ class HrEmployee(models.Model):
             employee.okticket_bind_ids.write({'external_id': employee.okticket_user_id})
 
     def _search_hr_employee(self, operator, value):
-        if operator not in ['=', '!=']:
+        # Odoo 19 normalizes '='/'!=' into 'in'/'not in' before calling field search
+        if operator in ('=', '!='):
+            operator = 'in' if operator == '=' else 'not in'
+            value = [value]
+        if operator not in ('in', 'not in'):
             raise ValueError(_('This operator is not supported'))
-        if not isinstance(value, int):
-            raise ValueError(_('Value should be integer (not %s)'), value)
-        domain = []
         odoo_ids = self.env['okticket.hr.employee'].search([
-            ('external_id', operator, value)]).mapped('odoo_id').ids
-        if odoo_ids:
-            domain.append(('id', 'in', odoo_ids))
-        return domain
+            ('external_id', 'in', list(value))]).mapped('odoo_id').ids
+        return [('id', 'not in' if operator == 'not in' else 'in', odoo_ids)]
 
     okticket_user_id = fields.Integer(string="Okticket User_Id",
                                       default=-1.0,

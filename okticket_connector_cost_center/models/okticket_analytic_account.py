@@ -36,16 +36,15 @@ class AccountAnalyticAccount(models.Model):
             analytic.okticket_bind_ids.write({'external_id': analytic.okticket_cost_center_id})
 
     def _search_cost_center(self, operator, value):
-        if operator not in ['=', '!=']:
+        # Odoo 19 normalizes '='/'!=' into 'in'/'not in' before calling field search
+        if operator in ('=', '!='):
+            operator = 'in' if operator == '=' else 'not in'
+            value = [value]
+        if operator not in ('in', 'not in'):
             raise ValueError(_('This operator is not supported'))
-        if not isinstance(value, int):
-            raise ValueError(_('Value should be integer (not %s)'), value)
-        domain = []
         odoo_ids = self.env['okticket.account.analytic.account'].search([
-            ('external_id', operator, value)]).mapped('odoo_id').ids
-        if odoo_ids:
-            domain.append(('id', 'in', odoo_ids))
-        return domain
+            ('external_id', 'in', list(value))]).mapped('odoo_id').ids
+        return [('id', 'not in' if operator == 'not in' else 'in', odoo_ids)]
 
     okticket_cost_center_id = fields.Integer(string="OkTicket Cost_center_id",
                                              default=-1.0,

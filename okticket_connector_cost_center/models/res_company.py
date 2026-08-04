@@ -12,4 +12,8 @@ _logger = logging.getLogger(__name__)
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
-    create_cost_center_automatically = fields.Boolean('Create Costs Center Automatically')
+    create_cost_center_automatically = fields.Boolean(
+        'Auto-create project cost center',
+        help='When enabled, creating a project in Odoo automatically creates '
+             'its cost center in OkTicket (renames, archives and deletions '
+             'are synchronized too).')

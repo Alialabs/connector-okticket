@@ -29,7 +29,7 @@ class OkticketAdapter(Component):
     _usage = 'backend.adapter'
 
     def _auth(self):
-        auth_data = self.backend_record.read(['location', 'http_client_conn_url', 'base_url', 'auth_uri',
+        auth_data = self.backend_record.read(['http_client_conn_url', 'base_url', 'auth_uri',
                                               'api_login', 'api_password', 'uri_op_path', 'okticket_company_id',
                                               'grant_type', 'oauth_client_id', 'oauth_secret', 'scope'])[0]
 

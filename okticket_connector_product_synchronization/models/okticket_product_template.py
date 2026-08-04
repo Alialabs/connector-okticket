@@ -23,7 +23,6 @@ class ProductTemplate(models.Model):
         compute='_compute_okticket_categ_prod_id',
         inverse='_inverse_okticket_categ_prod_id',
         search='_search_okticket_categ_prod_id',
-        store=True
     )
 
     def _compute_okticket_categ_prod_id(self):
@@ -39,18 +38,23 @@ class ProductTemplate(models.Model):
                 base_product.okticket_bind_ids.write({'external_id': product.okticket_categ_prod_id})
 
     def _search_okticket_categ_prod_id(self, operator, value):
-        if operator not in ['=', '!=']:
+        # Odoo 19 normalizes '='/'!=' into 'in'/'not in' before calling field search
+        if operator in ('=', '!='):
+            operator = 'in' if operator == '=' else 'not in'
+            value = [value]
+        if operator not in ('in', 'not in'):
             raise ValueError(_('This operator is not supported'))
-        if not isinstance(value, int):
-            raise ValueError(_('Value should be integer (not %s)') % type(value).__name__)
-
-        odoo_ids = self.env['okticket.product.template'].search(
-            [('external_id', operator, value)]
-        ).mapped('odoo_id.id')
-
-        if odoo_ids:
-            return [('id', 'in', odoo_ids)]
-        return []
+        base_products = self.env['okticket.product.template'].search(
+            [('external_id', 'in', list(value))]).mapped('odoo_id')
+        # The category binding only lives on the base product; include its
+        # invoice version (okticket_type_prod_id=1) so "Factura" expenses can
+        # resolve their -Invoiceable product. Rebillable versions are
+        # intentionally excluded: get_base_product first resolves the
+        # base/invoice product and then swaps to its rebillable version itself
+        # when the expense is refacturable, so adding them here would let a plain
+        # ticket (type_id=0) resolve to the "-Rebillable" product instead.
+        products = base_products | base_products.mapped('invoice_prod_id')
+        return [('id', 'not in' if operator == 'not in' else 'in', products.ids)]
 
 
 class OkticketProductTemplate(models.Model):

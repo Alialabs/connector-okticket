@@ -10,38 +10,27 @@
             <field name="model">okticket.backend</field>
             <field name="arch" type="xml">
                 <form string="Okticket Backend">
+                    <header>
+                        <button name="check_auth"
+                                type="object"
+                                class="oe_highlight"
+                                string="Test Authentication"
+                                groups="okticket_connector.group_okticket_conn_user"/>
+                    </header>
                     <sheet>
                         <label for="name" class="oe_edit_only"/>
                         <h1>
                             <field name="name" class="oe_inline"/>
                         </h1>
-                        <group name="okticket" string="Okticket Configuration"
+                        <group name="okticket" string="OkTicket Parameters Configuration"
                                groups="okticket_connector.group_okticket_conn_user">
-                            <group>
-                                <field name="location"/>
-<!--                                <field name="key"/>-->
-                                <button name="check_auth"
-                                        type="object"
-                                        class="oe_highlight"
-                                        string="Test Authentication"/>
-                            </group>
-                            <group>
-                                <!-- Campos vacíos para balancear -->
-                                <div invisible="1"/>
-                                <div invisible="1"/>
-                                <div invisible="1"/>
-                            </group>
-
-                            <separator string="OkTicket Test Parameters" colspan="2"/>
-
                             <group>
                                 <field name="http_client_conn_url"/>
                                 <field name="auth_uri"/>
                                 <field name="image_base_url"/>
-                                <field name="api_password"/>
+                                <field name="api_password" password="True"/>
                                 <field name="oauth_client_id"/>
                                 <field name="https"/>
-                                <field name="version"/>
                                 <field name="company_id"/>
                                 <field name="okticket_company_id"/>
                             </group>
@@ -108,7 +97,7 @@
             <field name="arch" type="xml">
                 <list string="Okticket Backend">
                     <field name="name"/>
-                    <field name="location"/>
+                    <field name="base_url"/>
                 </list>
             </field>
         </record>

@@ -70,10 +70,10 @@ class HrExpenseBatchImporter(Component):
     @mapping
     def product_id(self, record):
         existing = self.get_base_product(record)
-        company_id = self.company_id(record).get('company_id')
+        company_id = (self.company_id(record) or {}).get('company_id')
         if existing:
             result = {'product_id': existing.id}
-            if record['type_id'] != 0:
+            if record.get('type_id') != 0:
                 #tax_ids = [(4, stax.id) for stax in existing.supplier_taxes_id]
                 tax_ids = [(4, stax.id) for stax in existing.supplier_taxes_id if stax.company_id.id == company_id]
                 if tax_ids:
@@ -84,7 +84,7 @@ class HrExpenseBatchImporter(Component):
     def amount(self, record):
         return {
             'price_unit': 0.0,  # Para hacer visibles los impuestos en la interfaz Odoo 15
-            'total_amount': record['amount']
+            'total_amount': record.get('amount', 0.0)
         }
 
     @mapping
@@ -95,11 +95,12 @@ class HrExpenseBatchImporter(Component):
 
     @mapping
     def comments(self, record):
-        return {'description': record['comments']}
+        if 'comments' in record:
+            return {'description': record['comments']}
 
     @mapping
     def company_id(self, record):
-        if record.get('user_id'):
+        if record.get('company_id'):
             backend = self.env['okticket.backend'].search(
                 [('okticket_company_id', '=', record['company_id'])], limit=1
             )
@@ -109,20 +110,85 @@ class HrExpenseBatchImporter(Component):
     @mapping
     def employee_id(self, record):
         if record.get('user_id'):
-            existing = self.env['hr.employee'].search(
-                [('okticket_user_id', '=', record['user_id'])], limit=1
-            )
+            domain = [('okticket_user_id', '=', record['user_id'])]
+            company_vals = self.company_id(record)
+            if company_vals and company_vals.get('company_id'):
+                # The employee must belong to the same company as the expense
+                domain.append(('company_id', '=', company_vals['company_id']))
+            existing = self.env['hr.employee'].search(domain, limit=1)
             if existing:
                 return {'employee_id': existing.id}
 
     @mapping
     def okticket_status(self, record):
-        return {'okticket_status': 'confirmed' if record['status_id'] == 1 else 'pending'}
+        return {'okticket_status': 'confirmed' if record.get('status_id') == 1 else 'pending'}
+
+    @mapping
+    def okticket_report_id(self, record):
+        if 'report_id' in record:
+            return {'okticket_report_id': record['report_id']}
+
+    @mapping
+    def okticket_report_name(self, record):
+        report_id = record.get('report_id')
+        return {'okticket_report_name': self._get_okticket_report_name(report_id)}
+
+    def _get_okticket_report_name(self, report_id):
+        """Fetch the OkTicket report name, cached per import run."""
+        if not report_id:
+            return False
+        if not hasattr(self, '_report_name_cache'):
+            self._report_name_cache = {}
+        if report_id not in self._report_name_cache:
+            name = False
+            try:
+                adapter = self.component(usage='backend.adapter')
+                if adapter._auth():
+                    result = adapter.okticket_api.find_report_by_id(
+                        report_id, https=self.backend_record.https)
+                    report = result.get('result')
+                    if isinstance(report, dict) and 'data' in report:
+                        report = report['data']
+                    if isinstance(report, list):
+                        report = report[0] if report else {}
+                    name = (report or {}).get('name')
+            except Exception:
+                _logger.warning(
+                    'Could not fetch OkTicket report %s name', report_id)
+            self._report_name_cache[report_id] = name
+        return self._report_name_cache[report_id]
 
     @mapping
     def okticket_vat(self, record):
         if 'cif' in record:
             return {'okticket_vat': record['cif']}
+
+    @mapping
+    def vendor_id(self, record):
+        """Fill the vendor when the captured VAT matches exactly one partner.
+
+        The comparison takes the country prefix into account: a captured
+        VAT without prefix matches a partner VAT stored with it (and the
+        other way around).
+        """
+        vat = (record.get('cif') or '').replace(' ', '').replace('-', '').upper()
+        if not vat:
+            return
+        candidates = {vat}
+        if len(vat) > 2 and vat[:2].isalpha() and vat[2:]:
+            candidates.add(vat[2:])  # captured with country prefix
+        company_vals = self.company_id(record) or {}
+        company_id = company_vals.get('company_id')
+        country_code = False
+        if company_id:
+            country_code = self.env['res.company'].browse(company_id).country_id.code
+        candidates.add((country_code or 'ES') + vat)  # partner stored with prefix
+        domain = [('vat', 'in', list(candidates))]
+        if company_id:
+            domain.append(('company_id', 'in', [False, company_id]))
+        partners = self.env['res.partner'].search(domain).mapped('commercial_partner_id')
+        if len(partners) == 1:
+            return {'vendor_id': partners.id}
 
     @mapping
     def okticket_partner_name(self, record):
@@ -137,12 +203,7 @@ class HrExpenseBatchImporter(Component):
     @mapping
     def okticket_remote_uri(self, record):
         if 'remote_uri' in record:
-            img_path = self.backend_record.image_base_url + record['remote_uri']
-            okticket_img = base64.b64encode(requests.get(img_path).content)
-            return {
-                'okticket_remote_uri': record['remote_uri'],
-                'okticket_img': okticket_img
-            }
+            return {'okticket_remote_uri': record['remote_uri']}
 
     @mapping
     def okticket_response(self, record):
@@ -175,7 +236,8 @@ class HrExpenseBatchImporter(Component):
     def analytic_account_id(self, record):
         if record.get('cost_center_id'):
             cc_analytic_binder = self.env['okticket.account.analytic.account'].search(
-                [('external_id', '=', int(record['cost_center_id']))], limit=1
+                [('external_id', '=', int(record['cost_center_id'])),
+                 ('backend_id', '=', self.backend_record.id)], limit=1
             )
 
             if cc_analytic_binder and cc_analytic_binder.odoo_id:
@@ -197,7 +259,8 @@ class HrExpenseBatchImporter(Component):
         okticket_account_id = False
         if record.get('cost_center_id'):
             cc_analytic_binder = self.env['okticket.account.analytic.account'].search(
-                [('external_id', '=', int(record['cost_center_id']))], limit=1
+                [('external_id', '=', int(record['cost_center_id'])),
+                 ('backend_id', '=', self.backend_record.id)], limit=1
             )
             if cc_analytic_binder and cc_analytic_binder.odoo_id:
                 okticket_account_id = cc_analytic_binder.odoo_id.okticket_def_account_id.id if cc_analytic_binder.odoo_id.okticket_def_account_id else False
@@ -215,6 +278,46 @@ class HrExpenseBatchImporter(Component):
     @mapping
     def is_invoice(self, record):
         return {'is_invoice': record.get('type_id') == 1}
+
+    def _import_pdf_to_chatter(self, binding, record):
+        """Download the OkTicket PDF (invoices/tickets sent to the robot) and
+        attach it to the related hr.expense chatter.
+
+        The actual PDF lives in ``signed_pdf_url`` (a pre-signed S3 URL). This
+        brings that PDF into Odoo so it is available on the expense. Idempotent:
+        it is not re-attached on later imports.
+        """
+        pdf_url = record.get('signed_pdf_url')
+        if not pdf_url or not binding or not binding.odoo_id:
+            return
+        expense = binding.odoo_id
+        filename = '%s.pdf' % (record.get('ticket_num') or record.get('_id') or 'okticket')
+        already = self.env['ir.attachment'].sudo().search_count([
+            ('res_model', '=', 'hr.expense'),
+            ('res_id', '=', expense.id),
+            ('name', '=', filename),
+        ])
+        if already:
+            return
+        try:
+            response = requests.get(pdf_url, timeout=60)
+            if not response.ok or not response.content:
+                _logger.warning('Could not download expense PDF %s (HTTP %s)',
+                                pdf_url, response.status_code)
+                return
+            attachment = self.env['ir.attachment'].sudo().create({
+                'name': filename,
+                'datas': base64.b64encode(response.content),
+                'res_model': 'hr.expense',
+                'res_id': expense.id,
+                'mimetype': 'application/pdf',
+            })
+            expense.sudo().message_post(
+                body=_('OkTicket PDF document imported'),
+                attachment_ids=[attachment.id],
+            )
+        except Exception as e:
+            _logger.warning('Error importing expense PDF %s: %s', pdf_url, e)
 
     def run(self, filters=None, options=None):
         backend_adapter = self.component(usage='backend.adapter')
@@ -285,6 +388,8 @@ class HrExpenseBatchImporter(Component):
 
                     okticket_hr_expense_ids.append(binding.id)
                     binder.bind(expense_ext_vals.get('_id'), binding)
+                    self._attach_ticket_image(binding, expense_ext_vals)
+                    self._import_pdf_to_chatter(binding, expense_ext_vals)
                     _logger.info('Imported')
 
                 self.backend_record.import_expenses_since = last_expenses_import
@@ -300,6 +405,38 @@ class HrExpenseBatchImporter(Component):
 
         _logger.info('Import from Okticket DONE')
         return okticket_hr_expense_ids
+
+    def _attach_ticket_image(self, binding, record):
+        """Attach the OkTicket ticket image to the expense chatter.
+
+        The image lives in the chatter (and becomes the expense main
+        attachment, shown in the native preview pane) instead of a binary
+        field. Idempotent: skips if the attachment already exists.
+        """
+        remote_uri = record.get('remote_uri')
+        if not remote_uri:
+            return
+        expense = binding.odoo_id
+        extension = remote_uri.rsplit('.', 1)[-1] if '.' in remote_uri else 'jpg'
+        att_name = 'OkTicket-%s.%s' % (record.get('_id'), extension)
+        existing = self.env['ir.attachment'].sudo().search([
+            ('res_model', '=', 'hr.expense'),
+            ('res_id', '=', expense.id),
+            ('name', '=', att_name),
+        ], limit=1)
+        if existing:
+            return
+        img_path = self.backend_record.image_base_url + remote_uri
+        content = requests.get(img_path, timeout=30).content
+        # Post in the backend language (schedulers run in en_US otherwise)
+        lang = (self.backend_record.default_lang_id.code
+                or expense.company_id.partner_id.lang
+                or self.env.user.lang)
+        expense = expense.with_context(lang=lang)
+        expense.sudo().message_post(
+            body=expense.env._('Ticket image imported from OkTicket'),
+            attachments=[(att_name, content)],
+        )
 
     def datetime_expenses_import_backend_filter(self, filters):
         last_expenses_import = datetime.datetime.now()
