@@ -80,27 +80,10 @@ los gastos importados recaen siempre en el impuesto por defecto del producto.
 
 ## 3. Clonado del repositorio
 
-El código se publica en GitHub. Clona la rama correspondiente a tu versión de Odoo dentro del
-directorio de *addons*:
+El repositorio mantiene una rama por versión de Odoo. Para 19.0:
 
 ```bash
-# situarse en el directorio de addons de la instancia
-cd /opt/odoo/addons
-
-# clonar solo la rama 19.0
 git clone --branch 19.0 https://github.com/Alialabs/connector-okticket.git
-
-# comprobar los módulos disponibles
-ls connector-okticket
-```
-
-Si prefieres SSH: `git clone --branch 19.0 git@github.com:Alialabs/connector-okticket.git`
-
-Para actualizar más adelante:
-
-```bash
-cd /opt/odoo/addons/connector-okticket
-git pull origin 19.0
 ```
 
 ---
@@ -109,61 +92,45 @@ git pull origin 19.0
 
 ### Módulos OCA
 
-El conector se apoya en el framework *connector* y en las colas de trabajo de la OCA. Ambos
-repositorios deben estar disponibles en la ruta de *addons*, en su rama `19.0`:
+Ambos repositorios en su rama `19.0`:
 
-| Repositorio OCA | Módulos que aporta |
+| Repositorio | Módulos que aporta |
 |---|---|
 | `OCA/connector` | `connector`, `component`, `component_event` |
 | `OCA/queue` | `queue_job` |
 
-```bash
-cd /opt/odoo/addons
-git clone --branch 19.0 https://github.com/OCA/connector.git
-git clone --branch 19.0 https://github.com/OCA/queue.git
-```
-
 ### Módulos estándar de Odoo
 
-Se instalan automáticamente al resolver dependencias: `hr`, `hr_expense`, `hr_timesheet`,
-`sale_expense`, `product`, `uom`, `analytic` y, para el módulo de centros de coste, `project`.
+`hr`, `hr_expense`, `hr_timesheet`, `sale_expense`, `product`, `uom`, `analytic` y, para el módulo
+de centros de coste, `project`.
 
 ### Dependencias Python
 
-Una sola, declarada en `requirements.txt`:
-
-```bash
-pip install cachetools==3.1.1
-# o bien
-pip install -r /opt/odoo/addons/connector-okticket/requirements.txt
-```
+Una sola, declarada en `requirements.txt`: `cachetools==3.1.1`.
 
 > [!NOTE]
-> En despliegues Docker/Doodba, añade `cachetools==3.1.1` a
-> `odoo/custom/dependencies/pip.txt` y reconstruye la imagen en lugar de instalar el paquete
-> dentro del contenedor en caliente.
+> En despliegues Docker/Doodba va en `odoo/custom/dependencies/pip.txt`, no instalada en caliente
+> dentro del contenedor.
 
 ---
 
 ## 5. Instalación de los módulos
 
-Añade la ruta del repositorio a `addons_path` en el fichero de configuración de Odoo y reinicia el
-servicio. Después, actualiza la lista de aplicaciones y localiza los módulos buscando **okticket**.
+Con las rutas ya en `addons_path` y el servicio reiniciado, los módulos aparecen buscando
+**okticket** en la lista de aplicaciones.
 
 > [!NOTE]
-> Los módulos del conector no son «aplicaciones», así que en la vista de *Aplicaciones* hay que
-> **quitar el filtro «Aplicaciones»** del buscador para que aparezcan.
+> Ninguno de los módulos declara `application: True`, así que hay que **quitar el filtro
+> «Aplicaciones»** del buscador para que aparezcan.
 
 ![Lista de módulos del conector OkTicket en Odoo](img/t01-modulos.png)
 
-Basta con instalar los que necesites; Odoo resuelve el orden de dependencias por sí solo:
+Qué instalar según el alcance:
 
 - `okticket_connector` — obligatorio.
 - `okticket_connector_user_synchronization` y `okticket_connector_product_synchronization` —
   necesarios para que la importación de gastos encuentre empleado y producto.
 - `okticket_connector_cost_center` — solo si vas a publicar centros de coste.
-
-Desde línea de comandos:
 
 ```bash
 odoo -d <base_de_datos> --stop-after-init \
@@ -232,12 +199,8 @@ El *backend* guarda los datos de conexión con la API. Hay **uno por compañía*
 | Oauth client id / Secreto OAuth | — | Credenciales del cliente. Las facilita OkTicket. |
 
 Los parámetros técnicos vienen rellenos por defecto al crear un backend nuevo: en la práctica solo
-hay que introducir las cuatro credenciales y asignar la compañía.
-
-> [!CAUTION]
-> Las credenciales son secretos de producción. No las escribas en documentación, capturas, tickets
-> ni ficheros versionados. Para preproducción sustituye `api.okticket.es` por `apipre.okticket.es`
-> en los cuatro valores de URL.
+hay que introducir las cuatro credenciales y asignar la compañía. Para apuntar a preproducción,
+sustituye `api.okticket.es` por `apipre.okticket.es` en los cuatro valores de URL.
 
 ### Parámetros de importación
 

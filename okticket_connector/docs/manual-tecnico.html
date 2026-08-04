@@ -192,75 +192,49 @@ del producto.</p>
 
 <h2 id="clonado">3. Clonado del repositorio</h2>
 
-<p>El código se publica en GitHub. Clona la rama correspondiente a tu versión de Odoo dentro
-del directorio de <i>addons</i>:</p>
+<p>El repositorio mantiene una rama por versión de Odoo. Para 19.0:</p>
 
-<pre><code><span class="c"># situarse en el directorio de addons de la instancia</span>
-cd /opt/odoo/addons
-
-<span class="c"># clonar solo la rama 19.0</span>
-git clone --branch 19.0 https://github.com/Alialabs/connector-okticket.git
-
-<span class="c"># comprobar los módulos disponibles</span>
-ls connector-okticket</code></pre>
-
-<p>Si prefieres SSH: <code>git clone --branch 19.0 git@github.com:Alialabs/connector-okticket.git</code></p>
-
-<p>Para actualizar más adelante:</p>
-
-<pre><code>cd /opt/odoo/addons/connector-okticket
-git pull origin 19.0</code></pre>
+<pre><code>git clone --branch 19.0 https://github.com/Alialabs/connector-okticket.git</code></pre>
 
 <h2 id="dependencias">4. Dependencias</h2>
 
 <h3>Módulos OCA</h3>
 
-<p>El conector se apoya en el framework <i>connector</i> y en las colas de trabajo de la OCA. Ambos
-repositorios deben estar disponibles en la ruta de <i>addons</i>, en su rama <code>19.0</code>:</p>
+<p>Ambos repositorios en su rama <code>19.0</code>:</p>
 
 <table>
-  <thead><tr><th>Repositorio OCA</th><th>Módulos que aporta</th></tr></thead>
+  <thead><tr><th>Repositorio</th><th>Módulos que aporta</th></tr></thead>
   <tbody>
     <tr><td><code>OCA/connector</code></td><td><code>connector</code>, <code>component</code>, <code>component_event</code></td></tr>
     <tr><td><code>OCA/queue</code></td><td><code>queue_job</code></td></tr>
   </tbody>
 </table>
 
-<pre><code>cd /opt/odoo/addons
-git clone --branch 19.0 https://github.com/OCA/connector.git
-git clone --branch 19.0 https://github.com/OCA/queue.git</code></pre>
-
 <h3>Módulos estándar de Odoo</h3>
 
-<p>Se instalan automáticamente al resolver dependencias: <code>hr</code>, <code>hr_expense</code>,
-<code>hr_timesheet</code>, <code>sale_expense</code>, <code>product</code>, <code>uom</code>,
-<code>analytic</code> y, para el módulo de centros de coste, <code>project</code>.</p>
+<p><code>hr</code>, <code>hr_expense</code>, <code>hr_timesheet</code>, <code>sale_expense</code>,
+<code>product</code>, <code>uom</code>, <code>analytic</code> y, para el módulo de centros de
+coste, <code>project</code>.</p>
 
 <h3>Dependencias Python</h3>
 
-<p>Una sola, declarada en <code>requirements.txt</code>:</p>
-
-<pre><code>pip install cachetools==3.1.1
-<span class="c"># o bien</span>
-pip install -r /opt/odoo/addons/connector-okticket/requirements.txt</code></pre>
+<p>Una sola, declarada en <code>requirements.txt</code>: <code>cachetools==3.1.1</code>.</p>
 
 <div class="callout">
   <span class="tag">Nota</span>
-  En despliegues Docker/Doodba, añade <code>cachetools==3.1.1</code> a
-  <code>odoo/custom/dependencies/pip.txt</code> y reconstruye la imagen en lugar de instalar el
-  paquete dentro del contenedor en caliente.
+  En despliegues Docker/Doodba va en <code>odoo/custom/dependencies/pip.txt</code>, no instalada
+  en caliente dentro del contenedor.
 </div>
 
 <h2 id="instalacion">5. Instalación de los módulos</h2>
 
-<p>Añade la ruta del repositorio a <code>addons_path</code> en el fichero de configuración de Odoo y
-reinicia el servicio. Después, actualiza la lista de aplicaciones y localiza los módulos
-buscando <b>okticket</b>.</p>
+<p>Con las rutas ya en <code>addons_path</code> y el servicio reiniciado, los módulos aparecen
+buscando <b>okticket</b> en la lista de aplicaciones.</p>
 
 <div class="callout">
-  <span class="tag">Recuerda</span>
-  Los módulos del conector no son «aplicaciones», así que en la vista de <i>Aplicaciones</i> hay que
-  <b>quitar el filtro «Aplicaciones»</b> del buscador para que aparezcan.
+  <span class="tag">Detalle</span>
+  Ninguno de los módulos declara <code>application: True</code>, así que hay que <b>quitar el filtro
+  «Aplicaciones»</b> del buscador para que aparezcan.
 </div>
 
 <figure>
@@ -268,7 +242,7 @@ buscando <b>okticket</b>.</p>
   <figcaption>Los cinco módulos del conector en la lista de aplicaciones.</figcaption>
 </figure>
 
-<p>Basta con instalar los que necesites; Odoo resuelve el orden de dependencias por sí solo:</p>
+<p>Qué instalar según el alcance:</p>
 
 <ul>
   <li><code>okticket_connector</code> — obligatorio.</li>
@@ -277,8 +251,6 @@ buscando <b>okticket</b>.</p>
       gastos encuentre empleado y producto.</li>
   <li><code>okticket_connector_cost_center</code> — solo si vas a publicar centros de coste.</li>
 </ul>
-
-<p>Desde línea de comandos:</p>
 
 <pre><code>odoo -d &lt;base_de_datos&gt; --stop-after-init \
   -i okticket_connector,okticket_connector_user_synchronization,\
@@ -360,14 +332,9 @@ cliente web cachea la definición de las vistas.</p>
 </table>
 
 <p>Los parámetros técnicos vienen rellenos por defecto al crear un backend nuevo: en la práctica
-solo hay que introducir las cuatro credenciales y asignar la compañía.</p>
-
-<div class="callout warn">
-  <span class="tag">Seguridad</span>
-  Las credenciales son secretos de producción. No las escribas en documentación, capturas,
-  tickets ni ficheros versionados. Para preproducción sustituye <code>api.okticket.es</code> por
-  <code>apipre.okticket.es</code> en los cuatro valores de URL.
-</div>
+solo hay que introducir las cuatro credenciales y asignar la compañía. Para apuntar a
+preproducción, sustituye <code>api.okticket.es</code> por <code>apipre.okticket.es</code> en los
+cuatro valores de URL.</p>
 
 <h3>Parámetros de importación</h3>
 
