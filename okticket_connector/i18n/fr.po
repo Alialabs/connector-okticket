@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * connector_redmine
-# 
+#
 # Translators:
 # OCA Transbot <transbot@odoo-community.org>, 2016
 msgid ""
@@ -12,492 +12,1415 @@ msgstr ""
 "PO-Revision-Date: 2017-03-17 13:17+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#. module: connector_redmine
-#: code:addons/connector_redmine/models/redmine_backend.py:21
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
 #, python-format
-msgid "1.3 and higher"
+msgid ""
+"\n"
+"Error: %s\n"
+msgstr ""
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/wizard/expense_wizard.py:0
+#, python-format
+msgid ""
+"(assign_default_expense_account)> Field \"account_id\" updated from product "
+"for expenses: %s"
+msgstr ""
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_backend.py:0
+#, fuzzy, python-format
+msgid "1.0 and higher"
 msgstr "1.3 et supérieure"
 
-#. module: connector_redmine
-#: code:addons/connector_redmine/unit/backend_adapter.py:44
+#. module: okticket_connector
+#: model:ir.model.constraint,message:okticket_connector.constraint_okticket_account_analytic_account_okticket_uniq
+#: model:ir.model.constraint,message:okticket_connector.constraint_okticket_binding_okticket_uniq
+#: model:ir.model.constraint,message:okticket_connector.constraint_okticket_hr_employee_okticket_uniq
+#: model:ir.model.constraint,message:okticket_connector.constraint_okticket_hr_expense_okticket_uniq
+#: model:ir.model.constraint,message:okticket_connector.constraint_okticket_hr_expense_sheet_okticket_uniq
+#: model:ir.model.constraint,message:okticket_connector.constraint_okticket_product_template_okticket_uniq
+msgid "A binding already exists with the same Okticket ID."
+msgstr ""
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/components/backend_adapter.py:0
 #, python-format
 msgid "A network error caused the failure of the job: %s"
 msgstr "Une erreur réseau a provoqué l'échec de cette tâche : %s"
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,currency_id:0
-msgid "Account Currency"
+#. module: okticket_connector
+#: model:ir.model.constraint,message:okticket_connector.constraint_okticket_product_tax_mapping_okticket_product_rate_uniq
+msgid "A product can map an OkTicket rate to only one tax per company."
 msgstr ""
 
-#. module: connector_redmine
-#: field:res.users,property_account_payable:0
-msgid "Account Payable"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__account_id
+#, fuzzy
+msgid "Account"
+msgstr "Compte analytique"
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_view_account_analytic_account_form
+msgid "Account Information"
 msgstr ""
 
-#. module: connector_redmine
-#: field:res.users,property_account_receivable:0
-msgid "Account Receivable"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__accounting_date
+msgid "Accounting Date"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.backend,active:0
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__active
 msgid "Active"
 msgstr "Actif"
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,amount:0
-msgid "Amount"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_ids
+#, fuzzy
+msgid "Activities"
+msgstr "Actif"
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_exception_decoration
+msgid "Activity Exception Decoration"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,amount_currency:0
-msgid "Amount Currency"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_state
+#, fuzzy
+msgid "Activity State"
+msgstr "Actif"
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_type_icon
+msgid "Activity Type Icon"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,account_id:0
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__account_id
+msgid "An expense account is expected"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_account_analytic_account
 msgid "Analytic Account"
 msgstr "Compte analytique"
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,journal_id:0
-msgid "Analytic Journal"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__analytic_distribution
+msgid "Analytic Distribution"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,line_id:0
-msgid "Analytic Line"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__analytic_distribution_search
+msgid "Analytic Distribution Search"
 msgstr ""
 
-#. module: connector_redmine
-#: model:ir.ui.menu,name:connector_redmine.menu_redmine_backend
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__analytic_precision
+#, fuzzy
+msgid "Analytic Precision"
+msgstr "Compte analytique"
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__analytic_account_id
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__analytic_account_id
+#, fuzzy
+msgid "Analytic account from OkTicket"
+msgstr "Compte analytique"
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__approved_by
+msgid "Approved By"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__approved_on
+msgid "Approved On"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__attachment_ids
+msgid "Attachments"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__tag__auth
+#, fuzzy
+msgid "Authentication"
+msgstr "Tester l'authentification"
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_log_event__backend_id
+#, fuzzy
+msgid "Backend"
+msgstr "Backends"
+
+#. module: okticket_connector
+#: model:ir.ui.menu,name:okticket_connector.menu_okticket_backend
 msgid "Backends"
 msgstr "Backends"
 
-#. module: connector_redmine
-#: help:redmine.hr.analytic.timesheet,amount:0
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__hr_expense__payment_method__cheque
+msgid "Bank check"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_product_product__base_version_prod_ids
+#: model:ir.model.fields,field_description:okticket_connector.field_product_template__base_version_prod_ids
+msgid "Base Product Versions"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__base_url
+msgid "Base url"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__tax_ids
 msgid ""
-"Calculated by multiplying the quantity and the price given in the Product's "
-"cost price. Always expressed in the company main currency."
+"Both price-included and price-excluded taxes will behave as price-included "
+"taxes for expenses."
 msgstr ""
 
-#. module: connector_redmine
-#: help:res.users,vat_subjected:0
-msgid ""
-"Check this box if the partner is subjected to the VAT. It will be used for "
-"the VAT legal statement."
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__hr_expense__payment_method__tarjeta
+msgid "Business card"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,code:0
-msgid "Code"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__can_be_reinvoiced
+msgid "Can be reinvoiced"
 msgstr ""
 
-#. module: connector_redmine
-#: field:res.users,ref_companies:0
-msgid "Companies that refers to partner"
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.expense_wizard_view
+msgid "Cancel"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,company_id:0
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__hr_expense__payment_method__efectivo
+msgid "Cash"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__product_id
+msgid "Category"
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_product_expense_form_view
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
+msgid "Category_id"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__message_main_attachment_checksum
+msgid "Checksum/SHA1"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__company_id
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__company_id
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__company_id
 msgid "Company"
 msgstr ""
 
-#. module: connector_redmine
-#: code:addons/connector_redmine/models/redmine_backend.py:77
-#, python-format
-msgid "Connection test succeededEverything seems properly set up"
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_view_company_form
+msgid "Company_id"
 msgstr ""
 
-#. module: connector_redmine
-#: field:res.users,contract_ids:0 field:res.users,contracts_count:0
-msgid "Contracts"
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__hr_expense__okticket_status__confirmed
+msgid "Confirmed"
 msgstr ""
 
-#. module: connector_redmine
-#: code:addons/connector_redmine/models/redmine_backend.py:74
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_backend.py:0
 #, python-format
-msgid "Could not connect to Redmine"
+msgid ""
+"Connection test succeeded\n"
+"Everything seems properly set up"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_connector_backend
+#, fuzzy
+msgid "Connector Backend"
+msgstr "Backend Redmine"
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_log_event__content
+msgid "Content"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__product_uom_category_id
+msgid ""
+"Conversion between Units of Measure can only occur if they belong to the "
+"same category. The conversion will be made based on the ratios."
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_view_account_analytic_account_form
+msgid "Cost Center Information"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_hr_expense__analytic_account_id
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__analytic_account_id
+msgid "Cost center (analytical account) from OkTicket synchronization"
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_view_account_analytic_account_form
+msgid "Cost_center_id"
+msgstr ""
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_backend.py:0
+#: code:addons/okticket_connector/models/okticket_binding.py:0
+#, fuzzy, python-format
+msgid "Could not connect to Okticket"
 msgstr "N'a pas pu se connecter à Redmine"
 
-#. module: connector_redmine
-#: field:redmine.backend,create_uid:0
-#: field:redmine.hr.analytic.timesheet,create_uid:0
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_log_event__create_uid
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__create_uid
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_expense_wizard__create_uid
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__create_uid
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__create_uid
 msgid "Created by"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.backend,create_date:0
-#: field:redmine.hr.analytic.timesheet,create_date:0
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_log_event__create_date
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__create_date
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_expense_wizard__create_date
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__create_date
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__create_date
 msgid "Created on"
 msgstr ""
 
-#. module: connector_redmine
-#: field:res.users,property_payment_term:0
-msgid "Customer Payment Term"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__currency_id
+msgid "Currency"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,date:0
-msgid "Date"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__currency_rate
+msgid "Currency Rate"
 msgstr ""
 
-#. module: connector_redmine
-#: help:res.users,last_reconciliation_date:0
-msgid ""
-"Date on which the partner accounting entries were fully reconciled last "
-"time. It differs from the last date where a reconciliation has been made for"
-" this partner, as here we depict the fact that nothing more was to be "
-"reconciled at this date. This can be achieved in 2 different ways: either "
-"the last unreconciled debit/credit entry of this partner was reconciled, "
-"either the user pressed the button \"Nothing more to reconcile\" during the "
-"manual reconciliation process."
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__sale_order_id
+msgid "Customer to Reinvoice"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.backend,default_lang_id:0
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_log_event__datetime_event
+msgid "Datetime Event"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_account_analytic_account__okticket_def_account_id
+msgid "Default Account for Expenses"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__default_lang_id
 msgid "Default Language"
 msgstr "Langage par défaut"
 
-#. module: connector_redmine
-#: field:redmine.backend,is_default:0
-msgid "Default Redmine Service"
-msgstr "Service Redmine par défaut"
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__tag__delete
+msgid "Delete"
+msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,name:0
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__okticket_deleted
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__okticket_deleted
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_hr_expense_view
+msgid "Deleted in Okticket"
+msgstr ""
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/hr_expense.py:0
+#, python-format
+msgid "Deleting expenses in a state different from draft is not allowed."
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__name
 msgid "Description"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.backend,display_name:0 field:redmine.binding,display_name:0
-#: field:redmine.hr.analytic.timesheet,display_name:0
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_log_event__display_name
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__display_name
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_expense_wizard__display_name
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__display_name
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__display_name
 msgid "Display Name"
 msgstr ""
 
-#. module: connector_redmine
-#: field:res.users,property_account_position:0
-msgid "Fiscal Position"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__distribution_analytic_account_ids
+#, fuzzy
+msgid "Distribution Analytic Account"
+msgstr "Compte analytique"
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__duplicate_expense_ids
+msgid "Duplicate Expense"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,general_account_id:0
-msgid "General Account"
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_hr_employee
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__employee_id
+msgid "Employee"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.backend,id:0 field:redmine.binding,id:0
-#: field:redmine.hr.analytic.timesheet,id:0
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__type__error
+msgid "Error"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__odoo_id
+msgid "Expense"
+msgstr ""
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
+#, python-format
+msgid ""
+"Expense %s reports %g%% but that rate matches several purchase taxes in "
+"company %s that cannot be told apart (%s); imported with no tax. Map the "
+"rate on the product's OkTicket tab, or add the right tax to the product."
+msgstr ""
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
+#, python-format
+msgid ""
+"Expense %s reports several tax rates (%s) but an Odoo expense holds a single "
+"taxable base; keeping the product default taxes. Review this expense "
+"manually."
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__date
+msgid "Expense Date"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__sheet_id
+msgid "Expense Report"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.actions.act_window,name:okticket_connector.action_expense_wizard
+msgid "Expense Wizard"
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_hr_expense_binding_view_search
+msgid "Expense name"
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
+msgid "Expenses Bindings"
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
+#, fuzzy
+msgid "Expenses import Configuration"
+msgstr "Configuration de Redmine"
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__hr_expense__payment_method__tarjeta-gas
+msgid "Fuel card"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__tag__get
+msgid "Get"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__grant_type
+msgid "Grant type"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_hr_expense
+msgid "HR Expense"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__okticket_hr_expense_ids
+msgid "HR Expense Bindings"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__http_client_conn_url
+msgid "HTTP connection url"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__https
+msgid "HTTPS protocol"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_log_event__id
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__id
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_expense_wizard__id
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__id
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__id
 msgid "ID"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.binding,redmine_id:0
-#: field:redmine.hr.analytic.timesheet,redmine_id:0
-msgid "ID in Redmine"
-msgstr "ID dans Redmine"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_binding__external_id
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__external_id
+msgid "ID on Okticket"
+msgstr ""
 
-#. module: connector_redmine
-#: help:redmine.backend,default_lang_id:0
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_backend__default_lang_id
 msgid ""
-"If a default language is selected, the records will be imported in the translation of this language.\n"
+"If a default language is selected, the records will be imported in the "
+"translation of this language.\n"
 "Note that a similar configuration exists for each storeview."
 msgstr ""
 "Si une langue par défaut est sélectionnée, les enregistements seront "
 "importés dans la traduction de cette langue. Note: une configuration "
 "similaire peut être définie sur chaque vue magasin."
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,invoice_id:0
-msgid "Invoice"
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__message_needaction
+msgid "If checked, new messages require your attention."
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,to_invoice:0
-msgid "Invoiceable"
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__message_has_error
+msgid "If checked, some messages have a delivery error."
 msgstr ""
 
-#. module: connector_redmine
-#: field:res.users,invoice_ids:0
-msgid "Invoices"
-msgstr ""
-
-#. module: connector_redmine
-#: help:redmine.hr.analytic.timesheet,to_invoice:0
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__sale_order_id
 msgid ""
-"It allows to set the discount while making invoice, keep empty if the "
-"activities should not be invoiced."
+"If the category has an expense policy, it will be reinvoiced on this sales "
+"order"
 msgstr ""
 
-#. module: connector_redmine
-#: field:res.users,journal_item_count:0
-msgid "Journal Items"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__ignore_import_expenses_since
+msgid "Ignore Import Expenses Since"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.backend,key:0
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__okticket_img
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__okticket_img
+msgid "Image"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__image_base_url
+msgid "Image Base url"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.actions.server,name:okticket_connector.ir_cron_hr_expenses_import_ir_actions_server
+msgid "Import Expenses From Okticket"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__import_expenses_since
+msgid "Import Expenses since"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__import_only_reviewed_expenses
+msgid "Import Only Reviewed Expenses"
+msgstr ""
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
+#, python-format
+msgid "Importing expense ID: %s. It does not have required fields: %s"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__tax_ids
+msgid "Included taxes"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__type__info
+msgid "Info"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__description
+msgid "Internal Notes"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_product_product__invoice_prod_id
+#: model:ir.model.fields,field_description:okticket_connector.field_product_template__invoice_prod_id
+msgid "Invoice Product Version"
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_product_expense_form_view
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
+msgid "Invoice version Info"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__is_editable
+msgid "Is Editable By Current User"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_product_product__rebillable_product_version
+#: model:ir.model.fields,field_description:okticket_connector.field_product_template__rebillable_product_version
+msgid "Is Rebillable Product Version"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__is_multiple_currency
+msgid "Is currency_id different from the company_currency_id"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__is_invoice
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__is_invoice
+msgid "Is invoice"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__key
 msgid "Key"
 msgstr "Clé"
 
-#. module: connector_redmine
-#: field:redmine.backend,__last_update:0 field:redmine.binding,__last_update:0
-#: field:redmine.hr.analytic.timesheet,__last_update:0
-msgid "Last Modified on"
+#. module: okticket_connector
+#: model:product.template,name:okticket_connector.product_template_okticket_km
+msgid "Kilometres"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.binding,sync_date:0
-#: field:redmine.hr.analytic.timesheet,sync_date:0
-msgid "Last Synchronization Date"
-msgstr "Dernière date de mise-à-jour"
+#. module: okticket_connector
+#: model:product.template,name:okticket_connector.product_template_okticket_kilometres_rebillable
+msgid "Kilometres-Rebillable"
+msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.binding,updated_on:0
-#: field:redmine.hr.analytic.timesheet,updated_on:0
-msgid "Last Update in Redmine"
-msgstr "Dernière mise-à-jour dans Redmine"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__name
+msgid "Label"
+msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.backend,write_uid:0
-#: field:redmine.hr.analytic.timesheet,write_uid:0
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__label_currency_rate
+msgid "Label Currency Rate"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_log_event__write_uid
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__write_uid
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_expense_wizard__write_uid
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__write_uid
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__write_uid
 msgid "Last Updated by"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.backend,write_date:0
-#: field:redmine.hr.analytic.timesheet,write_date:0
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_log_event__write_date
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__write_date
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_expense_wizard__write_date
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__write_date
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__write_date
 msgid "Last Updated on"
 msgstr ""
 
-#. module: connector_redmine
-#: field:res.users,last_reconciliation_date:0
-msgid "Latest Full Reconciliation Date"
-msgstr ""
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_binding__sync_date
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__sync_date
+#, fuzzy
+msgid "Last synchronization date"
+msgstr "Dernière date de mise-à-jour"
 
-#. module: connector_redmine
-#: field:redmine.backend,location:0
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__location
 msgid "Location"
 msgstr "URL"
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,move_id:0
-msgid "Move Line"
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_log_event
+msgid "Log Event"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.backend,name:0
-msgid "Name"
-msgstr "Nom"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__log_event_ids
+msgid "Log Events"
+msgstr ""
 
-#. module: connector_redmine
-#: code:addons/connector_redmine/unit/backend_adapter.py:62
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.log_event_view_tree
+msgid "Log events"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_backend__log_event_ids
+msgid "Log events related with this backend"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.ui.menu,name:okticket_connector.menu_okticket_log_event
+msgid "Logs"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: okticket_connector
+#: model:res.groups,name:okticket_connector.group_okticket_conn_manager
+msgid "Manager"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__hr_expense__payment_method__na
+msgid "N.A."
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_product_product__no_rebillable_prod_ids
+#: model:ir.model.fields,field_description:okticket_connector.field_product_template__no_rebillable_prod_ids
+msgid "Non-Rebillable Product Versions"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__nb_attachment
+msgid "Number of Attachments"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__oauth_client_id
+msgid "Oauth client id"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__auth_uri
+msgid "Oauth path"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__oauth_secret
+msgid "Oauth secret"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__tax_id
+msgid "Odoo Tax"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_product_product__okticket_categ_prod_id
+#: model:ir.model.fields,field_description:okticket_connector.field_product_template__okticket_categ_prod_id
+msgid "OkTicket Category ID"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_res_company__okticket_company_id
+msgid "OkTicket Company_id"
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_hr_employee_view_form
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_product_expense_form_view
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_view_account_analytic_account_form
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_view_company_form
+msgid "OkTicket Conf."
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_account_analytic_account__okticket_cost_center_id
+msgid "OkTicket Cost_center_id"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__okticket_bind_ids
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__okticket_bind_ids
+msgid "OkTicket Expense Bindings"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__okticket_expense_id
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__okticket_expense_id
+msgid "OkTicket ID"
+msgstr ""
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
 #, python-format
-msgid "No user with login %s found in Redmine."
-msgstr "Aucun utilisateur %s trouvé dans Redmine."
-
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,partner_id:0
-msgid "Partner"
+msgid "OkTicket PDF document imported"
 msgstr ""
 
-#. module: connector_redmine
-#: field:res.users,debit_limit:0
-msgid "Payable Limit"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__okticket_rate
+msgid "OkTicket Rate (%)"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,product_id:0
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_okticket_product_tax_mapping
+msgid "OkTicket Rate to Odoo Tax Mapping"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_product_product__okticket_tax_mapping_ids
+#: model:ir.model.fields,field_description:okticket_connector.field_product_template__okticket_tax_mapping_ids
+msgid "OkTicket Tax Mapping"
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
+msgid "OkTicket Test Parameters"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_product_product__okticket_type_prod_id
+#: model:ir.model.fields,field_description:okticket_connector.field_product_template__okticket_type_prod_id
+msgid "OkTicket Type ID"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.ui.menu,name:okticket_connector.menu_okticket_root
+msgid "Okticket"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_expense_wizard__accounted_state
+msgid "Okticket Accounted State Expense"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.actions.act_window,name:okticket_connector.action_okticket_backend
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_binding__backend_id
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__backend_id
+#: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
+#: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_tree
+#, fuzzy
+msgid "Okticket Backend"
+msgstr "Backend Redmine"
+
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_okticket_backend
+#, fuzzy
+msgid "Okticket Backend Configuration"
+msgstr "Configuration de Redmine"
+
+#. module: okticket_connector
+#: model:ir.actions.act_window,name:okticket_connector.action_okticket_log
+#: model:ir.actions.act_window,name:okticket_connector.action_open_okticket_log
+msgid "Okticket Backend Logs"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_okticket_binding
+#, fuzzy
+msgid "Okticket Binding (abstract)"
+msgstr "Binding Redmine (Abstract)"
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__okticket_company_id
+msgid "Okticket Company Id"
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
+#, fuzzy
+msgid "Okticket Configuration"
+msgstr "Configuration de Redmine"
+
+#. module: okticket_connector
+#: model:ir.module.category,name:okticket_connector.module_category_okticket_connector
+msgid "Okticket Connector Management"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.module.category,description:okticket_connector.module_category_okticket_connector
+msgid "Okticket Connector Operations"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_okticket_expense_wizard
+msgid "Okticket Expense Wizard"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_okticket_hr_expense
+msgid "Okticket HR Expense Binding"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.actions.act_window,name:okticket_connector.action_open_okticket_hr_expense_binding
+msgid "Okticket Hr Expense Bindings"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__okticket_response
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__okticket_response
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_hr_expense_view
+msgid "Okticket Response"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_res_users__okticket_backend_ids
+#, fuzzy
+msgid "Okticket Server"
+msgstr "Service Redmine"
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_hr_employee__okticket_user_id
+msgid "Okticket User_Id"
+msgstr ""
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/components/backend_adapter.py:0
+#, fuzzy, python-format
+msgid "Okticket connection Error: Invalid authentications key."
+msgstr "Erreur de connection à Redmine: clé d'authentification invalide"
+
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__tag__op
+msgid "Operation"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__uri_op_path
+msgid "Operations path"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__payment_mode
+msgid "Paid By"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__okticket_partner_name
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__okticket_partner_name
+msgid "Partner Name"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__api_password
+msgid "Pass"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__tag__patch
+msgid "Patch"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__payment_method
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__payment_method
+msgid "Payment method"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__hr_expense__payment_method__paypal
+msgid "Paypal"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__hr_expense__okticket_status__pending
+msgid "Pending"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__tag__post
+msgid "Post"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_product_template
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__product_tmpl_id
 msgid "Product"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,unit_amount:0
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__product_description
+msgid "Product Description"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__product_has_cost
+msgid "Product Has Cost"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__tag__put
+msgid "Put"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__quantity
 msgid "Quantity"
 msgstr ""
 
-#. module: connector_redmine
-#: model:ir.ui.menu,name:connector_redmine.menu_redmine_root
-msgid "Redmine"
-msgstr "Redmine"
-
-#. module: connector_redmine
-#: model:ir.actions.act_window,name:connector_redmine.action_redmine_backend
-#: model:ir.model,name:connector_redmine.model_redmine_backend
-#: view:redmine.backend:connector_redmine.view_redmine_backend_form
-#: view:redmine.backend:connector_redmine.view_redmine_backend_tree
-#: field:redmine.binding,backend_id:0
-#: field:redmine.hr.analytic.timesheet,backend_id:0
-msgid "Redmine Backend"
-msgstr "Backend Redmine"
-
-#. module: connector_redmine
-#: model:ir.model,name:connector_redmine.model_redmine_binding
-msgid "Redmine Binding (Abstract)"
-msgstr "Binding Redmine (Abstract)"
-
-#. module: connector_redmine
-#: view:redmine.backend:connector_redmine.view_redmine_backend_form
-msgid "Redmine Configuration"
-msgstr "Configuration de Redmine"
-
-#. module: connector_redmine
-#: field:res.users,redmine_backend_ids:0
-msgid "Redmine Server"
-msgstr "Service Redmine"
-
-#. module: connector_redmine
-#: model:ir.model,name:connector_redmine.model_redmine_hr_analytic_timesheet
-msgid "Redmine Time Entry Binding"
-msgstr "Correspondance des entrées de temps Redmine"
-
-#. module: connector_redmine
-#: code:addons/connector_redmine/unit/backend_adapter.py:39
-#, python-format
-msgid "Redmine connection Error: Invalid authentications key."
-msgstr "Erreur de connection à Redmine: clé d'authentification invalide"
-
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,ref:0
-msgid "Ref."
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__rating_ids
+msgid "Ratings"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,sheet_id:0
-msgid "Sheet"
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_product_expense_form_view
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
+msgid "Rebillable Info"
 msgstr ""
 
-#. module: connector_redmine
-#: help:redmine.hr.analytic.timesheet,unit_amount:0
-msgid "Specifies the amount of quantity to count."
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_product_product__rebillable_prod_id
+#: model:ir.model.fields,field_description:okticket_connector.field_product_template__rebillable_prod_id
+msgid "Rebillable Product Version"
 msgstr ""
 
-#. module: connector_redmine
-#: field:res.users,property_supplier_payment_term:0
-msgid "Supplier Payment Term"
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_product_product__rebillable_prod_id
+#: model:ir.model.fields,help:okticket_connector.field_product_template__rebillable_prod_id
+msgid "Rebillable version of the product"
 msgstr ""
 
-#. module: connector_redmine
-#: view:redmine.backend:connector_redmine.view_redmine_backend_form
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__okticket_remote_path
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__okticket_remote_path
+msgid "Remote Path"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__okticket_remote_uri
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__okticket_remote_uri
+msgid "Remote URI"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__company_currency_id
+msgid "Report Company Currency"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__scope
+msgid "Scope"
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_hr_expense_binding_view_search
+msgid "Search Okticket Hr Expense Binding"
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.expense_wizard_view
+msgid "Set accounted"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__okticket_status
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__okticket_status
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__state
+msgid "Status"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__type__success
+msgid "Success"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_log_event__tag
+msgid "Tag"
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
+msgid "Tax Mapping"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__tax_amount
+msgid "Tax amount"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__tax_amount_currency
+msgid "Tax amount in Currency"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__tax_amount
+msgid "Tax amount in company currency"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__tax_amount_currency
+msgid "Tax amount in currency"
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
 msgid "Test Authentication"
 msgstr "Tester l'authentification"
 
-#. module: connector_redmine
-#: help:redmine.hr.analytic.timesheet,amount_currency:0
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_res_users__okticket_backend_ids
+#, fuzzy
 msgid ""
-"The amount expressed in the related account currency if not equal to the "
-"company one."
-msgstr ""
-
-#. module: connector_redmine
-#: help:res.users,property_account_position:0
-msgid ""
-"The fiscal position will determine taxes and accounts used for the partner."
-msgstr ""
-
-#. module: connector_redmine
-#: help:res.users,redmine_backend_ids:0
-msgid ""
-"The redmine service from which to import your timesheets. If empty, the "
-"default redmine service will be used instead."
+"The okticket service from which to import your timesheets. If empty, the "
+"default okticket service will be used instead."
 msgstr ""
 "Le service Redmine duquel seront importées vos feuilles de temps. Laisser "
 "vide pour utiliser le service par défaut."
 
-#. module: connector_redmine
-#: help:redmine.hr.analytic.timesheet,currency_id:0
-msgid "The related account currency if not equal to the company one."
-msgstr ""
-
-#. module: connector_redmine
-#: help:res.users,property_account_payable:0
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_product_tax_mapping__okticket_rate
 msgid ""
-"This account will be used instead of the default one as the payable account "
-"for the current partner"
+"The percentage OkTicket reports in the receipt's tax breakdown (the 'p' of "
+"each entry). 0 is a valid rate and is not the same as having no row."
 msgstr ""
 
-#. module: connector_redmine
-#: help:res.users,property_account_receivable:0
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_product_tax_mapping.py:0
+#, python-format
 msgid ""
-"This account will be used instead of the default one as the receivable "
-"account for the current partner"
+"The tax \"%(tax)s\" belongs to company \"%(tax_company)s\" but the mapping "
+"row is for \"%(company)s\"."
 msgstr ""
 
-#. module: connector_redmine
-#: help:res.users,property_supplier_payment_term:0
-msgid ""
-"This payment term will be used instead of the default one for purchase "
-"orders and supplier invoices"
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_hr_expense.py:0
+#, python-format
+msgid "This operator is not supported"
 msgstr ""
 
-#. module: connector_redmine
-#: help:res.users,property_payment_term:0
-msgid ""
-"This payment term will be used instead of the default one for sale orders "
-"and customer invoices"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__total_amount
+msgid "Total"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,openerp_id:0
-msgid "Timesheet"
-msgstr "Feuilles de temps"
-
-#. module: connector_redmine
-#: field:res.users,total_invoiced:0
-msgid "Total Invoiced"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__total_amount_currency
+msgid "Total In Currency"
 msgstr ""
 
-#. module: connector_redmine
-#: field:res.users,debit:0
-msgid "Total Payable"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__untaxed_amount_currency
+msgid "Total Untaxed Amount In Currency"
 msgstr ""
 
-#. module: connector_redmine
-#: field:res.users,credit:0
-msgid "Total Receivable"
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__hr_expense__payment_method__transferencia
+msgid "Transfer"
 msgstr ""
 
-#. module: connector_redmine
-#: help:res.users,credit:0
-msgid "Total amount this customer owes you."
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_product_product__rebillable_product_version
+#: model:ir.model.fields,help:okticket_connector.field_product_template__rebillable_product_version
+msgid "True if the product has other versions that are non-rebillable"
 msgstr ""
 
-#. module: connector_redmine
-#: help:res.users,debit:0
-msgid "Total amount you have to pay to this supplier."
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_log_event__type
+msgid "Type"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,product_uom_id:0
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_product_expense_form_view
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
+msgid "Type_id"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__price_unit
+msgid "Unit Price"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__product_uom_id
 msgid "Unit of Measure"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.hr.analytic.timesheet,user_id:0
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__product_uom_category_id
+msgid "UoM Category"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_res_users
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__api_login
+#: model:res.groups,name:okticket_connector.group_okticket_conn_user
 msgid "User"
 msgstr ""
 
-#. module: connector_redmine
-#: model:ir.model,name:connector_redmine.model_res_users
-msgid "Users"
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_hr_employee_view_form
+msgid "User_id"
 msgstr ""
 
-#. module: connector_redmine
-#: field:res.users,vat_subjected:0
-msgid "VAT Legal Statement"
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__okticket_vat
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__okticket_vat
+msgid "VAT Number"
 msgstr ""
 
-#. module: connector_redmine
-#: field:redmine.backend,version:0
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_hr_expense.py:0
+#, python-format
+msgid "Value should be string (not %s)"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__version
 msgid "Version"
 msgstr "Version"
 
-#. module: connector_redmine
-#: view:redmine.backend:connector_redmine.view_redmine_backend_form
-msgid "e.g. http://localhost:8081/redmine"
-msgstr "e.g. http://localhost:8081/redmine"
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_product_product__invoice_prod_id
+#: model:ir.model.fields,help:okticket_connector.field_product_template__invoice_prod_id
+msgid "Version of the product to use in invoices"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__type__warning
+msgid "Warning"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__product_has_tax
+msgid "Whether tax is defined on a selected product"
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
+msgid ""
+"Which Odoo tax each rate OkTicket reports means for this\n"
+"                            product. Only needed where the tax the connector "
+"resolves\n"
+"                            on its own is not the right one: it always picks "
+"the\n"
+"                            domestic tax of the product's scope, and every "
+"expense\n"
+"                            product is typed as a service, so a rate that is "
+"goods\n"
+"                            here has to be stated. A row on the base product "
+"also\n"
+"                            applies to its invoice and rebillable versions."
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_product_product__okticket_tax_mapping_ids
+#: model:ir.model.fields,help:okticket_connector.field_product_template__okticket_tax_mapping_ids
+msgid ""
+"Which Odoo tax each rate OkTicket reports means for this product. Rows are "
+"only needed where the tax the connector would otherwise resolve is not the "
+"right one -- typically a rate that is goods here, since every expense "
+"product is typed as a service."
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
+msgid "⇒ See Backend Logs"
+msgstr ""
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
+msgid "⇒ See Hr Expense Bindings"
+msgstr ""
+
+#~ msgid "Default Redmine Service"
+#~ msgstr "Service Redmine par défaut"
+
+#~ msgid "ID in Redmine"
+#~ msgstr "ID dans Redmine"
+
+#~ msgid "Last Update in Redmine"
+#~ msgstr "Dernière mise-à-jour dans Redmine"
+
+#~ msgid "Name"
+#~ msgstr "Nom"
+
+#, python-format
+#~ msgid "No user with login %s found in Redmine."
+#~ msgstr "Aucun utilisateur %s trouvé dans Redmine."
+
+#~ msgid "Redmine"
+#~ msgstr "Redmine"
+
+#~ msgid "Redmine Time Entry Binding"
+#~ msgstr "Correspondance des entrées de temps Redmine"
+
+#~ msgid "Timesheet"
+#~ msgstr "Feuilles de temps"
+
+#~ msgid "e.g. http://localhost:8081/redmine"
+#~ msgstr "e.g. http://localhost:8081/redmine"

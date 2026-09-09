@@ -44,14 +44,20 @@
         </t>
     </template>
 
-    <report
-        id="action_report_img_hr_expense"
-        string="Expenses Image Report"
-        model="hr.expense"
-        report_type="qweb-pdf"
-        name="okticket_hr_expense_reporting.report_img_expense"
-        file="okticket_hr_expense_reporting.report_img_expense"
-        print_report_name="'Expenses'"
-    />
+    <!-- The <report> shorthand was dropped in Odoo 17: it is neither in
+         import_xml.rng nor handled by convert.py any more, so the module simply
+         would not install. Declared as the ir.actions.report record it always
+         produced, with binding_model_id/binding_type so it keeps showing up in
+         the record's Print menu. -->
+    <record id="action_report_img_hr_expense" model="ir.actions.report">
+        <field name="name">Expenses Image Report</field>
+        <field name="model">hr.expense</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">okticket_hr_expense_reporting.report_img_expense</field>
+        <field name="report_file">okticket_hr_expense_reporting.report_img_expense</field>
+        <field name="print_report_name">'Expenses'</field>
+        <field name="binding_model_id" ref="hr_expense.model_hr_expense"/>
+        <field name="binding_type">report</field>
+    </record>
 
 </odoo>

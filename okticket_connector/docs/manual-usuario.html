@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Conector OkTicket &middot; Manual de usuario &middot; Odoo 17</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand:#FF9900;          /* Alia brand main */
+    --brand-dark:#e08600;
+    --secondary:#777777;      /* Alia brand secondary */
+    --ink:#222222;
+    --muted:#6b6b6b;
+    --line:#e6e6e6;
+    --bg-soft:#faf9f7;
+    --code-bg:#2b2b2b;
+    --ok:#2E9F12;
+    --danger:#C50C0D;
+    --info:#439FDB;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; color:var(--ink); background:#fff;
+    font-family:Nunito,Arial,Helvetica,sans-serif; font-size:16px; font-weight:400; line-height:1.6;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:0 28px 80px}
+
+  /* ---------- cabecera ---------- */
+  .masthead{border-top:6px solid var(--brand);background:var(--bg-soft);border-bottom:1px solid var(--line);margin-bottom:38px}
+  .masthead .wrap{padding-top:26px;padding-bottom:26px}
+  .logos{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+  .logos img{height:44px;width:auto;display:block}
+  .logos .sep{width:1px;height:38px;background:var(--line)}
+  .kicker{margin:18px 0 0;font-family:Poppins,Nunito,sans-serif;font-weight:600;letter-spacing:.14em;
+          text-transform:uppercase;font-size:12px;color:var(--brand)}
+  .masthead h1{font-family:Poppins,Nunito,sans-serif;font-weight:700;font-size:34px;line-height:1.2;margin:6px 0 6px}
+  .masthead p.sub{margin:0;color:var(--muted);font-size:16px}
+  .meta{margin-top:14px;font-size:13px;color:var(--secondary)}
+  .meta b{color:var(--ink);font-weight:600}
+
+  h2{font-family:Poppins,Nunito,sans-serif;font-weight:600;font-size:25px;margin:46px 0 6px;
+     padding-bottom:8px;border-bottom:2px solid var(--brand)}
+  h3{font-family:Poppins,Nunito,sans-serif;font-weight:600;font-size:19px;margin:30px 0 8px}
+  h4{font-family:Poppins,Nunito,sans-serif;font-weight:600;font-size:16px;margin:22px 0 6px;color:var(--secondary)}
+  p{margin:10px 0}
+  ul,ol{margin:10px 0;padding-left:22px}
+  li{margin:5px 0}
+  a{color:var(--brand-dark);text-decoration:none;border-bottom:1px solid rgba(255,153,0,.4)}
+  a:hover{border-bottom-color:var(--brand)}
+
+  code{font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;font-size:.87em;
+       background:#f3f1ee;border:1px solid #e4e0da;border-radius:4px;padding:1px 5px}
+  pre{background:var(--code-bg);color:#f5f5f5;border-radius:8px;padding:16px 18px;overflow-x:auto;
+      font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;font-size:13.5px;line-height:1.55}
+  pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit}
+  pre .c{color:#9aa0a6}
+
+  table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14.5px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--bg-soft);font-family:Poppins,Nunito,sans-serif;font-weight:600;font-size:13.5px}
+  tbody tr:nth-child(even){background:#fcfbfa}
+
+  figure{margin:20px 0}
+  figure img{width:100%;height:auto;border:1px solid var(--line);border-radius:8px;display:block}
+  figcaption{margin-top:8px;font-size:13px;color:var(--secondary);text-align:center}
+
+  .callout{border-left:4px solid var(--brand);background:var(--bg-soft);padding:12px 16px;margin:18px 0;border-radius:0 6px 6px 0}
+  .callout .tag{display:inline-block;font-family:Poppins,Nunito,sans-serif;font-weight:600;font-size:11px;
+        letter-spacing:.09em;text-transform:uppercase;color:var(--brand);margin-right:8px}
+  .callout.warn{border-left-color:var(--danger)}
+  .callout.warn .tag{color:var(--danger)}
+  .callout.ok{border-left-color:var(--ok)}
+  .callout.ok .tag{color:var(--ok)}
+
+  .toc{background:var(--bg-soft);border:1px solid var(--line);border-radius:8px;padding:18px 24px;margin:8px 0 10px}
+  .toc h4{margin:0 0 8px;color:var(--ink)}
+  .toc ol{margin:0;padding-left:20px;columns:2;column-gap:34px}
+  .toc a{border:0;color:var(--ink)}
+  .toc a:hover{color:var(--brand-dark)}
+
+  .step{display:inline-block;min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:50%;
+        background:var(--brand);color:#fff;font-family:Poppins,sans-serif;font-weight:600;font-size:13px;margin-right:8px}
+
+  footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--secondary)}
+  footer b{color:var(--ink)}
+
+  @media print{
+    body{font-size:12.5px}
+    .wrap{max-width:none;padding:0 6mm 6mm}
+    .masthead{margin-bottom:20px}
+    h2{page-break-after:avoid;margin-top:26px}
+    h3,h4{page-break-after:avoid}
+    figure,table,pre,.callout{page-break-inside:avoid}
+    a{color:var(--ink);border:0}
+    .toc ol{columns:2}
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="wrap">
+    <div class="logos">
+      <img src="img/alia-logo.png" alt="Alia Technologies"/>
+      <span class="sep"></span>
+      <img src="img/okticket-logo.png" alt="OkTicket"/>
+    </div>
+    <p class="kicker">Manual de usuario</p>
+    <h1>Conector OkTicket para Odoo 17</h1>
+    <p class="sub">Qu&eacute; hace el conector en tu d&iacute;a a d&iacute;a y d&oacute;nde encontrar cada cosa en Odoo.</p>
+    <p class="meta">Para usuarios de Odoo <b>17.0</b> &middot; No requiere conocimientos t&eacute;cnicos</p>
+  </div>
+</div>
+
+<div class="wrap">
+<div class="toc"><h4>Contenido</h4><ol>
+<li><a href="#1-qué-hace-el-conector">Qué hace el conector</a></li>
+<li><a href="#2-el-circuito-de-un-ticket">El circuito de un ticket</a></li>
+<li><a href="#3-consultar-los-gastos-importados">Consultar los gastos importados</a></li>
+<li><a href="#4-la-ficha-de-un-gasto">La ficha de un gasto</a></li>
+<li><a href="#5-imagen-del-ticket-y-facturas-pdf">Imagen del ticket y facturas PDF</a></li>
+<li><a href="#6-hojas-de-gasto">Hojas de gasto</a></li>
+<li><a href="#7-categorías-y-productos">Categorías y productos</a></li>
+<li><a href="#8-empleados-y-usuarios">Empleados y usuarios</a></li>
+<li><a href="#9-cuentas-analíticas-y-centros-de-coste">Cuentas analíticas y centros de coste</a></li>
+<li><a href="#10-qué-hacer-con-un-gasto-importado">Qué hacer con un gasto importado</a></li>
+<li><a href="#11-dudas-frecuentes">Dudas frecuentes</a></li>
+</ol></div>
+
+<h2>1. Qué hace el conector</h2>
+<p>El conector trae a Odoo, de forma automática, los gastos que registras con la aplicación de
+OkTicket. No tienes que introducir nada a mano: fotografías el ticket con el móvil y, en la
+siguiente sincronización, el gasto aparece en Odoo con su importe, su fecha, su categoría, tu
+nombre como empleado y la imagen del recibo adjunta.</p>
+<p>Además mantiene alineados los catálogos entre ambos sistemas:</p>
+<ul>
+<li>Los <strong>usuarios</strong> de OkTicket se emparejan con los empleados de Odoo por correo electrónico.</li>
+<li>Las <strong>categorías</strong> de gasto de OkTicket se crean en Odoo como productos.</li>
+<li>Los gastos importados se agrupan en <strong>hojas de gasto</strong>, y el estado de cada hoja se mantiene
+  sincronizado con OkTicket.</li>
+<li>Las <strong>cuentas analíticas</strong> de Odoo se publican en OkTicket como centros de coste, para que puedas
+  imputar un ticket a un proyecto desde el móvil.</li>
+</ul>
+<div class="callout"><p><span class="tag">Nota</span> La sincronización es <strong>programada</strong>, normalmente cada dos horas. Si acabas de subir un ticket y
+todavía no lo ves en Odoo, lo más probable es que aún no haya pasado la siguiente ejecución.</p>
+</div>
+
+<h2>2. El circuito de un ticket</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Paso</th>
+<th>Qué ocurre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td>Móvil</td>
+<td>Fotografías el ticket en la app de OkTicket y completas los datos.</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>OkTicket</td>
+<td>El ticket queda registrado y, si procede, revisado.</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>Sincronización</td>
+<td>Odoo consulta la API y trae los gastos nuevos o modificados.</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>Odoo</td>
+<td>El gasto aparece y se agrupa en una hoja de gasto en estado <em>Borrador</em>, listo para tramitar.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>3. Consultar los gastos importados</h2>
+<p>Los gastos viven en la aplicación <strong>Gastos</strong> de Odoo. Cada empleado ve los suyos en <em>Mis gastos</em>;
+quien tenga permisos de responsable o de contabilidad puede ver los de toda la compañía.</p>
+<div class="callout ok"><p><span class="tag">Consejo</span> Los gastos importados llegan en estado <strong>Borrador</strong>. Algunas vistas de Odoo traen por defecto un
+filtro que solo muestra los gastos ya tramitados: si la lista te aparece vacía, <strong>quita el filtro</strong>
+del buscador y volverán a salir.</p>
+</div>
+<figure><img src="img/u01-gastos-lista.png" alt="Lista de gastos importados desde OkTicket"/><figcaption>Lista de gastos importados desde OkTicket</figcaption></figure>
+<p>La columna <strong>Descripción</strong> muestra la referencia del ticket en OkTicket, lo que facilita localizar
+un gasto concreto si te lo reclaman por su número.</p>
+
+<h2>4. La ficha de un gasto</h2>
+<p>Al abrir un gasto verás los campos habituales de Odoo —categoría, importe, impuestos, empleado,
+quién lo paga— y, además, los datos que añade el conector con la información de OkTicket, junto a
+la imagen del recibo. En modo desarrollador, la pestaña <strong>Okticket Response</strong> muestra la respuesta
+completa de la API para ese gasto.</p>
+<figure><img src="img/u02-gasto-ficha.png" alt="Ficha de un gasto con los datos que añade el conector OkTicket"/><figcaption>Ficha de un gasto con los datos que añade el conector OkTicket</figcaption></figure>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Qué significa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Id de Okticket</strong></td>
+<td>Identificador del gasto en OkTicket. Es la referencia que hay que dar al soporte si algo no cuadra.</td>
+</tr>
+<tr>
+<td><strong>Estado</strong></td>
+<td>Estado del gasto en OkTicket (por ejemplo <em>Confirmado</em>). Es informativo.</td>
+</tr>
+<tr>
+<td><strong>Es factura</strong></td>
+<td>Marcado cuando el documento es una factura y no un simple ticket.</td>
+</tr>
+<tr>
+<td><strong>Modo de pago</strong></td>
+<td>Cómo se pagó según la app: tarjeta, efectivo, etc.</td>
+</tr>
+<tr>
+<td><strong>NIF</strong> y <strong>Nombre del contacto</strong></td>
+<td>Datos del establecimiento leídos del recibo, cuando la app ha podido extraerlos.</td>
+</tr>
+<tr>
+<td><strong>Hoja de Gastos</strong></td>
+<td>Informe al que pertenece el gasto en OkTicket, que el conector usa para agruparlo en su hoja de gasto de Odoo.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>5. Imagen del ticket y facturas PDF</h2>
+<p>El conector adjunta al gasto la <strong>fotografía del recibo</strong>, que puedes ver directamente en el panel
+derecho de la ficha. Cuando el documento es una factura enviada al robot de OkTicket, adjunta
+también el <strong>PDF original</strong>.</p>
+<p>Ambos quedan registrados en el historial con un mensaje del sistema, de modo que siempre se sabe
+qué llegó y cuándo. Los documentos no se duplican: si la sincronización vuelve a pasar sobre el
+mismo gasto, no se adjuntan de nuevo.</p>
+
+<h2>6. Hojas de gasto</h2>
+<p>Los gastos importados no quedan sueltos: el conector los agrupa en <strong>hojas de gasto</strong>. Cómo se
+agrupan (por cuenta analítica, por semana, por mes…) lo decide la configuración de tu compañía; el
+resultado es que encuentras tus tickets ya reunidos en hojas listas para tramitar.</p>
+<figure><img src="img/u03-hojas-gasto.png" alt="Hojas de gasto generadas por el conector a partir de los gastos importados"/><figcaption>Hojas de gasto generadas por el conector a partir de los gastos importados</figcaption></figure>
+<p>El estado de la hoja se mantiene <strong>sincronizado con OkTicket</strong>:</p>
+<ul>
+<li>Cuando <strong>envías</strong> una hoja en Odoo, sus gastos quedan marcados como <em>contabilizados</em> en OkTicket.</li>
+<li>Cuando la hoja se <strong>aprueba</strong>, el informe correspondiente se actualiza también en OkTicket.</li>
+</ul>
+<div class="callout"><p><span class="tag">Nota</span> Si añades un gasto a un grupo cuya hoja ya está enviada o aprobada, el conector <strong>no toca la hoja
+ya tramitada</strong>: crea una hoja nueva en borrador con el mismo nombre y un número de orden. Así
+nunca se modifica una hoja que ya ha salido a aprobación.</p>
+</div>
+
+<h2>7. Categorías y productos</h2>
+<p>Cada categoría de OkTicket —Restauración, Peaje, Aparcamiento, Kilómetros…— tiene su equivalente en
+Odoo como producto de gasto. Es lo que hace que, al importar, el gasto quede clasificado
+automáticamente.</p>
+<figure><img src="img/u04-productos.png" alt="Productos de gasto creados por el conector, con sus variantes"/><figcaption>Productos de gasto creados por el conector, con sus variantes</figcaption></figure>
+<p>Verás que algunas categorías aparecen duplicadas con un sufijo (por ejemplo <strong>-Factura</strong> o
+<strong>-Refacturable</strong>). Son las variantes que se usan cuando el documento es una factura o un gasto
+refacturable, y permiten distinguirlos contablemente de un ticket normal del mismo concepto.</p>
+<div class="callout"><p><span class="tag">Importante</span> Estos productos los crea y mantiene el conector. <strong>No los borres ni los renombres</strong>: si desaparece
+el producto de una categoría, los gastos de esa categoría dejarán de importarse.</p>
+</div>
+
+<h3>El IVA de cada categoría</h3>
+<p>Cada producto tiene, en su pestaña <em>Configuración Okticket</em>, una tabla de <strong>asignación de
+impuestos</strong>: indica qué impuesto de Odoo corresponde a cada tipo de IVA que reporta OkTicket. Sirve
+para los casos en los que el mismo porcentaje puede ser de bienes o de servicios y el conector no
+tiene forma de adivinarlo.</p>
+<figure><img src="img/u07-impuestos-producto.png" alt="Asignación de impuestos en la pestaña OkTicket del producto"/><figcaption>Asignación de impuestos en la pestaña OkTicket del producto</figcaption></figure>
+<p>Lo normal es que esté vacía y que no haya que tocarla: el conector elige por su cuenta el impuesto
+nacional que corresponde. <strong>La rellena el administrador</strong> cuando alguna categoría necesita otro
+impuesto distinto, así que si crees que el IVA de tus gastos no es el correcto, avísale en lugar de
+cambiarlo gasto a gasto.</p>
+
+<h2>8. Empleados y usuarios</h2>
+<p>El emparejamiento entre un usuario de OkTicket y un empleado de Odoo se hace por <strong>correo
+electrónico</strong>. En la ficha del empleado, la pestaña <strong>Configuración Okticket</strong> muestra el
+identificador con el que quedó vinculado.</p>
+<figure><img src="img/u05-empleado.png" alt="Pestaña de configuración OkTicket en la ficha del empleado"/><figcaption>Pestaña de configuración OkTicket en la ficha del empleado</figcaption></figure>
+<div class="callout warn"><p><span class="tag">Atenci&oacute;n</span> Si el correo del empleado en Odoo no coincide con el de su cuenta de OkTicket, <strong>sus gastos no se
+importarán</strong>. Es la causa más habitual de que a una persona concreta no le lleguen los tickets.
+Revisa que el correo de trabajo sea exactamente el mismo.</p>
+</div>
+
+<h2>9. Cuentas analíticas y centros de coste</h2>
+<p>Lo que se publica en OkTicket como <strong>centro de coste</strong> es una <strong>cuenta analítica</strong> de Odoo. Una vez
+publicada, al registrar un ticket desde el móvil puedes imputarlo a ese centro de coste, y al
+importarlo el gasto llegará a Odoo con esa cuenta analítica ya asignada.</p>
+<h3>Publicar cuentas analíticas a mano</h3>
+<p>Es la forma habitual y funciona con cualquier cuenta analítica, tenga o no un proyecto detrás. Ve a
+la lista de <strong>cuentas analíticas</strong>, marca las que quieras publicar y despliega el menú <strong>Acciones</strong>:
+encontrarás <strong>Creación de centro de coste desde cuenta analítica</strong>. Odoo pide confirmación antes de
+crear nada.</p>
+<figure><img src="img/u06-accion-analiticas.png" alt="Acción de creación de centro de coste en la lista de cuentas analíticas"/><figcaption>Acción de creación de centro de coste en la lista de cuentas analíticas</figcaption></figure>
+<div class="callout"><p><span class="tag">Nota</span> <strong>Duplicados.</strong> Si en OkTicket ya existe un centro de coste con ese nombre, el asistente avisa y
+pide una confirmación adicional antes de crear el duplicado. Cuando el conflicto afecta a una
+selección múltiple, hay que procesar las cuentas <strong>de una en una</strong>. Las cuentas que ya estén
+vinculadas se ignoran, así que repetir la acción es inofensivo.</p>
+</div>
+<h3>Publicación automática desde proyectos</h3>
+<p>Además, si tu compañía tiene activada la opción <em>Autocrear centro de coste del proyecto</em>, al dar de
+alta un <strong>proyecto</strong> en Odoo su cuenta analítica se publica sola, sin pasar por la acción anterior.
+El proyecto debe tener <strong>compañía asignada</strong> para que esto ocurra.</p>
+<h3>Comprobar el vínculo</h3>
+<p>La pestaña <strong>Configuración Okticket</strong> de la cuenta analítica indica el identificador del centro de
+coste y ofrece la opción de <strong>desvincularlo</strong> si se quiere dejar de sincronizar.</p>
+
+<h2>10. Qué hacer con un gasto importado</h2>
+<p>El conector <strong>trae el gasto y lo agrupa en su hoja</strong>: no lo aprueba ni lo contabiliza. A partir de
+ahí sigue el circuito normal de gastos de Odoo.</p>
+<ol>
+<li>Revisa que el importe, la fecha y la categoría se correspondan con el recibo adjunto.</li>
+<li>Comprueba quién paga: <em>Empleado (a reembolsar)</em> o <em>Compañía</em>.</li>
+<li>Si procede, asigna la distribución analítica al proyecto correspondiente.</li>
+<li>Envía la hoja de gasto para su aprobación con el botón <strong>Enviar</strong>.</li>
+</ol>
+<p>El estado avanza por <code>Borrador</code> → <code>Enviado</code> → <code>Aprobado</code> → <code>Registrado</code> → <code>Pagado</code>, igual que
+cualquier otra hoja de gasto de Odoo.</p>
+<div class="callout"><p><span class="tag">Nota</span> El <strong>estado de la hoja</strong> sí viaja a OkTicket (al enviar y aprobar). En cambio, los cambios de
+datos de un gasto (importe, fecha…) <strong>no vuelven a OkTicket</strong>: si un gasto está mal en origen,
+corrígelo en la aplicación de OkTicket y espera a la siguiente sincronización.</p>
+</div>
+
+<h2>11. Dudas frecuentes</h2>
+<table>
+<thead>
+<tr>
+<th>Situación</th>
+<th>Qué ocurre y qué hacer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>He subido un ticket y no aparece en Odoo.</td>
+<td>La sincronización se ejecuta cada dos horas. Si tras la siguiente pasada sigue sin aparecer, comprueba que tu correo en Odoo coincide con el de OkTicket y avisa al administrador.</td>
+</tr>
+<tr>
+<td>La lista de gastos me sale vacía.</td>
+<td>Suele ser el filtro por defecto de la vista, que oculta los borradores. Quítalo desde el buscador.</td>
+</tr>
+<tr>
+<td>El importe del gasto no coincide con el del ticket.</td>
+<td>El conector importa el total que se registró en OkTicket. Corrige el importe en la app y espera a la siguiente sincronización.</td>
+</tr>
+<tr>
+<td>Falta la imagen del recibo.</td>
+<td>Ocurre si el ticket se creó a mano en OkTicket, sin fotografía. Puedes adjuntarla en Odoo con <em>Adjuntar recibo</em>.</td>
+</tr>
+<tr>
+<td>Un gasto aparece con la categoría equivocada.</td>
+<td>Se hereda de la categoría elegida en la app. Puedes cambiarla en Odoo; el cambio no se propaga a OkTicket.</td>
+</tr>
+<tr>
+<td>Me ha aparecido una hoja de gasto repetida con el mismo nombre.</td>
+<td>Ocurre cuando llega un gasto nuevo para un grupo cuya hoja ya estaba enviada o aprobada: se crea una hoja nueva en borrador para no tocar la anterior.</td>
+</tr>
+<tr>
+<td>He borrado un gasto en OkTicket y sigue en Odoo.</td>
+<td>El borrado no se propaga. Elimina también el gasto en Odoo si aún está en borrador.</td>
+</tr>
+<tr>
+<td>El IVA del gasto no es el que esperaba.</td>
+<td>El conector traduce el porcentaje que envía OkTicket al impuesto equivalente de Odoo. Si en tu empresa esa categoría debe llevar otro, es configuración del producto: avisa al administrador. Mientras el gasto siga en borrador puedes corregirle el impuesto a mano.</td>
+</tr>
+<tr>
+<td>No veo el menú de OkTicket en Odoo.</td>
+<td>Ese menú es para administradores. Como usuario no lo necesitas: tus gastos están en la aplicación <em>Gastos</em>.</td>
+</tr>
+</tbody>
+</table>
+<footer>
+  <p><b>Alia Technologies S.L.</b> &middot; R&uacute;a Nova 8, Ourense &middot; 988 319 612 &middot;
+     <a href="mailto:contacto@alialabs.com">contacto@alialabs.com</a> &middot;
+     <a href="https://www.alialabs.com">alialabs.com</a></p>
+  <p>Conector OkTicket para Odoo 17 &middot; Licencia AGPL-3 &middot;
+     &iquest;Buscas instalarlo o configurarlo? Consulta el <a href="manual-tecnico.html">manual t&eacute;cnico</a>.</p>
+</footer>
+</div>
+</body>
+</html>

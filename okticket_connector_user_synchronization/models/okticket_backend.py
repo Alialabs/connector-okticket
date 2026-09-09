@@ -23,7 +23,10 @@ class OkticketBackend(models.Model):
 
     def import_employees(self):
         self.ensure_one()
-        self.env['okticket.hr.employee'].sudo().with_company(
-            self.company_id
-        ).import_batch(self)
+        # Pass the company-aware backend: components take their env from the
+        # backend record (WorkContext.env is collection.env), so the with_company
+        # applied to the model alone was discarded for every component.
+        self.env['okticket.hr.employee'].sudo().import_batch(
+            self.with_company(self.company_id)
+        )
         return True
