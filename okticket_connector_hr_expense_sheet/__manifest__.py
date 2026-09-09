@@ -5,7 +5,7 @@
 {
     'name': 'Alia Okticket Expense Sheet',
     'summary': 'Implements Okticket expenses sheet operations.',
-    'version': '17.0.1.0.0',
+    'version': '17.0.1.0.10',
     'category': 'Connector',
     'depends': [
         'sale_timesheet',

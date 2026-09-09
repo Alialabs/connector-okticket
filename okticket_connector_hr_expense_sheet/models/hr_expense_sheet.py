@@ -160,54 +160,115 @@ class HrExpenseBatchImporter(Component):
         """
         hr_expense_sheet_obj = self.env['hr.expense.sheet']
 
-        for expense_data in grouped_expenses:
-            # Inicializa la variable para la nueva hoja de gastos
-            new_sheet = False
-
-            # Construye el dominio de búsqueda para la hoja de gastos
-            # sheet_domain = []
-            sheet_domain = [('state', 'in', ['draft'])]
-            for sheet_field, sheet_value in expense_data['group_fields'].items():
-                if sheet_field != 'analytic_ids' or sheet_value:
-                    # Si el campo no es 'analytic_ids' o si lo es pero tiene un valor, añadir al dominio
-                    sheet_domain.append((sheet_field, '=', sheet_value))
-                else:
-                    # Si no hay cuenta analítica, usar 'IS NULL'
-                    sheet_domain.append(('analytic_ids', '=', False))
-
-            # Valores a actualizar/crear en la hoja de gastos
-            expense_sheet_values = {
-                'expense_line_ids': [(4, expense_data['expense'].id)],
-            }
-
-            # Busca si ya existe una hoja de gastos con el dominio especificado
-            hr_expense_sheet = hr_expense_sheet_obj.search(sheet_domain)
-
-            if hr_expense_sheet:  # Actualiza la hoja existente
-                hr_expense_sheet.write(expense_sheet_values)
-            else:  # Crea una nueva hoja de gastos
-                new_sheet_values = {}
-                for sheet_field, sheet_value in expense_data['group_fields'].items():
-                    if sheet_field not in new_sheet_values:
-                        new_sheet_values[sheet_field] = sheet_value
-
-                # Agrega el nombre de la hoja si está disponible
-                if 'sheet_name' in expense_data and expense_data['sheet_name']:
-                    new_sheet_values['name'] = expense_data['sheet_name']
-
-                # Prepara y actualiza los valores de la nueva hoja de gastos
-                new_sheet_values = hr_expense_sheet_obj.prepare_expense_sheet_values(new_sheet_values)
-                new_sheet_values.update(expense_sheet_values)
-
-                # Crea la nueva hoja de gastos
-                new_sheet = hr_expense_sheet_obj.create(new_sheet_values)
-
-                # Manejo de errores durante la sincronización con Okticket
-                if new_sheet and not new_sheet.okticket_bind_ids \
-                        and self.collection.okticket_exp_sheet_sync:
-                    new_sheet.unlink()  # Elimina la hoja de gastos si ocurre un error
+        for expense_data in self._batch_grouped_expenses(grouped_expenses):
+            # One unusable sheet must not abort the whole import. Creating a sheet
+            # pushes it to OkTicket, so anything from a duplicated report name to a
+            # network error used to propagate all the way up and roll back every
+            # expense imported in this run -- the expenses were already in Odoo but
+            # the transaction was discarded, so nothing arrived.
+            try:
+                with self.env.cr.savepoint():
+                    self._manage_grouped_expense(hr_expense_sheet_obj, expense_data)
+            except Exception as e:
+                msg = _('Could not build the expense sheet for expenses %s: %s') % (
+                    expense_data['expenses'].ids, e)
+                self.env['log.event'].add_event({
+                    'backend_id': self.backend_record.id,
+                    'type': 'error',
+                    'msg': msg,
+                })
+                _logger.error(msg)
 
         return grouped_expenses
+
+    def _batch_grouped_expenses(self, grouped_expenses):
+        """Merge the per-expense entries that end up on the same expense sheet.
+
+        The classification methods emit one entry per expense, and each entry used
+        to issue its own ``write`` on the sheet. Every write fires
+        ``on_record_write``, which re-exports the whole sheet and re-PATCHes every
+        expense already linked to it, so filling a sheet with N expenses cost
+        O(N^2) API calls -- a report with 97 expenses meant around 3000 PATCH
+        calls where 97 suffice. Grouping first means one write, and therefore one
+        export, per sheet.
+
+        The key is the grouping fields plus the sheet name, so the methods that
+        deliberately produce one sheet per expense (``single_expense``, which puts
+        the expense name in the key) keep doing exactly that.
+        """
+        batches = {}
+        for index, expense_data in enumerate(grouped_expenses):
+            group_fields = expense_data.get('group_fields') or {}
+            # repr() keeps the key hashable whatever the classification method put
+            # in the grouping fields (ids, selection values, dates, False).
+            key = (
+                tuple(sorted((field, repr(value)) for field, value in group_fields.items())),
+                repr(expense_data.get('sheet_name')),
+            )
+            if 'name' in group_fields:
+                # ``single_expense`` grouping: the expense's own name is part of the
+                # key, so every entry is meant to get its own sheet -- including two
+                # expenses that share employee, payment mode *and* name, which the
+                # demo data does contain. Merging them would silently turn N sheets
+                # into fewer, so those entries are never batched together.
+                key = key + (index,)
+            batch = batches.get(key)
+            if batch is None:
+                batch = dict(expense_data)
+                batch['expenses'] = self.env['hr.expense'].browse()
+                batches[key] = batch
+            if expense_data.get('expense'):
+                batch['expenses'] |= expense_data['expense']
+        return list(batches.values())
+
+    def _manage_grouped_expense(self, hr_expense_sheet_obj, expense_data):
+        """Create or update the hr.expense.sheet for a batch of grouped expenses."""
+        # Construye el dominio de búsqueda para la hoja de gastos
+        sheet_domain = [('state', 'in', ['draft'])]
+        for sheet_field, sheet_value in expense_data['group_fields'].items():
+            if sheet_field != 'analytic_ids' or sheet_value:
+                # Si el campo no es 'analytic_ids' o si lo es pero tiene un valor, añadir al dominio
+                sheet_domain.append((sheet_field, '=', sheet_value))
+            else:
+                # Si no hay cuenta analítica, usar 'IS NULL'
+                sheet_domain.append(('analytic_ids', '=', False))
+
+        # Valores a actualizar/crear en la hoja de gastos
+        # Un solo comando por hoja: el listener de export se dispara una vez.
+        expenses = expense_data.get('expenses')
+        if expenses is None:  # llamada directa con una única expense
+            expenses = expense_data['expense']
+        expense_sheet_values = {
+            'expense_line_ids': [(4, expense_id) for expense_id in expenses.ids],
+        }
+
+        # Busca si ya existe una hoja de gastos con el dominio especificado
+        hr_expense_sheet = hr_expense_sheet_obj.search(sheet_domain)
+
+        if hr_expense_sheet:  # Actualiza la hoja existente
+            hr_expense_sheet.write(expense_sheet_values)
+            return
+
+        # Crea una nueva hoja de gastos
+        new_sheet_values = {}
+        for sheet_field, sheet_value in expense_data['group_fields'].items():
+            if sheet_field not in new_sheet_values:
+                new_sheet_values[sheet_field] = sheet_value
+
+        # Agrega el nombre de la hoja si está disponible
+        if 'sheet_name' in expense_data and expense_data['sheet_name']:
+            new_sheet_values['name'] = expense_data['sheet_name']
+
+        # Prepara y actualiza los valores de la nueva hoja de gastos
+        new_sheet_values = hr_expense_sheet_obj.prepare_expense_sheet_values(new_sheet_values)
+        new_sheet_values.update(expense_sheet_values)
+
+        new_sheet = hr_expense_sheet_obj.create(new_sheet_values)
+
+        # Manejo de errores durante la sincronización con Okticket
+        if new_sheet and not new_sheet.okticket_bind_ids \
+                and self.collection.okticket_exp_sheet_sync:
+            new_sheet.unlink()  # Elimina la hoja de gastos si ocurre un error
 
     def sanitize_expenses(self, hr_expense_ids):
         """

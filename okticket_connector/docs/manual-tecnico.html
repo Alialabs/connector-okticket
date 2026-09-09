@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Conector OkTicket &middot; Manual t&eacute;cnico &middot; Odoo 17</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand:#FF9900;          /* Alia brand main */
+    --brand-dark:#e08600;
+    --secondary:#777777;      /* Alia brand secondary */
+    --ink:#222222;
+    --muted:#6b6b6b;
+    --line:#e6e6e6;
+    --bg-soft:#faf9f7;
+    --code-bg:#2b2b2b;
+    --ok:#2E9F12;
+    --danger:#C50C0D;
+    --info:#439FDB;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; color:var(--ink); background:#fff;
+    font-family:Nunito,Arial,Helvetica,sans-serif; font-size:16px; font-weight:400; line-height:1.6;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:0 28px 80px}
+
+  /* ---------- cabecera ---------- */
+  .masthead{border-top:6px solid var(--brand);background:var(--bg-soft);border-bottom:1px solid var(--line);margin-bottom:38px}
+  .masthead .wrap{padding-top:26px;padding-bottom:26px}
+  .logos{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+  .logos img{height:44px;width:auto;display:block}
+  .logos .sep{width:1px;height:38px;background:var(--line)}
+  .kicker{margin:18px 0 0;font-family:Poppins,Nunito,sans-serif;font-weight:600;letter-spacing:.14em;
+          text-transform:uppercase;font-size:12px;color:var(--brand)}
+  .masthead h1{font-family:Poppins,Nunito,sans-serif;font-weight:700;font-size:34px;line-height:1.2;margin:6px 0 6px}
+  .masthead p.sub{margin:0;color:var(--muted);font-size:16px}
+  .meta{margin-top:14px;font-size:13px;color:var(--secondary)}
+  .meta b{color:var(--ink);font-weight:600}
+
+  h2{font-family:Poppins,Nunito,sans-serif;font-weight:600;font-size:25px;margin:46px 0 6px;
+     padding-bottom:8px;border-bottom:2px solid var(--brand)}
+  h3{font-family:Poppins,Nunito,sans-serif;font-weight:600;font-size:19px;margin:30px 0 8px}
+  h4{font-family:Poppins,Nunito,sans-serif;font-weight:600;font-size:16px;margin:22px 0 6px;color:var(--secondary)}
+  p{margin:10px 0}
+  ul,ol{margin:10px 0;padding-left:22px}
+  li{margin:5px 0}
+  a{color:var(--brand-dark);text-decoration:none;border-bottom:1px solid rgba(255,153,0,.4)}
+  a:hover{border-bottom-color:var(--brand)}
+
+  code{font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;font-size:.87em;
+       background:#f3f1ee;border:1px solid #e4e0da;border-radius:4px;padding:1px 5px}
+  pre{background:var(--code-bg);color:#f5f5f5;border-radius:8px;padding:16px 18px;overflow-x:auto;
+      font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;font-size:13.5px;line-height:1.55}
+  pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit}
+  pre .c{color:#9aa0a6}
+
+  table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14.5px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--bg-soft);font-family:Poppins,Nunito,sans-serif;font-weight:600;font-size:13.5px}
+  tbody tr:nth-child(even){background:#fcfbfa}
+
+  figure{margin:20px 0}
+  figure img{width:100%;height:auto;border:1px solid var(--line);border-radius:8px;display:block}
+  figcaption{margin-top:8px;font-size:13px;color:var(--secondary);text-align:center}
+
+  .callout{border-left:4px solid var(--brand);background:var(--bg-soft);padding:12px 16px;margin:18px 0;border-radius:0 6px 6px 0}
+  .callout .tag{display:inline-block;font-family:Poppins,Nunito,sans-serif;font-weight:600;font-size:11px;
+        letter-spacing:.09em;text-transform:uppercase;color:var(--brand);margin-right:8px}
+  .callout.warn{border-left-color:var(--danger)}
+  .callout.warn .tag{color:var(--danger)}
+  .callout.ok{border-left-color:var(--ok)}
+  .callout.ok .tag{color:var(--ok)}
+
+  .toc{background:var(--bg-soft);border:1px solid var(--line);border-radius:8px;padding:18px 24px;margin:8px 0 10px}
+  .toc h4{margin:0 0 8px;color:var(--ink)}
+  .toc ol{margin:0;padding-left:20px;columns:2;column-gap:34px}
+  .toc a{border:0;color:var(--ink)}
+  .toc a:hover{color:var(--brand-dark)}
+
+  .step{display:inline-block;min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:50%;
+        background:var(--brand);color:#fff;font-family:Poppins,sans-serif;font-weight:600;font-size:13px;margin-right:8px}
+
+  footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--secondary)}
+  footer b{color:var(--ink)}
+
+  @media print{
+    body{font-size:12.5px}
+    .wrap{max-width:none;padding:0 6mm 6mm}
+    .masthead{margin-bottom:20px}
+    h2{page-break-after:avoid;margin-top:26px}
+    h3,h4{page-break-after:avoid}
+    figure,table,pre,.callout{page-break-inside:avoid}
+    a{color:var(--ink);border:0}
+    .toc ol{columns:2}
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="wrap">
+    <div class="logos">
+      <img src="img/alia-logo.png" alt="Alia Technologies"/>
+      <span class="sep"></span>
+      <img src="img/okticket-logo.png" alt="OkTicket"/>
+    </div>
+    <p class="kicker">Manual t&eacute;cnico</p>
+    <h1>Conector OkTicket para Odoo 17</h1>
+    <p class="sub">Instalaci&oacute;n, dependencias, configuraci&oacute;n del conector y planificaci&oacute;n de las sincronizaciones.</p>
+    <p class="meta">Versi&oacute;n de los m&oacute;dulos <b>17.0.1.0.x</b> &middot; Odoo <b>17.0</b> &middot; Licencia <b>AGPL-3</b> &middot; Repositorio <b>Alialabs/connector-okticket</b> (rama <code>17.0</code>)</p>
+  </div>
+</div>
+
+<div class="wrap">
+<div class="toc"><h4>Contenido</h4><ol>
+<li><a href="#1-alcance-y-arquitectura">Alcance y arquitectura</a></li>
+<li><a href="#2-requisitos-previos">Requisitos previos</a></li>
+<li><a href="#3-clonado-del-repositorio">Clonado del repositorio</a></li>
+<li><a href="#4-dependencias">Dependencias</a></li>
+<li><a href="#5-instalación-de-los-módulos">Instalación de los módulos</a></li>
+<li><a href="#6-grupos-y-permisos">Grupos y permisos</a></li>
+<li><a href="#7-configuración-de-la-compañía">Configuración de la compañía</a></li>
+<li><a href="#8-configuración-del-backend">Configuración del backend</a></li>
+<li><a href="#9-acciones-planificadas">Acciones planificadas</a></li>
+<li><a href="#10-impuestos-de-los-gastos-importados">Impuestos de los gastos importados</a></li>
+<li><a href="#11-hojas-de-gasto-y-sincronización-de-estados">Hojas de gasto y sincronización de estados</a></li>
+<li><a href="#12-centros-de-coste">Centros de coste</a></li>
+<li><a href="#13-multi-compañía">Multi-compañía</a></li>
+<li><a href="#14-logs-y-diagnóstico">Logs y diagnóstico</a></li>
+<li><a href="#15-problemas-frecuentes">Problemas frecuentes</a></li>
+</ol></div>
+
+<h2>1. Alcance y arquitectura</h2>
+<p>El conector sincroniza <strong>OkTicket → Odoo</strong> los gastos que los empleados registran desde la
+aplicación móvil, junto con sus usuarios y el catálogo de categorías. Los gastos importados se
+agrupan en <strong>hojas de gasto</strong>, cuyos estados se mantienen sincronizados con OkTicket. En sentido
+inverso, <strong>Odoo → OkTicket</strong>, publica los centros de coste creados a partir de cuentas analíticas.</p>
+<p>Está construido sobre el framework <em>connector</em> de la OCA: cada entidad de OkTicket tiene en Odoo
+un modelo <em>binding</em> que guarda la correspondencia entre el registro local y su identificador remoto.</p>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>Qué aporta</th>
+<th>Binding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>okticket_connector</code></td>
+<td>Base del conector: backend, cliente HTTP, log de eventos e importación de gastos.</td>
+<td><code>okticket.hr.expense</code></td>
+</tr>
+<tr>
+<td><code>okticket_connector_user_synchronization</code></td>
+<td>Importa los usuarios de OkTicket y los empareja con empleados por correo electrónico.</td>
+<td><code>okticket.hr.employee</code></td>
+</tr>
+<tr>
+<td><code>okticket_connector_product_synchronization</code></td>
+<td>Importa el árbol de categorías de OkTicket como productos de gasto.</td>
+<td><code>okticket.product.template</code></td>
+</tr>
+<tr>
+<td><code>okticket_connector_cost_center</code></td>
+<td>Publica cuentas analíticas de Odoo como centros de coste en OkTicket.</td>
+<td><code>okticket.account.analytic.account</code></td>
+</tr>
+<tr>
+<td><code>okticket_connector_hr_expense_sheet</code></td>
+<td>Agrupa los gastos importados en hojas de gasto y sincroniza sus estados con OkTicket.</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>okticket_connector_hr_expense_sheet_grouping</code></td>
+<td>Añade los métodos de agrupación de gastos en hojas (cuenta analítica, estándar, individual o sin agrupar).</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>okticket_hr_expense_reporting</code></td>
+<td>Genera informes PDF de gastos y hojas de gasto con las imágenes de los recibos.</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>okticket_hr_timesheet_cost_center</code></td>
+<td>Evita que el proyecto que Odoo crea automáticamente con cada compañía dispare una sincronización espuria. Opcional.</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+
+<h2>2. Requisitos previos</h2>
+<ul>
+<li>Una instancia de <strong>Odoo 17.0</strong> (Community o Enterprise) sobre PostgreSQL.</li>
+<li>Acceso al sistema de ficheros de <em>addons</em> y capacidad de reiniciar el servicio.</li>
+<li><strong>Credenciales de la API de OkTicket</strong>: usuario, contraseña, <em>OAuth client id</em> y <em>OAuth secret</em>,
+  más el <strong>identificador numérico de la compañía</strong>. Los facilita OkTicket y son distintos para cada
+  cliente.</li>
+<li><strong>Salida HTTPS</strong> desde el servidor de Odoo hacia <code>api.okticket.es</code> (o <code>apipre.okticket.es</code> en
+  preproducción). Si Odoo corre tras un proxy con lista blanca, hay que autorizar ese host.</li>
+</ul>
+<h3>Entorno contable</h3>
+<p>OkTicket es un producto español y devuelve los tipos de IVA españoles. Conviene que la compañía
+tenga instalada la localización española (<code>l10n_es</code>) con su plan contable aplicado, y que existan
+los impuestos de compra al <strong>0 %, 4 %, 10 % y 21 %</strong>, además de un diario de compras. Sin ellos,
+los gastos importados recaen siempre en el impuesto por defecto del producto.</p>
+
+<h2>3. Clonado del repositorio</h2>
+<p>El repositorio mantiene una rama por versión de Odoo. Para 17.0:</p>
+<pre><code class="language-bash">git clone --branch 17.0 https://github.com/Alialabs/connector-okticket.git
+</code></pre>
+
+<h2>4. Dependencias</h2>
+<h3>Módulos OCA</h3>
+<p>Ambos repositorios en su rama <code>17.0</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Repositorio</th>
+<th>Módulos que aporta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OCA/connector</code></td>
+<td><code>connector</code>, <code>component</code>, <code>component_event</code></td>
+</tr>
+<tr>
+<td><code>OCA/queue</code></td>
+<td><code>queue_job</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Módulos estándar de Odoo</h3>
+<p><code>hr</code>, <code>hr_expense</code>, <code>hr_timesheet</code>, <code>sale_expense</code>, <code>sale_timesheet</code>, <code>product</code>, <code>uom</code> y
+<code>analytic</code>. El módulo de centros de coste usa además <code>project</code>.</p>
+<h3>Dependencias Python</h3>
+<p>Una sola, declarada en <code>requirements.txt</code>: <code>cachetools==3.1.1</code>.</p>
+<div class="callout"><p><span class="tag">Nota</span> En despliegues Docker/Doodba va en <code>odoo/custom/dependencies/pip.txt</code>, no instalada en caliente
+dentro del contenedor.</p>
+</div>
+
+<h2>5. Instalación de los módulos</h2>
+<p>Con las rutas ya en <code>addons_path</code> y el servicio reiniciado, los módulos aparecen buscando
+<strong>okticket</strong> en la lista de aplicaciones.</p>
+<div class="callout"><p><span class="tag">Nota</span> Ninguno de los módulos declara <code>application: True</code>, así que hay que <strong>quitar el filtro
+«Aplicaciones»</strong> del buscador para que aparezcan.</p>
+</div>
+<figure><img src="img/t01-modulos.png" alt="Los ocho módulos del conector OkTicket en la lista de aplicaciones"/><figcaption>Los ocho módulos del conector OkTicket en la lista de aplicaciones</figcaption></figure>
+<p>Qué instalar según el alcance:</p>
+<ul>
+<li><code>okticket_connector</code> — obligatorio.</li>
+<li><code>okticket_connector_user_synchronization</code> y <code>okticket_connector_product_synchronization</code> —
+  necesarios para que la importación de gastos encuentre empleado y producto.</li>
+<li><code>okticket_connector_hr_expense_sheet</code> y <code>okticket_connector_hr_expense_sheet_grouping</code> — para
+  agrupar los gastos en hojas de gasto y sincronizar sus estados.</li>
+<li><code>okticket_hr_expense_reporting</code> — para los informes PDF con las imágenes de los recibos.</li>
+<li><code>okticket_connector_cost_center</code> — solo si vas a publicar centros de coste.</li>
+</ul>
+<pre><code class="language-bash">odoo -d &lt;base_de_datos&gt; --stop-after-init \
+  -i okticket_connector,okticket_connector_user_synchronization,\
+okticket_connector_product_synchronization,okticket_connector_cost_center,\
+okticket_connector_hr_expense_sheet,okticket_connector_hr_expense_sheet_grouping,\
+okticket_hr_expense_reporting
+</code></pre>
+<p>El módulo <code>okticket_hr_timesheet_cost_center</code> es opcional; instálalo solo si vas a crear compañías
+nuevas con <code>hr_timesheet</code>.</p>
+<div class="callout warn"><p><span class="tag">Atenci&oacute;n</span> La importación de gastos necesita que <strong>usuarios y productos ya estén sincronizados</strong>. Un gasto
+cuyo empleado o producto no se resuelva se descarta silenciosamente. Ejecuta siempre en el orden
+<strong>Usuarios → Productos → Gastos</strong>.</p>
+</div>
+
+<h2>6. Grupos y permisos</h2>
+<p>El conector define dos grupos, y <strong>los parámetros de conexión del backend solo son visibles para
+quien pertenece a ellos</strong>. Un administrador recién creado no los ve.</p>
+<table>
+<thead>
+<tr>
+<th>Grupo</th>
+<th>Referencia</th>
+<th>Permite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OkTicket / User</td>
+<td><code>okticket_connector.group_okticket_conn_user</code></td>
+<td>Ver el menú OkTicket, los backends, los logs y los <em>bindings</em>, y lanzar la prueba de autenticación.</td>
+</tr>
+<tr>
+<td>OkTicket / Manager</td>
+<td><code>okticket_connector.group_okticket_conn_manager</code></td>
+<td>Además, crear y modificar backends.</td>
+</tr>
+</tbody>
+</table>
+<p>Asigna el grupo desde <em>Ajustes → Usuarios y compañías → Usuarios</em>. Si acabas de cambiar los grupos
+y la ficha del backend sigue apareciendo incompleta, <strong>cierra y reabre la sesión</strong>: el cliente web
+cachea la definición de las vistas.</p>
+
+<h2>7. Configuración de la compañía</h2>
+<p>Cada compañía de Odoo que vaya a sincronizar necesita su identificador de OkTicket. En
+<em>Ajustes → Usuarios y compañías → Compañías</em>, abre la compañía y ve a la pestaña
+<strong>Configuración Okticket</strong>.</p>
+<figure><img src="img/t03-compania-okticket.png" alt="Pestaña de configuración OkTicket en la compañía"/><figcaption>Pestaña de configuración OkTicket en la compañía</figcaption></figure>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Compañía</strong></td>
+<td>Identificador numérico que facilita OkTicket. <strong>Sin él la importación descarta todos los gastos</strong>, porque no puede resolver a qué compañía pertenecen.</td>
+</tr>
+<tr>
+<td><strong>Autocrear centro de coste del proyecto</strong></td>
+<td>Si está activo, al crear un proyecto en Odoo se publica automáticamente su cuenta analítica como centro de coste en OkTicket.</td>
+</tr>
+<tr>
+<td><strong>Método de agrupación de hojas de gastos</strong></td>
+<td>Cómo se reúnen los gastos importados en hojas: por <strong>cuenta analítica</strong>, <strong>estándar</strong>, <strong>hoja individual</strong> o <strong>sin agrupar</strong>.</td>
+</tr>
+<tr>
+<td><strong>Intervalo temporal de agrupación</strong></td>
+<td>Ventana temporal con la que se agrupan los gastos en cada hoja: sin intervalo, semanal, quincenal o mensual.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>8. Configuración del backend</h2>
+<p>El <em>backend</em> guarda los datos de conexión con la API. Hay <strong>uno por compañía</strong>. Se crea desde
+<em>Conectores → Okticket → Backend de Okticket</em>.</p>
+<figure><img src="img/t02-backend-form.png" alt="Formulario de configuración del backend de OkTicket (credenciales ocultas)"/><figcaption>Formulario de configuración del backend de OkTicket (credenciales ocultas)</figcaption></figure>
+<h3>Parámetros de conexión</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Valor de producción</th>
+<th>Comentario</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>URL Conexión HTTP</td>
+<td><code>api.okticket.es</code></td>
+<td>Solo el host.</td>
+</tr>
+<tr>
+<td>URL Base</td>
+<td><code>https://api.okticket.es/v2/public</code></td>
+<td></td>
+</tr>
+<tr>
+<td>URL de imagen base</td>
+<td><code>https://api.okticket.es/v2/public</code></td>
+<td>Descarga de tickets y PDF.</td>
+</tr>
+<tr>
+<td>Ruta Oauth</td>
+<td><code>/oauth/token</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Ruta de operaciones</td>
+<td><code>/api</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Tipo de concesión</td>
+<td><code>password</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Ámbito</td>
+<td><code>*</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Versión</td>
+<td><code>1.0 y superior</code></td>
+<td>Campo obligatorio; hay que seleccionarlo o el guardado falla.</td>
+</tr>
+<tr>
+<td>Protocolo HTTPS</td>
+<td>Activado</td>
+<td></td>
+</tr>
+<tr>
+<td>Usuario / Contraseña</td>
+<td>—</td>
+<td>Credenciales del cliente. Las facilita OkTicket.</td>
+</tr>
+<tr>
+<td>Oauth client id / Secreto OAuth</td>
+<td>—</td>
+<td>Credenciales del cliente. Las facilita OkTicket.</td>
+</tr>
+</tbody>
+</table>
+<p>Los parámetros técnicos vienen rellenos por defecto al crear un backend nuevo: en la práctica solo
+hay que introducir las cuatro credenciales, seleccionar la versión y asignar la compañía. Para
+apuntar a preproducción, sustituye <code>api.okticket.es</code> por <code>apipre.okticket.es</code> en los cuatro valores
+de URL.</p>
+<h3>Parámetros de importación</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Importar gastos desde fecha</strong></td>
+<td>Marca de la última importación. El conector la actualiza solo y pide a la API únicamente lo modificado después.</td>
+</tr>
+<tr>
+<td><strong>Ignorar «Importar gastos desde fecha»</strong></td>
+<td>Desactiva el filtro incremental y reimporta el conjunto completo. Útil en la primera carga o para rehacer una importación.</td>
+</tr>
+<tr>
+<td><strong>Importar solo gastos revisados</strong></td>
+<td>Restringe la importación a los gastos marcados como revisados en OkTicket.</td>
+</tr>
+</tbody>
+</table>
+<h3>Prueba de autenticación</h3>
+<p>El botón <strong>Prueba de autenticación</strong> pide un token a la API con las credenciales guardadas. Si todo
+es correcto aparece una notificación verde de conexión correcta. Si falla, revisa usuario,
+contraseña, <em>client id</em>, secreto y la conectividad de salida hacia el host.</p>
+<div class="callout warn"><p><span class="tag">Atenci&oacute;n</span> Las credenciales de la API son <strong>secretos de producción</strong>. No las escribas en documentación,
+capturas ni ficheros versionados: guárdalas únicamente en el backend de Odoo.</p>
+</div>
+
+<h2>9. Acciones planificadas</h2>
+<p>El conector instala tres acciones planificadas, todas sobre el modelo <code>okticket.backend</code> y con un
+intervalo por defecto de <strong>2 horas</strong>.</p>
+<div class="callout warn"><p><span class="tag">Atenci&oacute;n</span> Los tres crons se instalan <strong>desactivados</strong> a propósito, para que una instalación nueva no empiece
+a sincronizar antes de estar configurada. Hay que activarlos explícitamente cuando la prueba de
+autenticación funcione.</p>
+</div>
+<figure><img src="img/t04-crons.png" alt="Las tres acciones planificadas del conector OkTicket"/><figcaption>Las tres acciones planificadas del conector OkTicket</figcaption></figure>
+<table>
+<thead>
+<tr>
+<th>Orden</th>
+<th>Acción</th>
+<th>Método</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>User Synchronization From Okticket</td>
+<td><code>_scheduler_import_employee()</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Product Synchronization From Okticket</td>
+<td><code>_scheduler_synchronize_products()</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Import Expenses From Okticket</td>
+<td><code>_scheduler_import_expenses()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Para la primera carga, ejecuta las tres manualmente en ese orden con <em>Ejecutar manualmente</em>. La
+importación de gastos recorre la API paginada y confirma al final, de modo que <strong>consultar la tabla
+a mitad del proceso devuelve cero legítimamente</strong>: espera a que termine antes de dar nada por fallido.</p>
+
+<h2>10. Impuestos de los gastos importados</h2>
+<p>OkTicket no envía un impuesto: envía un <strong>porcentaje</strong>. En el desglose <code>taxes</code> de cada
+ticket, cada entrada lleva el tipo (<code>p</code>) y su base (<code>b</code>), y solo las de base mayor que cero
+describen el recibo. Traducir ese porcentaje a un impuesto concreto de Odoo no tiene una respuesta
+única: un plan contable español trae <strong>doce impuestos de compra por cada tipo</strong>. Para el 10 %
+conviven, entre otros, <code>10% G</code> (bienes), <code>10% IG</code> (bienes de inversión), <code>10% S</code> (servicios) y
+las variantes intracomunitaria, de importación y de inversión del sujeto pasivo.</p>
+<p>Elegir mal no produce ningún error: produce un IVA equivocado. Y en un caso concreto produce
+<strong>cero</strong>, porque las variantes extracomunitarias reparten +100 % al IVA soportado y &minus;100 % al
+repercutido, se anulan entre sí, y el gasto queda con la base igual al total y sin cuota deducible.</p>
+<h3>Cómo se resuelve</h3>
+<p>Cuatro pasos, del más explícito al más deducido. Ninguno recae en «el primero que devuelva la base
+de datos».</p>
+<table>
+<thead>
+<tr>
+<th>Paso</th>
+<th>Criterio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>La <strong>tabla de impuestos del producto</strong>, o la del producto base del que deriva. Es configuración explícita y gana siempre.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Un impuesto que el producto ya lleve en <em>Impuestos de proveedor</em> con ese mismo tipo.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Desambiguación estructural: se conserva el impuesto <strong>nacional</strong> del ámbito del producto.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Si aún quedan varios candidatos, el gasto se importa <strong>sin impuesto</strong> y se registra un aviso nombrándolos.</td>
+</tr>
+</tbody>
+</table>
+<p>El paso 3 aplica dos criterios objetivos, sin comparar nombres. Primero conserva los impuestos que
+alguna <strong>posición fiscal</strong> declara como origen (<code>tax_src_id</code>), que son los nacionales: las variantes
+solo aparecen como destino, porque se alcanzan traduciendo el nacional. Después filtra por
+<strong>ámbito</strong> (<code>tax_scope</code>), que distingue bienes de servicios. En un plan español eso deja exactamente
+un candidato para el 4 %, el 10 % y el 21 %.</p>
+<p>Si la localización no trae posiciones fiscales, el primer criterio no puede aplicarse y es más
+probable terminar en el paso 4. Ahí es donde hace falta la tabla del producto.</p>
+<h3>La tabla de impuestos del producto</h3>
+<p>Está en la pestaña <em>Configuración Okticket</em> de cada producto de gasto, bajo <strong>Asignación de
+impuestos</strong>. Cada fila declara qué impuesto de Odoo corresponde a un tipo que reporta OkTicket.</p>
+<figure><img src="img/t06-impuestos-producto.png" alt="Asignación de impuestos en la pestaña OkTicket del producto"/><figcaption>Asignación de impuestos en la pestaña OkTicket del producto</figcaption></figure>
+<table>
+<thead>
+<tr>
+<th>Columna</th>
+<th>Contenido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Tipo de OkTicket (%)</em></td>
+<td>El porcentaje tal como lo reporta OkTicket. El <strong>0 %</strong> es un tipo válido y no equivale a no tener fila.</td>
+</tr>
+<tr>
+<td><em>Impuesto de Odoo</em></td>
+<td>El impuesto de compra que le corresponde, de la compañía de la fila.</td>
+</tr>
+<tr>
+<td><em>Compañía</em></td>
+<td>Oculta por defecto; se muestra desde el selector de columnas. Los impuestos son por compañía, así que en multi-compañía hace falta una fila por cada una.</td>
+</tr>
+</tbody>
+</table>
+<p>Una fila declarada en el <strong>producto base</strong> se aplica también a sus versiones <em>-Factura</em> y
+<em>-Refacturable</em>, de modo que la decisión se toma una vez por categoría en lugar de tres veces.</p>
+<div class="callout"><p><span class="tag">Importante</span> El paso 3 solo puede llegar al impuesto <strong>de servicios</strong>, porque el conector tipa todos los
+productos de gasto como servicio. Si en tu caso un tipo corresponde a <strong>bienes</strong>, hay que
+declararlo en esta tabla: no hay ningún otro sitio del modelo donde quepa esa información.</p>
+</div>
+<h3>Con la tabla vacía</h3>
+<p>No hay que rellenarla para que la instalación funcione. Con un plan español y ninguna fila, el
+paso 3 resuelve el 4 %, el 10 % y el 21 % al impuesto nacional de servicios, que es la respuesta
+correcta para la mayoría de los productos de gasto. La tabla existe para las excepciones.</p>
+<div class="callout warn"><p><span class="tag">Atenci&oacute;n</span> Actualizar el módulo <strong>no recalcula los gastos ya importados</strong>. Un gasto solo cambia de impuesto
+cuando la importación vuelve a tocarlo, y eso ocurre únicamente si la API sigue devolviéndolo: los
+que ya están marcados como contabilizados en OkTicket quedan fuera del filtro <code>accounted=false</code> y
+conservan el impuesto con el que entraron. Si además su asiento ya está asentado, la corrección es
+contable y no técnica.</p>
+</div>
+
+<h2>11. Hojas de gasto y sincronización de estados</h2>
+<p>Los gastos importados no quedan sueltos: el conector los reúne en <strong>hojas de gasto</strong>
+(<code>hr.expense.sheet</code>) y mantiene sus estados alineados con OkTicket.</p>
+<h3>Agrupación</h3>
+<p>Al terminar la importación, cada gasto nuevo se coloca en una hoja según el <strong>método de agrupación</strong>
+y el <strong>intervalo temporal</strong> configurados en la compañía (sección 7):</p>
+<ul>
+<li><strong>Cuenta analítica</strong> — una hoja por cuenta analítica.</li>
+<li><strong>Estándar</strong> — agrupación por los criterios estándar de Odoo.</li>
+<li><strong>Hoja individual</strong> — una hoja por gasto.</li>
+<li><strong>Sin agrupar</strong> — los gastos quedan sin hoja.</li>
+</ul>
+<p>La agrupación solo reutiliza hojas en estado <strong>borrador</strong>. Si la hoja que correspondería a un grupo
+ya está enviada o aprobada, se crea una <strong>hoja nueva</strong> en borrador con el mismo nombre base y un
+sufijo numérico, en lugar de añadir el gasto a la hoja ya tramitada.</p>
+<h3>Sincronización de estados</h3>
+<p>Cuando una hoja avanza en Odoo, el conector lo refleja en OkTicket:</p>
+<ul>
+<li><strong>Enviar</strong> la hoja marca sus gastos como <strong>contabilizados</strong> en OkTicket.</li>
+<li><strong>Aprobar</strong> la hoja actualiza el estado del informe en OkTicket.</li>
+</ul>
+<div class="callout"><p><span class="tag">Nota</span> La sincronización de estados escribe un gasto a la vez en OkTicket, dentro de una única
+transacción por backend. En hojas con muchos gastos la operación puede tardar varios segundos;
+es normal y no indica un fallo.</p>
+</div>
+<h3>Informes</h3>
+<p>El módulo <code>okticket_hr_expense_reporting</code> genera informes PDF de gastos y hojas de gasto
+incorporando las imágenes de los recibos.</p>
+
+<h2>12. Centros de coste</h2>
+<p>Es la única sincronización que va de <strong>Odoo hacia OkTicket</strong>, y la aporta el módulo
+<code>okticket_connector_cost_center</code>. Lo que se publica es una <strong>cuenta analítica</strong>
+(<code>account.analytic.account</code>), no un proyecto: el proyecto solo interviene como disparador de la
+variante automática.</p>
+<h3>Publicación manual desde la lista de cuentas analíticas</h3>
+<p>El módulo registra un <code>ir.actions.server</code> anclado a la <strong>vista lista</strong> de
+<code>account.analytic.account</code>. Aparece en el menú <strong>Acciones</strong> al seleccionar uno o varios registros, y
+abre el asistente <code>analytic.cost.center.wizard</code>, que confirma antes de escribir en OkTicket.</p>
+<p>Su comportamiento:</p>
+<ul>
+<li>Ignora las cuentas que <strong>ya tienen binding</strong> (<code>okticket_bind_ids</code>), de modo que relanzar la acción
+  es idempotente.</li>
+<li>Antes de crear comprueba si en OkTicket existe ya un centro de coste con el mismo nombre. Si lo
+  hay, pide una <strong>confirmación explícita de duplicado</strong>.</li>
+<li>Si el conflicto surge con <strong>varias cuentas seleccionadas</strong>, aborta con un <code>ValidationError</code> y
+  obliga a procesarlas de una en una.</li>
+</ul>
+<h3>Publicación automática desde proyectos</h3>
+<p>Con <em>Autocrear centro de coste del proyecto</em> activo en la compañía, un <em>listener</em> sobre
+<code>project.project</code> llama a <code>_okticket_create()</code> sobre la cuenta analítica del proyecto en cuanto
+este se crea. Renombrar el proyecto propaga el nuevo nombre; archivarlo desactiva el centro de
+coste, y borrarlo lo elimina en OkTicket.</p>
+<div class="callout"><p><span class="tag">Nota</span> El proyecto debe tener <strong>compañía asignada</strong> para que se dispare la publicación: la cuenta
+analítica hereda de ella la opción de autocreación. El módulo opcional
+<code>okticket_hr_timesheet_cost_center</code> existe precisamente para que el proyecto que Odoo crea de
+oficio al dar de alta una compañía con <code>hr_timesheet</code> no dispare esta publicación.</p>
+</div>
+<h3>Vuelta a Odoo</h3>
+<p>Cuando un gasto de OkTicket llega imputado a un centro de coste que <strong>se originó en Odoo</strong>, la
+importación fija su cuenta analítica al 100 % en el gasto. Los centros de coste creados
+directamente en OkTicket no tienen correspondencia en Odoo y, por tanto, no fijan analítica.</p>
+
+<h2>13. Multi-compañía</h2>
+<p>El conector soporta varias compañías simultáneamente. El esquema es:</p>
+<ul>
+<li>Un <strong>backend por compañía</strong>, cada uno con su propio identificador de OkTicket.</li>
+<li>Las mismas credenciales pueden servir para varias compañías: la API las distingue por la
+  cabecera <code>company</code>.</li>
+<li>Los gastos, empleados e impuestos se resuelven <strong>dentro de la compañía del backend</strong>, de modo que
+  no se mezclan entre sí.</li>
+</ul>
+<p>Los productos, en cambio, son compartidos: si dos compañías de OkTicket exponen el mismo árbol de
+categorías, ambas apuntarán a las mismas plantillas de producto en Odoo.</p>
+
+<h2>14. Logs y diagnóstico</h2>
+<p>Cada llamada a la API queda registrada en <em>Conectores → Okticket → Logs</em>, con su tipo (<em>Éxito</em>,
+<em>Aviso</em>, <em>Error</em>), la etiqueta de la operación y la URL con el código de respuesta.</p>
+<figure><img src="img/t05-logs.png" alt="Log de eventos del conector OkTicket"/><figcaption>Log de eventos del conector OkTicket</figcaption></figure>
+<p>Es el primer sitio donde mirar cuando una sincronización no produce lo esperado. Una importación
+sana no deja ninguna entrada de tipo <em>Error</em>; los avisos habituales corresponden a gastos con
+varios tipos de IVA, que el conector importa con el impuesto por defecto del producto para que se
+revisen a mano.</p>
+
+<h2>15. Problemas frecuentes</h2>
+<table>
+<thead>
+<tr>
+<th>Síntoma</th>
+<th>Causa habitual</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>La ficha del backend no muestra los parámetros de conexión.</td>
+<td>El usuario no pertenece a los grupos del conector, o la sesión tiene la vista cacheada.</td>
+<td>Asignar el grupo <em>OkTicket / Manager</em> y volver a iniciar sesión.</td>
+</tr>
+<tr>
+<td>El backend no se guarda y el campo <em>Versión</em> aparece en rojo.</td>
+<td><em>Versión</em> es obligatorio y no viene preseleccionado.</td>
+<td>Seleccionar <em>1.0 y superior</em> y guardar.</td>
+</tr>
+<tr>
+<td>La importación termina sin errores pero no aparece ningún gasto.</td>
+<td>Falta el identificador de compañía, o no se han sincronizado antes usuarios y productos.</td>
+<td>Rellenar <em>Compañía</em> en la pestaña OkTicket y ejecutar los crons en orden.</td>
+</tr>
+<tr>
+<td>La prueba de autenticación falla.</td>
+<td>Credenciales incorrectas o salida HTTPS bloqueada.</td>
+<td>Verificar las cuatro credenciales y el acceso a <code>api.okticket.es</code> desde el servidor.</td>
+</tr>
+<tr>
+<td>Los gastos entran con un impuesto que no corresponde.</td>
+<td>O la compañía no tiene el plan contable español con los tipos 0/4/10/21 de compra, o ese porcentaje debe resolverse a un impuesto distinto del que elige el conector.</td>
+<td>Instalar <code>l10n_es</code> y aplicar el plan a la compañía; si el plan ya está, declarar el tipo en la tabla <em>Asignación de impuestos</em> del producto (§10).</td>
+</tr>
+<tr>
+<td>El log avisa de que un tipo coincide con varios impuestos y el gasto entra sin impuesto.</td>
+<td>El plan contable tiene varias opciones para ese porcentaje y ninguna se puede distinguir estructuralmente (falta de posiciones fiscales, o varios impuestos del mismo ámbito).</td>
+<td>Declarar la fila correspondiente en la tabla <em>Asignación de impuestos</em> del producto. Ver §10.</td>
+</tr>
+<tr>
+<td>Un gasto nuevo crea una hoja repetida en vez de sumarse a la existente.</td>
+<td>La hoja de ese grupo ya no está en borrador (está enviada o aprobada).</td>
+<td>Es el comportamiento esperado: la agrupación solo reutiliza hojas en borrador.</td>
+</tr>
+<tr>
+<td>Se repite la importación completa en cada ejecución.</td>
+<td><em>Ignorar «Importar gastos desde fecha»</em> está activo.</td>
+<td>Desactivarlo una vez hecha la carga inicial.</td>
+</tr>
+</tbody>
+</table>
+<footer>
+  <p><b>Alia Technologies S.L.</b> &middot; R&uacute;a Nova 8, Ourense &middot; 988 319 612 &middot;
+     <a href="mailto:contacto@alialabs.com">contacto@alialabs.com</a> &middot;
+     <a href="https://www.alialabs.com">alialabs.com</a></p>
+  <p>Conector OkTicket para Odoo 17 &middot; Licencia AGPL-3 &middot;
+     &iquest;Buscas el uso diario? Consulta el <a href="manual-usuario.html">manual de usuario</a>.</p>
+</footer>
+</div>
+</body>
+</html>

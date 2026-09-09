@@ -81,7 +81,9 @@ class OkticketBackend(models.Model):
         with backend_record.work_on('okticket.backend') as work:
             adapter = work.component(usage='backend.adapter')
         try:
-            adapter._auth()
+            # force=True: the token cache would otherwise let a test pass on
+            # credentials that were just edited to something invalid.
+            adapter._auth(force=True)
         except Exception as e:
             _logger.error('Exception: %s\n', e)
             import traceback
@@ -103,7 +105,10 @@ class OkticketBackend(models.Model):
         Import expenses from Okticket.
         """
         self.ensure_one()
-        self.env['okticket.hr.expense'].sudo().with_company(
-            self.company_id
-        ).import_batch(self)
+        # Pass the company-aware backend: components take their env from the
+        # backend record (WorkContext.env is collection.env), so the with_company
+        # applied to the model alone was discarded for every component.
+        self.env['okticket.hr.expense'].sudo().import_batch(
+            self.with_company(self.company_id)
+        )
         return True

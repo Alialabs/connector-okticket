@@ -12,4 +12,5 @@ from . import okticket_hr_employee
 from . import okticket_hr_expense
 from . import okticket_hr_expense_importer
 from . import okticket_product
+from . import okticket_product_tax_mapping
 from . import okticket_analytic

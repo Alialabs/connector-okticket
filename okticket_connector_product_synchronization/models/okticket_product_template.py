@@ -44,13 +44,25 @@ class ProductTemplate(models.Model):
         if not isinstance(value, int):
             raise ValueError(_('Value should be integer (not %s)') % type(value).__name__)
 
-        odoo_ids = self.env['okticket.product.template'].search(
+        base_products = self.env['okticket.product.template'].search(
             [('external_id', operator, value)]
-        ).mapped('odoo_id.id')
+        ).mapped('odoo_id')
+        # The OkTicket category binding only exists on the base product, so its
+        # invoice version (okticket_type_prod_id=1) was never returned and
+        # expenses of type "Factura" (type_id=1) could not resolve their product
+        # and were silently discarded. Include the invoice version here.
+        # The rebillable variants are intentionally NOT added: get_base_product
+        # first resolves the base/invoice product by okticket_type_prod_id and
+        # then swaps to its rebillable version itself when the expense is
+        # refacturable. Adding them here would let a plain ticket (type_id=0)
+        # resolve to the "-Rebillable" product instead of the base one.
+        products = base_products | base_products.mapped('invoice_prod_id')
 
-        if odoo_ids:
-            return [('id', 'in', odoo_ids)]
-        return []
+        # Always return a well-formed leaf: an empty domain makes the leaf
+        # vanish and unbalances expression.parse(), raising "IndexError: pop
+        # from empty list" when this field is ANDed with another one (as
+        # get_base_product does with okticket_type_prod_id).
+        return [('id', 'in', products.ids)]
 
 
 class OkticketProductTemplate(models.Model):

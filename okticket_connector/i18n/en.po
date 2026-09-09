@@ -10,6 +10,7 @@ msgstr ""
 "PO-Revision-Date: 2025-02-13 10:59+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -55,6 +56,11 @@ msgstr ""
 #: code:addons/okticket_connector/components/backend_adapter.py:0
 #, python-format
 msgid "A network error caused the failure of the job: %s"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.constraint,message:okticket_connector.constraint_okticket_product_tax_mapping_okticket_product_rate_uniq
+msgid "A product can map an OkTicket rate to only one tax per company."
 msgstr ""
 
 #. module: okticket_connector
@@ -235,6 +241,7 @@ msgstr ""
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__company_id
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__company_id
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__company_id
 msgid "Company"
 msgstr ""
 
@@ -303,6 +310,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__create_uid
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_expense_wizard__create_uid
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__create_uid
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__create_uid
 msgid "Created by"
 msgstr ""
 
@@ -311,6 +319,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__create_date
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_expense_wizard__create_date
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__create_date
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__create_date
 msgid "Created on"
 msgstr ""
 
@@ -373,7 +382,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__display_name
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_expense_wizard__display_name
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__display_name
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__display_name
 msgid "Display Name"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__distribution_analytic_account_ids
+msgid "Distribution Analytic Account"
 msgstr ""
 
 #. module: okticket_connector
@@ -393,9 +408,28 @@ msgid "Error"
 msgstr ""
 
 #. module: okticket_connector
-#: model:ir.model,name:okticket_connector.model_hr_expense
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__odoo_id
 msgid "Expense"
+msgstr ""
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
+#, python-format
+msgid ""
+"Expense %s reports %g%% but that rate matches several purchase taxes in "
+"company %s that cannot be told apart (%s); imported with no tax. Map the "
+"rate on the product's OkTicket tab, or add the right tax to the product."
+msgstr ""
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
+#, python-format
+msgid ""
+"Expense %s reports several tax rates (%s) but an Odoo expense holds a single "
+"taxable base; keeping the product default taxes. Review this expense "
+"manually."
 msgstr ""
 
 #. module: okticket_connector
@@ -459,6 +493,11 @@ msgid "Grant type"
 msgstr ""
 
 #. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_hr_expense
+msgid "HR Expense"
+msgstr ""
+
+#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__okticket_hr_expense_ids
 msgid "HR Expense Bindings"
 msgstr ""
@@ -483,6 +522,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__id
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_expense_wizard__id
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__id
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__id
 msgid "ID"
 msgstr ""
 
@@ -505,7 +545,8 @@ msgstr ""
 #. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_okticket_backend__default_lang_id
 msgid ""
-"If a default language is selected, the records will be imported in the translation of this language.\n"
+"If a default language is selected, the records will be imported in the "
+"translation of this language.\n"
 "Note that a similar configuration exists for each storeview."
 msgstr ""
 
@@ -559,7 +600,6 @@ msgstr ""
 
 #. module: okticket_connector
 #. odoo-python
-#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
 #: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
 #, python-format
 msgid "Importing expense ID: %s. It does not have required fields: %s"
@@ -649,6 +689,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__write_uid
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_expense_wizard__write_uid
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__write_uid
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__write_uid
 msgid "Last Updated by"
 msgstr ""
 
@@ -657,6 +698,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__write_date
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_expense_wizard__write_date
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__write_date
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__write_date
 msgid "Last Updated on"
 msgstr ""
 
@@ -669,6 +711,11 @@ msgstr ""
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__location
 msgid "Location"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_log_event
+msgid "Log Event"
 msgstr ""
 
 #. module: okticket_connector
@@ -783,6 +830,11 @@ msgid "Oauth secret"
 msgstr ""
 
 #. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__tax_id
+msgid "Odoo Tax"
+msgstr ""
+
+#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_product_product__okticket_categ_prod_id
 #: model:ir.model.fields,field_description:okticket_connector.field_product_template__okticket_categ_prod_id
 msgid "OkTicket Category ID"
@@ -817,6 +869,29 @@ msgstr ""
 #: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__okticket_expense_id
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__okticket_expense_id
 msgid "OkTicket ID"
+msgstr ""
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
+#, python-format
+msgid "OkTicket PDF document imported"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__okticket_rate
+msgid "OkTicket Rate (%)"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_okticket_product_tax_mapping
+msgid "OkTicket Rate to Odoo Tax Mapping"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_product_product__okticket_tax_mapping_ids
+#: model:ir.model.fields,field_description:okticket_connector.field_product_template__okticket_tax_mapping_ids
+msgid "OkTicket Tax Mapping"
 msgstr ""
 
 #. module: okticket_connector
@@ -883,6 +958,16 @@ msgstr ""
 #. module: okticket_connector
 #: model:ir.module.category,description:okticket_connector.module_category_okticket_connector
 msgid "Okticket Connector Operations"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_okticket_expense_wizard
+msgid "Okticket Expense Wizard"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model,name:okticket_connector.model_okticket_hr_expense
+msgid "Okticket HR Expense Binding"
 msgstr ""
 
 #. module: okticket_connector
@@ -968,6 +1053,7 @@ msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model,name:okticket_connector.model_product_template
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__product_tmpl_id
 msgid "Product"
 msgstr ""
 
@@ -1078,6 +1164,11 @@ msgid "Tag"
 msgstr ""
 
 #. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
+msgid "Tax Mapping"
+msgstr ""
+
+#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__tax_amount
 msgid "Tax amount"
 msgstr ""
@@ -1107,6 +1198,22 @@ msgstr ""
 msgid ""
 "The okticket service from which to import your timesheets. If empty, the "
 "default okticket service will be used instead."
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_product_tax_mapping__okticket_rate
+msgid ""
+"The percentage OkTicket reports in the receipt's tax breakdown (the 'p' of "
+"each entry). 0 is a valid rate and is not the same as having no row."
+msgstr ""
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_product_tax_mapping.py:0
+#, python-format
+msgid ""
+"The tax \"%(tax)s\" belongs to company \"%(tax_company)s\" but the mapping "
+"row is for \"%(company)s\"."
 msgstr ""
 
 #. module: okticket_connector
@@ -1230,18 +1337,30 @@ msgid "Whether tax is defined on a selected product"
 msgstr ""
 
 #. module: okticket_connector
-#: model:ir.model,name:okticket_connector.model_log_event
-msgid "log.event"
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
+msgid ""
+"Which Odoo tax each rate OkTicket reports means for this\n"
+"                            product. Only needed where the tax the connector "
+"resolves\n"
+"                            on its own is not the right one: it always picks "
+"the\n"
+"                            domestic tax of the product's scope, and every "
+"expense\n"
+"                            product is typed as a service, so a rate that is "
+"goods\n"
+"                            here has to be stated. A row on the base product "
+"also\n"
+"                            applies to its invoice and rebillable versions."
 msgstr ""
 
 #. module: okticket_connector
-#: model:ir.model,name:okticket_connector.model_okticket_expense_wizard
-msgid "okticket.expense.wizard"
-msgstr ""
-
-#. module: okticket_connector
-#: model:ir.model,name:okticket_connector.model_okticket_hr_expense
-msgid "okticket.hr.expense"
+#: model:ir.model.fields,help:okticket_connector.field_product_product__okticket_tax_mapping_ids
+#: model:ir.model.fields,help:okticket_connector.field_product_template__okticket_tax_mapping_ids
+msgid ""
+"Which Odoo tax each rate OkTicket reports means for this product. Rows are "
+"only needed where the tax the connector would otherwise resolve is not the "
+"right one -- typically a rate that is goods here, since every expense "
+"product is typed as a service."
 msgstr ""
 
 #. module: okticket_connector

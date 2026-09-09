@@ -34,12 +34,12 @@ class HrEmployee(models.Model):
             raise ValueError(_('This operator is not supported'))
         if not isinstance(value, int):
             raise ValueError(_('Value should be integer (not %s)'), value)
-        domain = []
         odoo_ids = self.env['okticket.hr.employee'].search([
             ('external_id', operator, value)]).mapped('odoo_id').ids
-        if odoo_ids:
-            domain.append(('id', 'in', odoo_ids))
-        return domain
+        # Always a well-formed leaf: an empty domain makes the leaf vanish and
+        # unbalances expression.parse() ("IndexError: pop from empty list")
+        # whenever this field is combined with another one.
+        return [('id', 'in', odoo_ids)]
 
     okticket_user_id = fields.Integer(string="Okticket User_Id",
                                       default=-1.0,

@@ -87,14 +87,17 @@
         </t>
     </template>
 
-    <report
-        id="action_report_img_hr_expense_sheet"
-        string="Expenses Sheet Image Report"
-        model="hr.expense.sheet"
-        report_type="qweb-pdf"
-        name="okticket_hr_expense_reporting.report_img_expense_sheet"
-        file="okticket_hr_expense_reporting.report_img_expense_sheet"
-        print_report_name="'Expenses - %s - %s' % (object.employee_id.name, (object.name).replace('/', ''))"
-    />
+    <!-- See the note in hr_expense_report.xml: the <report> shorthand no longer
+         exists in Odoo 17. -->
+    <record id="action_report_img_hr_expense_sheet" model="ir.actions.report">
+        <field name="name">Expenses Sheet Image Report</field>
+        <field name="model">hr.expense.sheet</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">okticket_hr_expense_reporting.report_img_expense_sheet</field>
+        <field name="report_file">okticket_hr_expense_reporting.report_img_expense_sheet</field>
+        <field name="print_report_name">'Expenses - %s - %s' % (object.employee_id.name, (object.name).replace('/', ''))</field>
+        <field name="binding_model_id" ref="hr_expense.model_hr_expense_sheet"/>
+        <field name="binding_type">report</field>
+    </record>
 
 </odoo>
