@@ -24,6 +24,23 @@
                             <field name="invoice_prod_id"/>
                             <field name="base_version_prod_ids" widget="many2many_tags" readonly="1"/>
                         </group>
+                        <separator string="Tax Mapping"/>
+                        <p class="text-muted">
+                            Which Odoo tax each rate OkTicket reports means for this
+                            product. Only needed where the tax the connector resolves
+                            on its own is not the right one: it always picks the
+                            domestic tax of the product's scope, and every expense
+                            product is typed as a service, so a rate that is goods
+                            here has to be stated. A row on the base product also
+                            applies to its invoice and rebillable versions.
+                        </p>
+                        <field name="okticket_tax_mapping_ids">
+                            <list editable="bottom">
+                                <field name="company_id" optional="hide"/>
+                                <field name="okticket_rate"/>
+                                <field name="tax_id"/>
+                            </list>
+                        </field>
                     </page>
                 </notebook>
             </field>
