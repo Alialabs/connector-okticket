@@ -77,9 +77,19 @@ class LogEvent(models.Model):
         Prepare and create a log.event.
         :param values: dict
         :return: log.event
+
+        Written with ``sudo``: the connector log is infrastructure, not user
+        data, and whoever happens to trigger an operation must not decide
+        whether it gets recorded. Creating a log entry is restricted to the two
+        connector groups, so without this an employee submitting their own
+        expense sheet got an access error -- ``action_submit_sheet`` reports the
+        status change to OkTicket, which logs the call. Granting the connector
+        group to every employee would fix the symptom by handing out write
+        access to backends and bindings, and putting ``sudo`` on each flow
+        action leaves the next caller to trip over the same thing.
         """
         event_values = prepare_log_event(values)
-        return self.create({
+        return self.sudo().create({
             'backend_id': event_values['backend_id'],
             'type': event_values['type'],
             'tag': event_values['tag'],
