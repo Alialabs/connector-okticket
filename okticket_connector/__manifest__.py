@@ -5,9 +5,12 @@
     'name': 'Alia Okticket Connector',
     'summary': 'Mainly features, models and business logic for Okticket connector. '
                'Implements expenses import from Okticket.',
-    'version': '18.0.1.0.0',
+    'version': '18.0.1.0.13',
     'category': 'Connector',
     'depends': [
+        'hr',
+        # 'project',
+        'hr_timesheet',
         'hr_expense',
         'sale_expense',
         'queue_job',
@@ -17,10 +20,7 @@
         'uom',
         # 'analytic_base_department',
         'product',
-        'analytic',
-        'hr',
-        # 'project',
-        'hr_timesheet'
+        'analytic'
     ],
     'author': "Alia Technologies",
     'license': 'AGPL-3',

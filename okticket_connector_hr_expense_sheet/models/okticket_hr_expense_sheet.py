@@ -3,12 +3,27 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import logging
+import time
 
 from odoo.addons.component.core import Component
 from odoo.exceptions import UserError
 from odoo import _, api, fields, models
 
 _logger = logging.getLogger(__name__)
+
+# Report names already taken in OkTicket, per (database, backend). OkTicket
+# rejects a duplicated report name with a 422, and the exporter used to discover
+# that by posting a candidate and reading the rejection -- one wasted write per
+# collision, plus a warning in the log for something that is not a problem. The
+# whole list costs a single call, so the free name is resolved locally instead.
+#
+# Same shape as the token cache in okticket_connector/components/backend_adapter:
+# names are not transactional data, so sharing them beyond the current cursor is
+# safe. Staleness costs at most one wasted POST, after which ``create`` drops the
+# entry and the next lookup reloads.
+_SHEET_NAME_CACHE = {}
+# The set is only a shortcut, never the authority, so it can be held for a while.
+SHEET_NAME_CACHE_TTL = 600
 
 
 class HrExpenseSheet(models.Model):
@@ -33,12 +48,12 @@ class HrExpenseSheet(models.Model):
             raise ValueError(_('This operator is not supported'))
         if not isinstance(value, str):
             raise ValueError(_('Value should be string (not %s)'), value)
-        domain = []
         odoo_ids = self.env['okticket.hr.expense.sheet'].search([
             ('external_id', operator, value)]).mapped('odoo_id').ids
-        if odoo_ids:
-            domain.append(('id', 'in', odoo_ids))
-        return domain
+        # Always a well-formed leaf: an empty domain makes the leaf vanish and
+        # unbalances expression.parse() ("IndexError: pop from empty list")
+        # whenever this field is combined with another one.
+        return [('id', 'in', odoo_ids)]
 
     okticket_expense_sheet_id = fields.Char(string="OkTicket Expense_sheet_id",
                                             default='-1',
@@ -137,6 +152,55 @@ class HrExpenseSheetAdapter(Component):
     _collection = 'okticket.backend'
     _apply_on = 'okticket.hr.expense.sheet'
 
+    def _sheet_name_cache_key(self):
+        return (self.env.cr.dbname, self.backend_record.id)
+
+    def taken_sheet_names(self):
+        """Names already used by a report of this backend's company.
+
+        Loaded once and reused: the listing is one call for the whole company,
+        against one wasted POST per collision the other way round.
+
+        Never fails the export: if the listing cannot be read the caller simply
+        gets an empty set and falls back to probing the API, which is exactly
+        the previous behaviour.
+        """
+        key = self._sheet_name_cache_key()
+        cached = _SHEET_NAME_CACHE.get(key)
+        if cached and (time.monotonic() - cached['loaded_at']) < SHEET_NAME_CACHE_TTL:
+            return cached['names']
+
+        names = set()
+        try:
+            if self._auth():
+                result = self.okticket_api.find_expense_sheet_names(
+                    https=self.collection.https)
+                rows = (result or {}).get('result') or []
+                if isinstance(rows, dict):  # not paginated away for some reason
+                    rows = rows.get('data') or []
+                names = {row['name'] for row in rows
+                         if isinstance(row, dict) and row.get('name')}
+                _logger.info('Okticket: %s report names cached for backend %s',
+                             len(names), self.backend_record.name)
+        except Exception as exc:
+            _logger.warning('Okticket: could not list report names for backend %s '
+                            '(%s); falling back to probing names one by one',
+                            self.backend_record.name, exc)
+            return set()
+
+        _SHEET_NAME_CACHE[key] = {'names': names, 'loaded_at': time.monotonic()}
+        return names
+
+    def remember_sheet_name(self, name):
+        """Record a name just used, so two sheets of the same run cannot pick it."""
+        cached = _SHEET_NAME_CACHE.get(self._sheet_name_cache_key())
+        if cached and name:
+            cached['names'].add(name)
+
+    def invalidate_sheet_names(self):
+        """Drop the cache after OkTicket disagreed with it."""
+        _SHEET_NAME_CACHE.pop(self._sheet_name_cache_key(), None)
+
     def prepare_values(self, values):
         """
         Generates prepares valid values dictionary to create a expense sheet in Okticket from other one
@@ -151,7 +215,31 @@ class HrExpenseSheetAdapter(Component):
 
     def create(self, values):
         if self._auth():
-            result = self.create_expense_sheet(self.prepare_values(values))
+            try:
+                result = self.create_expense_sheet(self.prepare_values(values))
+            except UserError as e:
+                # OkTicket rejects a report whose name is already in use with a
+                # 422. That rejection used to be invisible (the 422 branch called
+                # .json() on an http.client response and the AttributeError was
+                # swallowed), which by accident returned a falsy value and made
+                # the caller retry under another name. Now that the 422 is
+                # reported properly it must be turned into that same falsy value
+                # here: letting it propagate aborts -- and rolls back -- the whole
+                # expense import over a single conflicting sheet name.
+                msg = _('Could not create the Okticket expense sheet "%s": %s') % (
+                    values.name, e)
+                self.env['log.event'].add_event({
+                    'backend_id': self.backend_record.id,
+                    'type': 'warning',
+                    'msg': msg,
+                })
+                _logger.warning(msg)
+                # The cached name list disagreed with the server, so it is stale
+                # (a report created elsewhere since it was read). Drop it: the
+                # next lookup reloads and the fallback probing takes over here.
+                self.invalidate_sheet_names()
+                return False
+            self.remember_sheet_name(values.name)
             result['log'].update({
                 'backend_id': self.backend_record.id,
                 'type': result['log'].get('type') or 'success',
@@ -181,6 +269,14 @@ class HrExpenseSheetAdapter(Component):
         return False
 
     def get_expenses_sheet_api(self, external_id):
+        """Every expense of an OkTicket report, following pagination.
+
+        This used to ask with ``only_data=False``, which returns just the first
+        page. With the documented per_page of 20, a report holding more expenses
+        reported only 20 as linked, so the exporter treated all the others as
+        missing and re-PATCHed them on every single write. ``only_data=True``
+        walks ``links.next`` / ``meta.last_page`` and returns the flat list.
+        """
         okticketapi = self.okticket_api
         path = '/reports/%s/expenses' % external_id
         url = okticketapi.get_full_path(path)
@@ -188,23 +284,40 @@ class HrExpenseSheetAdapter(Component):
             'Authorization': okticketapi.token_type + ' ' + okticketapi.access_token,
             'Content-Type': 'application/json', }
         return okticketapi.general_request(url, "GET", fields_dict={},
-                                           headers=header, only_data=False, https=self.collection.https)
+                                           headers=header, only_data=True, https=self.collection.https)
 
     def unlink_expenses_sheet(self, external_ids_to_unlink):
         """
         Unlink Okticket expenses from expense sheets
         :param external_ids_to_unlink: external_id list char
+
+        The unlink used to be issued *inside* the loop over a list that grew on
+        every iteration, so expense 1 was patched N times, expense 2 N-1 times
+        and so on: N(N+1)/2 PATCH calls for N expenses. A report holding a few
+        hundred stale expenses turned that into hundreds of thousands of API
+        calls. One pass, one batch.
         """
-        expenses_to_unlink = []
-        expenses_to_import = []
-        for external_id in external_ids_to_unlink:
-            # Obtains Odoo expense based on external_id
-            okticket_expense = self.env['okticket.hr.expense'].search([('external_id', '=', external_id)])
-            if okticket_expense:
-                expenses_to_unlink.append(okticket_expense.odoo_id)
-            else:
-                # If not exists, tries to import from Okticket
-                expenses_to_import.append(external_id)
+        if not external_ids_to_unlink:
+            return True
+        # Single query instead of one search per external id.
+        bindings = self.env['okticket.hr.expense'].search(
+            [('external_id', 'in', list(external_ids_to_unlink))])
+        expenses_to_unlink = bindings.mapped('odoo_id')
+
+        unknown_ids = set(external_ids_to_unlink) - set(bindings.mapped('external_id'))
+        if unknown_ids:
+            # These exist in the Okticket report but not in Odoo. Importing them
+            # is not implemented; say so instead of dropping them silently.
+            msg = _('Okticket expenses in the report with no Odoo counterpart, '
+                    'left untouched: %s') % ', '.join(sorted(unknown_ids))
+            self.env['log.event'].add_event({
+                'backend_id': self.backend_record.id,
+                'type': 'warning',
+                'msg': msg,
+            })
+            _logger.warning(msg)
+
+        if expenses_to_unlink:
             self.set_report_expense(False, expenses_to_unlink)
         return True
 
@@ -243,22 +356,51 @@ class HrExpenseSheetAdapter(Component):
         result = False
         try:
             result = self.set_report_expense(sheet_external_id, expenses_to_link)
-        except UserError as e:
-            # No puede cambiarse la hoja de gastos asignada a los gastos
-            # Se elimina la hoja de gastos en Odoo y Okticket (hoja que permanecería vacía)
-            # Los gastos permanecen sin hoja de gastos en Odoo
-
-            msg = _('\nError while trying to link expenses to Okticket expense sheet (id: %s): %s') % \
-                  (sheet_external_id, e)
-
-            # Log event
-            log_vals = {
-                'backend_id': self.backend_record.id,
-                'type': 'warning',
-                'msg': msg,
+        except UserError as error:
+            # The report is discarded only when it would stay empty, which is
+            # the case this branch was written for: a report just created for a
+            # batch that OkTicket then refuses. It used to be deleted
+            # unconditionally, so a report already holding every expense linked
+            # in earlier runs was destroyed as soon as a later batch was refused
+            # in full. Measured on the reference company: six reports of 144,
+            # 124, 113, 105, 94 and 81 expenses deleted in one pass, because the
+            # 70 records OkTicket answers 403 for were the whole batch of that
+            # run. The binding went with them, leaving the sheets unlinked.
+            expenses_in_report = self.get_expenses_sheet(sheet_external_id) or []
+            if isinstance(expenses_in_report, dict):
+                expenses_in_report = expenses_in_report.get('data') or []
+            sheet = expenses_to_link[0].sheet_id if expenses_to_link else False
+            msg = _('\nExpense sheet %(sheet)s (Odoo id %(sheet_id)s): none of the '
+                    '%(total)s expenses of this run could be linked to OkTicket report '
+                    '%(report)s. %(reason)s') % {
+                'sheet': sheet and sheet.name or '-',
+                'sheet_id': sheet and sheet.id or '-',
+                'total': len(expenses_to_link),
+                'report': sheet_external_id,
+                'reason': error,
             }
-            self.env['log.event'].add_event(log_vals)
+            if expenses_in_report:
+                msg += _(' The report is kept: it still holds %(held)s expenses linked in '
+                         'earlier runs, and deleting it would remove them from OkTicket '
+                         'too. The expenses of this run stay on the Odoo sheet with no '
+                         'OkTicket counterpart, so the two sides differ for those lines.') % {
+                    'held': len(expenses_in_report),
+                }
+            else:
+                msg += _(' The report holds no expense and is deleted.')
+
+            # 'error' and not 'warning': the sheet is left out of step with
+            # OkTicket, which someone has to reconcile by hand.
+            self.env['log.event'].add_event({
+                'backend_id': self.backend_record.id,
+                'type': 'error',
+                'msg': msg,
+            })
             _logger.error(msg)
+            if expenses_in_report:
+                # Truthy so the caller keeps the binding: the report is still
+                # the sheet's report, and the expenses it holds are still linked.
+                return True
             self.delete_expense_sheet(sheet_external_id)
 
         return result
@@ -272,16 +414,75 @@ class HrExpenseSheetAdapter(Component):
     #     return self.set_report_expense(sheet_external_id, expenses_to_link)
 
     def set_report_expense(self, report_id, expenses):
+        """Link the expenses of a sheet to their OkTicket report, one by one.
+
+        Each expense is attempted on its own. OkTicket refuses some of them with
+        a 403 and an empty body -- old records it no longer serves through
+        ``GET /expenses/{id}`` either, although they still come back in the
+        listing -- and a single refusal used to propagate out of here, make
+        ``link_expenses_sheet`` delete the report and leave *every* expense of
+        the sheet without one. Measured on the reference company: 70 of the 102
+        expenses older than the current year answer 403, and they dragged 431
+        perfectly good ones down with them.
+
+        A refused expense stays on the Odoo sheet and is reported in the
+        connector log. Detaching it is deliberately not done: an expense with no
+        sheet is the one state the destructive pre-import prune can delete, so
+        that would trade a divergence someone can reconcile for silent data loss.
+
+        :raise UserError: only when not a single expense could be linked. The
+            caller then discards the report if -- and only if -- it would stay
+            empty; a report already holding expenses is kept.
+        """
         expense_backend_adapter = self.component(usage='backend.adapter', model_name='okticket.hr.expense')
+        linked, refused = [], []
         for expense in expenses:
+            expense_external_id = expense.okticket_bind_ids and expense.okticket_bind_ids[0].external_id or False
+            if not expense_external_id:
+                continue
             vals_dict = {
                 'company_id': expense.company_id.okticket_company_id,
                 'user_id': expense.employee_id.okticket_user_id,
                 'report_id': report_id or "",
             }
-            expense_external_id = expense.okticket_bind_ids and expense.okticket_bind_ids[0].external_id or False
-            if expense_external_id:
+            try:
                 expense_backend_adapter.write_expense(expense_external_id, vals_dict)
+                linked.append(expense)
+            except Exception as exc:
+                refused.append((expense, expense_external_id, exc))
+                _logger.warning(
+                    'OkTicket refused expense %s (OkTicket id %s) for report %s: %s',
+                    expense.id, expense_external_id, report_id, exc)
+
+        if refused and not linked:
+            raise UserError(_(
+                'OkTicket refused every expense of this sheet (%(total)s of them). '
+                'First reason: %(reason)s') % {
+                    'total': len(refused),
+                    'reason': refused[0][2],
+                })
+
+        if refused:
+            # One entry per sheet rather than per expense: a sheet can carry
+            # dozens and the connector log has to stay readable.
+            msg = _('Expense sheet report %(report)s: %(linked)s of %(total)s expenses '
+                    'linked in OkTicket. The other %(refused)s were refused and stay on '
+                    'the Odoo sheet without their OkTicket counterpart, so the two sides '
+                    'differ for those lines. OkTicket ids: %(ids)s. First reason: '
+                    '%(reason)s') % {
+                'report': report_id,
+                'linked': len(linked),
+                'total': len(linked) + len(refused),
+                'refused': len(refused),
+                'ids': ', '.join(r[1] for r in refused[:10]) + ('...' if len(refused) > 10 else ''),
+                'reason': refused[0][2],
+            }
+            self.env['log.event'].add_event({
+                'backend_id': self.backend_record.id,
+                'type': 'error',
+                'msg': msg,
+            })
+            _logger.error(msg)
         return True
 
     def search(self, filters=False):
@@ -339,31 +540,72 @@ class HrExpenseSheetAdapter(Component):
         # Current Okticket expenses sheets state
         for sheet in expense_sheets:
             sheet_expense_external_id = sheet.okticket_bind_ids and sheet.okticket_bind_ids[0].external_id or False
-            if sheet_expense_external_id:
-                filter = {
-                    'sheet_expense_external_id': sheet_expense_external_id,
-                }
-                current_expense_sheet_oktk = expense_sheet_backend_adapter.search(filters=filter)
-                if current_expense_sheet_oktk:
-                    current_status_id = current_expense_sheet_oktk.get('status_id')
-                    # Checks if the action is valid
-                    if action_id in self._STATUS_TRANSITIONS.get(current_status_id, []):
-                        # Modify expenses sheet status
-                        expense_sheet_backend_adapter.workflow_expense_sheet(sheet_expense_external_id, action_id,
-                                                                             comments=comments)
-                    else:
-                        # If the action is not valid, raise a warning
-                        warning_msg = _('Okticket not permit the transition between this states. Status of expense sheet not sincronized') % (
-                            current_status_id, action_id)
-                        _logger.warning(warning_msg)
-
-                        # Añadir mensaje al chatter de la hoja de gastos
-                        sheet.message_post(
-                            body=warning_msg,
-                            message_type='comment',
-                            subtype_xmlid='mail.mt_comment'
-                        )
+            if not sheet_expense_external_id:
+                self._report_status_divergence(
+                    sheet, action_id,
+                    _('the sheet has no OkTicket report bound to it'))
+                continue
+            filter = {
+                'sheet_expense_external_id': sheet_expense_external_id,
+            }
+            current_expense_sheet_oktk = expense_sheet_backend_adapter.search(filters=filter)
+            if not current_expense_sheet_oktk:
+                self._report_status_divergence(
+                    sheet, action_id,
+                    _('OkTicket did not return the report %s') % sheet_expense_external_id)
+                continue
+            current_status_id = current_expense_sheet_oktk.get('status_id')
+            # Checks if the action is valid
+            if action_id in self._STATUS_TRANSITIONS.get(current_status_id, []):
+                # Modify expenses sheet status
+                expense_sheet_backend_adapter.workflow_expense_sheet(sheet_expense_external_id, action_id,
+                                                                     comments=comments)
+            else:
+                self._report_status_divergence(
+                    sheet, action_id,
+                    _('OkTicket does not allow it from its current status %s')
+                    % current_status_id)
         return True
+
+    def _report_status_divergence(self, sheet, action_id, reason):
+        """Record that an Odoo state change could not be pushed to OkTicket.
+
+        Every one of the three ways this can happen used to be silent in the
+        connector log: no binding and "report not returned" said nothing at all,
+        and the disallowed transition only reached the Python log and the sheet
+        chatter. Resetting a *posted* sheet to draft is the case that bites --
+        Odoo allows it, ``_STATUS_TRANSITIONS`` defines nothing for status 35
+        beyond paying, so Odoo went back to draft while OkTicket stayed posted
+        with nothing recorded anywhere an operator looks.
+
+        Closing the workflow gap needs the customer's real process (see INT-807
+        of the integration plan); making the divergence visible does not, and is
+        what this does.
+        """
+        msg = _('Expense sheet "%(sheet)s" is now "%(state)s" in Odoo but the '
+                'status could not be sent to OkTicket (action %(action)s): '
+                '%(reason)s. Both sides are out of sync until someone fixes it '
+                'by hand.') % {
+            'sheet': sheet.display_name,
+            'state': sheet.state,
+            'action': action_id,
+            'reason': reason,
+        }
+        _logger.warning(msg)
+        backend = sheet.okticket_bind_ids[:1].backend_id or \
+            self.env['okticket.backend'].search(
+                [('company_id', '=', sheet.company_id.id)], limit=1)
+        if backend:
+            self.env['log.event'].add_event({
+                'backend_id': backend.id,
+                'type': 'warning',
+                'msg': msg,
+            })
+        sheet.message_post(
+            body=msg,
+            message_type='comment',
+            subtype_xmlid='mail.mt_comment',
+        )
 
     def workflow_expense_sheet(self, sheet_expense_external_id, action_id, comments='No comment'):
         if self._auth():

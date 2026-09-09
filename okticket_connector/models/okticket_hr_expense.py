@@ -1,6 +1,23 @@
 from odoo import fields, models, _
 from odoo.addons.component.core import Component
 
+# Fields asked for when listing expenses. The list matters for one reason: the
+# API answers HTTP 500 while serialising ``review`` on at least one record of
+# the reference company, and since a listing without ``fields`` returns every
+# field, any wide listing died halfway through. Reproducible with
+# ``updated_after=2000-01-01T00:00:00&limit=1&page=729``: 500 as it stands, 200
+# with any ``fields`` set that leaves ``review`` out, 500 again as soon as it is
+# added back. Everything the connector maps is here; ``review`` is added only
+# when the backend actually filters by it.
+EXPENSE_LIST_FIELDS = (
+    '_id,id,amount,currency,rate,rate_amount,rate_datetime,rate_source,date,'
+    'type_id,category_id,user_id,company_id,status_id,accounted,taxes,cif,name,'
+    'comments,custom_fields,report_id,remote_uri,remote_path,local_path,'
+    'signed_pdf_url,image_source,source,ticket_num,cost_center_id,department_id,'
+    'card_id,payment_method,payment_method_id,tax_model_id,country_code,ocr,'
+    'integrity_hash,app_version,created_at,created_by,updated_at,deleted_at'
+)
+
 
 class HrExpense(models.Model):
     _inherit = 'hr.expense'
@@ -36,7 +53,10 @@ class HrExpense(models.Model):
             raise ValueError(_('Value should be string (not %s)') % type(value).__name__)
 
         odoo_ids = self.env['okticket.hr.expense'].search([('external_id', operator, value)]).mapped('odoo_id').ids
-        return [('id', 'in', odoo_ids)] if odoo_ids else []
+        # Always a well-formed leaf: an empty domain makes the leaf vanish and
+        # unbalances expression.parse() ("IndexError: pop from empty list")
+        # whenever this field is combined with another one.
+        return [('id', 'in', odoo_ids)]
 
 
 class OkticketExpense(models.Model):
@@ -92,7 +112,15 @@ class ExpensesAdapter(Component):
         if not self._auth():
             return []
 
-        params_dict = {'accounted': 'false', 'statuses': '0,1,2'}
+        params_dict = {
+            'accounted': 'false',
+            'statuses': '0,1,2',
+            'fields': EXPENSE_LIST_FIELDS,
+        }
+        if self.backend_record.import_only_reviewed_expenses:
+            # Needed to honour the option, and it is the field that makes the
+            # API answer 500, so it is only requested when it is actually read.
+            params_dict['fields'] += ',review'
 
         if filters and 'params' in filters and isinstance(filters['params'], dict):
             params_dict.update(filters['params'])
@@ -116,3 +144,14 @@ class ExpensesAdapter(Component):
             return []
 
         return result['result']
+
+    def last_listing_was_truncated(self):
+        """Whether the last listing stopped on an error instead of its end.
+
+        The importer needs this before advancing ``import_expenses_since``: a
+        truncated listing that still moves the watermark forward leaves the
+        records it never fetched behind the cut-off, and they never enter the
+        incremental window again.
+        """
+        api = getattr(self, 'okticket_api', None)
+        return bool(api is not None and getattr(api, 'last_listing_truncated', False))

@@ -471,9 +471,9 @@ msgstr "Vínculos de hojas de gastos de OkTicket"
 #. odoo-python
 #: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
 msgid ""
-"Okticket not permit the transition between this states. Status of expense sheet not sincronized"
+"Okticket not permit the transition between this states (current status: %s, action: %s). Status of expense sheet not sincronized"
 msgstr ""
-"OkTicket no permite cambio entre estos estados. Estado de hoja de gastos no sincronizado"
+"OkTicket no permite cambio entre estos estados (estado actual: %s, acción: %s). Estado de hoja de gastos no sincronizado"
 
 #. module: okticket_connector_hr_expense_sheet
 #. odoo-python

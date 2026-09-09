@@ -35,11 +35,24 @@ class ProductTemplateBatchImporter(Component):
              ('can_be_expensed', '=', True),
              ('rebillable_product_version', '=', False)]
         )
-        if existing:
-            for prod in existing:
-                if prod.okticket_bind_ids:
-                    return {'odoo_id': prod.id}
-            return {'odoo_id': existing[0].id}
+        if not existing:
+            return
+        # Prefer a product already bound to *this* backend. The previous version
+        # accepted a product bound to any backend, so with several backends the
+        # second one adopted -- and rebound to itself -- the product templates
+        # of the first company, cross-wiring the bindings.
+        own = existing.filtered(
+            lambda p: p.okticket_bind_ids.filtered(
+                lambda b: b.backend_id == self.backend_record
+            )
+        )
+        if own:
+            return {'odoo_id': own[0].id}
+        # Then an unbound one, rather than stealing another backend's binding.
+        unbound = existing.filtered(lambda p: not p.okticket_bind_ids)
+        if unbound:
+            return {'odoo_id': unbound[0].id}
+        return {'odoo_id': existing[0].id}
 
     @mapping
     def type(self, record):
@@ -80,6 +93,26 @@ class ProductTemplateBatchImporter(Component):
             binding = binder.to_internal(product_ext_vals.get('id'))
 
             if not binding:
+                # Already imported by another backend: reuse it, do not import it
+                # again. These products carry no company and every company sees
+                # them, and okticket_categ_prod_id resolves through *any*
+                # backend's binding, so a second binding for the same OkTicket
+                # category would only duplicate. The company-dependent invoice and
+                # rebillable links still have to be written for this company,
+                # which is what the two load_* calls below do.
+                already = self.model.with_context(active_test=False).search(
+                    [('external_id', '=', str(product_ext_vals['id'])),
+                     ('backend_id', '!=', self.backend_record.id)], limit=1)
+                if already:
+                    _logger.info('Category %s already imported by backend %s; reusing '
+                                 'product %s', product_ext_vals['id'],
+                                 already.backend_id.name, already.odoo_id.display_name)
+                    odoo_product = binder.unwrap_binding(already)
+                    if odoo_product:
+                        odoo_product.load_rebillable_product_version()
+                        odoo_product.load_invoice_product_version()
+                    okticket_product_template_ids.append(already.id)
+                    continue
                 if internal_data.get('odoo_id'):
                     binding = self.model.search([
                         (binder._odoo_field, '=', internal_data['odoo_id']),
