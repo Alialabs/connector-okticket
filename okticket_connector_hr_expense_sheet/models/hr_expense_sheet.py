@@ -13,6 +13,18 @@ from odoo import fields, models, api
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
+from enum import Enum
+
+class OkticketSheetStatusTransitions(Enum):
+    REFUSE_FROM_APPROVED = 352  # Cancel from aprroved
+    REFUSE_FROM_SUBMIT = 350    # Cancel from submitted
+    RESET_FROM_SUBMIT = 348     # Reset (Draft) from submitted
+    RESET_FROM_CANCEL = 354     # Reset (Draft) from rejected
+    SUBMIT = 347                # Submit
+    APPROVE = 349               # Approve
+    POST = 351                  # Post
+    PAID = 353                  # Paid
+
 
 
 class HrExpenseBatchImporter(Component):
@@ -148,54 +160,115 @@ class HrExpenseBatchImporter(Component):
         """
         hr_expense_sheet_obj = self.env['hr.expense.sheet']
 
-        for expense_data in grouped_expenses:
-            # Inicializa la variable para la nueva hoja de gastos
-            new_sheet = False
-
-            # Construye el dominio de búsqueda para la hoja de gastos
-            # sheet_domain = []
-            sheet_domain = [('state', 'in', ['draft'])]
-            for sheet_field, sheet_value in expense_data['group_fields'].items():
-                if sheet_field != 'analytic_ids' or sheet_value:
-                    # Si el campo no es 'analytic_ids' o si lo es pero tiene un valor, añadir al dominio
-                    sheet_domain.append((sheet_field, '=', sheet_value))
-                else:
-                    # Si no hay cuenta analítica, usar 'IS NULL'
-                    sheet_domain.append(('analytic_ids', '=', False))
-
-            # Valores a actualizar/crear en la hoja de gastos
-            expense_sheet_values = {
-                'expense_line_ids': [(4, expense_data['expense'].id)],
-            }
-
-            # Busca si ya existe una hoja de gastos con el dominio especificado
-            hr_expense_sheet = hr_expense_sheet_obj.search(sheet_domain)
-
-            if hr_expense_sheet:  # Actualiza la hoja existente
-                hr_expense_sheet.write(expense_sheet_values)
-            else:  # Crea una nueva hoja de gastos
-                new_sheet_values = {}
-                for sheet_field, sheet_value in expense_data['group_fields'].items():
-                    if sheet_field not in new_sheet_values:
-                        new_sheet_values[sheet_field] = sheet_value
-
-                # Agrega el nombre de la hoja si está disponible
-                if 'sheet_name' in expense_data and expense_data['sheet_name']:
-                    new_sheet_values['name'] = expense_data['sheet_name']
-
-                # Prepara y actualiza los valores de la nueva hoja de gastos
-                new_sheet_values = hr_expense_sheet_obj.prepare_expense_sheet_values(new_sheet_values)
-                new_sheet_values.update(expense_sheet_values)
-
-                # Crea la nueva hoja de gastos
-                new_sheet = hr_expense_sheet_obj.create(new_sheet_values)
-
-                # Manejo de errores durante la sincronización con Okticket
-                if new_sheet and not new_sheet.okticket_bind_ids \
-                        and self.collection.okticket_exp_sheet_sync:
-                    new_sheet.unlink()  # Elimina la hoja de gastos si ocurre un error
+        for expense_data in self._batch_grouped_expenses(grouped_expenses):
+            # One unusable sheet must not abort the whole import. Creating a sheet
+            # pushes it to OkTicket, so anything from a duplicated report name to a
+            # network error used to propagate all the way up and roll back every
+            # expense imported in this run -- the expenses were already in Odoo but
+            # the transaction was discarded, so nothing arrived.
+            try:
+                with self.env.cr.savepoint():
+                    self._manage_grouped_expense(hr_expense_sheet_obj, expense_data)
+            except Exception as e:
+                msg = _('Could not build the expense sheet for expenses %s: %s') % (
+                    expense_data['expenses'].ids, e)
+                self.env['log.event'].add_event({
+                    'backend_id': self.backend_record.id,
+                    'type': 'error',
+                    'msg': msg,
+                })
+                _logger.error(msg)
 
         return grouped_expenses
+
+    def _batch_grouped_expenses(self, grouped_expenses):
+        """Merge the per-expense entries that end up on the same expense sheet.
+
+        The classification methods emit one entry per expense, and each entry used
+        to issue its own ``write`` on the sheet. Every write fires
+        ``on_record_write``, which re-exports the whole sheet and re-PATCHes every
+        expense already linked to it, so filling a sheet with N expenses cost
+        O(N^2) API calls -- a report with 97 expenses meant around 3000 PATCH
+        calls where 97 suffice. Grouping first means one write, and therefore one
+        export, per sheet.
+
+        The key is the grouping fields plus the sheet name, so the methods that
+        deliberately produce one sheet per expense (``single_expense``, which puts
+        the expense name in the key) keep doing exactly that.
+        """
+        batches = {}
+        for index, expense_data in enumerate(grouped_expenses):
+            group_fields = expense_data.get('group_fields') or {}
+            # repr() keeps the key hashable whatever the classification method put
+            # in the grouping fields (ids, selection values, dates, False).
+            key = (
+                tuple(sorted((field, repr(value)) for field, value in group_fields.items())),
+                repr(expense_data.get('sheet_name')),
+            )
+            if 'name' in group_fields:
+                # ``single_expense`` grouping: the expense's own name is part of the
+                # key, so every entry is meant to get its own sheet -- including two
+                # expenses that share employee, payment mode *and* name, which the
+                # demo data does contain. Merging them would silently turn N sheets
+                # into fewer, so those entries are never batched together.
+                key = key + (index,)
+            batch = batches.get(key)
+            if batch is None:
+                batch = dict(expense_data)
+                batch['expenses'] = self.env['hr.expense'].browse()
+                batches[key] = batch
+            if expense_data.get('expense'):
+                batch['expenses'] |= expense_data['expense']
+        return list(batches.values())
+
+    def _manage_grouped_expense(self, hr_expense_sheet_obj, expense_data):
+        """Create or update the hr.expense.sheet for a batch of grouped expenses."""
+        # Construye el dominio de búsqueda para la hoja de gastos
+        sheet_domain = [('state', 'in', ['draft'])]
+        for sheet_field, sheet_value in expense_data['group_fields'].items():
+            if sheet_field != 'analytic_ids' or sheet_value:
+                # Si el campo no es 'analytic_ids' o si lo es pero tiene un valor, añadir al dominio
+                sheet_domain.append((sheet_field, '=', sheet_value))
+            else:
+                # Si no hay cuenta analítica, usar 'IS NULL'
+                sheet_domain.append(('analytic_ids', '=', False))
+
+        # Valores a actualizar/crear en la hoja de gastos
+        # Un solo comando por hoja: el listener de export se dispara una vez.
+        expenses = expense_data.get('expenses')
+        if expenses is None:  # llamada directa con una única expense
+            expenses = expense_data['expense']
+        expense_sheet_values = {
+            'expense_line_ids': [(4, expense_id) for expense_id in expenses.ids],
+        }
+
+        # Busca si ya existe una hoja de gastos con el dominio especificado
+        hr_expense_sheet = hr_expense_sheet_obj.search(sheet_domain)
+
+        if hr_expense_sheet:  # Actualiza la hoja existente
+            hr_expense_sheet.write(expense_sheet_values)
+            return
+
+        # Crea una nueva hoja de gastos
+        new_sheet_values = {}
+        for sheet_field, sheet_value in expense_data['group_fields'].items():
+            if sheet_field not in new_sheet_values:
+                new_sheet_values[sheet_field] = sheet_value
+
+        # Agrega el nombre de la hoja si está disponible
+        if 'sheet_name' in expense_data and expense_data['sheet_name']:
+            new_sheet_values['name'] = expense_data['sheet_name']
+
+        # Prepara y actualiza los valores de la nueva hoja de gastos
+        new_sheet_values = hr_expense_sheet_obj.prepare_expense_sheet_values(new_sheet_values)
+        new_sheet_values.update(expense_sheet_values)
+
+        new_sheet = hr_expense_sheet_obj.create(new_sheet_values)
+
+        # Manejo de errores durante la sincronización con Okticket
+        if new_sheet and not new_sheet.okticket_bind_ids \
+                and self.collection.okticket_exp_sheet_sync:
+            new_sheet.unlink()  # Elimina la hoja de gastos si ocurre un error
 
     def sanitize_expenses(self, hr_expense_ids):
         """
@@ -341,6 +414,9 @@ class HrExpenseSheet(models.Model):
         })
         return raw_values
 
+    # --------------------------------------------
+    # Redefined flow actions
+    # --------------------------------------------
     def action_submit_sheet(self):
         """
         "Send to responsable"
@@ -351,34 +427,46 @@ class HrExpenseSheet(models.Model):
         super(HrExpenseSheet, self).action_submit_sheet()
         for expense in self.expense_line_ids:
             expense._okticket_accounted_expense(new_state=True)  # 'accounted': 'True'
-        action_id = 347
+        action_id = OkticketSheetStatusTransitions.SUBMIT.value
         self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
 
-    def reset_expense_sheets(self):
+    def approve_expense_sheets(self):
         """
-        From "Enviada" and "Rechazada" state: "Cambiar a borrador"/"Reabrir(Empleado)"
-        From "Aprobada" state: "Rechazada" + "Cambiar a borrador"/"Reabrir(Empleado)"
+        "Aprobar"/"Aprobar(Admin)"
         Implied actions:
-            - Set 'accounted' = 'false' in expenses from Okticket expense sheet.
-            - Action [352] Okticket from "Aprobada" to "Rechazada" state
-            - Action [348] Okticket from "Enviada" state
-            - Action [354] Okticket from "Rechazada" state
+            - Action [349] Okticket
+
+        'approve_expense_sheets' y no 'action_approve_expense_sheets': el metodo
+        se renombro en 17.0. Con el nombre de la version superior la redefinicion
+        no la llama nadie -- el boton del formulario invoca el del core -- asi que
+        la accion 349 no llegaba nunca a OkTicket y el informe se quedaba en el
+        estado del envio. Medido: 0 llamadas a /actions/349 en una bateria
+        completa, y despues las acciones 351 y 353 rechazadas por OkTicket
+        precisamente por venir de ese estado.
         """
+        super(HrExpenseSheet, self).approve_expense_sheets()
+        # Product "expense" is included as sale.order.line in sale.order related with hr.expense
+        action_id = OkticketSheetStatusTransitions.APPROVE.value
+        self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
 
-        if self.state == 'approve':
-            self.refuse_sheet('')
+    def action_sheet_move_create(self):
+        """
+           "Registrar asientos"
+           Implied actions:
+               - Action [351, 353] Okticket
+        """
+        res = super(HrExpenseSheet, self).action_sheet_move_create()
+        action_id = OkticketSheetStatusTransitions.POST.value
+        self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
+        if self.payment_mode == 'company_account':
+            # Si el modo de pago es 'company_account', se registra el pago automáticamente
+            action_id = OkticketSheetStatusTransitions.PAID.value
+            self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
+        return res
 
-        if self.state == 'cancel':
-            action_id = 354  # From "Rechazada"
-        elif self.state == 'submit':
-            action_id = 348  # From "Enviada"
-
-        if super(HrExpenseSheet, self).reset_expense_sheets():
-            # Check if exists sheet. It could be deleted if only had one expense with okticket_deleted  = True
-            if self.search([('id', '=', self.id)]):
-                for expense in self.expense_line_ids:
-                    expense._okticket_accounted_expense(new_state=False)
-                self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
+    # --------------------------------------------
+    # Redefined flow actions
+    # --------------------------------------------
 
     def refuse_sheet(self, reason):
         """
@@ -387,55 +475,77 @@ class HrExpenseSheet(models.Model):
             - Set'accounted' = 'false' in expenses from Okticket expense sheet.
             - Action [350] Okticket from "Enviada" state
             - Action [352] Okticket from "Aprobada" state
+
+        'refuse_sheet' y no '_do_refuse': 16.0 no tiene '_do_refuse' -- se
+        introdujo despues -- y el rechazo entra directamente por 'refuse_sheet',
+        de modo que con el nombre de la version superior la redefinicion quedaba
+        muerta y el rechazo no viajaba a OkTicket. El estado se lee antes de
+        llamar al core porque el core ya lo cambia a 'cancel'.
         """
         if self.state == 'approve':
-            action_id = 352  # From "Aprobada"
+            action_id = OkticketSheetStatusTransitions.REFUSE_FROM_APPROVED.value  # From "Aprobada"
         else:
-            action_id = 350  # From "Enviada"
+            action_id = OkticketSheetStatusTransitions.REFUSE_FROM_SUBMIT.value  # From "Enviada"
         super(HrExpenseSheet, self).refuse_sheet(reason)
         for expense in self.expense_line_ids:
             expense._okticket_accounted_expense(new_state=False)
         self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id, comments=reason)
 
-    def approve_expense_sheets(self):
+    def reset_expense_sheets(self):
         """
-        "Aprobar"/"Aprobar(Admin)"
-        Implied actions:
-            - Action [349] Okticket
-        """
-        super(HrExpenseSheet, self).approve_expense_sheets()
-        # Product "expense" is included as sale.order.line in sale.order related with hr.expense
-        action_id = 349
-        self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
+        Available when state in ('submit', 'cancel', 'approve')"
 
-    def action_sheet_move_create(self):
-        """
-        "Publicar asientos"/"Publicar asientos(Admin)"
-        Implied actions:
-            - Action [351] Okticket
-        """
-        res = super(HrExpenseSheet, self).action_sheet_move_create()
-        if res:
-            action_id = 351
-            self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
-        return res
+        'reset_expense_sheets' y no 'action_reset_expense_sheets' /
+        'action_reset_approval_expense_sheets': en 16.0 solo existe el primero.
+        Las dos redefiniciones de la version superior quedaban muertas y, ademas,
+        una de ellas llamaba a un super() inexistente.
 
-    def action_sheet_payment_registry(self, body):
+        From "Enviada" and "Rechazada" state: "Cambiar a borrador"/"Reabrir(Empleado)"
+        From "Aprobada" state: "Rechazada" + "Cambiar a borrador"/"Reabrir(Empleado)"
+        Implied actions:
+            - Set 'accounted' = 'false' in expenses from Okticket expense sheet.
+            - Action [352] Okticket from "Aprobada" to "Rechazada" state
+            - Action [348] Okticket from "Enviada" state.  Submit to "Draft" state
+            - Action [354] Okticket from "Rechazada" state Submit to "Cancel" state
         """
+
+        reset_from_approved = False
+        if self.state == 'approve':
+            reset_from_approved = True
+
+        action_id = OkticketSheetStatusTransitions.RESET_FROM_SUBMIT.value  # From "Enviada"
+        if self.state == 'cancel':
+            action_id = OkticketSheetStatusTransitions.RESET_FROM_CANCEL.value  # From "Rechazada"
+
+        if super(HrExpenseSheet, self).reset_expense_sheets():
+            # Check if exists sheet. It could be deleted if only had one expense with okticket_deleted  = True
+            if self.search([('id', '=', self.id)]):
+                for expense in self.expense_line_ids:
+                    expense._okticket_accounted_expense(new_state=False)
+                if reset_from_approved:
+                    # Force flow in okticket to change state from approved to draft
+                    action_id = OkticketSheetStatusTransitions.REFUSE_FROM_APPROVED.value  # From "Aprobada"
+                    self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
+                    action_id = OkticketSheetStatusTransitions.RESET_FROM_CANCEL.value  # From "Cancel"
+                    self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
+                else:
+                    self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
+
+    def okticket_sheet_payment_registry(self):
+        """
+        Hook defined in hr_expense_sheet
         "Registrar pago"/"Registrar pago(Admin)"
         Implied actions:
             - Action [353] Okticket
         """
-        action_id = 353
+        action_id = OkticketSheetStatusTransitions.PAID.value
         self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
-
-    # def action_unpost
 
     @api.returns('mail.message', lambda value: value.id)
     def message_post(self, body='', **kwargs):
         result = super(HrExpenseSheet, self).message_post(body=body, **kwargs)
-        if result and self.env.context and self.env.context.get('okticket_synch'):
-            self.action_sheet_payment_registry(body)
+        if result and self.env.context and self.env.context.get('okticket_payment_sync'):
+            self.okticket_sheet_payment_registry()
         return result
 
     def unlink(self):
@@ -446,6 +556,6 @@ class AccountPaymentRegister(models.TransientModel):
     _inherit = 'account.payment.register'
 
     def _create_payments(self):
-        super(AccountPaymentRegister, self.with_context(
-            okticket_synch=True,
+        return super(AccountPaymentRegister, self.with_context(
+            okticket_payment_sync=True,
         ))._create_payments()

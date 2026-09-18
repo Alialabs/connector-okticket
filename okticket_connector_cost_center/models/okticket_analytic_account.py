@@ -40,12 +40,12 @@ class AccountAnalyticAccount(models.Model):
             raise ValueError(_('This operator is not supported'))
         if not isinstance(value, int):
             raise ValueError(_('Value should be integer (not %s)'), value)
-        domain = []
         odoo_ids = self.env['okticket.account.analytic.account'].search([
             ('external_id', operator, value)]).mapped('odoo_id').ids
-        if odoo_ids:
-            domain.append(('id', 'in', odoo_ids))
-        return domain
+        # Always a well-formed leaf: an empty domain makes the leaf vanish and
+        # unbalances expression.parse() ("IndexError: pop from empty list")
+        # whenever this field is combined with another one.
+        return [('id', 'in', odoo_ids)]
 
     okticket_cost_center_id = fields.Integer(string="OkTicket Cost_center_id",
                                              default=-1.0,
@@ -69,8 +69,15 @@ class AccountAnalyticAccount(models.Model):
     def _okticket_unlink(self):
         """
         Delete cost center object in OkTicket related with current account.analytic.account
+
+        Una cuenta cada vez: 'project.unlink' acumula las cuentas analiticas de
+        todos los proyectos que se borran y llama aqui una sola vez, mientras que
+        'delete_cost_center' lee 'acc_analyt.company_id' para resolver el backend.
+        Con mas de una cuenta eso levanta "Expected singleton" y el borrado falla
+        entero. Reproducido en 16.0 borrando dos proyectos a la vez desde la lista.
         """
-        self.env['okticket.account.analytic.account'].sudo().delete_cost_center(self)
+        for record in self:
+            self.env['okticket.account.analytic.account'].sudo().delete_cost_center(record)
 
     def _okticket_modify_cc_name(self):
         """
@@ -92,6 +99,7 @@ class AccountAnalyticAccount(models.Model):
 
 class OkticketAccountAnalyticAccount(models.Model):
     _name = 'okticket.account.analytic.account'
+    _description = 'Okticket Account Analytic Account Binding'
     _inherit = 'okticket.binding'
     _inherits = {'account.analytic.account': 'odoo_id'}
 

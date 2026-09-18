@@ -25,7 +25,7 @@ msgstr ""
 #. module: okticket_hr_expense_reporting
 #: model:ir.actions.report,print_report_name:okticket_hr_expense_reporting.action_report_img_hr_expense
 msgid "'Expenses'"
-msgstr ""
+msgstr "'Gastos'"
 
 #. module: okticket_hr_expense_reporting
 #: model_terms:ir.ui.view,arch_db:okticket_hr_expense_reporting.okticket_external_layout
@@ -34,24 +34,27 @@ msgid ""
 "                        Expenses report\n"
 "                    </span>"
 msgstr ""
+"<span style=\"font-size:30px;\">\n"
+"                        Informe de gastos\n"
+"                    </span>"
 
 #. module: okticket_hr_expense_reporting
 #: model:ir.actions.report,name:okticket_hr_expense_reporting.action_report_img_hr_expense
 msgid "Expenses Image Report"
-msgstr ""
+msgstr "Informe del gasto con los justificantes"
 
 #. module: okticket_hr_expense_reporting
 #: model:ir.actions.report,name:okticket_hr_expense_reporting.action_report_img_hr_expense_sheet
 msgid "Expenses Sheet Image Report"
-msgstr ""
+msgstr "Informe de la hoja con los justificantes"
 
 #. module: okticket_hr_expense_reporting
 #: model_terms:ir.ui.view,arch_db:okticket_hr_expense_reporting.report_img_expense
 #: model_terms:ir.ui.view,arch_db:okticket_hr_expense_reporting.report_img_expense_sheet
 msgid "IMG N.A."
-msgstr ""
+msgstr "IMG N/D"
 
 #. module: okticket_hr_expense_reporting
 #: model_terms:ir.ui.view,arch_db:okticket_hr_expense_reporting.okticket_external_layout
 msgid "Logo"
-msgstr ""
+msgstr "Logotipo"

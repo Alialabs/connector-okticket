@@ -33,6 +33,11 @@ class OkticketBinding(models.AbstractModel):
     @api.model
     def import_batch(self, backend, filters=None, **kwargs):
         """ Prepares a batch import of records from OkTicket """
+        if not backend:
+            # No backend configured (e.g. employee created in a company
+            # without Okticket backend): nothing to import
+            _logger.warning('No Okticket backend available, skipping batch import of %s', self._name)
+            return
         backend.ensure_one()
         filters = filters or {}
         with backend.work_on(self._name) as work:

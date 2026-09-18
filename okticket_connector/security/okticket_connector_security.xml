@@ -27,4 +27,14 @@
         <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
     </record>
 
+    <!-- Sin esta regla la tabla de impuestos del producto muestra las filas de
+         todas las companias a la vez. Como la clave es producto + compania +
+         tipo, con dos companias sobre el mismo plan contable cada tipo aparece
+         dos veces con el mismo nombre de impuesto y se lee como un duplicado. -->
+    <record id="okticket_product_tax_mapping_company_rule" model="ir.rule">
+        <field name="name">Okticket Product Tax Mapping Multi-Company</field>
+        <field name="model_id" ref="model_okticket_product_tax_mapping"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+
 </odoo>
