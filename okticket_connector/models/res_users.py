@@ -15,8 +15,9 @@ class ResUsers(models.Model):
              "will be used instead.")
 
     @property
-    def SELF_WRITEABLE_FIELDS(self):
-        return super().SELF_WRITEABLE_FIELDS + [
-            "okticket_backend_ids",
-        ]
+    def SELF_READABLE_FIELDS(self):
+        return super().SELF_READABLE_FIELDS + ['okticket_backend_ids']
 
+    @property
+    def SELF_WRITEABLE_FIELDS(self):
+        return super().SELF_WRITEABLE_FIELDS + ['okticket_backend_ids']

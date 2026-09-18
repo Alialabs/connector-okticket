@@ -59,6 +59,37 @@ class RequestEntityTooLargeError(BaseOkticketError):
         super().__init__("The requested resource doesn't allow POST requests or the size of the request exceeds the capacity limit")
 
 
+class RateLimitError(BaseOkticketError):
+    """Okticket per-minute call limit exceeded (HTTP 429).
+
+    The API enforces a per-client calls-per-minute limit, reported in the
+    X-RateLimit-Limit / X-RateLimit-Remaining response headers. ``retry_after``
+    holds the seconds to wait before retrying, when the API reports it.
+    """
+    def __init__(self, retry_after=None):
+        self.retry_after = retry_after
+        super().__init__(
+            'Okticket call limit per minute exceeded'
+            + (f', retry after {retry_after}s' if retry_after else '')
+        )
+
+
+class GatewayError(BaseOkticketError):
+    """Bad gateway / service unavailable / gateway timeout (502, 503, 504).
+
+    Not an answer from the API but from whatever sits in front of it, and
+    transient by nature: the load balancer had no healthy upstream for that
+    instant. It used to fall through to ``UnknownError``, so a single blip
+    aborted the operation with "Okticket returned unknown error with the code
+    502" instead of being retried like a dropped connection.
+    """
+    def __init__(self, code):
+        self.code = code
+        super().__init__(
+            'Okticket gateway error (%s); the service is temporarily '
+            'unreachable' % code)
+
+
 class UnknownError(BaseOkticketError):
     """Okticket returned unknown error."""
     def __init__(self, code):

@@ -443,3 +443,8 @@ msgstr "Cuenta analítica Okticket"
 #: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.view_okticket_backend_form
 msgid "⇒ See Analytic Account Bindings"
 msgstr "⇒ Ver Bindings de cuentas analíticas"
+
+#. module: okticket_connector_cost_center
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_res_company__create_cost_center_automatically
+msgid "Create Costs Center Automatically"
+msgstr "Crear centros de coste automáticamente"

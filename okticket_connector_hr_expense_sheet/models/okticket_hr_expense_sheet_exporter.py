@@ -8,8 +8,12 @@ from datetime import datetime
 from odoo import _
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
+
+# Numbered suffixes tried against the API before falling back to a timestamp.
+MAX_SHEET_NAME_ATTEMPTS = 20
 
 
 class HrExpenseSheetMapper(Component):
@@ -33,38 +37,82 @@ class HrExpenseExporter(Component):
     _apply_on = 'okticket.hr.expense.sheet'
     _usage = 'record.exporter'
 
+    def apply_free_sheet_name(self, expense_sheet, backend_adapter):
+        """Pick a name no report of this company holds, without asking the API.
+
+        The names are read once per run and per backend (a single call for the
+        whole company), so the candidate is decided in memory. Posting a name
+        just to be told it is taken costs a write attempt and leaves a warning in
+        the log for something that is not an incident -- 16 of them in a run over
+        a company that already had reports from previous runs.
+
+        Falls through silently when the listing is unavailable: an empty set
+        means "unknown", not "nothing is taken", and the caller still has
+        ``generate_new_expense_sheet`` to probe the server the old way.
+
+        The numbering matches that fallback exactly, so a sheet gets the same
+        name whichever path resolved it.
+        """
+        taken = backend_adapter.taken_sheet_names()
+        base_name = expense_sheet.name
+        if not taken or base_name not in taken:
+            return base_name
+
+        for index in range(1, MAX_SHEET_NAME_ATTEMPTS + 1):
+            candidate = '%s | %s' % (base_name, index)
+            if candidate not in taken:
+                expense_sheet.write({'name': candidate})
+                return candidate
+
+        candidate = '%s-%s' % (base_name, str(datetime.now())[:-7])
+        expense_sheet.write({'name': candidate})
+        return candidate
+
     def generate_new_expense_sheet(self, expense_sheet, backend_adapter):
         """
         Generates new expenses sheet with different name for avoiding conflict with any other expense sheet in
         Okticket with a state different from 'draft', a different payment method or a different employee from the
         expense to add.
-        """
-        index = 0
-        date_now = datetime.now()
-        date_str = str(date_now)[:-7]
-        new_name_to_test = expense_sheet.name
-        # new_name_to_test = expense_sheet.name + '-' + date_str
-        # new_name_to_test = new_name_to_test.replace(" ", "_")
-        found_exp_sheets = True
-        max_tries = 20  # Tries search a valid name until 20 times
-        while found_exp_sheets:
-            found_exp_sheets = backend_adapter.search({'name': new_name_to_test})
-            if found_exp_sheets:
-                new_name_to_test = expense_sheet.name + ' | ' + str(index + 1)
-                index += 1
-            max_tries -= 1
-            if max_tries == 0:
-                new_name_to_test = expense_sheet.name + '-' + date_str
-                # raise Exception(_("(generate_new_expense_sheet): It is not possible to find a valid name for "
-                #                   "expenses sheet: %s"), expense_sheet.name)
 
+        Fallback path. ``apply_free_sheet_name`` resolves the name from the
+        cached listing before the first attempt, so this now only runs when that
+        listing was unavailable, or when the server disagreed with it because a
+        report appeared after it was read.
+
+        The name used to be probed with ``backend_adapter.search({'name': ...})``
+        before each attempt, up to twenty times. That probe was extremely
+        expensive and unreliable at once: ``search`` fetches ``/reports`` with
+        ``only_data`` set, so the transport walks *every* page of the whole
+        reports collection, and each probe was preceded by a full login. It also
+        filtered by name in Python, so the answer depended on what the
+        pagination happened to return.
+
+        OkTicket is the authority on report-name uniqueness and says so with a
+        422, which ``create`` already turns into a falsy result. So the name is
+        simply retried against the server: one call per attempt instead of a
+        login plus a full collection scan.
+        """
         expense_sheet = self.env['hr.expense.sheet'].browse(expense_sheet.id)
-        expense_sheet.write({'name': new_name_to_test})
-        _logger.info('Creating conficting in okticket {expense_sheet.name}')
+        base_name = expense_sheet.name
+
+        for index in range(1, MAX_SHEET_NAME_ATTEMPTS + 1):
+            candidate = '%s | %s' % (base_name, index)
+            expense_sheet.write({'name': candidate})
+            _logger.info('Creating renamed expense sheet in okticket: %s', candidate)
+            res = backend_adapter.create(expense_sheet)
+            if res:
+                return res
+
+        # Names exhausted: a timestamp cannot collide with an earlier report.
+        candidate = '%s-%s' % (base_name, str(datetime.now())[:-7])
+        expense_sheet.write({'name': candidate})
+        _logger.info('Creating timestamped expense sheet in okticket: %s', candidate)
         res = backend_adapter.create(expense_sheet)
         if not res:
-            raise Exception(_("(generate_new_expense_sheet): It is not possible to find a valid name for "
-                              "expenses sheet: %s"), expense_sheet.name)
+            raise UserError(
+                _('It is not possible to find a valid name for the Okticket '
+                  'expense sheet "%s" after %s attempts.')
+                % (base_name, MAX_SHEET_NAME_ATTEMPTS + 1))
         return res
 
     def delete_expense_sheet(self, exp_sheet):
@@ -96,6 +144,7 @@ class HrExpenseExporter(Component):
             binding = expense_sheet.okticket_bind_ids and \
                       expense_sheet.okticket_bind_ids[0] or False
             if not binding:
+                self.apply_free_sheet_name(expense_sheet, backend_adapter)
                 _logger.info(f'Creating in okticket {expense_sheet.name}')
                 creation_result = backend_adapter.create(expense_sheet)
                 if not creation_result:
@@ -109,8 +158,14 @@ class HrExpenseExporter(Component):
                 binder.bind(internal_data['external_id'], binding)
                 _logger.info('Created and synchronized expense sheet')
             # Exists binding. Okticket expenses sheet will be updated.
-            expenses_sheet = backend_adapter.get_expenses_sheet(binding.external_id).get('data', [])
-            expenses_external_ids_in_oktk = [expense['_id'] for expense in expenses_sheet if '_id' in expense]
+            # get_expenses_sheet now returns the flat, fully paginated list. It can
+            # still hand back the raw payload when the report holds no expenses,
+            # and False when authentication failed, so normalise the three shapes.
+            expenses_sheet = backend_adapter.get_expenses_sheet(binding.external_id) or []
+            if isinstance(expenses_sheet, dict):
+                expenses_sheet = expenses_sheet.get('data') or []
+            expenses_external_ids_in_oktk = [expense['_id'] for expense in expenses_sheet
+                                             if isinstance(expense, dict) and '_id' in expense]
             expenses_to_add = []
             for expense in expense_sheet.expense_line_ids:
                 if expense.okticket_bind_ids:

@@ -47,7 +47,7 @@ class OkTicketOpenConnector(BaseConnector):
         return self.find("/expenses", params=params, https=https, company_in_header=True)
 
     def find_expense_by_id(self, id, https=False):
-        return self.find_one(f"/expenses/{id}", params={'with': 'report'}, https=https)
+        return self.find_one(f"/expenses/{id}", params={'with': 'report'}, https=https, company_in_header=True)
 
     def find_report_by_id(self, id, https=False):
         return self.find_one(f"/reports/{id}", params={}, https=https, company_in_header=True)
@@ -56,10 +56,25 @@ class OkTicketOpenConnector(BaseConnector):
         return self.find("/users", params=params, https=https, company_in_header=True)
 
     def find_products(self, params=None, https=False):
-        return self.find("/categories", params=params, https=https, company_in_header=True)
+        # Do NOT send the company header here: with it, the OkTicket API
+        # returns only global root categories, omitting subcategories and
+        # company-specific ones. Without it, the API scopes by the
+        # authenticated user's company and returns the full category tree.
+        return self.find("/categories", params=params, https=https, company_in_header=False)
 
     def find_expense_sheets(self, params=None, https=False):
         return self.find("/reports?with=user,expenses", params=params, https=https, company_in_header=True)
+
+    def find_expense_sheet_names(self, https=False):
+        """Every report of the authenticated company, in a single call.
+
+        Deliberately does not ask for ``with=user,expenses``: only the ``name``
+        is needed, and expanding the relations makes the same listing several
+        times slower. ``paginate=false`` is documented by the API and returns
+        the whole collection at once, so this replaces the page walk entirely.
+        """
+        return self.find("/reports", params={'paginate': 'false'}, https=https,
+                         company_in_header=True)
 
     def find_cost_center(self, params=None, https=False):
         return self.find("/cost-centers", params=params, https=https, company_in_header=True)
