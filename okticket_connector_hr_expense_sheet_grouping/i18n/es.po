@@ -10,16 +10,11 @@ msgstr ""
 "PO-Revision-Date: 2025-06-27 09:51+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-
-#. module: okticket_connector_hr_expense_sheet_grouping
-#. odoo-python
-#: code:addons/okticket_connector_hr_expense_sheet_grouping/models/hr_expense_sheet.py:0
-msgid "BI"
-msgstr "QUI"
 
 #. module: okticket_connector_hr_expense_sheet_grouping
 #: model:ir.model.fields.selection,name:okticket_connector_hr_expense_sheet_grouping.selection__res_company__expense_sheet_grouping_time__biweekly
@@ -69,12 +64,6 @@ msgid "Init Date"
 msgstr "Fecha inicio"
 
 #. module: okticket_connector_hr_expense_sheet_grouping
-#. odoo-python
-#: code:addons/okticket_connector_hr_expense_sheet_grouping/models/hr_expense_sheet.py:0
-msgid "MO"
-msgstr "MES"
-
-#. module: okticket_connector_hr_expense_sheet_grouping
 #: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet_grouping.field_res_company__month_day_limit
 msgid "Month day"
 msgstr "Día del mes"
@@ -112,12 +101,6 @@ msgid "Standard"
 msgstr "Estándar"
 
 #. module: okticket_connector_hr_expense_sheet_grouping
-#. odoo-python
-#: code:addons/okticket_connector_hr_expense_sheet_grouping/models/hr_expense_sheet.py:0
-msgid "WK"
-msgstr "S"
-
-#. module: okticket_connector_hr_expense_sheet_grouping
 #: model:ir.model.fields.selection,name:okticket_connector_hr_expense_sheet_grouping.selection__res_company__expense_sheet_grouping_time__weekly
 msgid "Weekly"
 msgstr "Semanal"
@@ -133,3 +116,10 @@ msgid ""
 "{id} - First day as number. 1, 2, ..., 31\n"
 "{ed} - Last day as number. 1, 2, ..., 31\n"
 msgstr ""
+"{name} - Nombre de la hoja\n"
+"{M} - Nombre completo del mes. Enero, Febrero, ...\n"
+"{m} - Mes como número decimal con cero delante. 01, 02, ..., 12\n"
+"{Y} - Año con siglo como número decimal. 2013, 2019\n"
+"{y} - Año sin siglo como número decimal con cero delante. 00, 01, ..., 99\n"
+"{id} - Primer día como número. 1, 2, ..., 31\n"
+"{ed} - Último día como número. 1, 2, ..., 31\n"

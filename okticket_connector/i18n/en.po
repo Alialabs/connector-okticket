@@ -10,7 +10,7 @@ msgstr ""
 "PO-Revision-Date: 2025-02-13 10:59+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: \n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -102,6 +102,11 @@ msgstr ""
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_type_icon
 msgid "Activity Type Icon"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__amount_residual
+msgid "Amount Due"
 msgstr ""
 
 #. module: okticket_connector
@@ -413,8 +418,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
 msgid ""
-"Expense %s reports several tax rates (%s) but an Odoo expense holds a single "
-"taxable base; keeping the product default taxes. Review this expense "
+"Expense %s reports several tax rates (%s) but an Odoo expense holds a single"
+" taxable base; keeping the product default taxes. Review this expense "
 "manually."
 msgstr ""
 
@@ -531,8 +536,7 @@ msgstr ""
 #. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_okticket_backend__default_lang_id
 msgid ""
-"If a default language is selected, the records will be imported in the "
-"translation of this language.\n"
+"If a default language is selected, the records will be imported in the translation of this language.\n"
 "Note that a similar configuration exists for each storeview."
 msgstr ""
 
@@ -820,6 +824,15 @@ msgid "Odoo Tax"
 msgstr ""
 
 #. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_backend__import_only_reviewed_expenses
+msgid ""
+"Off by default: every expense OkTicket serves is imported. Turned on, only "
+"the ones already marked as reviewed come in, which on a company that does "
+"not use the review step means importing almost nothing without any error to "
+"explain it."
+msgstr ""
+
+#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_product_product__okticket_categ_prod_id
 #: model:ir.model.fields,field_description:okticket_connector.field_product_template__okticket_categ_prod_id
 msgid "OkTicket Category ID"
@@ -1051,6 +1064,11 @@ msgid "Product Has Cost"
 msgstr ""
 
 #. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__auto_generated
+msgid "Proposed by the connector"
+msgstr ""
+
+#. module: okticket_connector
 #: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__tag__put
 msgid "Put"
 msgstr ""
@@ -1126,6 +1144,11 @@ msgid "Set accounted"
 msgstr ""
 
 #. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__sheet_id_state
+msgid "Sheet state"
+msgstr ""
+
+#. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__accounting_date
 msgid "Specify the bill date of the related vendor bill."
 msgstr ""
@@ -1187,6 +1210,16 @@ msgid "Test Authentication"
 msgstr ""
 
 #. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
+msgid ""
+"The OkTicket expense listing was cut short by an API error, so %(imported)s "
+"expenses were imported out of an unknown total. \"Import Expenses since\" "
+"has been left untouched on purpose, so the next run asks for the same range "
+"again instead of skipping what never arrived."
+msgstr ""
+
+#. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_res_users__okticket_backend_ids
 msgid ""
 "The okticket service from which to import your timesheets. If empty, the "
@@ -1198,6 +1231,14 @@ msgstr ""
 msgid ""
 "The percentage OkTicket reports in the receipt's tax breakdown (the 'p' of "
 "each entry). 0 is a valid rate and is not the same as having no row."
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_product_tax_mapping__auto_generated
+msgid ""
+"The row was written from the connector's table of Spanish VAT criteria, not "
+"by a person. Editing the tax clears the flag and the row is never touched "
+"again: the masters synchronisation only refreshes rows that still carry it."
 msgstr ""
 
 #. module: okticket_connector
@@ -1232,6 +1273,11 @@ msgstr ""
 #. module: okticket_connector
 #: model:ir.model.fields.selection,name:okticket_connector.selection__hr_expense__payment_method__transferencia
 msgid "Transfer"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__transfer_move_ids
+msgid "Transfer Move"
 msgstr ""
 
 #. module: okticket_connector
@@ -1301,6 +1347,11 @@ msgid "Vendor"
 msgstr ""
 
 #. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__invoice_id
+msgid "Vendor Bill"
+msgstr ""
+
+#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__version
 msgid "Version"
 msgstr ""
@@ -1335,17 +1386,13 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
 msgid ""
 "Which Odoo tax each rate OkTicket reports means for this\n"
-"                            product. Only needed where the tax the connector "
-"resolves\n"
-"                            on its own is not the right one: it always picks "
-"the\n"
-"                            domestic tax of the product's scope, and every "
-"expense\n"
-"                            product is typed as a service, so a rate that is "
-"goods\n"
-"                            here has to be stated. A row on the base product "
-"also\n"
-"                            applies to its invoice and rebillable versions."
+"                            product. Rows marked as proposed were written from the\n"
+"                            connector's table of Spanish VAT criteria for the OkTicket\n"
+"                            category and are kept up to date on every masters\n"
+"                            synchronisation. Change the tax on one and it becomes\n"
+"                            yours: it is never updated again. A row on the base\n"
+"                            product also applies to its invoice and rebillable\n"
+"                            versions."
 msgstr ""
 
 #. module: okticket_connector

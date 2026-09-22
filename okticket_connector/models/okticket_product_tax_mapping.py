@@ -41,12 +41,38 @@ class OkticketProductTaxMapping(models.Model):
         comodel_name='account.tax', string='Odoo Tax', required=True,
         domain="[('type_tax_use', '=', 'purchase'),"
                " ('company_id', '=', company_id)]")
+    auto_generated = fields.Boolean(
+        string='Proposed by the connector', readonly=True, copy=False,
+        help="The row was written from the connector's table of Spanish VAT "
+             "criteria, not by a person. Editing the tax clears the flag and "
+             "the row is never touched again: the masters synchronisation only "
+             "refreshes rows that still carry it.")
 
     _sql_constraints = [
         ('okticket_product_rate_uniq',
          'unique(product_tmpl_id, company_id, okticket_rate)',
          'A product can map an OkTicket rate to only one tax per company.'),
     ]
+
+    def write(self, vals):
+        """A person editing the tax takes ownership of the row.
+
+        The masters synchronisation runs every couple of hours and passes over
+        every category, so without this the next run would quietly put back the
+        tax the table proposes and undo the correction. Clearing the flag on a
+        manual edit is what makes the proposal safe to refresh at all.
+
+        The rate counts as much as the tax: moving a proposed row to another
+        rate is also a decision, and leaving the flag on would have the next run
+        propose the original rate again beside it.
+
+        The synchronisation writes with ``okticket_auto_mapping`` in the
+        context, which is the only way to keep the flag set.
+        """
+        touched = {'tax_id', 'okticket_rate'} & set(vals)
+        if touched and not self.env.context.get('okticket_auto_mapping'):
+            vals = dict(vals, auto_generated=False)
+        return super().write(vals)
 
     @api.constrains('tax_id', 'company_id')
     def _check_tax_company(self):
