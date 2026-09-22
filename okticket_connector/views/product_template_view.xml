@@ -27,18 +27,20 @@
                         <separator string="Tax Mapping"/>
                         <p class="text-muted">
                             Which Odoo tax each rate OkTicket reports means for this
-                            product. Only needed where the tax the connector resolves
-                            on its own is not the right one: it always picks the
-                            domestic tax of the product's scope, and every expense
-                            product is typed as a service, so a rate that is goods
-                            here has to be stated. A row on the base product also
-                            applies to its invoice and rebillable versions.
+                            product. Rows marked as proposed were written from the
+                            connector's table of Spanish VAT criteria for the OkTicket
+                            category and are kept up to date on every masters
+                            synchronisation. Change the tax on one and it becomes
+                            yours: it is never updated again. A row on the base
+                            product also applies to its invoice and rebillable
+                            versions.
                         </p>
                         <field name="okticket_tax_mapping_ids">
                             <list editable="bottom">
                                 <field name="company_id" optional="hide"/>
                                 <field name="okticket_rate"/>
                                 <field name="tax_id"/>
+                                <field name="auto_generated" optional="show"/>
                             </list>
                         </field>
                     </page>

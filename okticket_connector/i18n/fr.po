@@ -37,9 +37,8 @@ msgstr ""
 #. module: okticket_connector
 #. odoo-python
 #: code:addons/okticket_connector/models/okticket_backend.py:0
-#, fuzzy
 msgid "1.0 and higher"
-msgstr "1.3 et supérieure"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.constraint,message:okticket_connector.constraint_okticket_account_analytic_account_okticket_uniq
@@ -64,9 +63,8 @@ msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__account_id
-#, fuzzy
 msgid "Account"
-msgstr "Compte analytique"
+msgstr ""
 
 #. module: okticket_connector
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_view_account_analytic_account_form
@@ -90,9 +88,8 @@ msgstr "Actif"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_ids
-#, fuzzy
 msgid "Activities"
-msgstr "Actif"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_exception_decoration
@@ -101,13 +98,17 @@ msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_state
-#, fuzzy
 msgid "Activity State"
-msgstr "Actif"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__activity_type_icon
 msgid "Activity Type Icon"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__amount_residual
+msgid "Amount Due"
 msgstr ""
 
 #. module: okticket_connector
@@ -127,16 +128,14 @@ msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__analytic_precision
-#, fuzzy
 msgid "Analytic Precision"
-msgstr "Compte analytique"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__analytic_account_id
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__analytic_account_id
-#, fuzzy
 msgid "Analytic account from OkTicket"
-msgstr "Compte analytique"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__approved_by
@@ -160,20 +159,18 @@ msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__tag__auth
-#, fuzzy
 msgid "Authentication"
-msgstr "Tester l'authentification"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_log_event__backend_id
-#, fuzzy
 msgid "Backend"
-msgstr "Backends"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.ui.menu,name:okticket_connector.menu_okticket_backend
 msgid "Backends"
-msgstr "Backends"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields.selection,name:okticket_connector.selection__hr_expense__payment_method__cheque
@@ -266,9 +263,8 @@ msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model,name:okticket_connector.model_connector_backend
-#, fuzzy
 msgid "Connector Backend"
-msgstr "Backend Redmine"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_log_event__content
@@ -302,9 +298,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/okticket_connector/models/okticket_backend.py:0
 #: code:addons/okticket_connector/models/okticket_binding.py:0
-#, fuzzy
 msgid "Could not connect to Okticket"
-msgstr "N'a pas pu se connecter à Redmine"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_log_event__create_uid
@@ -388,9 +383,8 @@ msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__distribution_analytic_account_ids
-#, fuzzy
 msgid "Distribution Analytic Account"
-msgstr "Compte analytique"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__duplicate_expense_ids
@@ -426,8 +420,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
 msgid ""
-"Expense %s reports several tax rates (%s) but an Odoo expense holds a single "
-"taxable base; keeping the product default taxes. Review this expense "
+"Expense %s reports several tax rates (%s) but an Odoo expense holds a single"
+" taxable base; keeping the product default taxes. Review this expense "
 "manually."
 msgstr ""
 
@@ -458,9 +452,8 @@ msgstr ""
 
 #. module: okticket_connector
 #: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
-#, fuzzy
 msgid "Expenses import Configuration"
-msgstr "Configuration de Redmine"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__message_follower_ids
@@ -545,8 +538,7 @@ msgstr ""
 #. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_okticket_backend__default_lang_id
 msgid ""
-"If a default language is selected, the records will be imported in the "
-"translation of this language.\n"
+"If a default language is selected, the records will be imported in the translation of this language.\n"
 "Note that a similar configuration exists for each storeview."
 msgstr ""
 "Si une langue par défaut est sélectionnée, les enregistements seront "
@@ -707,9 +699,8 @@ msgstr ""
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_binding__sync_date
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__sync_date
-#, fuzzy
 msgid "Last synchronization date"
-msgstr "Dernière date de mise-à-jour"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__location
@@ -838,6 +829,15 @@ msgid "Odoo Tax"
 msgstr ""
 
 #. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_backend__import_only_reviewed_expenses
+msgid ""
+"Off by default: every expense OkTicket serves is imported. Turned on, only "
+"the ones already marked as reviewed come in, which on a company that does "
+"not use the review step means importing almost nothing without any error to "
+"explain it."
+msgstr ""
+
+#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_product_product__okticket_categ_prod_id
 #: model:ir.model.fields,field_description:okticket_connector.field_product_template__okticket_categ_prod_id
 msgid "OkTicket Category ID"
@@ -923,15 +923,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__backend_id
 #: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
 #: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_list
-#, fuzzy
 msgid "Okticket Backend"
-msgstr "Backend Redmine"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model,name:okticket_connector.model_okticket_backend
-#, fuzzy
 msgid "Okticket Backend Configuration"
-msgstr "Configuration de Redmine"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.actions.act_window,name:okticket_connector.action_okticket_log
@@ -941,9 +939,8 @@ msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model,name:okticket_connector.model_okticket_binding
-#, fuzzy
 msgid "Okticket Binding (abstract)"
-msgstr "Binding Redmine (Abstract)"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__okticket_company_id
@@ -952,9 +949,8 @@ msgstr ""
 
 #. module: okticket_connector
 #: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
-#, fuzzy
 msgid "Okticket Configuration"
-msgstr "Configuration de Redmine"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.module.category,name:okticket_connector.module_category_okticket_connector
@@ -990,9 +986,8 @@ msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_res_users__okticket_backend_ids
-#, fuzzy
 msgid "Okticket Server"
-msgstr "Service Redmine"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_hr_employee__okticket_user_id
@@ -1002,9 +997,8 @@ msgstr ""
 #. module: okticket_connector
 #. odoo-python
 #: code:addons/okticket_connector/components/backend_adapter.py:0
-#, fuzzy
 msgid "Okticket connection Error: Invalid authentications key."
-msgstr "Erreur de connection à Redmine: clé d'authentification invalide"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__tag__op
@@ -1072,6 +1066,11 @@ msgstr ""
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__product_has_cost
 msgid "Product Has Cost"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__auto_generated
+msgid "Proposed by the connector"
 msgstr ""
 
 #. module: okticket_connector
@@ -1150,6 +1149,11 @@ msgid "Set accounted"
 msgstr ""
 
 #. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__sheet_id_state
+msgid "Sheet state"
+msgstr ""
+
+#. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__accounting_date
 msgid "Specify the bill date of the related vendor bill."
 msgstr ""
@@ -1211,20 +1215,35 @@ msgid "Test Authentication"
 msgstr "Tester l'authentification"
 
 #. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
+msgid ""
+"The OkTicket expense listing was cut short by an API error, so %(imported)s "
+"expenses were imported out of an unknown total. \"Import Expenses since\" "
+"has been left untouched on purpose, so the next run asks for the same range "
+"again instead of skipping what never arrived."
+msgstr ""
+
+#. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_res_users__okticket_backend_ids
-#, fuzzy
 msgid ""
 "The okticket service from which to import your timesheets. If empty, the "
 "default okticket service will be used instead."
 msgstr ""
-"Le service Redmine duquel seront importées vos feuilles de temps. Laisser "
-"vide pour utiliser le service par défaut."
 
 #. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_okticket_product_tax_mapping__okticket_rate
 msgid ""
 "The percentage OkTicket reports in the receipt's tax breakdown (the 'p' of "
 "each entry). 0 is a valid rate and is not the same as having no row."
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_product_tax_mapping__auto_generated
+msgid ""
+"The row was written from the connector's table of Spanish VAT criteria, not "
+"by a person. Editing the tax clears the flag and the row is never touched "
+"again: the masters synchronisation only refreshes rows that still carry it."
 msgstr ""
 
 #. module: okticket_connector
@@ -1259,6 +1278,11 @@ msgstr ""
 #. module: okticket_connector
 #: model:ir.model.fields.selection,name:okticket_connector.selection__hr_expense__payment_method__transferencia
 msgid "Transfer"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__transfer_move_ids
+msgid "Transfer Move"
 msgstr ""
 
 #. module: okticket_connector
@@ -1328,9 +1352,14 @@ msgid "Vendor"
 msgstr ""
 
 #. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__invoice_id
+msgid "Vendor Bill"
+msgstr ""
+
+#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__version
 msgid "Version"
-msgstr "Version"
+msgstr ""
 
 #. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_product_product__invoice_prod_id
@@ -1362,17 +1391,13 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
 msgid ""
 "Which Odoo tax each rate OkTicket reports means for this\n"
-"                            product. Only needed where the tax the connector "
-"resolves\n"
-"                            on its own is not the right one: it always picks "
-"the\n"
-"                            domestic tax of the product's scope, and every "
-"expense\n"
-"                            product is typed as a service, so a rate that is "
-"goods\n"
-"                            here has to be stated. A row on the base product "
-"also\n"
-"                            applies to its invoice and rebillable versions."
+"                            product. Rows marked as proposed were written from the\n"
+"                            connector's table of Spanish VAT criteria for the OkTicket\n"
+"                            category and are kept up to date on every masters\n"
+"                            synchronisation. Change the tax on one and it becomes\n"
+"                            yours: it is never updated again. A row on the base\n"
+"                            product also applies to its invoice and rebillable\n"
+"                            versions."
 msgstr ""
 
 #. module: okticket_connector
@@ -1394,31 +1419,3 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
 msgid "⇒ See Hr Expense Bindings"
 msgstr ""
-
-#~ msgid "Default Redmine Service"
-#~ msgstr "Service Redmine par défaut"
-
-#~ msgid "ID in Redmine"
-#~ msgstr "ID dans Redmine"
-
-#~ msgid "Last Update in Redmine"
-#~ msgstr "Dernière mise-à-jour dans Redmine"
-
-#~ msgid "Name"
-#~ msgstr "Nom"
-
-#, python-format
-#~ msgid "No user with login %s found in Redmine."
-#~ msgstr "Aucun utilisateur %s trouvé dans Redmine."
-
-#~ msgid "Redmine"
-#~ msgstr "Redmine"
-
-#~ msgid "Redmine Time Entry Binding"
-#~ msgstr "Correspondance des entrées de temps Redmine"
-
-#~ msgid "Timesheet"
-#~ msgstr "Feuilles de temps"
-
-#~ msgid "e.g. http://localhost:8081/redmine"
-#~ msgstr "e.g. http://localhost:8081/redmine"

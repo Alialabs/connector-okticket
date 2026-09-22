@@ -55,7 +55,13 @@ class OkticketBackend(models.Model):
 
     # Expenses import config
     ignore_import_expenses_since = fields.Boolean(string='Ignore Import Expenses Since', default=False)
-    import_only_reviewed_expenses = fields.Boolean(string='Import Only Reviewed Expenses', default=True)
+    import_only_reviewed_expenses = fields.Boolean(
+        string='Import Only Reviewed Expenses',
+        default=False,
+        help='Off by default: every expense OkTicket serves is imported. '
+             'Turned on, only the ones already marked as reviewed come in, '
+             'which on a company that does not use the review step means '
+             'importing almost nothing without any error to explain it.')
 
     @api.model
     def _select_versions(self):

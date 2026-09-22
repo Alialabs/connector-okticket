@@ -37,8 +37,10 @@
             <field name="state">code</field>
             <field name="binding_view_types">list</field>
             <field name="code">
+# El titulo sale del propio nombre de la accion, que si es traducible:
+# un literal aqui dentro no lo extrae makepot y el dialogo queda en ingles.
 action = {
-            'name': 'Confirm Cost Center Creation from Analytic',
+            'name': env.ref('okticket_connector_cost_center.cost_center_creation_from_analytic_action').name,
             'view_mode': 'form',
             'res_model': 'analytic.cost.center.wizard',
             'views': [(env.ref('okticket_connector_cost_center.cost_center_creation_from_analytic_view').id, 'form')],

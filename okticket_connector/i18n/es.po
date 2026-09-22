@@ -10,7 +10,7 @@ msgstr ""
 "PO-Revision-Date: 2023-11-21 16:38+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: \n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -59,7 +59,9 @@ msgstr "Un error de red ha causado el fallo: %s"
 #. module: okticket_connector
 #: model:ir.model.constraint,message:okticket_connector.constraint_okticket_product_tax_mapping_okticket_product_rate_uniq
 msgid "A product can map an OkTicket rate to only one tax per company."
-msgstr "Un producto solo puede asignar un tipo de OkTicket a un único impuesto por compañía."
+msgstr ""
+"Un producto solo puede asignar un tipo de OkTicket a un único impuesto por "
+"compañía."
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__account_id
@@ -107,6 +109,11 @@ msgid "Activity Type Icon"
 msgstr "Icono de tipo de actvidad"
 
 #. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__amount_residual
+msgid "Amount Due"
+msgstr "Importe adeudado"
+
+#. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__account_id
 msgid "An expense account is expected"
 msgstr "Se espera una cuenta de gastos"
@@ -123,16 +130,14 @@ msgstr "Distribución analítica"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__analytic_precision
-#, fuzzy
 msgid "Analytic Precision"
-msgstr "Cuenta analítica"
+msgstr "Precisión analítica"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__analytic_account_id
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__analytic_account_id
-#, fuzzy
 msgid "Analytic account from OkTicket"
-msgstr "Cuenta analítica"
+msgstr "Cuenta analítica desde OkTicket"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__approved_by
@@ -151,9 +156,8 @@ msgstr "Nº de archivos adjuntos"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__attachment_ids
-#, fuzzy
 msgid "Attachments"
-msgstr "Adjuntos principales"
+msgstr "Archivos adjuntos"
 
 #. module: okticket_connector
 #: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__tag__auth
@@ -178,9 +182,8 @@ msgstr "Cheque bancario"
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_product_product__base_version_prod_ids
 #: model:ir.model.fields,field_description:okticket_connector.field_product_template__base_version_prod_ids
-#, fuzzy
 msgid "Base Product Versions"
-msgstr "Versión producto base"
+msgstr "Versiones de producto base"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__base_url
@@ -192,7 +195,9 @@ msgstr "URL Base"
 msgid ""
 "Both price-included and price-excluded taxes will behave as price-included "
 "taxes for expenses."
-msgstr "Tanto los impuestos incluidos como los no incluidos en el precio se comportarán como incluidos en el precio para los gastos."
+msgstr ""
+"Tanto los impuestos incluidos como los no incluidos en el precio se "
+"comportarán como incluidos en el precio para los gastos."
 
 #. module: okticket_connector
 #: model:ir.model.fields.selection,name:okticket_connector.selection__hr_expense__payment_method__tarjeta
@@ -216,7 +221,6 @@ msgstr "Efectivo"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__product_id
-#, fuzzy
 msgid "Category"
 msgstr "Categoría"
 
@@ -292,7 +296,8 @@ msgstr "Información de centro de coste"
 #: model:ir.model.fields,help:okticket_connector.field_hr_expense__analytic_account_id
 #: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__analytic_account_id
 msgid "Cost center (analytical account) from OkTicket synchronization"
-msgstr "Centro de coste (cuenta analítica) desde la sincronización con OkTicket"
+msgstr ""
+"Centro de coste (cuenta analítica) desde la sincronización con OkTicket"
 
 #. module: okticket_connector
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_view_account_analytic_account_form
@@ -331,9 +336,8 @@ msgstr "Moneda"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__currency_rate
-#, fuzzy
 msgid "Currency Rate"
-msgstr "Moneda"
+msgstr "Tasa de conversión"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__sale_order_id
@@ -342,9 +346,8 @@ msgstr "Cliente a refacturar"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_log_event__datetime_event
-#, fuzzy
 msgid "Datetime Event"
-msgstr "Fecha del evento"
+msgstr "Fecha y hora del evento"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_account_analytic_account__okticket_def_account_id
@@ -371,9 +374,8 @@ msgstr "Eliminado en Okticket"
 #. module: okticket_connector
 #. odoo-python
 #: code:addons/okticket_connector/models/hr_expense.py:0
-#, fuzzy
 msgid "Deleting expenses in a state different from draft is not allowed."
-msgstr "No se puede eliminar un gasto en estado distinto de \"A enviar\"."
+msgstr "No se permite eliminar gastos en un estado distinto de borrador."
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__name
@@ -391,9 +393,8 @@ msgstr "Nombre"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__distribution_analytic_account_ids
-#, fuzzy
 msgid "Distribution Analytic Account"
-msgstr "Cuenta analítica"
+msgstr "Distribución analítica"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__duplicate_expense_ids
@@ -423,16 +424,23 @@ msgid ""
 "Expense %s reports %g%% but that rate matches several purchase taxes in "
 "company %s that cannot be told apart (%s); imported with no tax. Map the "
 "rate on the product's OkTicket tab, or add the right tax to the product."
-msgstr "El gasto %s reporta un %g%% pero ese tipo coincide con varios impuestos de compra de la compañía %s que no se pueden distinguir (%s); se importa sin impuesto. Asigne el tipo en la pestaña OkTicket del producto, o añada el impuesto correcto al producto."
+msgstr ""
+"El gasto %s reporta un %g%% pero ese tipo coincide con varios impuestos de "
+"compra de la compañía %s que no se pueden distinguir (%s); se importa sin "
+"impuesto. Asigne el tipo en la pestaña OkTicket del producto, o añada el "
+"impuesto correcto al producto."
 
 #. module: okticket_connector
 #. odoo-python
 #: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
 msgid ""
-"Expense %s reports several tax rates (%s) but an Odoo expense holds a single "
-"taxable base; keeping the product default taxes. Review this expense "
+"Expense %s reports several tax rates (%s) but an Odoo expense holds a single"
+" taxable base; keeping the product default taxes. Review this expense "
 "manually."
-msgstr "El gasto %s reporta varios tipos de IVA (%s) pero un gasto de Odoo tiene una única base imponible; se mantienen los impuestos por defecto del producto. Revise este gasto manualmente."
+msgstr ""
+"El gasto %s reporta varios tipos de IVA (%s) pero un gasto de Odoo tiene una"
+" única base imponible; se mantienen los impuestos por defecto del producto. "
+"Revise este gasto manualmente."
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__date
@@ -496,15 +504,13 @@ msgstr "Tipo de concesión"
 
 #. module: okticket_connector
 #: model:ir.model,name:okticket_connector.model_hr_expense
-#, fuzzy
 msgid "HR Expense"
-msgstr "Gasto"
+msgstr "Gasto de RRHH"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__okticket_hr_expense_ids
-#, fuzzy
 msgid "HR Expense Bindings"
-msgstr "Bindings de gastos"
+msgstr "Vínculos de gasto"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__http_client_conn_url
@@ -528,7 +534,7 @@ msgstr "Tiene mensaje"
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__id
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__id
 msgid "ID"
-msgstr ""
+msgstr "Id"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_binding__external_id
@@ -549,12 +555,10 @@ msgstr "Icono para indicar una actividad de excepción."
 #. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_okticket_backend__default_lang_id
 msgid ""
-"If a default language is selected, the records will be imported in the "
-"translation of this language.\n"
+"If a default language is selected, the records will be imported in the translation of this language.\n"
 "Note that a similar configuration exists for each storeview."
 msgstr ""
-"Si un idioma por defecto está seleccionado, los registro serán importados en "
-"la traducción de este idioma.\n"
+"Si un idioma por defecto está seleccionado, los registro serán importados en la traducción de este idioma.\n"
 "Observe que una configuración similar existe para cada storeview."
 
 #. module: okticket_connector
@@ -599,7 +603,6 @@ msgstr "Importación de gastos desde Okticket"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__import_expenses_since
-#, fuzzy
 msgid "Import Expenses since"
 msgstr "Importar gastos desde fecha"
 
@@ -632,9 +635,8 @@ msgstr "Notas internas"
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_product_product__invoice_prod_id
 #: model:ir.model.fields,field_description:okticket_connector.field_product_template__invoice_prod_id
-#, fuzzy
 msgid "Invoice Product Version"
-msgstr "Versión de producto factura"
+msgstr "Versión de producto para facturas"
 
 #. module: okticket_connector
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_product_expense_form_view
@@ -655,9 +657,8 @@ msgstr "Es un seguidor"
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_product_product__rebillable_product_version
 #: model:ir.model.fields,field_description:okticket_connector.field_product_template__rebillable_product_version
-#, fuzzy
 msgid "Is Rebillable Product Version"
-msgstr "Es una versión de producto refacturable"
+msgstr "Es versión de producto refacturable"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__is_multiple_currency
@@ -692,9 +693,8 @@ msgstr "Descripción"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__label_currency_rate
-#, fuzzy
 msgid "Label Currency Rate"
-msgstr "Descripción de Ratio conversión"
+msgstr "Etiqueta de la tasa de conversión"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_log_event__write_uid
@@ -727,9 +727,8 @@ msgstr "Ubicación"
 
 #. module: okticket_connector
 #: model:ir.model,name:okticket_connector.model_log_event
-#, fuzzy
 msgid "Log Event"
-msgstr "Eventos de Log"
+msgstr "Evento de registro"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__log_event_ids
@@ -799,9 +798,8 @@ msgstr "Siguiente tipo de actividad"
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_product_product__no_rebillable_prod_ids
 #: model:ir.model.fields,field_description:okticket_connector.field_product_template__no_rebillable_prod_ids
-#, fuzzy
 msgid "Non-Rebillable Product Versions"
-msgstr "Versión de producto refacturable"
+msgstr "Versiones de producto no refacturables"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__message_needaction_counter
@@ -820,7 +818,6 @@ msgstr "Numero de errores"
 
 #. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__message_needaction_counter
-#, fuzzy
 msgid "Number of messages requiring action"
 msgstr "Número de mensajes que requieren una acción"
 
@@ -850,11 +847,23 @@ msgid "Odoo Tax"
 msgstr "Impuesto de Odoo"
 
 #. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_backend__import_only_reviewed_expenses
+msgid ""
+"Off by default: every expense OkTicket serves is imported. Turned on, only "
+"the ones already marked as reviewed come in, which on a company that does "
+"not use the review step means importing almost nothing without any error to "
+"explain it."
+msgstr ""
+"Desactivado por defecto: se importan todos los gastos que sirve OkTicket. "
+"Activado, solo entran los ya marcados como revisados, lo que en una compañía"
+" que no usa el paso de revisión significa importar casi nada sin ningún "
+"error que lo explique."
+
+#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_product_product__okticket_categ_prod_id
 #: model:ir.model.fields,field_description:okticket_connector.field_product_template__okticket_categ_prod_id
-#, fuzzy
 msgid "OkTicket Category ID"
-msgstr "Categoría de Okticket"
+msgstr "ID de categoría de OkTicket"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_res_company__okticket_company_id
@@ -884,16 +893,14 @@ msgstr "Vínculos de gastos de Okticket"
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__okticket_expense_id
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__okticket_expense_id
-#, fuzzy
 msgid "OkTicket ID"
-msgstr "Id de Okticket"
+msgstr "ID de OkTicket"
 
 #. module: okticket_connector
 #. odoo-python
 #: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
-#, fuzzy
 msgid "OkTicket PDF document imported"
-msgstr "Centro de coste de Okticket"
+msgstr "Documento PDF de OkTicket importado"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__okticket_rate
@@ -919,9 +926,8 @@ msgstr "Parámetros de prueba de Okticket"
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_product_product__okticket_type_prod_id
 #: model:ir.model.fields,field_description:okticket_connector.field_product_template__okticket_type_prod_id
-#, fuzzy
 msgid "OkTicket Type ID"
-msgstr "Tipo de Okticket"
+msgstr "ID de tipo de OkTicket"
 
 #. module: okticket_connector
 #: model:ir.ui.menu,name:okticket_connector.menu_okticket_root
@@ -980,15 +986,13 @@ msgstr "Operaciones de conector Okticket"
 
 #. module: okticket_connector
 #: model:ir.model,name:okticket_connector.model_okticket_expense_wizard
-#, fuzzy
 msgid "Okticket Expense Wizard"
-msgstr "Asistente de gasto Okticket"
+msgstr "Asistente de gastos de OkTicket"
 
 #. module: okticket_connector
 #: model:ir.model,name:okticket_connector.model_okticket_hr_expense
-#, fuzzy
 msgid "Okticket HR Expense Binding"
-msgstr "Bindings de gastos"
+msgstr "Vínculo de gasto de RRHH de OkTicket"
 
 #. module: okticket_connector
 #: model:ir.actions.act_window,name:okticket_connector.action_open_okticket_hr_expense_binding
@@ -999,9 +1003,8 @@ msgstr "Bindings de gastos"
 #: model:ir.model.fields,field_description:okticket_connector.field_hr_expense__okticket_response
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__okticket_response
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_hr_expense_view
-#, fuzzy
 msgid "Okticket Response"
-msgstr "Servidor Okticket"
+msgstr "Respuesta de OkTicket"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_res_users__okticket_backend_ids
@@ -1079,15 +1082,18 @@ msgstr "Producto"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__product_description
-#, fuzzy
 msgid "Product Description"
-msgstr "Descripción"
+msgstr "Descripción del producto"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__product_has_cost
-#, fuzzy
 msgid "Product Has Cost"
-msgstr "Plantilla de producto"
+msgstr "El producto tiene coste"
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_product_tax_mapping__auto_generated
+msgid "Proposed by the connector"
+msgstr "Propuesto por el conector"
 
 #. module: okticket_connector
 #: model:ir.model.fields.selection,name:okticket_connector.selection__log_event__tag__put
@@ -1113,7 +1119,6 @@ msgstr "Información de refacturación"
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_product_product__rebillable_prod_id
 #: model:ir.model.fields,field_description:okticket_connector.field_product_template__rebillable_prod_id
-#, fuzzy
 msgid "Rebillable Product Version"
 msgstr "Versión de producto refacturable"
 
@@ -1166,6 +1171,11 @@ msgid "Set accounted"
 msgstr "Actualizar estado de gasto en Okticket"
 
 #. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__sheet_id_state
+msgid "Sheet state"
+msgstr "Estado de la hoja"
+
+#. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__accounting_date
 msgid "Specify the bill date of the related vendor bill."
 msgstr "Especifique la fecha de la factura de proveedor relacionada."
@@ -1212,26 +1222,38 @@ msgstr "Importe del impuesto"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__tax_amount_currency
-#, fuzzy
 msgid "Tax amount in Currency"
-msgstr "Total"
+msgstr "Importe de impuestos en la divisa"
 
 #. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__tax_amount
-#, fuzzy
 msgid "Tax amount in company currency"
-msgstr "Informe en la moneda de la compañía"
+msgstr "Importe de impuestos en la divisa de la compañía"
 
 #. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__tax_amount_currency
-#, fuzzy
 msgid "Tax amount in currency"
-msgstr "Total"
+msgstr "Importe de impuestos en la divisa"
 
 #. module: okticket_connector
 #: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
 msgid "Test Authentication"
 msgstr "Prueba de autenticación"
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
+msgid ""
+"The OkTicket expense listing was cut short by an API error, so %(imported)s "
+"expenses were imported out of an unknown total. \"Import Expenses since\" "
+"has been left untouched on purpose, so the next run asks for the same range "
+"again instead of skipping what never arrived."
+msgstr ""
+"Un error de la API cortó el listado de gastos de OkTicket, así que se "
+"importaron %(imported)s gastos de un total desconocido. \"Importar gastos "
+"desde fecha\" se ha dejado intacto a propósito, para que la siguiente "
+"ejecución vuelva a pedir el mismo rango en lugar de saltarse lo que nunca "
+"llegó."
 
 #. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_res_users__okticket_backend_ids
@@ -1247,7 +1269,21 @@ msgstr ""
 msgid ""
 "The percentage OkTicket reports in the receipt's tax breakdown (the 'p' of "
 "each entry). 0 is a valid rate and is not the same as having no row."
-msgstr "El porcentaje que OkTicket reporta en el desglose de impuestos del ticket (la 'p' de cada entrada). 0 es un tipo válido y no equivale a no tener fila."
+msgstr ""
+"El porcentaje que OkTicket reporta en el desglose de impuestos del ticket "
+"(la 'p' de cada entrada). 0 es un tipo válido y no equivale a no tener fila."
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_product_tax_mapping__auto_generated
+msgid ""
+"The row was written from the connector's table of Spanish VAT criteria, not "
+"by a person. Editing the tax clears the flag and the row is never touched "
+"again: the masters synchronisation only refreshes rows that still carry it."
+msgstr ""
+"La fila la ha escrito el conector desde su tabla de criterios del IVA "
+"español, no una persona. Al cambiar el impuesto la marca desaparece y la "
+"fila no se vuelve a tocar: la sincronización de maestros solo actualiza las "
+"filas que la conservan."
 
 #. module: okticket_connector
 #. odoo-python
@@ -1255,7 +1291,9 @@ msgstr "El porcentaje que OkTicket reporta en el desglose de impuestos del ticke
 msgid ""
 "The tax \"%(tax)s\" belongs to company \"%(tax_company)s\" but the mapping "
 "row is for \"%(company)s\"."
-msgstr "El impuesto \"%(tax)s\" pertenece a la compañía \"%(tax_company)s\" pero la fila de asignación es para \"%(company)s\"."
+msgstr ""
+"El impuesto \"%(tax)s\" pertenece a la compañía \"%(tax_company)s\" pero la "
+"fila de asignación es para \"%(company)s\"."
 
 #. module: okticket_connector
 #. odoo-python
@@ -1275,9 +1313,8 @@ msgstr "Total"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__untaxed_amount_currency
-#, fuzzy
 msgid "Total Untaxed Amount In Currency"
-msgstr "Total"
+msgstr "Base imponible total en la divisa"
 
 #. module: okticket_connector
 #: model:ir.model.fields.selection,name:okticket_connector.selection__hr_expense__payment_method__transferencia
@@ -1285,11 +1322,15 @@ msgid "Transfer"
 msgstr "Albarán"
 
 #. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__transfer_move_ids
+msgid "Transfer Move"
+msgstr "Asiento de transferencia"
+
+#. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_product_product__rebillable_product_version
 #: model:ir.model.fields,help:okticket_connector.field_product_template__rebillable_product_version
-#, fuzzy
 msgid "True if the product has other versions that are non-rebillable"
-msgstr "Marcado si el producto tiene otra versión no refacturable"
+msgstr "Marcado si el producto tiene otras versiones no refacturables"
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_log_event__type
@@ -1352,6 +1393,11 @@ msgid "Vendor"
 msgstr "Proveedor"
 
 #. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__invoice_id
+msgid "Vendor Bill"
+msgstr "Factura de proveedor"
+
+#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_backend__version
 msgid "Version"
 msgstr "Versión"
@@ -1386,18 +1432,21 @@ msgstr "Indica si el impuesto está definido en un producto seleccionado"
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
 msgid ""
 "Which Odoo tax each rate OkTicket reports means for this\n"
-"                            product. Only needed where the tax the connector "
-"resolves\n"
-"                            on its own is not the right one: it always picks "
-"the\n"
-"                            domestic tax of the product's scope, and every "
-"expense\n"
-"                            product is typed as a service, so a rate that is "
-"goods\n"
-"                            here has to be stated. A row on the base product "
-"also\n"
-"                            applies to its invoice and rebillable versions."
-msgstr "Qué impuesto de Odoo significa cada tipo que reporta OkTicket para este producto. Solo hace falta cuando el impuesto que el conector resuelve por sí solo no es el correcto: siempre elige el impuesto nacional del ámbito del producto, y todo producto de gasto se tipa como servicio, así que un tipo que aquí sea de bienes hay que declararlo. Una fila en el producto base se aplica también a sus versiones de factura y refacturable."
+"                            product. Rows marked as proposed were written from the\n"
+"                            connector's table of Spanish VAT criteria for the OkTicket\n"
+"                            category and are kept up to date on every masters\n"
+"                            synchronisation. Change the tax on one and it becomes\n"
+"                            yours: it is never updated again. A row on the base\n"
+"                            product also applies to its invoice and rebillable\n"
+"                            versions."
+msgstr ""
+"Qué impuesto de Odoo significa cada tipo que reporta OkTicket para este "
+"producto. Las filas marcadas como propuestas las ha escrito el conector "
+"desde su tabla de criterios del IVA español para la categoría de OkTicket, y"
+" se mantienen al día en cada sincronización de maestros. Si cambia el "
+"impuesto de una, pasa a ser suya: no se vuelve a actualizar nunca. Una fila "
+"en el producto base se aplica también a sus versiones de factura y "
+"refacturable."
 
 #. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_product_product__okticket_tax_mapping_ids
@@ -1407,7 +1456,11 @@ msgid ""
 "only needed where the tax the connector would otherwise resolve is not the "
 "right one -- typically a rate that is goods here, since every expense "
 "product is typed as a service."
-msgstr "Qué impuesto de Odoo significa cada tipo que reporta OkTicket para este producto. Solo hacen falta filas cuando el impuesto que el conector resolvería no es el correcto, típicamente un tipo que aquí sea de bienes, ya que todo producto de gasto se tipa como servicio."
+msgstr ""
+"Qué impuesto de Odoo significa cada tipo que reporta OkTicket para este "
+"producto. Solo hacen falta filas cuando el impuesto que el conector "
+"resolvería no es el correcto, típicamente un tipo que aquí sea de bienes, ya"
+" que todo producto de gasto se tipa como servicio."
 
 #. module: okticket_connector
 #: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
@@ -1418,85 +1471,3 @@ msgstr "⇒ Ver logs"
 #: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
 msgid "⇒ See Hr Expense Bindings"
 msgstr "⇒ Ver Bindings de gastos"
-
-#, python-format
-#~ msgid ""
-#~ "\n"
-#~ "Error while try to unlink expense %s in Odoo: %s"
-#~ msgstr ""
-#~ "\n"
-#~ "Error mientras se trataba de eliminar el gasto %s en Odoo: %s"
-
-#~ msgid "Amount Due"
-#~ msgstr "Importe adeudado"
-
-#~ msgid "Analytic Tags"
-#~ msgstr "Etiquetas analíticas"
-
-#~ msgid "Bill Reference"
-#~ msgstr "Referencia Factura"
-
-#~ msgid "Explicitly Refused by manager or accountant"
-#~ msgstr "Denegado explícitamente por la persona gestora o contable"
-
-#, python-format
-#~ msgid "Invoiceable"
-#~ msgstr "Factura"
-
-#~ msgid "Is product with non zero cost selected"
-#~ msgstr "Producto con coste cero selecionado"
-
-#~ msgid "Label Total Amount Company"
-#~ msgstr "Descripción de monto total de compañía"
-
-#~ msgid "Last Modified on"
-#~ msgstr "Última modificación el"
-
-#~ msgid "No rebillable product version"
-#~ msgstr "Versión de producto no refacturable"
-
-#~ msgid "Notes..."
-#~ msgstr "Notas..."
-
-#~ msgid "Number of unread messages"
-#~ msgstr "Número de mensajes no leidos"
-
-#, python-format
-#~ msgid "Rebillable"
-#~ msgstr "Refacturable"
-
-#~ msgid "Reference Is Editable By Current User"
-#~ msgstr "La referencia es editable por el usuario actual"
-
-#~ msgid "Sample"
-#~ msgstr "Muestra"
-
-#~ msgid "Sheet Is Editable"
-#~ msgstr "Hoja de gastos editable"
-
-#~ msgid "Status of the expense."
-#~ msgstr "Estado del gasto"
-
-#~ msgid "Taxes"
-#~ msgstr "Impuestos"
-
-#~ msgid "The taxes should be \"Included In Price\""
-#~ msgstr "Los impuestos deben ser \"Incluido en el precio\""
-
-#~ msgid "Units"
-#~ msgstr "Unidades"
-
-#~ msgid "Unread Messages"
-#~ msgstr "Mensajes sin leer"
-
-#~ msgid "Unread Messages Counter"
-#~ msgstr "Nº de mensajes sin leer"
-
-#~ msgid "Users"
-#~ msgstr "Usuarios"
-
-#~ msgid "log.event"
-#~ msgstr "Evento de Log"
-
-#~ msgid "okticket.hr.expense"
-#~ msgstr "Gasto de Okticket"

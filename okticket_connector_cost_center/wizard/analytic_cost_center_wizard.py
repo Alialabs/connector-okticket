@@ -6,7 +6,7 @@
 
 import logging
 
-from odoo import models, fields
+from odoo import _, models, fields
 from odoo.exceptions import ValidationError
 
 _logger = logging.getLogger(__name__)
@@ -36,8 +36,9 @@ class AccountAnalyticAccountCostCenter(models.TransientModel):
                     record._okticket_create()  # No comprueba duplicados
                 elif self.duplicate_confirmation_needed and not self.confirm_duplicate:
                     # Se necesita confirmación de creación de CC duplicado PERO no se tiene confirmación
-                    raise ValidationError('Check the box if you want to create a duplicated cost center '
-                                          '\nand continue or cancel operation.')
+                    raise ValidationError(
+                        _('Check the box if you want to create a duplicated cost center '
+                          '\nand continue or cancel operation.'))
                 else:
                     # Comprueba si existe un CC con el mismo nombre y pregunta por confirmación
                     result = record._okticket_create_duplicates_control()
@@ -46,12 +47,13 @@ class AccountAnalyticAccountCostCenter(models.TransientModel):
                         if len(active_ids) > 1:
                             # Si existe conflicto de posible duplicado,
                             # no se permite procesar todas las cuentas analíticas simultáneamente
-                            raise ValidationError('There is a conflict in one or more analytic accounts selected.'
-                                                  '\nPlease, process them one at a time.')
+                            raise ValidationError(
+                                _('There is a conflict in one or more analytic accounts selected.'
+                                  '\nPlease, process them one at a time.'))
                         else:
                             self.duplicate_confirmation_needed = True
                             return {
-                                'name': 'Confirm Cost Center Creation from Analytic',
+                                'name': _('Confirm Cost Center Creation from Analytic'),
                                 'view_mode': 'form',
                                 'res_model': 'analytic.cost.center.wizard',
                                 'views': [(self.env.ref('okticket_connector_cost_center.cost_center_creation_from_analytic_view').id, 'form')],
@@ -63,7 +65,10 @@ class AccountAnalyticAccountCostCenter(models.TransientModel):
             else:
                 warning_analytic.append(record.name)
         if warning_analytic:
-            warning_msg = 'These analytic accounts have already a related cost center: %s' % warning_analytic
-            _logger.warning(warning_msg)
-            raise ValidationError(warning_msg)
+            _logger.warning(
+                'These analytic accounts have already a related cost center: %s',
+                warning_analytic)
+            raise ValidationError(
+                _('These analytic accounts have already a related cost center: %s')
+                % warning_analytic)
         return result

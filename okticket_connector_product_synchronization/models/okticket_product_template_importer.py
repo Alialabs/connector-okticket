@@ -78,6 +78,54 @@ class ProductTemplateBatchImporter(Component):
     def name(self, record):
         return {'name': record['name']}
 
+    def _apply_aeat_tax_defaults(self, odoo_product, record):
+        """Propose the tax mapping of the category, without ever breaking the run.
+
+        This is configuration written by a scheduled job that passes over every
+        category every couple of hours, so it is bounded on purpose: it only
+        ever adds rows nobody had, or refreshes rows it wrote itself, and a
+        failure here must not cost the masters synchronisation -- the products
+        are what the expense import depends on, the tax proposal is a
+        convenience on top.
+        """
+        company = self.backend_record.company_id
+        if not odoo_product or not company:
+            return
+        try:
+            summary = odoo_product.okticket_apply_aeat_tax_defaults(
+                company, record.get('id'), record.get('name'))
+        except Exception as error:  # noqa: BLE001 - never break the import
+            msg = _('Could not propose the tax mapping of category %s: %s') % (
+                record.get('name'), error)
+            _logger.warning(msg, exc_info=True)
+            self.env['log.event'].add_event({
+                'backend_id': self.backend_record.id,
+                'type': 'warning',
+                'msg': msg,
+            })
+            return
+        if summary['created'] or summary['updated']:
+            _logger.info('Tax mapping for %s in %s: %s created, %s updated',
+                         summary['category'], company.name,
+                         summary['created'], summary['updated'])
+        if summary['by_name_only']:
+            # The name is what identifies the category; the id only corroborates
+            # it. Worth saying out loud, because a renumbering on OkTicket's side
+            # shows up here first.
+            msg = _('Category "%s" was recognised by name but its OkTicket id '
+                    '(%s) is not the expected one. The Spanish VAT criteria '
+                    'were applied; check the product taxes if this is a '
+                    'different category.') % (record.get('name'), record.get('id'))
+            self.env['log.event'].add_event({
+                'backend_id': self.backend_record.id,
+                'type': 'warning',
+                'msg': msg,
+            })
+        if summary['no_tax']:
+            # Normal on a database whose chart of accounts is not loaded yet.
+            _logger.info('No chart tax for %s in company %s: %s',
+                         summary['category'], company.name, summary['no_tax'])
+
     def run(self, filters=None, options=None):
         backend_adapter = self.component(usage='backend.adapter')
         mapper = self.component(usage='importer')
@@ -111,6 +159,9 @@ class ProductTemplateBatchImporter(Component):
                     if odoo_product:
                         odoo_product.load_rebillable_product_version()
                         odoo_product.load_invoice_product_version()
+                        # Rows are per company, so the backend that reuses
+                        # another one's product still has to propose its own.
+                        self._apply_aeat_tax_defaults(odoo_product, product_ext_vals)
                     okticket_product_template_ids.append(already.id)
                     continue
                 if internal_data.get('odoo_id'):
@@ -136,6 +187,9 @@ class ProductTemplateBatchImporter(Component):
             # Creation/update of invoice product version which is being imported
             if odoo_product:
                 invoice_product_version_ids = odoo_product.load_invoice_product_version()
+                # Only on the base product: okticket_mapped_tax falls back to it
+                # from the invoice and rebillable versions.
+                self._apply_aeat_tax_defaults(odoo_product, product_ext_vals)
 
                 # FYI: implementar si se necesitase crear la versión "refacturable"
                 #  (reinvoiceable) de la versión "factura" (invoice) de un producto
