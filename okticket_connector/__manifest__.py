@@ -5,7 +5,7 @@
     'name': 'Alia Okticket Connector',
     'summary': 'Mainly features, models and business logic for Okticket connector. '
                'Implements expenses import from Okticket.',
-    'version': '18.0.1.2.0',
+    'version': '18.0.1.3.0',
     'category': 'Connector',
     'depends': [
         'hr',

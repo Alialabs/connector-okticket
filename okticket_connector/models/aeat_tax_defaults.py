@@ -131,8 +131,11 @@ OKTICKET_DEFAULT_CATEGORIES = {
         'rates': {},
         'legal': 'No nature and no rate can be stated for a catch-all '
                  'category: it holds anything from a hotel extra to a box of '
-                 'pens. Deliberately left empty -- seeding it would mean '
-                 'guessing, and a wrong row here reaches the VAT books.',
+                 'pens. The law gives nothing to seed here, so every rate is '
+                 'left to the service fallback below -- which is a decision '
+                 'about what to do when nobody decided, not a legal criterion. '
+                 'Correct the row on the product when a receipt says otherwise: '
+                 'from then on the connector leaves it alone.',
     },
     1: {
         'name': 'Restauración',
@@ -320,6 +323,43 @@ def resolve_category(external_id, name):
             if _normalise(candidate['name']) == folded:
                 return cat_id, candidate, False
     return None
+
+
+# The rates OkTicket can report. A receipt never carries anything else: the
+# API sends an entry for each of them and zeroes the base of the ones the
+# document does not use.
+OKTICKET_REPORTED_RATES = (21.0, 10.0, 4.0, 0.0)
+
+
+def service_fallback_rows(category_id):
+    """Service rows for the rates the category's legal criterion leaves open.
+
+    Without them a rate the table says nothing about has no tax to resolve to,
+    and the two sides of the connector disagree on what to do: the expense
+    import falls back to the product's default tax while the invoice, which
+    needs one tax *per rate*, refuses. The customer's decision is to close that
+    gap with the services variant, which is also the nature every expense
+    product is typed as.
+
+    They are a default, not a legal statement: a category whose law says a rate
+    is goods -- fuel, staple food -- declares it in the table above and that row
+    wins. This only fills what nobody decided.
+
+    :param category_id: the OkTicket category id (its ``external_id``).
+    :return: list of ``(rate, scope, tax_xmlid_suffix)``.
+    """
+    category = OKTICKET_DEFAULT_CATEGORIES.get(category_id)
+    if category is None:
+        return []
+    declared = set(category['rates'])
+    rows = []
+    for rate in OKTICKET_REPORTED_RATES:
+        if rate in declared:
+            continue
+        suffix = BASE_TAX_BY_RATE_SCOPE.get((rate, 'service'))
+        if suffix:
+            rows.append((rate, 'service', suffix))
+    return rows
 
 
 def category_tax_rows(category_id):

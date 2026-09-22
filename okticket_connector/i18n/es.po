@@ -421,6 +421,18 @@ msgstr "Gasto"
 #. odoo-python
 #: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
 msgid ""
+"Expense %s reports %g%% but company %s has no purchase tax at that rate; "
+"imported with no tax. Check the receipt, or add the tax to the chart of "
+"accounts."
+msgstr ""
+"El gasto %s reporta un %g%% pero la compañía %s no tiene ningún impuesto de "
+"compra a ese tipo; se importa sin impuesto. Revise el justificante, o añada "
+"el impuesto al plan contable."
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
+msgid ""
 "Expense %s reports %g%% but that rate matches several purchase taxes in "
 "company %s that cannot be told apart (%s); imported with no tax. Map the "
 "rate on the product's OkTicket tab, or add the right tax to the product."
@@ -434,13 +446,25 @@ msgstr ""
 #. odoo-python
 #: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
 msgid ""
+"Expense %s reports %g%% but the category of product \"%s\" declares no tax "
+"for that rate (it declares %s); imported with no tax. Check the receipt, or "
+"add the rate on the product's OkTicket tab."
+msgstr ""
+"El gasto %s reporta un %g%% pero la categoría del producto \"%s\" no declara"
+" ningún impuesto para ese tipo (declara %s); se importa sin impuesto. Revise"
+" el justificante, o añada el tipo en la pestaña OkTicket del producto."
+
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
+msgid ""
 "Expense %s reports several tax rates (%s) but an Odoo expense holds a single"
-" taxable base; keeping the product default taxes. Review this expense "
-"manually."
+" taxable base; imported with no tax. The supplier invoice does keep the "
+"breakdown, one line per rate. Review this expense manually."
 msgstr ""
 "El gasto %s reporta varios tipos de IVA (%s) pero un gasto de Odoo tiene una"
-" única base imponible; se mantienen los impuestos por defecto del producto. "
-"Revise este gasto manualmente."
+" única base imponible; se importa sin impuesto. La factura de proveedor sí "
+"conserva el desglose, una línea por tipo. Revise este gasto a mano."
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__date
@@ -1471,3 +1495,12 @@ msgstr "⇒ Ver logs"
 #: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
 msgid "⇒ See Hr Expense Bindings"
 msgstr "⇒ Ver Bindings de gastos"
+
+#~ msgid ""
+#~ "Expense %s reports several tax rates (%s) but an Odoo expense holds a single"
+#~ " taxable base; keeping the product default taxes. Review this expense "
+#~ "manually."
+#~ msgstr ""
+#~ "El gasto %s reporta varios tipos de IVA (%s) pero un gasto de Odoo tiene una"
+#~ " única base imponible; se mantienen los impuestos por defecto del producto. "
+#~ "Revise este gasto manualmente."
