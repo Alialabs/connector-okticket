@@ -3,7 +3,11 @@ import logging
 from odoo import _, api, fields, models
 from odoo.tools.float_utils import float_compare
 
-from .aeat_tax_defaults import category_tax_rows, resolve_category
+from .aeat_tax_defaults import (
+    category_tax_rows,
+    resolve_category,
+    service_fallback_rows,
+)
 
 _logger = logging.getLogger(__name__)
 
@@ -43,6 +47,23 @@ class ProductTemplate(models.Model):
              "resolve is not the right one -- typically a rate that is goods "
              "here, since every expense product is typed as a service."
     )
+
+    def okticket_declared_rates(self, company_id):
+        """The rates this product declares a tax for, its base product included.
+
+        Used to tell "this category says nothing about taxes" from "this
+        category says what its rates are, and the one on the receipt is not one
+        of them". The second is a receipt that contradicts its own category --
+        a 21% toll, a 0% refuelling -- and the connector refuses to guess there.
+        """
+        self.ensure_one()
+        products = self
+        base = self.get_base_product()
+        if base and base != self:
+            products = self + base
+        return {row.okticket_rate for product in products
+                for row in product.okticket_tax_mapping_ids
+                if row.company_id.id == company_id}
 
     def okticket_mapped_tax(self, rate, company_id):
         """The tax this product declares for an OkTicket rate, or an empty set.
@@ -122,7 +143,11 @@ class ProductTemplate(models.Model):
         category_id, entry, exact = resolved
         summary.update(category=entry['name'], by_name_only=not exact)
         mapping_model = self.env['okticket.product.tax.mapping']
-        for rate, _scope, suffix in category_tax_rows(category_id):
+        # The law first, then the service fallback for the rates it leaves
+        # open. Both are proposals and both stop being touched the moment a
+        # person changes the tax.
+        rows = category_tax_rows(category_id) + service_fallback_rows(category_id)
+        for rate, _scope, suffix in rows:
             tax = self._okticket_chart_tax(company, suffix)
             if not tax:
                 summary['no_tax'].append((rate, suffix))

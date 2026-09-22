@@ -127,8 +127,12 @@ class HrExpenseBatchImporter(Component):
         :return: list of account.tax ids, or None to keep the product defaults.
         """
         raw_taxes = record.get('taxes')
-        if not raw_taxes or not company_id or not isinstance(raw_taxes, (list, tuple)):
+        if not company_id:
             return None
+        if not raw_taxes or not isinstance(raw_taxes, (list, tuple)):
+            # OkTicket declares no VAT for this expense, so neither do we. The
+            # product's default tax is a guess about a receipt nobody read.
+            return []
         # OkTicket sends an entry for every rate it knows about and zeroes the
         # base of the ones the receipt does not use, e.g.
         #   [{p: 0, b: 0}, {p: 4, b: 0}, {p: 10, b: 0}, {p: 21, b: 14.88}]
@@ -147,11 +151,13 @@ class HrExpenseBatchImporter(Component):
             if rate not in rates:
                 rates.append(rate)
         if not rates:
-            return None
+            # Every entry with a zero base: the receipt declares no VAT.
+            return []
         if len(rates) > 1:
             msg = _('Expense %s reports several tax rates (%s) but an Odoo expense '
-                    'holds a single taxable base; keeping the product default taxes. '
-                    'Review this expense manually.') % (
+                    'holds a single taxable base; imported with no tax. The '
+                    'supplier invoice does keep the breakdown, one line per '
+                    'rate. Review this expense manually.') % (
                 record.get('_id'), ', '.join('%g%%' % r for r in rates))
             self.env['log.event'].add_event({
                 'backend_id': self.backend_record.id,
@@ -159,7 +165,9 @@ class HrExpenseBatchImporter(Component):
                 'msg': msg,
             })
             _logger.warning(msg)
-            return None
+            # No answer is faithful with a single taxable base, and keeping the
+            # product defaults means picking one of the rates at random.
+            return []
         # Expense taxes are tax inclusive: hr.expense computes them with
         # ``force_price_include`` in the context, so the receipt total is always
         # treated as gross. The tax record's own ``price_include`` flag is
@@ -172,10 +180,21 @@ class HrExpenseBatchImporter(Component):
             ('company_id', '=', company_id),
         ])
         if not candidates:
-            _logger.warning('No purchase tax of %g%% found in company %s for expense %s; '
-                            'keeping the product default taxes',
-                            rates[0], company_id, record.get('_id'))
-            return None
+            # The chart carries no purchase tax at that rate -- the 5% of a car
+            # park, for instance. Keeping the product's default would book a
+            # rate the receipt never mentioned, and only the server log would
+            # know.
+            msg = _('Expense %s reports %g%% but company %s has no purchase tax at '
+                    'that rate; imported with no tax. Check the receipt, or add '
+                    'the tax to the chart of accounts.') % (
+                record.get('_id'), rates[0], company_id)
+            self.env['log.event'].add_event({
+                'backend_id': self.backend_record.id,
+                'type': 'warning',
+                'msg': msg,
+            })
+            _logger.warning(msg)
+            return []
         # Resolution chain, from the most explicit to the most inferred. None of
         # the steps ever falls back to "whatever the database returns first".
         if product is not None:
@@ -188,6 +207,26 @@ class HrExpenseBatchImporter(Component):
                 rates[0], company_id)
             if mapped:
                 return mapped.ids
+            # The product declares taxes for other rates but not for this one:
+            # the receipt carries a rate its category does not admit -- a toll
+            # at 10%, a refuelling at 0% -- almost always a capture error. It
+            # does not fall through to the steps below because they would end
+            # up applying the product's default tax, which is inventing one.
+            declared = product.product_tmpl_id.okticket_declared_rates(company_id)
+            if declared:
+                msg = _('Expense %s reports %g%% but the category of product "%s" '
+                        'declares no tax for that rate (it declares %s); imported '
+                        'with no tax. Check the receipt, or add the rate on the '
+                        "product's OkTicket tab.") % (
+                    record.get('_id'), rates[0], product.display_name,
+                    ', '.join('%g%%' % r for r in sorted(declared)))
+                self.env['log.event'].add_event({
+                    'backend_id': self.backend_record.id,
+                    'type': 'warning',
+                    'msg': msg,
+                })
+                _logger.warning(msg)
+                return []
         # 2) A tax the product already carries: same chart context, deterministic.
         own = candidates & product.supplier_taxes_id if product else self.env['account.tax']
         # 3) Structural disambiguation.

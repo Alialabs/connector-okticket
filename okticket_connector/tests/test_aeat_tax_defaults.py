@@ -8,8 +8,10 @@ from odoo.tests.common import TransactionCase
 from ..models.aeat_tax_defaults import (
     BASE_TAX_BY_RATE_SCOPE,
     OKTICKET_DEFAULT_CATEGORIES,
+    OKTICKET_REPORTED_RATES,
     category_tax_rows,
     resolve_category,
+    service_fallback_rows,
 )
 
 
@@ -52,6 +54,41 @@ class TestAeatTaxDefaultsTable(TransactionCase):
 
     def test_catch_all_category_proposes_nothing(self):
         self.assertEqual(category_tax_rows(0), [])
+
+    def test_the_fallback_closes_the_rates_the_law_leaves_open(self):
+        """Every rate OkTicket can report resolves to something.
+
+        Otherwise the two sides disagree: the expense import falls back to the
+        product default and the invoice, which needs one tax per rate, refuses.
+        """
+        for category_id in OKTICKET_DEFAULT_CATEGORIES:
+            declared = {rate for rate, _s, _x in category_tax_rows(category_id)}
+            fallback = {rate for rate, _s, _x in service_fallback_rows(category_id)}
+            self.assertFalse(declared & fallback, category_id)
+            self.assertEqual(
+                declared | fallback, set(OKTICKET_REPORTED_RATES), category_id)
+
+    def test_the_fallback_is_always_services(self):
+        for category_id in OKTICKET_DEFAULT_CATEGORIES:
+            for _rate, scope, suffix in service_fallback_rows(category_id):
+                self.assertEqual(scope, 'service')
+                self.assertTrue(suffix.endswith(('_sc', '_s_sc')), suffix)
+
+    def test_the_fallback_never_overrides_a_legal_criterion(self):
+        """Fuel at 21% is goods by law and stays goods."""
+        gasolina = [cat_id for cat_id, cat in OKTICKET_DEFAULT_CATEGORIES.items()
+                    if cat['name'] == 'Gasolina'][0]
+        rows = dict((rate, suffix)
+                    for rate, _s, suffix in category_tax_rows(gasolina))
+        self.assertEqual(rows[21.0], 'p_iva21_bc')
+        self.assertNotIn(21.0, [r for r, _s, _x in service_fallback_rows(gasolina)])
+
+    def test_the_catch_all_category_falls_back_entirely(self):
+        """"Otros" has no legal criterion, so every rate comes from the fallback."""
+        self.assertEqual(category_tax_rows(0), [])
+        self.assertEqual(
+            {rate for rate, _s, _x in service_fallback_rows(0)},
+            set(OKTICKET_REPORTED_RATES))
 
     def test_fuel_is_the_only_goods_category(self):
         goods = [c['name'] for c in OKTICKET_DEFAULT_CATEGORIES.values()
@@ -134,26 +171,29 @@ class TestAeatTaxDefaultsApply(TransactionCase):
             self.company, external_id, name)
 
     def test_proposal_is_written_and_flagged(self):
+        """Taxi: 10% from the law, the other rates from the service fallback."""
         summary = self._apply()
-        self.assertEqual(summary['created'], 1)
-        row = self.product.okticket_tax_mapping_ids
-        self.assertEqual(len(row), 1)
-        self.assertEqual(row.okticket_rate, 10.0)
-        self.assertEqual(row.tax_id, self.tax_10_s)
-        self.assertTrue(row.auto_generated)
+        rows = self.product.okticket_tax_mapping_ids
+        self.assertEqual(summary['created'], len(rows))
+        legal = rows.filtered(lambda r: r.okticket_rate == 10.0)
+        self.assertEqual(legal.tax_id, self.tax_10_s)
+        self.assertTrue(all(rows.mapped('auto_generated')))
+        self.assertIn(10.0, rows.mapped('okticket_rate'))
 
     def test_running_again_changes_nothing(self):
         """The scheduled job passes over every category every couple of hours."""
-        self._apply()
+        first = self._apply()
         summary = self._apply()
         self.assertEqual(summary['created'], 0)
         self.assertEqual(summary['updated'], 0)
-        self.assertEqual(summary['kept'], 1)
-        self.assertEqual(len(self.product.okticket_tax_mapping_ids), 1)
+        self.assertEqual(summary['kept'], first['created'])
+        self.assertEqual(
+            len(self.product.okticket_tax_mapping_ids), first['created'])
 
     def test_an_edited_row_is_never_touched_again(self):
         self._apply()
-        row = self.product.okticket_tax_mapping_ids
+        row = self.product.okticket_tax_mapping_ids.filtered(
+            lambda r: r.okticket_rate == 10.0)
         row.write({'tax_id': self.other_tax.id})
         self.assertFalse(row.auto_generated, 'editing the tax takes ownership')
         summary = self._apply()
@@ -164,7 +204,8 @@ class TestAeatTaxDefaultsApply(TransactionCase):
     def test_a_proposed_row_follows_the_table(self):
         """How a change of criterion reaches installations: no migration."""
         self._apply()
-        row = self.product.okticket_tax_mapping_ids
+        row = self.product.okticket_tax_mapping_ids.filtered(
+            lambda r: r.okticket_rate == 10.0)
         row.with_context(okticket_auto_mapping=True).write(
             {'tax_id': self.other_tax.id})
         self.assertTrue(row.auto_generated)
@@ -186,7 +227,8 @@ class TestAeatTaxDefaultsApply(TransactionCase):
         })
         fuel.okticket_apply_aeat_tax_defaults(self.company, 6, 'Gasolina')
         rates = fuel.okticket_tax_mapping_ids.mapped('okticket_rate')
-        self.assertEqual(sorted(rates), [10.0, 21.0])
+        self.assertEqual(sorted(rates), [0.0, 4.0, 10.0, 21.0],
+                         'the law gives 10 and 21, the fallback the rest')
         self.assertEqual(
             fuel.okticket_tax_mapping_ids.filtered(
                 lambda m: m.okticket_rate == 10.0).tax_id,
@@ -204,7 +246,9 @@ class TestAeatTaxDefaultsApply(TransactionCase):
             summary = empty.okticket_apply_aeat_tax_defaults(
                 self.company, 3, 'Peaje')
         self.assertEqual(summary['created'], 0)
-        self.assertEqual(len(summary['no_tax']), 1)
+        # One entry per rate it would have proposed: the one the law gives the
+        # category and the ones the service fallback covers.
+        self.assertEqual(len(summary['no_tax']), len(OKTICKET_REPORTED_RATES))
         self.assertFalse(empty.okticket_tax_mapping_ids)
 
     def patch_missing_chart(self):
