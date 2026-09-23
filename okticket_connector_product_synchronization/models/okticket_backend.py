@@ -19,12 +19,13 @@ class OkticketBackend(models.Model):
             _logger.info(
                 'Scheduling product batch synchronization from Okticket '
                 'with backend %s.' % backend_record.name)
-            # with_company is mandatory here: invoice_prod_id / rebillable_prod_id
+            # okticket_work_env fixes the company and the language. The
+            # company is mandatory here: invoice_prod_id / rebillable_prod_id
             # are company_dependent, so without it the base->invoice links are
             # written under the cron user's company while the expense importer
             # reads them under the backend's company. Any non-default company
             # then resolved no product for "Factura" expenses and dropped them.
-            backend_record.with_company(backend_record.company_id).synchronize_products()
+            backend_record.okticket_work_env().synchronize_products()
 
     def synchronize_products(self):
         self.ensure_one()

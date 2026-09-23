@@ -127,3 +127,61 @@ class TestExpenseTaxCriteria(TransactionCase):
         the resolution chain still reaches the tax the product carries.
         """
         self.assertEqual(self._resolve([{"p": 21, "b": 80.0}]), self.tax_21.ids)
+
+@tagged("post_install", "-at_install")
+class TestBackendWorkLanguage(TransactionCase):
+    """The language a scheduled run writes in cannot depend on who started it.
+
+    Odoo's "Run manually" button calls ``with_context({'lastcall': ...})``,
+    which replaces the context instead of extending it, so the job loses the
+    language and every translated string it writes comes out in English: the
+    log entries, the reason left on an expense and the name of the expense
+    sheet, which then travels to OkTicket as the report name.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.company = cls.env.company
+        cls.backend = cls.env["okticket.backend"].create(
+            {
+                "name": "Backend de idioma",
+                "location": "https://example.invalid/v2/public",
+                "version": "1.0",
+                "http_client_conn_url": "example.invalid",
+                "base_url": "https://example.invalid/v2/public",
+                "image_base_url": "https://example.invalid/v2/public",
+                "auth_uri": "/oauth/token",
+                "uri_op_path": "/api",
+                "api_login": "test",
+                "api_password": "test",
+                "oauth_client_id": "1",
+                "oauth_secret": "test",
+                "grant_type": "password",
+                "scope": "*",
+                "company_id": cls.company.id,
+            }
+        )
+
+    def _sin_idioma(self):
+        """The backend as the manual trigger leaves it: no lang in context."""
+        backend = self.backend.with_context({})
+        self.assertFalse(backend.env.context.get("lang"))
+        return backend
+
+    def test_the_backend_states_the_language(self):
+        spanish = self.env["res.lang"]._activate_lang("es_ES")
+        self.backend.default_lang_id = spanish
+        backend = self._sin_idioma()
+        self.assertEqual(backend.okticket_work_lang(), "es_ES")
+        self.assertEqual(backend.okticket_work_env().env.context.get("lang"), "es_ES")
+
+    def test_without_one_it_falls_back_to_the_company(self):
+        self.backend.default_lang_id = False
+        self.env["res.lang"]._activate_lang("es_ES")
+        self.company.partner_id.lang = "es_ES"
+        self.assertEqual(self._sin_idioma().okticket_work_lang(), "es_ES")
+
+    def test_the_work_env_also_carries_the_company(self):
+        backend = self.backend.okticket_work_env()
+        self.assertEqual(backend.env.company, self.company)

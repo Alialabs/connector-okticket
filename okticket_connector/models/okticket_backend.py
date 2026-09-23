@@ -30,10 +30,17 @@ class OkticketBackend(models.Model):
     key = fields.Char(string='Key', size=64, groups='connector.group_connector_manager')
     version = fields.Selection(selection='_select_versions', string='Version', required=True)
     default_lang_id = fields.Many2one('res.lang', string='Default Language', help=(
-        "If a default language is selected, the records "
-        "will be imported in the translation of this language.\n"
-        "Note that a similar configuration exists "
-        "for each storeview."
+        "The language every scheduled run of this backend works in: the log "
+        "entries, the reasons written on the expenses and the names of the "
+        "expense sheets, which travel to OkTicket as the report name.\n\n"
+        "It has to be stated here and not inherited from whoever starts the "
+        "run. Odoo's \"Run manually\" button replaces the whole context, so a "
+        "job launched from the interface carries no language and writes "
+        "everything in English, while the same job launched by the scheduler "
+        "writes it in Spanish. Nothing should depend on which button was "
+        "pressed.\n\n"
+        "Left empty, the company's language is used, and failing that the "
+        "one of the user the job runs as."
     ))
     company_id = fields.Many2one('res.company', required=True, readonly=True, default=lambda self: self.env.company)
     okticket_company_id = fields.Integer(string='Okticket Company Id', related='company_id.okticket_company_id')
@@ -98,13 +105,37 @@ class OkticketBackend(models.Model):
         raise UserError(_('Connection test succeeded\nEverything seems properly set up'))
 
     @api.model
+    def okticket_work_lang(self):
+        """The language this backend's work is written in.
+
+        :return: a language code, or False when nothing states one.
+        """
+        self.ensure_one()
+        return (self.default_lang_id.code
+                or self.company_id.partner_id.lang
+                or self.env.user.lang
+                or self.env.context.get('lang'))
+
+    def okticket_work_env(self):
+        """This backend, bound to the company and the language of its work.
+
+        Every scheduled entry point goes through here, so a run started from
+        the "Run manually" button produces exactly what the scheduler would:
+        Odoo's ``method_direct_trigger`` replaces the context instead of
+        extending it, and what got lost on the way was the language.
+        """
+        self.ensure_one()
+        backend = self.with_company(self.company_id)
+        lang = backend.okticket_work_lang()
+        return backend.with_context(lang=lang) if lang else backend
+
     def _scheduler_import_expenses(self):
         """
         Schedule expenses batch import from Okticket.
         """
         for backend_record in self.search([]):
             _logger.info('Scheduling expenses batch import from Okticket with backend %s.', backend_record.name)
-            backend_record.with_company(backend_record.company_id).import_expenses()
+            backend_record.okticket_work_env().import_expenses()
 
     def import_expenses(self):
         """
