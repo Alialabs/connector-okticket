@@ -254,18 +254,6 @@ msgstr "Nombre del gasto"
 #. odoo-python
 #: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
 msgid ""
-"Expense sheet \"%(sheet)s\" is now \"%(state)s\" in Odoo but the status "
-"could not be sent to OkTicket (action %(action)s): %(reason)s. Both sides "
-"are out of sync until someone fixes it by hand."
-msgstr ""
-"La hoja de gastos \"%(sheet)s\" está ahora en \"%(state)s\" en Odoo pero el "
-"estado no se ha podido enviar a OkTicket (acción %(action)s): %(reason)s. "
-"Las dos partes quedan desincronizadas hasta que alguien lo corrija a mano."
-
-#. module: okticket_connector_hr_expense_sheet
-#. odoo-python
-#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
-msgid ""
 "Expense sheet report %(report)s: %(linked)s of %(total)s expenses linked in "
 "OkTicket. The other %(refused)s were refused and stay on the Odoo sheet "
 "without their OkTicket counterpart, so the two sides differ for those lines."
@@ -516,12 +504,6 @@ msgstr "OkTicket no ha devuelto el informe %s"
 #. module: okticket_connector_hr_expense_sheet
 #. odoo-python
 #: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
-msgid "OkTicket does not allow it from its current status %s"
-msgstr "OkTicket no lo permite desde su estado actual %s"
-
-#. module: okticket_connector_hr_expense_sheet
-#. odoo-python
-#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
 msgid ""
 "OkTicket refused every expense of this sheet (%(total)s of them). First "
 "reason: %(reason)s"
@@ -573,11 +555,6 @@ msgstr "CT"
 #: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__payment_mode
 msgid "Paid By"
 msgstr "Pagado por"
-
-#. module: okticket_connector_hr_expense_sheet
-#: model:ir.model,name:okticket_connector_hr_expense_sheet.model_account_payment_register
-msgid "Pay"
-msgstr "Pagar"
 
 #. module: okticket_connector_hr_expense_sheet
 #: model:ir.model.fields,field_description:okticket_connector_hr_expense_sheet.field_okticket_hr_expense_sheet__payment_method_line_id
@@ -713,12 +690,28 @@ msgid "Website communication history"
 msgstr "Historial de comunicaciones del sitio web"
 
 #. module: okticket_connector_hr_expense_sheet
-#. odoo-python
-#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
-msgid "the sheet has no OkTicket report bound to it"
-msgstr "la hoja no tiene ningún informe de OkTicket vinculado"
-
-#. module: okticket_connector_hr_expense_sheet
 #: model_terms:ir.ui.view,arch_db:okticket_connector_hr_expense_sheet.view_okticket_backend_form
 msgid "⇒ See Hr Expense Sheet Bindings"
 msgstr "⇒ Ver vínculos de hojas de gastos de RRHH"
+
+#. module: okticket_connector_hr_expense_sheet
+#. odoo-python
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
+msgid ""
+"Expense sheet \"%(sheet)s\" is now \"%(state)s\" in Odoo but its OkTicket "
+"report could not follow: %(reason)s. Both sides are out of sync until "
+"someone fixes it by hand."
+msgstr ""
+"La hoja de gastos \"%(sheet)s\" está ahora en \"%(state)s\" en Odoo, pero su"
+" informe de OkTicket no ha podido seguirla: %(reason)s. Las dos partes "
+"quedan desincronizadas hasta que alguien lo corrija a mano."
+
+#. module: okticket_connector_hr_expense_sheet
+#. odoo-python
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
+msgid ""
+"OkTicket has no action that takes the report from its status %(current)s to "
+"%(target)s"
+msgstr ""
+"OkTicket no tiene ninguna acción que lleve el informe de su estado "
+"%(current)s al %(target)s"
