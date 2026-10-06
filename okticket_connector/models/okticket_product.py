@@ -32,10 +32,10 @@ class ProductTemplate(models.Model):
     okticket_tax_mapping_ids = fields.One2many(
         'okticket.product.tax.mapping', 'product_tmpl_id',
         string='OkTicket Tax Mapping',
-        help="Which Odoo tax each rate OkTicket reports means for this product. "
-             "Rows are only needed where the tax the connector would otherwise "
-             "resolve is not the right one -- typically a rate that is goods "
-             "here, since every expense product is typed as a service."
+        help="Which Odoo tax each rate OkTicket reports means for this product "
+             "on a supplier invoice. Imported expenses never carry VAT: it can "
+             "only be deducted through an invoice, so these rows are used when "
+             "one is created from a receipt marked as an invoice."
     )
 
     def okticket_mapped_tax(self, rate, company_id):
