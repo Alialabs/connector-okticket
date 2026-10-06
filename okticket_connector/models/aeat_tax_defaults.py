@@ -5,7 +5,10 @@
 """Which Odoo tax an OkTicket rate means, derived from Spanish VAT law.
 
 Reference data for pre-filling ``okticket.product.tax.mapping`` when a category
-is imported and its product created. Two tables:
+is imported and its product created. The mapping is read when a supplier invoice
+is built from a receipt marked as an invoice; imported expenses themselves
+never carry VAT, because it can only be deducted against an invoice (LIVA
+art. 97). Two tables:
 
 * ``BASE_TAX_BY_RATE_SCOPE`` -- the Odoo tax that stands for a (rate, nature)
   pair in the Spanish chart.
@@ -22,7 +25,7 @@ receipt filed there may legitimately carry 21% or 4%. Seeding from it would
 write mappings that are wrong in law.
 
 A row is a *lookup*, never a default: it says "if a receipt reports this rate,
-this is the Odoo tax", so listing a rate here never forces it on an expense.
+this is the Odoo tax", so listing a rate here never forces it on an invoice.
 That is why the temporary rates need no special handling -- the rate arrives on
 the receipt and the row only has to know what it means. It is also why a rate
 this table does not list is worth a warning rather than a silent fallback: on a
@@ -335,11 +338,9 @@ def service_fallback_rows(category_id):
     """Service rows for the rates the category's legal criterion leaves open.
 
     Without them a rate the table says nothing about has no tax to resolve to,
-    and the two sides of the connector disagree on what to do: the expense
-    import falls back to the product's default tax while the invoice, which
-    needs one tax *per rate*, refuses. The customer's decision is to close that
-    gap with the services variant, which is also the nature every expense
-    product is typed as.
+    and the supplier invoice, which needs one tax *per rate*, is refused. The
+    customer's decision is to close that gap with the services variant, which is
+    also the nature every expense product is typed as.
 
     They are a default, not a legal statement: a category whose law says a rate
     is goods -- fuel, staple food -- declares it in the table above and that row

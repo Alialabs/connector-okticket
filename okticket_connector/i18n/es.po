@@ -418,55 +418,6 @@ msgid "Expense"
 msgstr "Gasto"
 
 #. module: okticket_connector
-#. odoo-python
-#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
-msgid ""
-"Expense %s reports %g%% but company %s has no purchase tax at that rate; "
-"imported with no tax. Check the receipt, or add the tax to the chart of "
-"accounts."
-msgstr ""
-"El gasto %s reporta un %g%% pero la compañía %s no tiene ningún impuesto de "
-"compra a ese tipo; se importa sin impuesto. Revise el justificante, o añada "
-"el impuesto al plan contable."
-
-#. module: okticket_connector
-#. odoo-python
-#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
-msgid ""
-"Expense %s reports %g%% but that rate matches several purchase taxes in "
-"company %s that cannot be told apart (%s); imported with no tax. Map the "
-"rate on the product's OkTicket tab, or add the right tax to the product."
-msgstr ""
-"El gasto %s reporta un %g%% pero ese tipo coincide con varios impuestos de "
-"compra de la compañía %s que no se pueden distinguir (%s); se importa sin "
-"impuesto. Asigne el tipo en la pestaña OkTicket del producto, o añada el "
-"impuesto correcto al producto."
-
-#. module: okticket_connector
-#. odoo-python
-#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
-msgid ""
-"Expense %s reports %g%% but the category of product \"%s\" declares no tax "
-"for that rate (it declares %s); imported with no tax. Check the receipt, or "
-"add the rate on the product's OkTicket tab."
-msgstr ""
-"El gasto %s reporta un %g%% pero la categoría del producto \"%s\" no declara"
-" ningún impuesto para ese tipo (declara %s); se importa sin impuesto. Revise"
-" el justificante, o añada el tipo en la pestaña OkTicket del producto."
-
-#. module: okticket_connector
-#. odoo-python
-#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
-msgid ""
-"Expense %s reports several tax rates (%s) but an Odoo expense holds a single"
-" taxable base; imported with no tax. The supplier invoice does keep the "
-"breakdown, one line per rate. Review this expense manually."
-msgstr ""
-"El gasto %s reporta varios tipos de IVA (%s) pero un gasto de Odoo tiene una"
-" única base imponible; se importa sin impuesto. La factura de proveedor sí "
-"conserva el desglose, una línea por tipo. Revise este gasto a mano."
-
-#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__date
 msgid "Expense Date"
 msgstr "Fecha de gasto"
@@ -575,15 +526,6 @@ msgstr "Icono"
 #: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__activity_exception_icon
 msgid "Icon to indicate an exception activity."
 msgstr "Icono para indicar una actividad de excepción."
-
-#. module: okticket_connector
-#: model:ir.model.fields,help:okticket_connector.field_okticket_backend__default_lang_id
-msgid ""
-"If a default language is selected, the records will be imported in the translation of this language.\n"
-"Note that a similar configuration exists for each storeview."
-msgstr ""
-"Si un idioma por defecto está seleccionado, los registro serán importados en la traducción de este idioma.\n"
-"Observe que una configuración similar existe para cada storeview."
 
 #. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__message_needaction
@@ -1473,20 +1415,6 @@ msgstr ""
 "refacturable."
 
 #. module: okticket_connector
-#: model:ir.model.fields,help:okticket_connector.field_product_product__okticket_tax_mapping_ids
-#: model:ir.model.fields,help:okticket_connector.field_product_template__okticket_tax_mapping_ids
-msgid ""
-"Which Odoo tax each rate OkTicket reports means for this product. Rows are "
-"only needed where the tax the connector would otherwise resolve is not the "
-"right one -- typically a rate that is goods here, since every expense "
-"product is typed as a service."
-msgstr ""
-"Qué impuesto de Odoo significa cada tipo que reporta OkTicket para este "
-"producto. Solo hacen falta filas cuando el impuesto que el conector "
-"resolvería no es el correcto, típicamente un tipo que aquí sea de bienes, ya"
-" que todo producto de gasto se tipa como servicio."
-
-#. module: okticket_connector
 #: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
 msgid "⇒ See Backend Logs"
 msgstr "⇒ Ver logs"
@@ -1496,11 +1424,37 @@ msgstr "⇒ Ver logs"
 msgid "⇒ See Hr Expense Bindings"
 msgstr "⇒ Ver Bindings de gastos"
 
-#~ msgid ""
-#~ "Expense %s reports several tax rates (%s) but an Odoo expense holds a single"
-#~ " taxable base; keeping the product default taxes. Review this expense "
-#~ "manually."
-#~ msgstr ""
-#~ "El gasto %s reporta varios tipos de IVA (%s) pero un gasto de Odoo tiene una"
-#~ " única base imponible; se mantienen los impuestos por defecto del producto. "
-#~ "Revise este gasto manualmente."
+#. module: okticket_connector
+#. odoo-python
+#: code:addons/okticket_connector/models/hr_expense.py:0
+msgid "OkTicket"
+msgstr ""
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_okticket_backend__default_lang_id
+msgid ""
+"The language every scheduled run of this backend works in: the log entries, the reasons written on the expenses and the names of the expense sheets, which travel to OkTicket as the report name.\n"
+"\n"
+"It has to be stated here and not inherited from whoever starts the run. Odoo's \"Run manually\" button replaces the whole context, so a job launched from the interface carries no language and writes everything in English, while the same job launched by the scheduler writes it in Spanish. Nothing should depend on which button was pressed.\n"
+"\n"
+"Left empty, the company's language is used, and failing that the one of the user the job runs as."
+msgstr ""
+"El idioma en el que trabaja cada ejecución programada de este backend: las entradas del registro, los motivos que se escriben en los gastos y los nombres de las hojas de gastos, que viajan a OkTicket como nombre del informe.\n"
+"\n"
+"Hay que indicarlo aquí y no heredarlo de quien lanza la ejecución. El botón \"Ejecutar manualmente\" de Odoo reemplaza todo el contexto, así que un trabajo lanzado desde la interfaz no lleva idioma y lo escribe todo en inglés, mientras que el mismo trabajo lanzado por el planificador lo escribe en español. Nada debería depender de qué botón se pulsó.\n"
+"\n"
+"Si se deja vacío, se usa el idioma de la compañía y, si no, el del usuario con el que se ejecuta el trabajo."
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_product_product__okticket_tax_mapping_ids
+#: model:ir.model.fields,help:okticket_connector.field_product_template__okticket_tax_mapping_ids
+msgid ""
+"Which Odoo tax each rate OkTicket reports means for this product on a "
+"supplier invoice. Imported expenses never carry VAT: it can only be deducted"
+" through an invoice, so these rows are used when one is created from a "
+"receipt marked as an invoice."
+msgstr ""
+"Qué impuesto de Odoo significa, para este producto en una factura de "
+"proveedor, cada tipo que informa OkTicket. Los gastos importados nunca "
+"llevan IVA: solo se puede deducir mediante factura, así que estas filas se "
+"usan cuando se crea una a partir de un justificante marcado como factura."

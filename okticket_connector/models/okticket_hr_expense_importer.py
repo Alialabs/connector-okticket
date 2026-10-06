@@ -9,7 +9,7 @@ import logging
 import json
 
 import requests
-from odoo import _
+from odoo import Command, _
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping, only_create
 
@@ -72,210 +72,21 @@ class HrExpenseBatchImporter(Component):
                 )
         return existing
 
-    def _pick_single_tax(self, taxes, product=None):
-        """Narrow a set of same-rate purchase taxes down to a single one.
-
-        A Spanish chart carries twelve purchase taxes per rate and they all have
-        ``sequence = 1``, so taking the first one picks whatever id the database
-        returns -- on the reference chart that is ``10% EX S``, an extra-community
-        tax whose repartition sends +100% to input VAT and -100% to output VAT.
-        It nets to zero, so a domestic 10% receipt lost its whole deductible VAT
-        without a single error in the log.
-
-        Two structural criteria, no name matching:
-
-        * **Base taxes only.** A localisation that ships fiscal positions
-          declares the domestic tax of a rate as the ``tax_src_id`` of the
-          position mappings; the intra-community, import and reverse-charge
-          variants appear only as ``tax_dest_id``, because they are reached *by
-          translating* the base one. On the reference chart this alone takes the
-          twelve candidates down to three (goods, services, capital goods).
-        * **Matching scope.** ``tax_scope`` tells goods from services; an empty
-          scope applies to both. Expense products are services, which leaves
-          exactly one candidate for 4%, 10% and 21%.
-
-        :return: a single-record recordset, or an empty one when the choice is
-            not unambiguous -- never a guess.
-        """
-        if len(taxes) <= 1:
-            return taxes
-        src_ids = set(self.env['account.fiscal.position.tax'].search(
-            [('tax_src_id', 'in', taxes.ids)]).mapped('tax_src_id').ids)
-        base = taxes.filtered(lambda t: t.id in src_ids)
-        if base:
-            taxes = base
-        if len(taxes) > 1 and product:
-            scoped = taxes.filtered(lambda t: not t.tax_scope or t.tax_scope == product.type)
-            if scoped:
-                taxes = scoped
-        return taxes if len(taxes) == 1 else self.env['account.tax']
-
-    def _resolve_record_taxes(self, record, company_id, product=None):
-        """Resolve Odoo purchase taxes from OkTicket's own ``taxes`` breakdown.
-
-        OkTicket reports the real tax breakdown of the receipt as
-        ``[{'p': <rate>, 'b': <base>}, ...]``. The connector ignored this field
-        completely and always derived the taxes from the product's default
-        supplier taxes, which is why an imported expense could show a tax that
-        did not match the receipt at all.
-
-        hr.expense holds a single taxable base, so a receipt combining several
-        rates cannot be represented faithfully. In that case we log it and let
-        the caller keep the product defaults rather than applying every rate to
-        the whole base, which would inflate the tax.
-
-        :return: list of account.tax ids, or None to keep the product defaults.
-        """
-        raw_taxes = record.get('taxes')
-        if not company_id:
-            return None
-        if not raw_taxes or not isinstance(raw_taxes, (list, tuple)):
-            # OkTicket declares no VAT for this expense, so neither do we. The
-            # product's default tax is a guess about a receipt nobody read.
-            return []
-        # OkTicket sends an entry for every rate it knows about and zeroes the
-        # base of the ones the receipt does not use, e.g.
-        #   [{p: 0, b: 0}, {p: 4, b: 0}, {p: 10, b: 0}, {p: 21, b: 14.88}]
-        # so only entries with an actual base describe the receipt.
-        rates = []
-        for entry in raw_taxes:
-            if not isinstance(entry, dict) or entry.get('p') is None:
-                continue
-            try:
-                rate = float(entry['p'])
-                base = float(entry.get('b') or 0)
-            except (TypeError, ValueError):
-                continue
-            if base <= 0:
-                continue
-            if rate not in rates:
-                rates.append(rate)
-        if not rates:
-            # Every entry with a zero base: the receipt declares no VAT.
-            return []
-        if len(rates) > 1:
-            msg = _('Expense %s reports several tax rates (%s) but an Odoo expense '
-                    'holds a single taxable base; imported with no tax. The '
-                    'supplier invoice does keep the breakdown, one line per '
-                    'rate. Review this expense manually.') % (
-                record.get('_id'), ', '.join('%g%%' % r for r in rates))
-            self.env['log.event'].add_event({
-                'backend_id': self.backend_record.id,
-                'type': 'warning',
-                'msg': msg,
-            })
-            _logger.warning(msg)
-            # No answer is faithful with a single taxable base, and keeping the
-            # product defaults means picking one of the rates at random.
-            return []
-        # Expense taxes are tax inclusive: hr.expense computes them with
-        # ``force_price_include`` in the context, so the receipt total is always
-        # treated as gross. The tax record's own ``price_include`` flag is
-        # therefore irrelevant here and must not be used to filter -- a standard
-        # Spanish chart carries none, so filtering on it would match nothing.
-        candidates = self.env['account.tax'].search([
-            ('type_tax_use', '=', 'purchase'),
-            ('amount_type', '=', 'percent'),
-            ('amount', '=', rates[0]),
-            ('company_id', '=', company_id),
-        ])
-        if not candidates:
-            # The chart carries no purchase tax at that rate -- the 5% of a car
-            # park, for instance. Keeping the product's default would book a
-            # rate the receipt never mentioned, and only the server log would
-            # know.
-            msg = _('Expense %s reports %g%% but company %s has no purchase tax at '
-                    'that rate; imported with no tax. Check the receipt, or add '
-                    'the tax to the chart of accounts.') % (
-                record.get('_id'), rates[0], company_id)
-            self.env['log.event'].add_event({
-                'backend_id': self.backend_record.id,
-                'type': 'warning',
-                'msg': msg,
-            })
-            _logger.warning(msg)
-            return []
-        # Resolution chain, from the most explicit to the most inferred. None of
-        # the steps ever falls back to "whatever the database returns first".
-        if product is not None:
-            # 1) What the product (or the base product it derives from) declares
-            #    for this rate. Explicit configuration always wins, and it is the
-            #    only way to say that a rate is goods here: the connector types
-            #    every expense product as a service, so ``_pick_single_tax``
-            #    below can only ever reach the services variant.
-            mapped = product.product_tmpl_id.okticket_mapped_tax(
-                rates[0], company_id)
-            if mapped:
-                return mapped.ids
-            # The product declares taxes for other rates but not for this one:
-            # the receipt carries a rate its category does not admit -- a toll
-            # at 10%, a refuelling at 0% -- almost always a capture error. It
-            # does not fall through to the steps below because they would end
-            # up applying the product's default tax, which is inventing one.
-            declared = product.product_tmpl_id.okticket_declared_rates(company_id)
-            if declared:
-                msg = _('Expense %s reports %g%% but the category of product "%s" '
-                        'declares no tax for that rate (it declares %s); imported '
-                        'with no tax. Check the receipt, or add the rate on the '
-                        "product's OkTicket tab.") % (
-                    record.get('_id'), rates[0], product.display_name,
-                    ', '.join('%g%%' % r for r in sorted(declared)))
-                self.env['log.event'].add_event({
-                    'backend_id': self.backend_record.id,
-                    'type': 'warning',
-                    'msg': msg,
-                })
-                _logger.warning(msg)
-                return []
-        # 2) A tax the product already carries: same chart context, deterministic.
-        own = candidates & product.supplier_taxes_id if product else self.env['account.tax']
-        # 3) Structural disambiguation.
-        picked = self._pick_single_tax(own, product) or self._pick_single_tax(candidates, product)
-        if picked:
-            return picked.ids
-        # Ambiguous: import the expense with no tax rather than with an invented
-        # one, and say which candidates could not be told apart. Returning an
-        # empty list is not the same as returning None -- None means "no usable
-        # rate reported", and the caller keeps the product defaults for that.
-        msg = _('Expense %s reports %g%% but that rate matches several purchase '
-                'taxes in company %s that cannot be told apart (%s); imported '
-                'with no tax. Map the rate on the product\'s OkTicket tab, or '
-                'add the right tax to the product.') % (
-            record.get('_id'), rates[0], company_id,
-            ', '.join(candidates.mapped('name')))
-        self.env['log.event'].add_event({
-            'backend_id': self.backend_record.id,
-            'type': 'warning',
-            'msg': msg,
-        })
-        _logger.warning(msg)
-        return []
-
     @mapping
     def product_id(self, record):
         existing = self.get_base_product(record)
-        company_id = (self.company_id(record) or {}).get('company_id')
         if existing:
-            result = {'product_id': existing.id}
-            # The tax OkTicket reports for the receipt comes first, whatever the
-            # expense type. Taxes used to be resolved only for type_id != 0, so a
-            # plain ticket whose receipt says 10% silently ended up with the
-            # product's default 21% -- measured on the demo company: 17 of 44.
-            record_tax_ids = self._resolve_record_taxes(record, company_id,
-                                                        product=existing)
-            if record_tax_ids is not None:
-                # An empty list is deliberate: the rate was reported but could
-                # not be resolved to a single tax, so no tax is better than the
-                # product's unrelated default.
-                result.update({'tax_ids': [(6, 0, record_tax_ids)]})
-            else:
-                # OkTicket reported no usable rate, or Odoo has no tax with it:
-                # fall back to the product's own supplier taxes.
-                tax_ids = [(4, stax.id) for stax in existing.supplier_taxes_id
-                           if stax.company_id.id == company_id]
-                if tax_ids:
-                    result.update({'tax_ids': tax_ids})
-            return result
+            # An imported expense never carries VAT, whatever its product or the
+            # receipt say. Spanish law only lets input VAT be deducted against an
+            # invoice (LIVA art. 97), and Odoo books whatever tax an expense
+            # carries as deductible: a 472 line and boxes [28]/[29] of the 303
+            # on an entry the SII never sees. The breakdown OkTicket reports is
+            # kept in ``okticket_response``, which is where the supplier invoice
+            # -- the only document that may deduct it -- reads it from.
+            #
+            # Cleared explicitly because ``tax_ids`` is computed from the
+            # product's supplier taxes: leaving the key out is not "no tax".
+            return {'product_id': existing.id, 'tax_ids': [Command.clear()]}
 
     @mapping
     def amount(self, record):
