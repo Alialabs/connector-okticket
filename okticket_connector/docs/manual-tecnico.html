@@ -673,13 +673,65 @@ y el <strong>intervalo temporal</strong> configurados en la compañía (sección
 ya está enviada o aprobada, se crea una <strong>hoja nueva</strong> en borrador con el mismo nombre base y un
 sufijo numérico, en lugar de añadir el gasto a la hoja ya tramitada.</p>
 <h3>Sincronización de estados</h3>
-<p>Cuando una hoja avanza en Odoo, el conector lo refleja en OkTicket:</p>
+<p>El informe de OkTicket sigue al <strong>estado en que queda la hoja en Odoo</strong>, no al botón que se
+pulsó. Justo antes de confirmar la transacción, el conector lee el estado del informe y le aplica
+las acciones que hagan falta para llevarlo al que corresponde:</p>
+<table>
+<thead>
+<tr>
+<th>Odoo</th>
+<th>OkTicket</th>
+<th>Acciones típicas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Borrador</td>
+<td>0 Abierta</td>
+<td>348 desde enviada, 354 desde rechazada, 352 + 354 desde aprobada</td>
+</tr>
+<tr>
+<td>Enviado</td>
+<td>34 Enviada</td>
+<td>347</td>
+</tr>
+<tr>
+<td>Aprobado</td>
+<td>5 Aprobada</td>
+<td>349</td>
+</tr>
+<tr>
+<td>Rechazado</td>
+<td>3 Rechazada</td>
+<td>350 desde enviada, 352 desde aprobada (con el motivo como comentario)</td>
+</tr>
+<tr>
+<td>Registrado</td>
+<td>35 Registrada</td>
+<td>351</td>
+</tr>
+<tr>
+<td>Hecho</td>
+<td>36 Pagada</td>
+<td>353 (351 + 353 si paga la empresa)</td>
+</tr>
+</tbody>
+</table>
 <ul>
-<li><strong>Enviar</strong> la hoja marca sus gastos como <strong>contabilizados</strong> en OkTicket.</li>
-<li><strong>Aprobar</strong> la hoja actualiza el estado del informe en OkTicket.</li>
+<li>Cuenta cualquier camino: los botones, el asistente de <strong>gastos duplicados</strong> y el de rechazo, el
+de pago, una <strong>conciliación bancaria</strong> o un asiento anulado o revertido.</li>
+<li>Si el informe <strong>ya está</strong> donde toca, no se manda nada. Por eso un informe que se quedó atrás se
+pone al día con el siguiente cambio de la hoja.</li>
+<li>Al salir de <em>Abierta</em>/<em>Rechazada</em> los gastos se marcan como <strong>contabilizados</strong> en OkTicket, y al
+volver a ellos se desmarcan.</li>
 </ul>
-<div class="callout"><p><span class="tag">Nota</span> La sincronización de estados escribe un gasto a la vez en OkTicket, dentro de una única
-transacción por backend. En hojas con muchos gastos la operación puede tardar varios segundos;
+<div class="callout"><p><span class="tag">Importante</span> OkTicket no tiene acciones para salir de <strong>Registrada</strong> (salvo pagar) ni de <strong>Pagada</strong>. Si en
+Odoo se reabre una hoja contabilizada —restablecer a borrador, anular o revertir el asiento,
+desconciliar el pago—, Odoo hace el cambio y el conector deja un <strong>aviso</strong> en el log y en el
+chatter de la hoja: el informe se queda donde estaba hasta que alguien lo corrija a mano.</p>
+</div>
+<div class="callout"><p><span class="tag">Nota</span> La sincronización de estados escribe un gasto a la vez en OkTicket (la marca de
+contabilizado), dentro de una única transacción por backend. En hojas con muchos gastos la operación puede tardar varios segundos;
 es normal y no indica un fallo.</p>
 </div>
 <h3>Informes</h3>

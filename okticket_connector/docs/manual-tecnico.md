@@ -418,14 +418,35 @@ sufijo numérico, en lugar de añadir el gasto a la hoja ya tramitada.
 
 ### Sincronización de estados
 
-Cuando una hoja avanza en Odoo, el conector lo refleja en OkTicket:
+El informe de OkTicket sigue al **estado en que queda la hoja en Odoo**, no al botón que se
+pulsó. Justo antes de confirmar la transacción, el conector lee el estado del informe y le aplica
+las acciones que hagan falta para llevarlo al que corresponde:
 
-- **Enviar** la hoja marca sus gastos como **contabilizados** en OkTicket.
-- **Aprobar** la hoja actualiza el estado del informe en OkTicket.
+| Odoo | OkTicket | Acciones típicas |
+|---|---|---|
+| Borrador | 0 Abierta | 348 desde enviada, 354 desde rechazada, 352 + 354 desde aprobada |
+| Enviado | 34 Enviada | 347 |
+| Aprobado | 5 Aprobada | 349 |
+| Rechazado | 3 Rechazada | 350 desde enviada, 352 desde aprobada (con el motivo como comentario) |
+| Registrado | 35 Registrada | 351 |
+| Hecho | 36 Pagada | 353 (351 + 353 si paga la empresa) |
+
+- Cuenta cualquier camino: los botones, el asistente de **gastos duplicados** y el de rechazo, el
+  de pago, una **conciliación bancaria** o un asiento anulado o revertido.
+- Si el informe **ya está** donde toca, no se manda nada. Por eso un informe que se quedó atrás se
+  pone al día con el siguiente cambio de la hoja.
+- Al salir de *Abierta*/*Rechazada* los gastos se marcan como **contabilizados** en OkTicket, y al
+  volver a ellos se desmarcan.
+
+> [!IMPORTANT]
+> OkTicket no tiene acciones para salir de **Registrada** (salvo pagar) ni de **Pagada**. Si en
+> Odoo se reabre una hoja contabilizada —restablecer a borrador, anular o revertir el asiento,
+> desconciliar el pago—, Odoo hace el cambio y el conector deja un **aviso** en el log y en el
+> chatter de la hoja: el informe se queda donde estaba hasta que alguien lo corrija a mano.
 
 > [!NOTE]
-> La sincronización de estados escribe un gasto a la vez en OkTicket, dentro de una única
-> transacción por backend. En hojas con muchos gastos la operación puede tardar varios segundos;
+> La sincronización de estados escribe un gasto a la vez en OkTicket (la marca de
+> contabilizado), dentro de una única transacción por backend. En hojas con muchos gastos la operación puede tardar varios segundos;
 > es normal y no indica un fallo.
 
 ### Informes
