@@ -469,8 +469,17 @@ Repeat the import for each combination of `expense_sheet_grouping_method` ×
 
 ## Phase 8 — Expense sheet status workflow
 
+The OkTicket report follows the **state the Odoo sheet ends up in**, not the button that
+was pressed. Right before the transaction commits, the connector reads the report's
+status and walks `_STATUS_TRANSITIONS` for the shortest list of actions that takes it to
+the status the Odoo state stands for (`draft` 0, `submit` 34, `approve` 5, `cancel` 3,
+`post` 35, `done` 36). A report already there gets no call. So every path counts —
+buttons, the duplicate-expense and refusal wizards, the payment wizard, a bank
+reconciliation, a cancelled or reversed entry — and a report left behind catches up on
+the next change.
+
 For each transition check the OkTicket report status **and** the `accounted` flag
-of the expenses.
+of the expenses, in *Connectors → Okticket → Logs*.
 
 ### INT-801 — Submit to manager
 - **Expected:** OkTicket action 347; expenses set to `accounted = true`.
@@ -479,25 +488,37 @@ of the expenses.
 - **Expected:** action 349.
 
 ### INT-803 — Post journal entries
-- **Expected:** action 351, plus 353 when `payment_mode = company_account`.
+- **Expected:** action 351, plus 353 when `payment_mode = company_account` (the sheet
+  goes straight to *Done*).
 
 ### INT-804 — Register payment
-- **Expected:** action 353.
+- **Expected:** action 353, whether the payment comes from the *Pay* wizard or from a
+  reconciliation.
 
 ### INT-805 — Refuse
-- **Expected:** action 350 from submitted, 352 from approved; expenses set back to
-  `accounted = false`.
+- **Expected:** action 350 from submitted, 352 from approved, with the refusal reason as
+  comment; expenses set back to `accounted = false`.
 
 ### INT-806 — Reset to draft
-- **Expected:** action 348 from submitted, 354 from refused. From approved, the
-  connector forces 352 then 354.
+- **Expected:** action 348 from submitted, 354 from refused, 352 then 354 from approved.
+  From *Posted* or *Done*, Odoo reverses the journal entries and goes back to draft.
 
-### INT-807 — Invalid transition ⚠ divergence risk
-- **Context:** the documented OkTicket statuses are 0–5, but
-  `_STATUS_TRANSITIONS` uses 0, 3, 5, **34, 35, 36**. Statuses 1, 2 and 4 have
-  **no transition defined**.
-- **Expected:** review against the customer's actual workflow. Today an
-  undefined transition only logs a warning and Odoo/OkTicket diverge silently.
+### INT-807 — A change OkTicket cannot follow
+- **Context:** OkTicket offers no action out of 35 (*Posted*) other than paying, and none
+  out of 36 (*Paid*). Odoo does allow reopening those sheets — reset to draft, cancel or
+  reverse the entry, unreconcile the payment.
+- **Expected:** Odoo makes the change; a warning naming both statuses is written to the
+  connector log and the sheet chatter. Allowed on purpose: blocking it would block
+  legitimate accounting corrections. The documented statuses 1, 2 and 4 are still not
+  part of the table.
+
+### INT-810 — Approve with a possible duplicate
+- **Steps:** approve a sheet with an expense that matches an approved one (same
+  employee, product, date and amount).
+- **Expected:** Odoo's *Validate duplicate expenses* wizard opens and **nothing** is sent
+  to OkTicket. Cancelling leaves both sides submitted; confirming approves the sheet and
+  only then sends 349. (Before 2026-10-06 the wizard never opened, 349 was sent anyway
+  and the sheet could not be approved from Odoo.)
 
 ### INT-808 — Delete the sheet
 - **Expected:** the report is deleted in OkTicket and the binding removed.
@@ -914,6 +935,10 @@ the UI offers *two* different "Reset to Draft" buttons, and only
 `action_reset_approval_expense_sheets` carries the OkTicket logic —
 `action_reset_expense_sheets` is the `state == 'post'` one; and a report cannot be read
 back by id once deleted (the API answers 403), so verify deletions against the listing.
+
+Settled on 2026-10-06: the connector no longer redefines the sheet buttons (see the
+phase 8 header), so core's reset reverses the entries again and both "Reset to Draft"
+buttons behave the same.
 
 One thing phase 8 could not settle: the connector's `action_reset_expense_sheets` calls
 `super().action_reset_approval_expense_sheets()`, so core's `_do_reverse_moves()` is

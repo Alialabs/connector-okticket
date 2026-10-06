@@ -597,3 +597,34 @@ msgstr "Hoja de gastos de Okticket"
 #: model_terms:ir.ui.view,arch_db:okticket_connector_hr_expense_sheet.view_okticket_backend_form
 msgid "⇒ See Hr Expense Sheet Bindings"
 msgstr "⇒ Ver Bindings de hojas de gastos"
+
+#. module: okticket_connector_hr_expense_sheet
+#. odoo-python
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
+#, python-format
+msgid ""
+"Expense sheet \"%(sheet)s\" is now \"%(state)s\" in Odoo but its OkTicket "
+"report could not follow: %(reason)s. Both sides are out of sync until "
+"someone fixes it by hand."
+msgstr ""
+"La hoja de gastos \"%(sheet)s\" está ahora en \"%(state)s\" en Odoo, pero su"
+" informe de OkTicket no ha podido seguirla: %(reason)s. Las dos partes "
+"quedan desincronizadas hasta que alguien lo corrija a mano."
+
+#. module: okticket_connector_hr_expense_sheet
+#. odoo-python
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
+#, python-format
+msgid ""
+"OkTicket has no action that takes the report from its status %(current)s to "
+"%(target)s"
+msgstr ""
+"OkTicket no tiene ninguna acción que lleve el informe de su estado "
+"%(current)s al %(target)s"
+
+#. module: okticket_connector_hr_expense_sheet
+#. odoo-python
+#: code:addons/okticket_connector_hr_expense_sheet/models/okticket_hr_expense_sheet.py:0
+#, python-format
+msgid "OkTicket did not return the report %s"
+msgstr "OkTicket no ha devuelto el informe %s"
