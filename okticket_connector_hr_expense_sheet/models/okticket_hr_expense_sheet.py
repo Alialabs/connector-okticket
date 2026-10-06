@@ -97,20 +97,30 @@ class OkticketHrExpenseSheet(models.Model):
                     traceback.print_exc()
                     raise (e or UserError(_('Could not connect to Okticket')))
 
-    def change_expense_sheet_status(self, expense_sheets, action_id, comments='No comment'):
-        backend = self.env['okticket.backend'].get_default_backend_okticket_connector(
-            company=expense_sheets[0].company_id)
-        backend.ensure_one()
-        if backend and backend.okticket_exp_sheet_sync:
+    def sync_expense_sheet_status(self, expense_sheets, comments=None):
+        """Bring the OkTicket report of each sheet to the status its Odoo state means.
+
+        Called once per transaction, right before it commits, with every sheet
+        whose state was recomputed (see ``hr.expense.sheet._compute_state``).
+        Sheets are grouped by the backend of their company; a company with no
+        backend, or with the report synchronisation turned off, is skipped
+        without blocking anything in Odoo -- the sheet was already changed by
+        the time this runs, and the user did not ask for OkTicket.
+
+        :param comments: optional ``{sheet_id: text}``, the refusal reason, sent
+            as the comment of the OkTicket action.
+        """
+        comments = comments or {}
+        for company in expense_sheets.company_id:
+            backend = self.env['okticket.backend'].get_default_backend_okticket_connector(
+                company=company)
+            if not backend or not backend.okticket_exp_sheet_sync:
+                continue
+            sheets = expense_sheets.filtered(lambda sheet: sheet.company_id == company)
             with backend.work_on(self._name) as work:
                 adapter = work.component(usage='backend.adapter')
-                try:
-                    return adapter.change_expense_sheet_status(expense_sheets, action_id, comments=comments)
-                except Exception as e:
-                    _logger.error('Exception: %s\n', e)
-                    import traceback
-                    traceback.print_exc()
-                    raise (e or UserError(_('Could not connect to Okticket')))
+                adapter.sync_expense_sheet_status(sheets, comments=comments)
+        return True
 
     def delete_expense_sheet(self, exp_sheet):
         """ Delete expense sheet in OkTicket related with Odoo hr.expense.sheet that is being unlinked"""
@@ -528,73 +538,132 @@ class HrExpenseSheetAdapter(Component):
         35: [353],  # 'Posted' -> ['Paid']
         36: []  # 'Paid' -> []
     }
+    # The status each action leaves the report in.
+    _ACTION_TARGET_STATUS = {
+        347: 34,  # Submit
+        348: 0,  # Reset (Draft) from submitted
+        349: 5,  # Approve
+        350: 3,  # Cancel from submitted
+        351: 35,  # Post (Registered)
+        352: 3,  # Refuse from approved
+        353: 36,  # Paid
+        354: 0,  # Reset (Draft) from rejected
+    }
+    # The OkTicket status an Odoo sheet state stands for.
+    _ODOO_STATE_STATUS = {
+        'draft': 0,
+        'submit': 34,
+        'approve': 5,
+        'cancel': 3,
+        'post': 35,
+        'done': 36,
+    }
+    # Statuses in which the report's expenses are still the employee's to edit,
+    # so they are not ``accounted`` in OkTicket.
+    _OPEN_STATUSES = (0, 3)
 
-    def change_expense_sheet_status(self, expense_sheets, action_id, comments='No comment'):
+    @classmethod
+    def _status_path(cls, current, target):
+        """Shortest list of OkTicket actions from ``current`` to ``target``.
+
+        One Odoo change can take several OkTicket steps: an approved sheet sent
+        back to draft is refused (352) and then reopened (354), because OkTicket
+        has no direct way back from "approved". The connector used to hard-code
+        that single bridge; walking the transition table finds every such path,
+        and none at all where OkTicket offers no way -- out of "posted" or
+        "paid", for instance.
+
+        :return: list of action ids, empty when already there, ``None`` when
+            OkTicket has no way to get there.
         """
-        Changes Okticket expenses sheets state through sent action id and Odoo hr.expense.sheet
-        :param expense: hr.expense.sheets RecordSet
-        :param action_id: Okticket expenses sheet status_id (int)
+        if current == target:
+            return []
+        paths = {current: []}
+        queue = [current]
+        while queue:
+            status = queue.pop(0)
+            for action in cls._STATUS_TRANSITIONS.get(status, []):
+                reached = cls._ACTION_TARGET_STATUS[action]
+                if reached in paths:
+                    continue
+                paths[reached] = paths[status] + [action]
+                if reached == target:
+                    return paths[reached]
+                queue.append(reached)
+        return None
+
+    def sync_expense_sheet_status(self, expense_sheets, comments=None):
+        """Bring each sheet's OkTicket report to the status its Odoo state means.
+
+        Driven by the state the sheet ended up in, not by the button that was
+        pressed. Pushing from the buttons sent an action whatever Odoo actually
+        did -- "approve" went out while Odoo was asking for confirmation about a
+        duplicate expense and had approved nothing -- and missed every change
+        that does not go through a button: the duplicate wizard, a bank
+        reconciliation, a cancelled or reversed journal entry.
+
+        Reads the report's current status first, so it is idempotent: a report
+        that is already where Odoo is gets no call at all, which is also what
+        brings back in line the sheets the old behaviour left out of sync.
+        Errors are contained per sheet and recorded; they never undo the Odoo
+        change, which has already happened.
         """
-        expense_sheet_backend_adapter = self.component(usage='backend.adapter',
-                                                       model_name='okticket.hr.expense.sheet')
-        # Current Okticket expenses sheets state
+        comments = comments or {}
         for sheet in expense_sheets:
-            sheet_expense_external_id = sheet.okticket_bind_ids and sheet.okticket_bind_ids[0].external_id or False
-            if not sheet_expense_external_id:
-                self._report_status_divergence(
-                    sheet, action_id,
-                    _('the sheet has no OkTicket report bound to it'))
+            external_id = sheet.okticket_bind_ids[:1].external_id
+            target = self._ODOO_STATE_STATUS.get(sheet.state)
+            if not external_id or target is None:
                 continue
-            filter = {
-                'sheet_expense_external_id': sheet_expense_external_id,
-            }
-            current_expense_sheet_oktk = expense_sheet_backend_adapter.search(filters=filter)
-            if not current_expense_sheet_oktk:
-                self._report_status_divergence(
-                    sheet, action_id,
-                    _('OkTicket did not return the report %s') % sheet_expense_external_id)
-                continue
-            current_status_id = current_expense_sheet_oktk.get('status_id')
-            # Checks if the action is valid
-            if action_id in self._STATUS_TRANSITIONS.get(current_status_id, []):
-                # Modify expenses sheet status
-                expense_sheet_backend_adapter.workflow_expense_sheet(sheet_expense_external_id, action_id,
-                                                                     comments=comments)
-            else:
-                self._report_status_divergence(
-                    sheet, action_id,
-                    _('OkTicket does not allow it from its current status %s')
-                    % current_status_id)
+            try:
+                report = self.search(filters={'sheet_expense_external_id': external_id})
+                if not report:
+                    self._report_status_divergence(
+                        sheet, _('OkTicket did not return the report %s') % external_id)
+                    continue
+                current = report.get('status_id')
+                path = self._status_path(current, target)
+                if path is None:
+                    self._report_status_divergence(
+                        sheet,
+                        _('OkTicket has no action that takes the report from its '
+                          'status %(current)s to %(target)s') % {
+                            'current': current, 'target': target})
+                    continue
+                if not path:
+                    continue
+                opening = current in self._OPEN_STATUSES and target not in self._OPEN_STATUSES
+                closing = target in self._OPEN_STATUSES and current not in self._OPEN_STATUSES
+                if opening or closing:
+                    for expense in sheet.expense_line_ids:
+                        expense._okticket_accounted_expense(new_state=opening)
+                comment = comments.get(sheet.id) or 'No comment'
+                for action in path:
+                    self.workflow_expense_sheet(external_id, action, comments=comment)
+            except Exception as error:  # noqa: BLE001 -- recorded, never raised
+                _logger.exception('OkTicket status sync failed for sheet %s', sheet.id)
+                self._report_status_divergence(sheet, str(error))
         return True
 
-    def _report_status_divergence(self, sheet, action_id, reason):
-        """Record that an Odoo state change could not be pushed to OkTicket.
+    def _report_status_divergence(self, sheet, reason):
+        """Record that OkTicket could not follow an Odoo state change.
 
-        Every one of the three ways this can happen used to be silent in the
-        connector log: no binding and "report not returned" said nothing at all,
-        and the disallowed transition only reached the Python log and the sheet
-        chatter. Resetting a *posted* sheet to draft is the case that bites --
-        Odoo allows it, ``_STATUS_TRANSITIONS`` defines nothing for status 35
-        beyond paying, so Odoo went back to draft while OkTicket stayed posted
-        with nothing recorded anywhere an operator looks.
-
-        Closing the workflow gap needs the customer's real process (see INT-807
-        of the integration plan); making the divergence visible does not, and is
-        what this does.
+        Written to the connector log and the sheet chatter, where an operator
+        looks. Leaving a posted or paid sheet is the expected case: Odoo allows
+        reopening it -- cancelling or reversing the entry, unreconciling the
+        payment -- and OkTicket has no action out of those statuses, so the
+        report stays where it was. It is allowed on purpose and made visible.
         """
-        msg = _('Expense sheet "%(sheet)s" is now "%(state)s" in Odoo but the '
-                'status could not be sent to OkTicket (action %(action)s): '
-                '%(reason)s. Both sides are out of sync until someone fixes it '
-                'by hand.') % {
+        state = dict(sheet._fields['state']._description_selection(self.env)).get(
+            sheet.state, sheet.state)
+        msg = _('Expense sheet "%(sheet)s" is now "%(state)s" in Odoo but its '
+                'OkTicket report could not follow: %(reason)s. Both sides are '
+                'out of sync until someone fixes it by hand.') % {
             'sheet': sheet.display_name,
-            'state': sheet.state,
-            'action': action_id,
+            'state': state,
             'reason': reason,
         }
         _logger.warning(msg)
-        backend = sheet.okticket_bind_ids[:1].backend_id or \
-            self.env['okticket.backend'].search(
-                [('company_id', '=', sheet.company_id.id)], limit=1)
+        backend = sheet.okticket_bind_ids[:1].backend_id or self.backend_record
         if backend:
             self.env['log.event'].add_event({
                 'backend_id': backend.id,
