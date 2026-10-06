@@ -154,8 +154,16 @@ refacturable, y permiten distinguirlos contablemente de un ticket normal del mis
 
 ### El IVA de cada categoría
 
+**Un gasto importado de OkTicket nunca lleva IVA**, tenga el producto los impuestos que tenga. La
+ley solo deja deducir el IVA soportado con una factura (art. 97 de la Ley 37/1992), y Odoo
+contabiliza como deducible cualquier impuesto que lleve un gasto: acabaría en la cuenta 472 y en el
+modelo 303 sin pasar por el SII. Así que el gasto entra por su importe total y el desglose de IVA que
+manda OkTicket se guarda en el propio gasto, para quien tenga que hacer la factura de proveedor.
+
 Cada producto tiene, en su pestaña *Configuración Okticket*, una tabla de **asignación de
-impuestos**: dice qué impuesto de Odoo corresponde a cada tipo de IVA que reporta OkTicket.
+impuestos**: dice qué impuesto de Odoo corresponde a cada tipo de IVA que reporta OkTicket. **No la
+usa el gasto**: es la que se aplica cuando el justificante es una factura y se registra como factura
+de proveedor.
 
 ![Asignación de impuestos en la pestaña OkTicket del producto](img/u07-impuestos-producto.png)
 
@@ -174,8 +182,8 @@ criterio de la empresa manda a partir de ahí.
 > empresa** en OkTicket, cuya naturaleza el conector no puede conocer. Esas las rellena el
 > administrador.
 
-Si crees que el IVA de tus gastos no es el correcto, **avisa al administrador** en lugar de
-cambiarlo gasto a gasto: se corrige una vez en el producto y vale para todos los que vengan después.
+Si crees que el impuesto de una categoría no es el correcto, **avisa al administrador**: se corrige
+una vez en el producto y vale para todas las facturas que vengan después.
 
 ---
 
@@ -259,7 +267,7 @@ cualquier otra hoja de gasto de Odoo.
 | Un gasto aparece con la categoría equivocada. | Se hereda de la categoría elegida en la app. Puedes cambiarla en Odoo; el cambio no se propaga a OkTicket. |
 | Me ha aparecido una hoja de gasto repetida con el mismo nombre. | Ocurre cuando llega un gasto nuevo para un grupo cuya hoja ya estaba enviada o aprobada: se crea una hoja nueva en borrador para no tocar la anterior. |
 | He borrado un gasto en OkTicket y sigue en Odoo. | El borrado no se propaga. Elimina también el gasto en Odoo si aún está en borrador. |
-| El IVA del gasto no es el que esperaba. | El conector traduce el porcentaje que envía OkTicket al impuesto equivalente de Odoo. Si en tu empresa esa categoría debe llevar otro, es configuración del producto: avisa al administrador. Mientras el gasto siga en borrador puedes corregirle el impuesto a mano. |
+| El gasto no lleva IVA. | Es lo correcto: un gasto importado de OkTicket nunca lleva IVA, porque solo se puede deducir con una factura. Si el justificante es una factura, hay que registrarla como factura de proveedor. |
 | No veo el menú de OkTicket en Odoo. | Ese menú es para administradores. Como usuario no lo necesitas: tus gastos están en la aplicación *Gastos*. |
 
 ---

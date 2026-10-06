@@ -267,13 +267,14 @@ el producto de una categoría, los gastos de esa categoría dejarán de importar
 </div>
 
 <h3>El IVA de cada categoría</h3>
-<p>Cada producto tiene, en su pestaña <em>Configuración Okticket</em>, una tabla de <strong>asignación de impuestos</strong>: dice qué impuesto de Odoo corresponde a cada tipo de IVA que reporta OkTicket.</p>
+<p><strong>Un gasto importado de OkTicket nunca lleva IVA</strong>, tenga el producto los impuestos que tenga. La ley solo deja deducir el IVA soportado con una factura (art. 97 de la Ley 37/1992), y Odoo contabiliza como deducible cualquier impuesto que lleve un gasto: acabaría en la cuenta 472 y en el modelo 303 sin pasar por el SII. Así que el gasto entra por su importe total y el desglose de IVA que manda OkTicket se guarda en el propio gasto, para quien tenga que hacer la factura de proveedor.</p>
+<p>Cada producto tiene, en su pestaña <em>Configuración Okticket</em>, una tabla de <strong>asignación de impuestos</strong>: dice qué impuesto de Odoo corresponde a cada tipo de IVA que reporta OkTicket. <strong>No la usa el gasto</strong>: es la que se aplica cuando el justificante es una factura y se registra como factura de proveedor.</p>
 <figure><img src="img/u07-impuestos-producto.png" alt="Asignación de impuestos en la pestaña OkTicket del producto"/><figcaption>Asignación de impuestos en la pestaña OkTicket del producto</figcaption></figure>
 <p><strong>Viene rellenada.</strong> El conector la escribe él mismo con lo que dice la normativa española para cada categoría, y la mantiene al día en cada sincronización. Un producto <em>Taxi</em> nace sabiendo que un 10 % es transporte de viajeros, y uno de <em>Gasolina</em> sabiendo que su 21 % es una compra de bienes y no un servicio.</p>
 <p>Las filas que ha escrito el conector llevan marcada la casilla <strong>Propuesto por el conector</strong>. Si alguien cambia el impuesto de una, esa marca desaparece y el conector <strong>no vuelve a tocarla</strong>: el criterio de la empresa manda a partir de ahí.</p>
 <div class="callout"><p><span class="tag">Nota</span> Hay dos casos en los que la tabla llega vacía a propósito: la categoría <strong>Otros</strong>, que es un cajón de sastre donde cualquier propuesta sería inventada, y las <strong>categorías que haya creado tu empresa</strong> en OkTicket, cuya naturaleza el conector no puede conocer. Esas las rellena el administrador.</p>
 </div>
-<p>Si crees que el IVA de tus gastos no es el correcto, <strong>avisa al administrador</strong> en lugar de cambiarlo gasto a gasto: se corrige una vez en el producto y vale para todos los que vengan después.</p>
+<p>Si crees que el impuesto de una categoría no es el correcto, <strong>avisa al administrador</strong>: se corrige una vez en el producto y vale para todas las facturas que vengan después.</p>
 
 <h2>8. Empleados y usuarios</h2>
 <p>El emparejamiento entre un usuario de OkTicket y un empleado de Odoo se hace por <strong>correo
@@ -362,8 +363,8 @@ corrígelo en la aplicación de OkTicket y espera a la siguiente sincronización
 <td>El borrado no se propaga. Elimina también el gasto en Odoo si aún está en borrador.</td>
 </tr>
 <tr>
-<td>El IVA del gasto no es el que esperaba.</td>
-<td>El conector traduce el porcentaje que envía OkTicket al impuesto equivalente de Odoo. Si en tu empresa esa categoría debe llevar otro, es configuración del producto: avisa al administrador. Mientras el gasto siga en borrador puedes corregirle el impuesto a mano.</td>
+<td>El gasto no lleva IVA.</td>
+<td>Es lo correcto: un gasto importado de OkTicket nunca lleva IVA, porque solo se puede deducir con una factura. Si el justificante es una factura, hay que registrarla como factura de proveedor.</td>
 </tr>
 <tr>
 <td>No veo el menú de OkTicket en Odoo.</td>
