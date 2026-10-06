@@ -479,41 +479,16 @@ importación de gastos recorre la API paginada y confirma al final, de modo que 
 a mitad del proceso devuelve cero legítimamente</strong>: espera a que termine antes de dar nada por fallido.</p>
 
 <h2>10. Impuestos de los gastos importados</h2>
+<div class="callout warn"><p><span class="tag">Importante</span> <strong>Un gasto importado nunca lleva IVA.</strong> El importador deja <code>tax_ids</code> vacío siempre, y <code>_compute_tax_ids</code> lo mantiene vacío aunque se cambie el producto en el formulario. La ley solo permite deducir el IVA soportado contra una factura (art. 97 LIVA; arts. 6 y 7 del RD 1619/2012), y Odoo contabiliza como deducible cualquier impuesto del gasto: una línea en la 472 y las casillas [28]/[29] del 303, en un asiento que el SII no ve. El desglose que manda OkTicket se conserva en <code>okticket_response</code>.</p>
+<p>Lo que sigue describe la <strong>tabla de impuestos del producto</strong>, que ya no se aplica al gasto: es la que traduce cada tipo a un impuesto de Odoo cuando el justificante se registra como factura de proveedor.</p>
+</div>
 <p>OkTicket no envía un impuesto: envía un <strong>porcentaje</strong>. En el desglose <code>taxes</code> de cada ticket, cada entrada lleva el tipo (<code>p</code>) y su base (<code>b</code>), y solo las de base mayor que cero describen el recibo. Traducir ese porcentaje a un impuesto concreto de Odoo no tiene una respuesta única: el plan contable español trae <strong>doce impuestos de compra por cada tipo</strong>. Para el 10 % conviven, entre otros, el de bienes corrientes, el de bienes de inversión, el de servicios corrientes y las variantes intracomunitaria, de importación y de inversión del sujeto pasivo.</p>
 <p>Elegir mal no produce ningún error: produce un IVA equivocado. Y en un caso concreto produce <strong>cero</strong>, porque las variantes extracomunitarias reparten +100 % al IVA soportado y &minus;100 % al repercutido, se anulan entre sí, y el gasto queda con la base igual al total y sin cuota deducible.</p>
-<div class="callout warn"><p><span class="tag">Importante</span> <strong>En Odoo 16 esto no se puede deducir.</strong> Medido sobre el plan <em>PGCE PYMEs 2008</em>: el campo <code>tax_scope</code>, que distingue bienes de servicios, está <strong>vacío en los 46 impuestos</strong> del plan, y los tres candidatos base de cada tipo comparten grupo (<code>IVA 10%</code>) y cuenta (<code>472000</code>). No hay ningún discriminador estructural, así que sin configuración el conector no puede elegir y el gasto entra <strong>sin impuesto</strong>. En 17.0 y 18.0, con el plan <code>es_pymes</code>, sí lo hay.</p>
+<div class="callout warn"><p><span class="tag">Importante</span> <strong>En Odoo 16 esto no se puede deducir.</strong> Medido sobre el plan <em>PGCE PYMEs 2008</em>: el campo <code>tax_scope</code>, que distingue bienes de servicios, está <strong>vacío en los 46 impuestos</strong> del plan, y los tres candidatos base de cada tipo comparten grupo (<code>IVA 10%</code>) y cuenta (<code>472000</code>). No hay ningún discriminador estructural, así que sin configuración no se puede elegir. En 17.0 y 18.0, con el plan <code>es_pymes</code>, sí lo hay.</p>
 </div>
 <p>Por eso en esta versión la tabla de impuestos del producto no es un extra para casos raros: es la pieza que hace que el IVA llegue bien. Y por eso <strong>la rellena el propio conector</strong>.</p>
-<h3>Cómo se resuelve</h3>
-<p>Lo primero es mirar si el ticket declara alg&uacute;n tipo. <strong>Si no declara ninguno, el gasto entra sin impuesto</strong>: OkTicket no dice que haya IVA, as&iacute; que el conector no se lo inventa. Es el caso m&aacute;s frecuente con diferencia &mdash; 488 de 733 gastos en la base de referencia &mdash; y antes acababan todos con el impuesto de proveedor del producto, que el plan espa&ntilde;ol rellena con el 21 % de <strong>bienes</strong>: un taxi o un hotel se contabilizaban como compra de bienes con IVA deducible que nadie hab&iacute;a declarado.</p>
-<p>Cuando el ticket s&iacute; declara un tipo, cuatro pasos, del m&aacute;s expl&iacute;cito al m&aacute;s deducido. Ninguno recae en &laquo;el primero que devuelva la base de datos&raquo;.</p>
-<table>
-<thead>
-<tr>
-<th>Paso</th>
-<th>Criterio</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>La <strong>tabla de impuestos del producto</strong>, o la del producto base del que deriva. Es configuración explícita y gana siempre.</td>
-</tr>
-<tr>
-<td>2</td>
-<td>Un impuesto que el producto ya lleve en <em>Impuestos de proveedor</em> con ese mismo tipo.</td>
-</tr>
-<tr>
-<td>3</td>
-<td>Desambiguación estructural: impuestos base de alguna posición fiscal, filtrados por ámbito. <strong>En 16.0 casi nunca resuelve</strong>, por lo dicho arriba.</td>
-</tr>
-<tr>
-<td>4</td>
-<td>Si aún quedan varios candidatos, el gasto se importa <strong>sin impuesto</strong> y se registra un aviso nombrándolos.</td>
-</tr>
-</tbody>
-</table>
-<p>Y dos reglas que cortan la cadena antes de empezar, las dos con aviso en el log y las dos sin impuesto: cuando el tipo del recibo <strong>no es de los que declara la categoría</strong> —un peaje al 10 %, un repostaje al 0 %— y cuando el recibo trae <strong>varios tipos</strong>, que un gasto de Odoo no puede representar con una sola base imponible.</p>
+<h3>Qué hace el importador con el desglose</h3>
+<p>Nada contable. Hasta esta versión traducía el tipo del ticket a un impuesto de compra y se lo ponía al gasto, con una cadena de criterios —la tabla del producto, el impuesto que ya llevara el producto, la desambiguación estructural— y avisos cuando no podía decidir. Todo eso ha desaparecido: el gasto entra <strong>sin impuesto</strong> siempre, y el porcentaje y la base de cada tipo quedan en <code>okticket_response</code> para quien registre la factura de proveedor.</p>
 <h3>La tabla se rellena sola</h3>
 <p>En cada <strong>sincronización de productos</strong> —la acción planificada nº 2, cada dos horas— el conector recorre todas las categorías de OkTicket y escribe en el producto las filas que la normativa española admite para esa categoría. No hay nada que ejecutar a mano ni ningún dato que mantener al día: la tabla de criterios vive en el código del módulo, así que se actualiza al actualizar el módulo.</p>
 <p>Sobre la base de referencia son <strong>22 filas por compañía</strong>, sin configuración previa.</p>
@@ -625,7 +600,7 @@ a mitad del proceso devuelve cero legítimamente</strong>: espera a que termine 
 <tbody>
 <tr>
 <td>La categoría <strong>Otros</strong></td>
-<td>Es un cajón de sastre: cualquier propuesta sería inventada. Un recibo suyo con un tipo reportado entra sin impuesto y queda avisado en el log.</td>
+<td>Es un cajón de sastre: cualquier propuesta sería inventada. Sus filas las declara el administrador.</td>
 </tr>
 <tr>
 <td>Las <strong>categorías propias del cliente</strong></td>
@@ -645,7 +620,7 @@ a mitad del proceso devuelve cero legítimamente</strong>: espera a que termine 
 </tr>
 </tbody>
 </table>
-<p>Un tipo que la normativa no admite para su categoría —un peaje al 10 %, un repostaje al 0 %— <strong>no se declara a propósito</strong>: no hay fila, el gasto entra sin impuesto y queda el aviso en el log. Es un error de captura en el ticket, y marcarlo es más útil que adivinar.</p>
+<p>Un tipo que la normativa no admite para su categoría —un peaje al 10 %, un repostaje al 0 %— <strong>no se declara a propósito</strong>: no hay fila. Es un error de captura en el ticket, y marcarlo es más útil que adivinar.</p>
 <h3>Cómo reconoce la categoría</h3>
 <p>Por el <strong>nombre</strong>, con el identificador de OkTicket corroborando. Las catorce categorías por defecto no llevan compañía y parecen un catálogo compartido por todos los clientes, pero eso está observado en un único entorno. Si el identificador no coincide con el esperado, la fila se escribe igual y queda un aviso en el log; si lo que no coincide es el nombre, <strong>no se escribe nada</strong> y el conector se comporta como siempre.</p>
 <p>La regla de fondo: la tabla solo puede mejorar el resultado, nunca empeorarlo.</p>
@@ -761,9 +736,7 @@ categorías, ambas apuntarán a las mismas plantillas de producto en Odoo.</p>
 <em>Aviso</em>, <em>Error</em>), la etiqueta de la operación y la URL con el código de respuesta.</p>
 <figure><img src="img/t05-logs.png" alt="Log de eventos del conector OkTicket"/><figcaption>Log de eventos del conector OkTicket</figcaption></figure>
 <p>Es el primer sitio donde mirar cuando una sincronización no produce lo esperado. Una importación
-sana no deja ninguna entrada de tipo <em>Error</em>; los avisos habituales corresponden a gastos con
-varios tipos de IVA, que el conector importa con el impuesto por defecto del producto para que se
-revisen a mano.</p>
+sana no deja ninguna entrada de tipo <em>Error</em>.</p>
 
 <h2>15. Problemas frecuentes</h2>
 <table>
@@ -799,11 +772,6 @@ revisen a mano.</p>
 <td>Los gastos entran con un impuesto que no corresponde.</td>
 <td>O la compañía no tiene el plan contable español con los tipos 0/4/10/21 de compra, o ese porcentaje debe resolverse a un impuesto distinto del que elige el conector.</td>
 <td>Instalar <code>l10n_es</code> y aplicar el plan a la compañía; si el plan ya está, declarar el tipo en la tabla <em>Asignación de impuestos</em> del producto (§10).</td>
-</tr>
-<tr>
-<td>El log avisa de que un tipo coincide con varios impuestos y el gasto entra sin impuesto.</td>
-<td>El plan contable tiene varias opciones para ese porcentaje y ninguna se puede distinguir estructuralmente (falta de posiciones fiscales, o varios impuestos del mismo ámbito).</td>
-<td>Declarar la fila correspondiente en la tabla <em>Asignación de impuestos</em> del producto. Ver §10.</td>
 </tr>
 <tr>
 <td>Un gasto nuevo crea una hoja repetida en vez de sumarse a la existente.</td>

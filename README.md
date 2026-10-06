@@ -82,6 +82,12 @@ encima de la importación:
 
 ## El IVA de los gastos
 
+**Un gasto importado nunca lleva IVA.** La ley solo deja deducir el IVA soportado con una factura
+(art. 97 de la Ley 37/1992), y Odoo contabiliza como deducible cualquier impuesto que lleve un gasto:
+acabaría en la 472 y en el modelo 303 sin pasar por el SII. El gasto entra por su total y el
+desglose que manda OkTicket se guarda en el propio gasto. La tabla de impuestos que se describe a
+continuación es la que se usa al registrar el justificante como factura de proveedor.
+
 OkTicket no envía un impuesto: envía un porcentaje. Un plan contable español trae doce impuestos de
 compra por cada tipo, y en **Odoo 16** no hay forma de distinguirlos automáticamente: sobre el plan
 *PGCE PYMEs 2008* el campo `tax_scope` está vacío en los 46 impuestos y los tres candidatos base de

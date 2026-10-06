@@ -38,11 +38,31 @@ class ProductTemplate(models.Model):
     okticket_tax_mapping_ids = fields.One2many(
         'okticket.product.tax.mapping', 'product_tmpl_id',
         string='OkTicket Tax Mapping',
-        help="Which Odoo tax each rate OkTicket reports means for this product. "
-             "Rows are only needed where the tax the connector would otherwise "
-             "resolve is not the right one -- typically a rate that is goods "
-             "here, since every expense product is typed as a service."
+        help="Which Odoo tax each rate OkTicket reports means for this product "
+             "on a supplier invoice. Imported expenses never carry VAT: it can "
+             "only be deducted through an invoice, so these rows are used when "
+             "one is created from a receipt marked as an invoice."
     )
+
+    def okticket_mapped_tax(self, rate, company_id):
+        """The tax this product declares for an OkTicket rate, or an empty set.
+
+        Falls back to the base product, so the decision is declared once on the
+        category and inherited by its "-Invoiceable" and "-Rebillable" versions
+        instead of being repeated on all three.
+        """
+        self.ensure_one()
+        products = self
+        base = self.get_base_product()
+        if base and base != self:
+            products = self + base
+        for product in products:
+            row = product.okticket_tax_mapping_ids.filtered(
+                lambda m: m.company_id.id == company_id
+                and float_compare(m.okticket_rate, rate, precision_digits=2) == 0)
+            if row:
+                return row[0].tax_id
+        return self.env['account.tax']
 
     def okticket_mapped_tax(self, rate, company_id):
         """The tax this product declares for an OkTicket rate, or an empty set.
@@ -132,8 +152,8 @@ class ProductTemplate(models.Model):
         resolved = resolve_category(external_id, category_name)
         if not resolved:
             # A customer's own category, or one this table does not cover.
-            # Nothing is written and the connector resolves taxes as it always
-            # has -- the proposal can only add, never take away.
+            # Nothing is written: the rows for it are the customer's to declare,
+            # and until they do, a supplier invoice for it is refused.
             return summary
         category_id, entry, exact = resolved
         summary.update(category=entry['name'], by_name_only=not exact)
