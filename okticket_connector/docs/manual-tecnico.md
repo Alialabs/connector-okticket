@@ -72,9 +72,16 @@ un modelo *binding* que guarda la correspondencia entre el registro local y su i
 ### Entorno contable
 
 OkTicket es un producto español y devuelve los tipos de IVA españoles. Conviene que la compañía
-tenga instalada la localización española (`l10n_es`) con su plan contable aplicado, y que existan
-los impuestos de compra al **0 %, 4 %, 10 % y 21 %**, además de un diario de compras. Sin ellos,
-los gastos importados recaen siempre en el impuesto por defecto del producto.
+tenga instalada la localización española (`l10n_es`) con su plan contable aplicado y un diario de
+compras.
+
+> [!IMPORTANT]
+> **Un gasto importado nunca lleva IVA**, tenga el producto los impuestos que tenga. La ley solo
+> permite deducir el IVA soportado contra una factura (art. 97 LIVA; arts. 6 y 7 del RD
+> 1619/2012), y Odoo contabiliza como deducible cualquier impuesto del gasto: una línea en la 472 y
+> las casillas [28]/[29] del 303, en un asiento que el SII no ve. El importador deja `tax_ids`
+> vacío y `_compute_tax_ids` lo mantiene vacío aunque se cambie el producto. El desglose que manda
+> OkTicket se conserva en `okticket_response`, para quien registre la factura de proveedor.
 
 ---
 
@@ -319,7 +326,6 @@ sana no deja ninguna entrada de tipo *Error*.
 | La ficha del backend no muestra los parámetros de conexión. | El usuario no pertenece a los grupos del conector, o la sesión tiene la vista cacheada. | Asignar el grupo *OkTicket / Manager* y volver a iniciar sesión. |
 | La importación termina sin errores pero no aparece ningún gasto. | Falta el identificador de compañía, o no se han sincronizado antes usuarios y productos. | Rellenar *Compañía* en la pestaña OkTicket y ejecutar los crons en orden. |
 | La prueba de autenticación falla. | Credenciales incorrectas o salida HTTPS bloqueada. | Verificar las cuatro credenciales y el acceso a `api.okticket.es` desde el servidor. |
-| Los gastos entran con un impuesto que no corresponde. | La compañía no tiene el plan contable español con los tipos 0/4/10/21 de compra. | Instalar `l10n_es` y aplicar el plan a la compañía. |
 | Solo se importa la primera página de gastos. | Corte de conectividad durante el recorrido paginado. | Revisar los logs y relanzar la importación. |
 | Se repite la importación completa en cada ejecución. | *Ignorar «Importar gastos desde fecha»* está activo. | Desactivarlo una vez hecha la carga inicial. |
 

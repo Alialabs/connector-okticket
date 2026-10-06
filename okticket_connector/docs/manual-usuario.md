@@ -81,8 +81,12 @@ un gasto concreto si te lo reclaman por su número.
 
 ## 4. La ficha de un gasto
 
-Al abrir un gasto verás los campos habituales de Odoo —categoría, importe, impuestos, empleado,
-quién lo paga— y, además, una pestaña **Servidor Okticket** que añade el conector.
+Al abrir un gasto verás los campos habituales de Odoo —categoría, importe, empleado, quién lo
+paga— y, además, una pestaña **Servidor Okticket** que añade el conector.
+
+El gasto **no lleva IVA**, y es lo correcto: la ley solo deja deducir el IVA con una factura. Entra
+por su importe total; si el justificante es una factura, hay que registrarla como factura de
+proveedor.
 
 ![Ficha de un gasto con la pestaña Servidor Okticket](img/u02-gasto-ficha.png)
 
