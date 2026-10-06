@@ -125,7 +125,12 @@ resultado es que encuentras tus tickets ya reunidos en hojas listas para tramita
 El estado de la hoja se mantiene **sincronizado con OkTicket**:
 
 - Cuando **envías** una hoja en Odoo, sus gastos quedan marcados como *contabilizados* en OkTicket.
-- Cuando la hoja se **aprueba**, el informe correspondiente se actualiza también en OkTicket.
+- Cada cambio de estado de la hoja en Odoo —enviar, aprobar, rechazar, devolver a borrador,
+  registrar, pagar— lleva el informe de OkTicket al mismo estado.
+- Si al aprobar Odoo te avisa de **gastos posiblemente duplicados**, OkTicket no se entera de nada
+  hasta que confirmas la aprobación.
+- Una hoja ya **registrada o pagada** que se reabre en Odoo no puede reabrirse en OkTicket: verás un
+  aviso en la hoja para que contabilidad lo revise.
 
 > [!NOTE]
 > Si añades un gasto a un grupo cuya hoja ya está enviada o aprobada, el conector **no toca la hoja
@@ -250,7 +255,7 @@ El estado avanza por `Borrador` → `Enviado` → `Aprobado` → `Registrado` �
 cualquier otra hoja de gasto de Odoo.
 
 > [!NOTE]
-> El **estado de la hoja** sí viaja a OkTicket (al enviar y aprobar). En cambio, los cambios de
+> El **estado de la hoja** sí viaja a OkTicket. En cambio, los cambios de
 > datos de un gasto (importe, fecha…) **no vuelven a OkTicket**: si un gasto está mal en origen,
 > corrígelo en la aplicación de OkTicket y espera a la siguiente sincronización.
 
