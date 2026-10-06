@@ -13,19 +13,6 @@ from odoo import fields, models, api
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
-from enum import Enum
-
-class OkticketSheetStatusTransitions(Enum):
-    REFUSE_FROM_APPROVED = 352  # Cancel from aprroved
-    REFUSE_FROM_SUBMIT = 350    # Cancel from submitted
-    RESET_FROM_SUBMIT = 348     # Reset (Draft) from submitted
-    RESET_FROM_CANCEL = 354     # Reset (Draft) from rejected
-    SUBMIT = 347                # Submit
-    APPROVE = 349               # Approve
-    POST = 351                  # Post
-    PAID = 353                  # Paid
-
-
 
 class HrExpenseBatchImporter(Component):
     _inherit = 'okticket.expenses.batch.importer'
@@ -384,6 +371,10 @@ class HrExpenseSheet(models.Model):
         Removes empty expense sheets
         """
         result = super(HrExpenseSheet, self).write(vals)
+        # ``set_to_paid``/``set_to_posted`` -- a reconciliation, the OCA invoice
+        # module -- write the stored state directly, bypassing the compute.
+        if vals and ('state' in vals or 'approval_state' in vals):
+            self._okticket_queue_status_sync()
         if vals and 'expense_line_ids' in vals:
             self.check_empty_sheet()
         return result
@@ -415,136 +406,72 @@ class HrExpenseSheet(models.Model):
         return raw_values
 
     # --------------------------------------------
-    # Redefined flow actions
+    # OkTicket report status follows the Odoo state
     # --------------------------------------------
-    def action_submit_sheet(self):
-        """
-        "Send to responsable"
-        Implied actions:
-            - Set 'accounted' = 'true' in expenses from Okticket expense sheet.
-            - Action [347] Okticket
-        """
-        super(HrExpenseSheet, self).action_submit_sheet()
-        for expense in self.expense_line_ids:
-            expense._okticket_accounted_expense(new_state=True)  # 'accounted': 'True'
-        action_id = OkticketSheetStatusTransitions.SUBMIT.value
-        self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
+    _OKTICKET_STATUS_SYNC_KEY = 'okticket_sheet_status_sync'
 
-    def action_approve_expense_sheets(self):
-        """
-        "Aprobar"/"Aprobar(Admin)"
-        Implied actions:
-            - Action [349] Okticket
-        """
-        super(HrExpenseSheet, self).action_approve_expense_sheets()
-        # Product "expense" is included as sale.order.line in sale.order related with hr.expense
-        action_id = OkticketSheetStatusTransitions.APPROVE.value
-        self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
+    def _okticket_status_sync_queue(self):
+        """This transaction's pending status sync, registered on first use.
 
-    def action_sheet_move_create(self):
+        Kept in ``cr.precommit.data`` and run as a precommit callback, so every
+        state change of the transaction -- whichever button, wizard or
+        accounting operation caused it -- is pushed once, after Odoo is done,
+        and only if the transaction is about to commit.
         """
-           "Registrar asientos"
-           Implied actions:
-               - Action [351, 353] Okticket
-        """
-        res = super(HrExpenseSheet, self).action_sheet_move_create()
-        action_id = OkticketSheetStatusTransitions.POST.value
-        self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
-        if self.payment_mode == 'company_account':
-            # Si el modo de pago es 'company_account', se registra el pago automáticamente
-            action_id = OkticketSheetStatusTransitions.PAID.value
-            self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
-        return res
+        data = self.env.cr.precommit.data
+        queue = data.get(self._OKTICKET_STATUS_SYNC_KEY)
+        if queue is None:
+            queue = data[self._OKTICKET_STATUS_SYNC_KEY] = {'ids': set(), 'comments': {}}
+            self.env.cr.precommit.add(self.browse()._okticket_run_status_sync)
+        return queue
 
-    # --------------------------------------------
-    # Redefined flow actions
-    # --------------------------------------------
+    def _okticket_queue_status_sync(self):
+        """Queue the sheets whose OkTicket report has to follow their state.
+
+        Only saved sheets that already have a report: a sheet being created gets
+        its report from the exporter, already open, and a sheet typed in Odoo
+        has nothing to follow.
+        """
+        # Not while modules load: a recompute triggered by an upgrade is not a
+        # state change anybody made.
+        if self.env.context.get('okticket_no_status_sync') or not self.env.registry.ready:
+            return
+        sheets = self.filtered(lambda sheet: isinstance(sheet.id, int) and sheet.okticket_bind_ids)
+        if sheets:
+            self._okticket_status_sync_queue()['ids'].update(sheets.ids)
+
+    def _okticket_run_status_sync(self):
+        queue = self.env.cr.precommit.data.pop(self._OKTICKET_STATUS_SYNC_KEY, None)
+        if not queue or not queue['ids']:
+            return
+        sheets = self.browse(sorted(queue['ids'])).exists()
+        if sheets:
+            self.env['okticket.hr.expense.sheet'].sync_expense_sheet_status(
+                sheets, comments=queue['comments'])
+            # Precommit callbacks run after the ORM flush: the log entries and
+            # chatter messages written while syncing need one of their own.
+            self.env.flush_all()
+
+    def _compute_state(self):
+        """Queue the OkTicket status sync whenever Odoo recomputes the state.
+
+        The state is computed from the approval, the journal entries and their
+        payment, so this is the one place every change goes through: the
+        buttons, the duplicate-expense and refusal wizards, the payment wizard,
+        a bank reconciliation, a cancelled or reversed entry. The sync itself
+        compares with OkTicket and does nothing when they already agree.
+        """
+        result = super()._compute_state()
+        self._okticket_queue_status_sync()
+        return result
 
     def _do_refuse(self, reason):
-        """
-        From "Enviada" and "Aprobada" state: "Rechazar"/"Rechazar(Admin)"
-        Implied actions:
-            - Set'accounted' = 'false' in expenses from Okticket expense sheet.
-            - Action [350] Okticket from "Enviada" state
-            - Action [352] Okticket from "Aprobada" state
-        """
-        if self.state == 'approve':
-            action_id = OkticketSheetStatusTransitions.REFUSE_FROM_APPROVED.value  # From "Aprobada"
-        else:
-            action_id = OkticketSheetStatusTransitions.REFUSE_FROM_SUBMIT.value  # From "Enviada"
-        super(HrExpenseSheet, self)._do_refuse(reason)
-        for expense in self.expense_line_ids:
-            expense._okticket_accounted_expense(new_state=False)
-        self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id, comments=reason)
-
-    def action_reset_expense_sheets(self):
-        """
-            Available when state == post
-            TODO: Not flow implemented in okticket to change state from post to draft
-            TODO: In Okticket when state is 'post' it only possible to change to 'paid'
-        """
-        super(HrExpenseSheet, self).action_reset_approval_expense_sheets()
-
-    def action_reset_approval_expense_sheets(self):
-        """
-        Available when state in ('submit', 'cancel', 'approve')"
-
-        From "Enviada" and "Rechazada" state: "Cambiar a borrador"/"Reabrir(Empleado)"
-        From "Aprobada" state: "Rechazada" + "Cambiar a borrador"/"Reabrir(Empleado)"
-        Implied actions:
-            - Set 'accounted' = 'false' in expenses from Okticket expense sheet.
-            - Action [352] Okticket from "Aprobada" to "Rechazada" state
-            - Action [348] Okticket from "Enviada" state.  Submit to "Draft" state
-            - Action [354] Okticket from "Rechazada" state Submit to "Cancel" state
-        """
-
-        reset_from_approved = False
-        if self.state == 'approve':
-            reset_from_approved = True
-
-        action_id = OkticketSheetStatusTransitions.RESET_FROM_SUBMIT.value  # From "Enviada"
-        if self.state == 'cancel':
-            action_id = OkticketSheetStatusTransitions.RESET_FROM_CANCEL.value  # From "Rechazada"
-
-        if super(HrExpenseSheet, self).action_reset_expense_sheets():
-            # Check if exists sheet. It could be deleted if only had one expense with okticket_deleted  = True
-            if self.search([('id', '=', self.id)]):
-                for expense in self.expense_line_ids:
-                    expense._okticket_accounted_expense(new_state=False)
-                if reset_from_approved:
-                    # Force flow in okticket to change state from approved to draft
-                    action_id = OkticketSheetStatusTransitions.REFUSE_FROM_APPROVED.value  # From "Aprobada"
-                    self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
-                    action_id = OkticketSheetStatusTransitions.RESET_FROM_CANCEL.value  # From "Cancel"
-                    self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
-                else:
-                    self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
-
-    def okticket_sheet_payment_registry(self):
-        """
-        Hook defined in hr_expense_sheet
-        "Registrar pago"/"Registrar pago(Admin)"
-        Implied actions:
-            - Action [353] Okticket
-        """
-        action_id = OkticketSheetStatusTransitions.PAID.value
-        self.env['okticket.hr.expense.sheet'].change_expense_sheet_status(self, action_id)
-
-    @api.returns('mail.message', lambda value: value.id)
-    def message_post(self, body='', **kwargs):
-        result = super(HrExpenseSheet, self).message_post(body=body, **kwargs)
-        if result and self.env.context and self.env.context.get('okticket_payment_sync'):
-            self.okticket_sheet_payment_registry()
-        return result
+        """Keep the refusal reason, sent to OkTicket as the action's comment."""
+        if not self.env.context.get('okticket_no_status_sync'):
+            comments = self._okticket_status_sync_queue()['comments']
+            for sheet in self:
+                comments[sheet.id] = reason
+        return super()._do_refuse(reason)
 
     def unlink(self):
         return super(HrExpenseSheet, self).unlink()
-
-
-class AccountPaymentRegister(models.TransientModel):
-    _inherit = 'account.payment.register'
-
-    def _create_payments(self):
-        return super(AccountPaymentRegister, self.with_context(
-            okticket_payment_sync=True,
-        ))._create_payments()
