@@ -1,4 +1,4 @@
-from odoo import fields, models, api, _
+from odoo import Command, fields, models, api, _
 from odoo.exceptions import UserError
 
 # Values from OkTicket
@@ -37,6 +37,31 @@ class HrExpense(models.Model):
         store=True,
         help="Cost center (analytical account) from OkTicket synchronization",
     )
+
+    def _okticket_is_synchronised(self):
+        """Whether this expense came from OkTicket.
+
+        ``okticket_response`` and not the binding: the binding is created after
+        the expense, through ``_inherits``, so while the expense is being
+        created -- which is when ``tax_ids`` is precomputed -- it does not exist
+        yet, and the raw response is already there.
+        """
+        self.ensure_one()
+        return bool(self.okticket_response or self.okticket_bind_ids)
+
+    @api.depends('product_id', 'company_id')
+    def _compute_tax_ids(self):
+        """An expense synchronised from OkTicket never inherits product taxes.
+
+        Odoo fills ``tax_ids`` from the product's supplier taxes and then books
+        them as deductible VAT when the sheet is posted, which Spanish law does
+        not allow without an invoice. The importer already clears them; this
+        keeps them cleared when the product is changed on the form afterwards.
+        A tax typed in by hand is kept until the product changes again.
+        """
+        synchronised = self.filtered(lambda exp: exp._okticket_is_synchronised())
+        synchronised.tax_ids = [Command.clear()]
+        return super(HrExpense, self - synchronised)._compute_tax_ids()
 
     @api.depends('sheet_id', 'sheet_id.account_move_ids', 'sheet_id.state')
     def _compute_state(self):
