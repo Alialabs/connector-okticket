@@ -63,7 +63,9 @@ msgstr "Un error de red ha causado el fallo: %s"
 #. module: okticket_connector
 #: model:ir.model.constraint,message:okticket_connector.constraint_okticket_product_tax_mapping_okticket_product_rate_uniq
 msgid "A product can map an OkTicket rate to only one tax per company."
-msgstr "Un producto solo puede asignar un tipo de OkTicket a un único impuesto por compañía."
+msgstr ""
+"Un producto solo puede asignar un tipo de OkTicket a un único impuesto por "
+"compañía."
 
 #. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__account_id
@@ -201,7 +203,9 @@ msgstr "URL Base"
 msgid ""
 "Both price-included and price-excluded taxes will behave as price-included "
 "taxes for expenses."
-msgstr "Tanto los impuestos incluidos como los no incluidos en el precio se comportarán como incluidos en el precio para los gastos."
+msgstr ""
+"Tanto los impuestos incluidos como los no incluidos en el precio se "
+"comportarán como incluidos en el precio para los gastos."
 
 #. module: okticket_connector
 #: model:ir.model.fields.selection,name:okticket_connector.selection__hr_expense__payment_method__tarjeta
@@ -302,7 +306,8 @@ msgstr "Información de centro de coste"
 #: model:ir.model.fields,help:okticket_connector.field_hr_expense__analytic_account_id
 #: model:ir.model.fields,help:okticket_connector.field_okticket_hr_expense__analytic_account_id
 msgid "Cost center (analytical account) from OkTicket synchronization"
-msgstr "Centro de coste (cuenta analítica) desde la sincronización con OkTicket"
+msgstr ""
+"Centro de coste (cuenta analítica) desde la sincronización con OkTicket"
 
 #. module: okticket_connector
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_view_account_analytic_account_form
@@ -428,26 +433,6 @@ msgid "Expense"
 msgstr "Gasto"
 
 #. module: okticket_connector
-#. odoo-python
-#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
-#, python-format
-msgid ""
-"Expense %s reports %g%% but that rate matches several purchase taxes in "
-"company %s that cannot be told apart (%s); imported with no tax. Map the "
-"rate on the product's OkTicket tab, or add the right tax to the product."
-msgstr "El gasto %s reporta un %g%% pero ese tipo coincide con varios impuestos de compra de la compañía %s que no se pueden distinguir (%s); se importa sin impuesto. Asigne el tipo en la pestaña OkTicket del producto, o añada el impuesto correcto al producto."
-
-#. module: okticket_connector
-#. odoo-python
-#: code:addons/okticket_connector/models/okticket_hr_expense_importer.py:0
-#, python-format
-msgid ""
-"Expense %s reports several tax rates (%s) but an Odoo expense holds a single "
-"taxable base; keeping the product default taxes. Review this expense "
-"manually."
-msgstr "El gasto %s reporta varios tipos de IVA (%s) pero un gasto de Odoo tiene una única base imponible; se mantienen los impuestos por defecto del producto. Revise este gasto manualmente."
-
-#. module: okticket_connector
 #: model:ir.model.fields,field_description:okticket_connector.field_okticket_hr_expense__date
 msgid "Expense Date"
 msgstr "Fecha de gasto"
@@ -562,12 +547,10 @@ msgstr "Icono para indicar una actividad de excepción."
 #. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_okticket_backend__default_lang_id
 msgid ""
-"If a default language is selected, the records will be imported in the "
-"translation of this language.\n"
+"If a default language is selected, the records will be imported in the translation of this language.\n"
 "Note that a similar configuration exists for each storeview."
 msgstr ""
-"Si un idioma por defecto está seleccionado, los registro serán importados en "
-"la traducción de este idioma.\n"
+"Si un idioma por defecto está seleccionado, los registro serán importados en la traducción de este idioma.\n"
 "Observe que una configuración similar existe para cada storeview."
 
 #. module: okticket_connector
@@ -1252,7 +1235,9 @@ msgstr ""
 msgid ""
 "The percentage OkTicket reports in the receipt's tax breakdown (the 'p' of "
 "each entry). 0 is a valid rate and is not the same as having no row."
-msgstr "El porcentaje que OkTicket reporta en el desglose de impuestos del ticket (la 'p' de cada entrada). 0 es un tipo válido y no equivale a no tener fila."
+msgstr ""
+"El porcentaje que OkTicket reporta en el desglose de impuestos del ticket "
+"(la 'p' de cada entrada). 0 es un tipo válido y no equivale a no tener fila."
 
 #. module: okticket_connector
 #. odoo-python
@@ -1261,7 +1246,9 @@ msgstr "El porcentaje que OkTicket reporta en el desglose de impuestos del ticke
 msgid ""
 "The tax \"%(tax)s\" belongs to company \"%(tax_company)s\" but the mapping "
 "row is for \"%(company)s\"."
-msgstr "El impuesto \"%(tax)s\" pertenece a la compañía \"%(tax_company)s\" pero la fila de asignación es para \"%(company)s\"."
+msgstr ""
+"El impuesto \"%(tax)s\" pertenece a la compañía \"%(tax_company)s\" pero la "
+"fila de asignación es para \"%(company)s\"."
 
 #. module: okticket_connector
 #. odoo-python
@@ -1389,28 +1376,33 @@ msgstr "Indica si el impuesto está definido en un producto seleccionado"
 #: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_product_template_form_view
 msgid ""
 "Which Odoo tax each rate OkTicket reports means for this\n"
-"                            product. Only needed where the tax the connector "
-"resolves\n"
-"                            on its own is not the right one: it always picks "
-"the\n"
-"                            domestic tax of the product's scope, and every "
-"expense\n"
-"                            product is typed as a service, so a rate that is "
-"goods\n"
-"                            here has to be stated. A row on the base product "
-"also\n"
+"                            product. Only needed where the tax the connector resolves\n"
+"                            on its own is not the right one: it always picks the\n"
+"                            domestic tax of the product's scope, and every expense\n"
+"                            product is typed as a service, so a rate that is goods\n"
+"                            here has to be stated. A row on the base product also\n"
 "                            applies to its invoice and rebillable versions."
-msgstr "Qué impuesto de Odoo significa cada tipo que reporta OkTicket para este producto. Solo hace falta cuando el impuesto que el conector resuelve por sí solo no es el correcto: siempre elige el impuesto nacional del ámbito del producto, y todo producto de gasto se tipa como servicio, así que un tipo que aquí sea de bienes hay que declararlo. Una fila en el producto base se aplica también a sus versiones de factura y refacturable."
+msgstr ""
+"Qué impuesto de Odoo significa cada tipo que reporta OkTicket para este "
+"producto. Solo hace falta cuando el impuesto que el conector resuelve por sí"
+" solo no es el correcto: siempre elige el impuesto nacional del ámbito del "
+"producto, y todo producto de gasto se tipa como servicio, así que un tipo "
+"que aquí sea de bienes hay que declararlo. Una fila en el producto base se "
+"aplica también a sus versiones de factura y refacturable."
 
 #. module: okticket_connector
 #: model:ir.model.fields,help:okticket_connector.field_product_product__okticket_tax_mapping_ids
 #: model:ir.model.fields,help:okticket_connector.field_product_template__okticket_tax_mapping_ids
 msgid ""
-"Which Odoo tax each rate OkTicket reports means for this product. Rows are "
-"only needed where the tax the connector would otherwise resolve is not the "
-"right one -- typically a rate that is goods here, since every expense "
-"product is typed as a service."
-msgstr "Qué impuesto de Odoo significa cada tipo que reporta OkTicket para este producto. Solo hacen falta filas cuando el impuesto que el conector resolvería no es el correcto, típicamente un tipo que aquí sea de bienes, ya que todo producto de gasto se tipa como servicio."
+"Which Odoo tax each rate OkTicket reports means for this product on a "
+"supplier invoice. Imported expenses never carry VAT: it can only be deducted"
+" through an invoice, so these rows are used when one is created from a "
+"receipt marked as an invoice."
+msgstr ""
+"Qué impuesto de Odoo significa, para este producto en una factura de "
+"proveedor, cada tipo que informa OkTicket. Los gastos importados nunca "
+"llevan IVA: solo se puede deducir mediante factura, así que estas filas se "
+"usan cuando se crea una a partir de un justificante marcado como factura."
 
 #. module: okticket_connector
 #: model_terms:ir.ui.view,arch_db:okticket_connector.view_okticket_backend_form
