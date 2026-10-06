@@ -22,8 +22,8 @@ lleva esos gastos a Odoo automáticamente, sin introducirlos a mano.
 
 La sincronización va principalmente de **OkTicket a Odoo**:
 
-- **Gastos** — importa tickets, facturas y kilometrajes con su importe, fecha, impuestos,
-  empleado y compañía, adjuntando la fotografía del recibo y, cuando existe, el PDF de la factura.
+- **Gastos** — importa tickets, facturas y kilometrajes con su importe, fecha, empleado y
+  compañía, siempre sin IVA (solo se deduce con factura), adjuntando la fotografía del recibo y, cuando existe, el PDF de la factura.
 - **Usuarios** — empareja los usuarios de OkTicket con empleados de Odoo por correo electrónico.
 - **Categorías** — crea en Odoo un producto de gasto por cada categoría de OkTicket, incluidas
   las variantes facturables.

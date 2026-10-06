@@ -9,7 +9,7 @@ import logging
 import json
 
 import requests
-from odoo import _
+from odoo import Command, _
 from odoo.addons.component.core import Component
 from odoo.addons.connector.components.mapper import mapping, only_create
 
@@ -70,15 +70,18 @@ class HrExpenseBatchImporter(Component):
     @mapping
     def product_id(self, record):
         existing = self.get_base_product(record)
-        company_id = (self.company_id(record) or {}).get('company_id')
         if existing:
-            result = {'product_id': existing.id}
-            if record.get('type_id') != 0:
-                #tax_ids = [(4, stax.id) for stax in existing.supplier_taxes_id]
-                tax_ids = [(4, stax.id) for stax in existing.supplier_taxes_id if stax.company_id.id == company_id]
-                if tax_ids:
-                    result.update({'tax_ids': tax_ids})
-            return result
+            # An imported expense never carries VAT, whatever its product or the
+            # receipt say. Spanish law only lets input VAT be deducted against an
+            # invoice (LIVA art. 97), and Odoo books whatever tax an expense
+            # carries as deductible: a 472 line and boxes [28]/[29] of the 303
+            # on an entry the SII never sees. The breakdown OkTicket reports is
+            # kept in ``okticket_response``, for whatever builds the supplier
+            # invoice -- the only document that may deduct it.
+            #
+            # Cleared explicitly because ``tax_ids`` is computed from the
+            # product's supplier taxes: leaving the key out is not "no tax".
+            return {'product_id': existing.id, 'tax_ids': [Command.clear()]}
 
     @mapping
     def amount(self, record):

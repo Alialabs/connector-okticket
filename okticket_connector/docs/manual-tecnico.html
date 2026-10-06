@@ -186,9 +186,17 @@ identificador remoto.</p>
 
 <p>OkTicket es un producto español y devuelve los tipos de IVA españoles. Conviene que la
 compañía tenga instalada la localización española (<code>l10n_es</code>) con su plan contable
-aplicado, y que existan los impuestos de compra al <b>0 %, 4 %, 10 % y 21 %</b>, además de un
-diario de compras. Sin ellos, los gastos importados recaen siempre en el impuesto por defecto
-del producto.</p>
+aplicado y un diario de compras.</p>
+
+<div class="callout warn">
+  <span class="tag">Importante</span>
+  <b>Un gasto importado nunca lleva IVA</b>, tenga el producto los impuestos que tenga. La ley solo
+  permite deducir el IVA soportado contra una factura (art. 97 LIVA; arts. 6 y 7 del RD
+  1619/2012), y Odoo contabiliza como deducible cualquier impuesto del gasto: una línea en la 472 y
+  las casillas [28]/[29] del 303, en un asiento que el SII no ve. El importador deja <code>tax_ids</code>
+  vacío y <code>_compute_tax_ids</code> lo mantiene vacío aunque se cambie el producto. El desglose que manda
+  OkTicket se conserva en <code>okticket_response</code>, para quien registre la factura de proveedor.
+</div>
 
 <h2 id="clonado">3. Clonado del repositorio</h2>
 
@@ -489,11 +497,6 @@ importación sana no deja ninguna entrada de tipo <i>Error</i>.</p>
       <td>La prueba de autenticación falla.</td>
       <td>Credenciales incorrectas o salida HTTPS bloqueada.</td>
       <td>Verificar las cuatro credenciales y el acceso a <code>api.okticket.es</code> desde el servidor.</td>
-    </tr>
-    <tr>
-      <td>Los gastos entran con un impuesto que no corresponde.</td>
-      <td>La compañía no tiene el plan contable español con los tipos 0/4/10/21 de compra.</td>
-      <td>Instalar <code>l10n_es</code> y aplicar el plan a la compañía.</td>
     </tr>
     <tr>
       <td>Solo se importa la primera página de gastos.</td>
