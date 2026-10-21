@@ -222,9 +222,11 @@ Modules covered:
 - **Expected:** the create listener also fires for timesheet projects.
 
 ### INT-409 — Global vs per-user cost centers
-- **Steps:** review the `global` flag of the created cost centers.
-- **Expected:** a non-global cost center has to be assigned to users before they
-  can charge expenses to it.
+- **Steps:** create a cost center with *Global Cost Centers* ticked on the company (the
+  default), then untick it and create another one.
+- **Expected:** the first is created in OkTicket with `global = true`, the second with
+  `global = false`; a non-global cost center has to be assigned to users before they
+  can charge expenses to it. Existing cost centers are not touched.
 
 ---
 
