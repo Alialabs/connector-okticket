@@ -441,3 +441,23 @@ msgstr "Historial de comunicaciones del sitio web"
 #: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.view_okticket_backend_form
 msgid "⇒ See Analytic Account Bindings"
 msgstr "⇒ Ver Bindings de cuentas analíticas"
+
+#. module: okticket_connector_cost_center
+#: model:ir.model.fields,field_description:okticket_connector_cost_center.field_res_company__okticket_cost_center_global
+msgid "Global Cost Centers"
+msgstr "Centros de coste globales"
+
+#. module: okticket_connector_cost_center
+#: model:ir.model.fields,help:okticket_connector_cost_center.field_res_company__okticket_cost_center_global
+msgid ""
+"How the cost centers created from Odoo are published in OkTicket. Enabled, "
+"they are global: every OkTicket user of the company can charge expenses to "
+"them. Disabled, they are created as not global and have to be assigned to "
+"users in OkTicket before anyone can use them. Only applies to cost centers "
+"created from now on."
+msgstr ""
+"Cómo se publican en OkTicket los centros de coste creados desde Odoo. "
+"Activado, son globales: cualquier usuario de OkTicket de la compañía puede "
+"imputarles gastos. Desactivado, se crean como no globales y hay que "
+"asignarlos a los usuarios en OkTicket antes de que puedan usarlos. Solo "
+"afecta a los centros de coste que se creen a partir de ahora."
