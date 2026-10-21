@@ -62,7 +62,9 @@ class AccountAnalyticAccountExporter(Component):
                 'code': sale and sale.name or '',
                 'company_id': okticket_company_id,
                 'active': True,
-                'global': True,
+                # Per company: global cost centers are usable by every OkTicket
+                # user, non-global ones have to be assigned to users there.
+                'global': (acc_analyt.company_id or self.env.company).okticket_cost_center_global,
             }
             new_cost_center_vals = backend_adapter.create_cost_center(values)
             if new_cost_center_vals:
