@@ -13,3 +13,10 @@ class ResCompany(models.Model):
     _inherit = 'res.company'
 
     create_cost_center_automatically = fields.Boolean('Create Costs Center Automatically')
+    okticket_cost_center_global = fields.Boolean(
+        'Global Cost Centers', default=True,
+        help='How the cost centers created from Odoo are published in OkTicket. '
+             'Enabled, they are global: every OkTicket user of the company can '
+             'charge expenses to them. Disabled, they are created as not global '
+             'and have to be assigned to users in OkTicket before anyone can use '
+             'them. Only applies to cost centers created from now on.')
