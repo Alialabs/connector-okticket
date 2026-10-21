@@ -180,6 +180,7 @@ Cada compañía de Odoo que vaya a sincronizar necesita su identificador de OkTi
 |---|---|
 | **Compañía** | Identificador numérico que facilita OkTicket. **Sin él la importación descarta todos los gastos**, porque no puede resolver a qué compañía pertenecen. |
 | **Autocrear centro de coste del proyecto** | Si está activo, al crear un proyecto en Odoo se publica automáticamente su cuenta analítica como centro de coste en OkTicket. |
+| **Centros de coste globales** (*Global Cost Centers*) | Activado por defecto. Los centros de coste que se crean desde Odoo son **globales** en OkTicket: cualquier usuario de la compañía puede imputarles gastos. Desactivado, se crean como **no globales** y hay que asignarlos a los usuarios en OkTicket antes de poder usarlos. Solo afecta a los que se creen a partir de ese momento. |
 
 ---
 
