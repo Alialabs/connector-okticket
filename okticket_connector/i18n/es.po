@@ -1414,6 +1414,18 @@ msgstr "⇒ Ver logs"
 msgid "⇒ See Hr Expense Bindings"
 msgstr "⇒ Ver Bindings de gastos"
 
+
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_view_company_form
+msgid "Connection"
+msgstr "Conexión"
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_view_company_form
+msgid "Pending Card Expenses"
+msgstr "Gastos de tarjeta pendientes"
+
 #, python-format
 #~ msgid ""
 #~ "\n"

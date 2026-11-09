@@ -628,3 +628,9 @@ msgstr ""
 #, python-format
 msgid "OkTicket did not return the report %s"
 msgstr "OkTicket no ha devuelto el informe %s"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model_terms:ir.ui.view,arch_db:okticket_connector_hr_expense_sheet.okticket_view_company_form
+msgid "Expense Sheets"
+msgstr "Hojas de gastos"
+

@@ -60,6 +60,17 @@ class HrExpenseBatchImporter(Component):
             return {'odoo_id': existing.id}
 
     def get_base_product(self, record):
+        if record.get('status_id') == 4 and record.get('type_id') is None:
+            # A card movement with no receipt yet has no category. It must not
+            # reach the search below: ``okticket_type_prod_id = None`` also
+            # matches type 0, so it would take any expense category. If the
+            # company imports them, it gets the default product until the
+            # receipt arrives and the next import brings the real category.
+            company = self.backend_record.company_id
+            if company.okticket_import_pending_expenses:
+                return company.okticket_pending_expense_product_id
+            return self.env['product.product'].browse()
+
         params = [('okticket_type_prod_id', '=', record.get('type_id'))]
         if record.get('type_id') in [0, 1]:
             params.append(('okticket_categ_prod_id', '=', record.get('category_id')))
