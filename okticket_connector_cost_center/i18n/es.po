@@ -493,3 +493,8 @@ msgstr ""
 
 #~ msgid "okticket.account.analytic.account"
 #~ msgstr "Cuenta analítica Okticket"
+
+#. module: okticket_connector_cost_center
+#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.okticket_view_grouping_company_form
+msgid "Cost Centers"
+msgstr "Centros de coste"

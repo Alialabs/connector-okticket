@@ -217,6 +217,7 @@ gasto de Odoo.
 | El importe del gasto no coincide con el del ticket. | El conector importa el total que se registró en OkTicket. Corrige el importe en la app y espera a la siguiente sincronización. |
 | Falta la imagen del recibo. | Ocurre si el ticket se creó a mano en OkTicket, sin fotografía. Puedes adjuntarla en Odoo con *Adjuntar recibo*. |
 | Un gasto aparece con la categoría equivocada. | Se hereda de la categoría elegida en la app. Puedes cambiarla en Odoo; el cambio no se propaga a OkTicket. |
+| En mis gastos aparece un pago con tarjeta sin ticket, con una categoría genérica. | Tu empresa ha activado la importación de movimientos de la tarjeta OkTicket pendientes de ticket. Sube el ticket en la app: en la siguiente sincronización el mismo gasto se actualiza con su categoría y su imagen, siempre que no se haya enviado ni aprobado ya. |
 | He borrado un gasto en OkTicket y sigue en Odoo. | El borrado no se propaga. Elimina también el gasto en Odoo si aún está en borrador. |
 | No veo el menú de OkTicket en Odoo. | Ese menú es para administradores. Como usuario no lo necesitas: tus gastos están en la aplicación *Gastos*. |
 
