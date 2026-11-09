@@ -468,3 +468,8 @@ msgstr ""
 "imputarles gastos. Desactivado, se crean como no globales y hay que "
 "asignarlos a los usuarios en OkTicket antes de que puedan usarlos. Solo "
 "afecta a los centros de coste que se creen a partir de ahora."
+
+#. module: okticket_connector_cost_center
+#: model_terms:ir.ui.view,arch_db:okticket_connector_cost_center.okticket_view_grouping_company_form
+msgid "Cost Centers"
+msgstr "Centros de coste"
