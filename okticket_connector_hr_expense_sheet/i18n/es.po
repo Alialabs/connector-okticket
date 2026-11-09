@@ -715,3 +715,8 @@ msgid ""
 msgstr ""
 "OkTicket no tiene ninguna acción que lleve el informe de su estado "
 "%(current)s al %(target)s"
+
+#. module: okticket_connector_hr_expense_sheet
+#: model_terms:ir.ui.view,arch_db:okticket_connector_hr_expense_sheet.okticket_view_company_form
+msgid "Expense Sheets"
+msgstr "Hojas de gastos"
