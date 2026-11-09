@@ -94,7 +94,12 @@ class ExpensesAdapter(Component):
         if not self._auth():
             return []
 
-        params_dict = {'accounted': 'false', 'statuses': '0,1,2'}
+        statuses = '0,1,2'
+        if self.backend_record.company_id.okticket_import_pending_expenses:
+            # Card movements still waiting for their receipt. They get the
+            # company's default product in the importer.
+            statuses += ',4'
+        params_dict = {'accounted': 'false', 'statuses': statuses}
 
         if filters and 'params' in filters and isinstance(filters['params'], dict):
             params_dict.update(filters['params'])

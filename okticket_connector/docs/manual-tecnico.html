@@ -306,12 +306,32 @@ cliente web cachea la definición de las vistas.</p>
   <tbody>
     <tr><td><b>Compañía</b></td>
         <td>Identificador numérico que facilita OkTicket. <b>Sin él la importación descarta todos los gastos</b>, porque no puede resolver a qué compañía pertenecen.</td></tr>
+    <tr><td><b>Importar gastos de tarjeta pendientes</b> (<i>Import Pending Card Expenses</i>)</td>
+        <td>Desactivado por defecto. Activado, la importación trae también los movimientos de la tarjeta OkTicket que aún no tienen ticket (estado 4 de OkTicket). Ver <a href="#gastos-de-tarjeta-pendientes-de-ticket">Gastos de tarjeta pendientes de ticket</a>.</td></tr>
+    <tr><td><b>Producto por defecto para gastos pendientes</b> (<i>Default Product for Pending Expenses</i>)</td>
+        <td>Categoría de gasto que reciben esos movimientos mientras no tienen ticket. Obligatorio con la opción anterior activa; sin él se omiten igual que con la opción desactivada.</td></tr>
     <tr><td><b>Autocrear centro de coste del proyecto</b></td>
         <td>Si está activo, al crear un proyecto en Odoo se publica automáticamente su cuenta analítica como centro de coste en OkTicket.</td></tr>
     <tr><td><b>Centros de coste globales</b> (<i>Global Cost Centers</i>)</td>
         <td>Activado por defecto. Los centros de coste que se crean desde Odoo son <b>globales</b> en OkTicket: cualquier usuario de la compañía puede imputarles gastos. Desactivado, se crean como <b>no globales</b> y hay que asignarlos a los usuarios en OkTicket antes de poder usarlos. Solo afecta a los que se creen a partir de ese momento.</td></tr>
   </tbody>
 </table>
+
+<h3 id="gastos-de-tarjeta-pendientes-de-ticket">Gastos de tarjeta pendientes de ticket</h3>
+<p>Cada pago con la tarjeta OkTicket crea un gasto en OkTicket en <b>estado 4</b>: tiene importe, fecha, empleado y comercio, pero no categoría, ticket, IVA ni informe. Cuando el empleado sube el ticket, ese mismo gasto pasa a estado 1. Por defecto el conector solo importa los estados 0, 1 y 2, así que estos movimientos no llegan a Odoo hasta que tienen ticket.</p>
+<p>Con <b>Importar gastos de tarjeta pendientes</b> activo:</p>
+<ul>
+  <li>La importación pide también el estado 4.</li>
+  <li>El movimiento entra con el <b>producto por defecto</b> (y su cuenta de gasto), sin IVA y en estado OkTicket <i>Pendiente</i>. Un movimiento de estado 4 que ya trae categoría la conserva.</li>
+  <li>Cuando llega el ticket, la siguiente importación actualiza <b>el mismo gasto</b> con su categoría, su imagen y su estado <i>Confirmado</i>. No se crea un gasto nuevo.</li>
+</ul>
+<p>Riesgos que asume la compañía al activarlo:</p>
+<ul>
+  <li>Si el gasto ya no se puede editar en Odoo (enviado, aprobado o contabilizado) cuando llega el ticket, la actualización falla y queda registrada en el log: el gasto se queda con el producto por defecto.</li>
+  <li>Las devoluciones de la tarjeta llegan como gastos de importe negativo, y las preautorizaciones pueden cambiar de importe o anularse después.</li>
+  <li>Un movimiento al que nunca se le sube ticket se queda para siempre con el producto por defecto.</li>
+</ul>
+<blockquote><p>Actívalo con <b>Importar gastos desde fecha</b> informado en el backend y sin marcar <b>Ignorar «Importar gastos desde fecha»</b>. De lo contrario se traen de golpe todos los movimientos pendientes acumulados en OkTicket.</p></blockquote>
 
 <h2 id="backend">8. Configuración del backend</h2>
 
