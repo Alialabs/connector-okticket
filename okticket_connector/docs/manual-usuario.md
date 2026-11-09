@@ -271,6 +271,7 @@ cualquier otra hoja de gasto de Odoo.
 | Falta la imagen del recibo. | Ocurre si el ticket se creó a mano en OkTicket, sin fotografía. Puedes adjuntarla en Odoo con *Adjuntar recibo*. |
 | Un gasto aparece con la categoría equivocada. | Se hereda de la categoría elegida en la app. Puedes cambiarla en Odoo; el cambio no se propaga a OkTicket. |
 | Me ha aparecido una hoja de gasto repetida con el mismo nombre. | Ocurre cuando llega un gasto nuevo para un grupo cuya hoja ya estaba enviada o aprobada: se crea una hoja nueva en borrador para no tocar la anterior. |
+| En mis gastos aparece un pago con tarjeta sin ticket, con una categoría genérica. | Tu empresa ha activado la importación de movimientos de la tarjeta OkTicket pendientes de ticket. Sube el ticket en la app: en la siguiente sincronización el mismo gasto se actualiza con su categoría y su imagen, siempre que no se haya enviado ni aprobado ya. |
 | He borrado un gasto en OkTicket y sigue en Odoo. | El borrado no se propaga. Elimina también el gasto en Odoo si aún está en borrador. |
 | El gasto no lleva IVA. | Es lo correcto: un gasto importado de OkTicket nunca lleva IVA, porque solo se puede deducir con una factura. Si el justificante es una factura, hay que registrarla como factura de proveedor. |
 | No veo el menú de OkTicket en Odoo. | Ese menú es para administradores. Como usuario no lo necesitas: tus gastos están en la aplicación *Gastos*. |

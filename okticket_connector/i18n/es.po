@@ -1450,6 +1450,51 @@ msgid "⇒ See Hr Expense Bindings"
 msgstr "⇒ Ver Bindings de gastos"
 
 #, python-format
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_res_company__okticket_import_pending_expenses
+msgid "Import Pending Card Expenses"
+msgstr "Importar gastos de tarjeta pendientes"
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_res_company__okticket_import_pending_expenses
+msgid ""
+"Also import the OkTicket card movements that still have no receipt (OkTicket "
+"status 4). They arrive with no category, so they are given the default "
+"product below, and they are updated with their real category and receipt "
+"once the employee uploads it, as long as the expense can still be edited in "
+"Odoo."
+msgstr ""
+"Importar también los movimientos de la tarjeta OkTicket que aún no tienen "
+"ticket (estado 4 de OkTicket). Llegan sin categoría, así que se les asigna "
+"el producto por defecto de abajo, y se actualizan con su categoría y su "
+"ticket reales cuando el empleado lo sube, siempre que el gasto todavía se "
+"pueda editar en Odoo."
+
+#. module: okticket_connector
+#: model:ir.model.fields,field_description:okticket_connector.field_res_company__okticket_pending_expense_product_id
+msgid "Default Product for Pending Expenses"
+msgstr "Producto por defecto para gastos pendientes"
+
+#. module: okticket_connector
+#: model:ir.model.fields,help:okticket_connector.field_res_company__okticket_pending_expense_product_id
+msgid ""
+"Expense category given to the card movements imported with no receipt. "
+"Without it they are skipped, as if the option were off."
+msgstr ""
+"Categoría de gasto que se asigna a los movimientos de tarjeta importados sin "
+"ticket. Si no se indica, se omiten, como si la opción estuviera desactivada."
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_view_company_form
+msgid "Connection"
+msgstr "Conexión"
+
+#. module: okticket_connector
+#: model_terms:ir.ui.view,arch_db:okticket_connector.okticket_view_company_form
+msgid "Pending Card Expenses"
+msgstr "Gastos de tarjeta pendientes"
+
 #~ msgid ""
 #~ "\n"
 #~ "Error while try to unlink expense %s in Odoo: %s"

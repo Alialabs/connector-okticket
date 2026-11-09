@@ -13,8 +13,16 @@
             <field name="arch" type="xml">
                 <notebook position="inside">
                     <page name="okticket_conn_conf" string="OkTicket Conf.">
-                        <group>
+                        <separator string="Connection"/>
+                        <group name="okticket_conf_connection">
                             <field name="okticket_company_id" string="Company_id"/>
+                        </group>
+                        <separator string="Pending Card Expenses"/>
+                        <group name="okticket_conf_pending_expenses">
+                            <field name="okticket_import_pending_expenses"/>
+                            <field name="okticket_pending_expense_product_id"
+                                   attrs="{'invisible': [('okticket_import_pending_expenses', '=', False)],
+                                           'required': [('okticket_import_pending_expenses', '=', True)]}"/>
                         </group>
                     </page>
                 </notebook>
